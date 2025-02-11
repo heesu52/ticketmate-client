@@ -168,7 +168,7 @@ const SignUpForm = () => {
       </div>
 
       <div className={styles.form_button}>
-        <PositiveButton label="로그인" type="submit" size="large" />
+        <PositiveButton label="회원가입" type="submit" size="large" />
       </div>
     </form>
   );

@@ -1,5 +1,11 @@
+import ConcertList from '@/app/_components/concert-list/conert-list';
+
 import styles from './page.module.scss';
 
 export default function Home() {
-  return <div className={styles.page}>티켓메이트</div>;
+  return (
+    <div className={styles.container}>
+      <ConcertList />
+    </div>
+  );
 }

@@ -1,0 +1,67 @@
+@use '@/styles/index' as *;
+
+.container {
+    display: flex;
+    width: 100%;
+    padding: 20px 0px;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--gray-1);
+    background: var(--white);
+
+
+    .left_container{
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+
+        .profile {
+            width: 48px;
+            height: 48px;
+            border-radius: 100px;
+            border: 1px solid var(--gray-3);
+        }
+    
+        .user_container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+    
+            .nickname {
+                @include Heading-03;
+                color: var(--gray-5);
+                align-self: stretch;
+            }
+        }
+    }
+    
+
+    .count_container {
+        display: flex;
+        padding-bottom: 4px;
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+        
+        .count {
+            @include Heading-01;
+            text-align: right;
+            color: var(--brand-main);
+        }
+        
+        .text{
+            flex: 1 0;
+        }
+    }
+
+    .user_container span {
+        @include Paragraph-02;
+        align-self: stretch;
+        color: var(--gray-4); 
+    }
+
+    .count_container span {
+        @include Paragraph-01;
+        color: var(--gray-5);
+    }
+}

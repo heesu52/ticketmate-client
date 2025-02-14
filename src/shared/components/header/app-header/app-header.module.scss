@@ -1,0 +1,39 @@
+@use '@/styles/index' as *;
+
+.container {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  margin: 0 auto;
+  padding: 0 0 0 24px;
+
+  width: 100%;
+  max-width: 600px;
+  background: var(--white);
+
+  border-width: 0 1px 0 1px;
+  border-style: solid;
+  border-color: var(--divider-line);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .title {
+    @include Heading-02;
+    color: var(--brand-main);
+  }
+
+  .button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 16px 24px 16px 24px;
+
+    .icon {
+      display: flex;
+      align-items: center;
+    }
+  }
+}

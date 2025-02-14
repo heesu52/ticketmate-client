@@ -1,0 +1,52 @@
+@use '@/styles/index' as *;
+
+.container {
+  display: flex;
+  justify-content: space-between;
+
+  width: 100%;
+  padding: 20px 0;
+
+  .concert_img {
+    img {
+      border-radius: 12px;
+    }
+  }
+
+  .concert_info {
+    @include Heading-02;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .description {
+      display: flex;
+      flex-direction: column;
+      .title {
+        @include Heading-03;
+        color: var(--gray-5);
+      }
+
+      .date {
+        @include Paragraph-02;
+        color: var(--gray-4);
+      }
+    }
+
+    .agent {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+
+      .agent_label {
+        @include Paragraph-02;
+      }
+
+      .agent_count {
+        @include Heading-03;
+        color: var(--brand-main);
+      }
+    }
+  }
+}

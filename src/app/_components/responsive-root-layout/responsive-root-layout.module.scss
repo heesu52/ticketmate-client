@@ -11,11 +11,20 @@
 
   .content {
     background: var(--white);
-    height: 100%;
 
     @media screen and (min-width: 601px) {
       border-right: 1px solid var(--divider-line);
       border-left: 1px solid var(--divider-line);
+    }
+
+    &.with_app_header {
+      // app-header 높이
+      margin-top: 56px;
+    }
+
+    &.without_app_header {
+      // app-bar 높이
+      margin-top: 54px;
     }
 
     &.with_nav {
@@ -27,7 +36,5 @@
       //  여유 공간 + safe-area-inset-bottom
       padding: 0 24px calc(40px + env(safe-area-inset-bottom)) 24px;
     }
-    // app-bar 높이
-    margin-top: 54px;
   }
 }

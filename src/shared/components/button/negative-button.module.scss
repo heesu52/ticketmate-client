@@ -1,0 +1,38 @@
+@use '@/styles/index' as *;
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid var(--brand-main);
+    padding: 12px 24px;
+    gap: 10px;
+
+    border-radius: 12px;
+    background-color: var(--gray-1);
+
+    &.large{
+        width: 100%; 
+    }
+
+    &.medium{
+        width: 50%;;
+        gap: 16px;
+    }
+
+    &.small{
+        width: 33%; 
+        gap: 16px;
+    }
+
+    span {
+        display: flex;
+        align-items: center;
+
+        @include Paragraph-02;
+        text-align: center;
+    }
+}

@@ -1,4 +1,4 @@
-import ConcertList from '@/app/_components/concert-list/conert-list';
+import ConcertList from '@/app/_components/concert/concert-list/concert-list';
 
 import styles from './page.module.scss';
 

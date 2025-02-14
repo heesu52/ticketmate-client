@@ -1,5 +1,6 @@
 'use client';
 
+import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
 import SearchIcon from '@/assets/icons/search.svg';
 import Input from '@/shared/components/input/input';
 
@@ -7,49 +8,49 @@ import styles from './concert-list.module.scss';
 
 const concert = [
   {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
+    title: '2터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
     date: '24년 11월 25일(월) 18:00',
     agent: '10명',
     img: 'https://placehold.co/400x600',
   },
   {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
+    title: '3터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
     date: '24년 11월 25일(월) 18:00',
     agent: '30명',
     img: 'https://placehold.co/400x600',
   },
   {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
+    title: '4터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
     date: '24년 11월 25일(월) 18:00',
     agent: '5명',
     img: 'https://placehold.co/400x600',
   },
   {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
+    title: '5터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
     date: '24년 11월 25일(월) 18:00',
     agent: '1명',
     img: 'https://placehold.co/400x600',
   },
   {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
+    title: '6터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
     date: '24년 11월 25일(월) 18:00',
     agent: '100명',
     img: 'https://placehold.co/400x600',
   },
   {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
+    title: '7터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
     date: '24년 11월 25일(월) 18:00',
     agent: '5명',
     img: 'https://placehold.co/400x600',
   },
   {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
+    title: '8터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
     date: '24년 11월 25일(월) 18:00',
     agent: '1명',
     img: 'https://placehold.co/400x600',
   },
   {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
+    title: '9터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
     date: '24년 11월 25일(월) 18:00',
     agent: '100명',
     img: 'https://placehold.co/400x600',
@@ -76,22 +77,9 @@ const ConcertList = () => {
       {/* 리스트 */}
       <div className={styles.concert_container}>
         <span className={styles.title}>신청 가능한 콘서트</span>
-        {concert.map((item, index) => (
-          <div className={styles.concert} key={index}>
-            <div className={styles.concert_img}>
-              <img src={item.img} alt="concert" width={104} height={139} />
-            </div>
-            <div className={styles.concert_info}>
-              <div className={styles.description}>
-                <span className={styles.date}>{item.date}</span>
-                <span className={styles.title}>{item.title}</span>
-              </div>
-              <div className={styles.agent}>
-                <span className={styles.agent_label}>대리인 수</span>
-                <span className={styles.agent_count}>{item.agent}</span>
-              </div>
-            </div>
-          </div>
+
+        {concert.map((concertItem) => (
+          <ConcertCard concertItem={concertItem} key={concertItem.title} />
         ))}
       </div>
     </div>

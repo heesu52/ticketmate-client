@@ -14,16 +14,13 @@ import styles from './page.module.scss';
 
 // Mock API 호출 함수
 const handleGetCard = async (pageParam: number) => {
-  // Mock 데이터
   const mockData = Array.from({ length: 10 }, (_, index) => ({
-    id: pageParam * 10 + index + 1, // 예시: 페이지마다 고유한 ID 부여
+    id: pageParam * 10 + index + 1,
     name: `의문의 티켓터 ${pageParam * 10 + index + 1}`,
     profileImage: 'https://via.placeholder.com/50',
     introduction: '한 줄 소개를 작성해주세요.',
-    transactionCount: Math.floor(Math.random() * 100), // 임의의 거래 건수
+    transactionCount: Math.floor(Math.random() * 100),
   }));
-
-  // 모의 데이터를 반환
   return mockData;
 };
 
@@ -33,22 +30,18 @@ export default function Page() {
     setIsBottomSheetOpen(!isBottomSheetOpen);
   };
 
-  // Intersection Observer 설정
   const { ref, inView } = useInView();
 
-  // useInfiniteQuery로 Mock 데이터 가져오기
   const { data, fetchNextPage, isLoading, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery({
       queryKey: ['cards'],
       queryFn: ({ pageParam = 0 }) => handleGetCard(pageParam),
       initialPageParam: 0,
       getNextPageParam: (lastPage, allPages) => {
-        // 페이지가 10개씩 데이터를 가져오면 다음 페이지를 로드
         return lastPage.length === 10 ? allPages.length * 10 : undefined;
       },
     });
 
-  // Intersection Observer가 활성화될 때마다 다음 페이지를 불러옵니다.
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, fetchNextPage]);
@@ -58,10 +51,7 @@ export default function Page() {
       <AppBarSetter title="콘서트 상세 페이지" />
 
       {isBottomSheetOpen && (
-        <div
-          className={`${styles.overlay} ${styles.open}`}
-          onClick={toggleBottomSheet}
-        ></div>
+        <div className={styles.overlay} onClick={toggleBottomSheet}></div>
       )}
 
       <div className={styles.container}>
@@ -100,7 +90,6 @@ export default function Page() {
         <hr className={styles.line} />
         <div className={styles.list_container}>
           <span className={styles.subtitle}>대리구매자 목록</span>
-          {/* 데이터가 있을 경우 UserCard에 전달 */}
           {data?.pages.map((page, index) =>
             page.map((user) => (
               <UserCard key={user.id} user={user} onClick={toggleBottomSheet} />
@@ -114,9 +103,9 @@ export default function Page() {
           {/* 무한 스크롤 트리거 */}
           <div ref={ref} style={{ height: 10 }} />
         </div>
-      </div>
 
-      <BottomSheet onClose={toggleBottomSheet} isOpen={isBottomSheetOpen} />
+        <BottomSheet onClose={toggleBottomSheet} isOpen={isBottomSheetOpen} />
+      </div>
     </>
   );
 }

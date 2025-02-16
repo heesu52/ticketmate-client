@@ -1,0 +1,25 @@
+{
+  "theme_color": "#ff6a6a",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "display": "standalone",
+  "dir": "auto",
+  "lang": "ko-KR",
+  "name": "티켓메이트",
+  "short_name": "티켓메이트",
+  "scope": "/",
+  "start_url": "/",
+  "description": "대리 티켓팅 플랫폼 티켓메이트",
+  "icons": [
+    {
+      "sizes": "192x192",
+      "src": "/app-assets/icons/icon-192.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "512x512",
+      "src": "/app-assets/icons/icon-512.png",
+      "type": "image/png"
+    }
+  ]
+}

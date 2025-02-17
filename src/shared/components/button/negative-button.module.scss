@@ -6,24 +6,23 @@
   justify-content: center;
 
   border-radius: 12px;
-  border: 1px solid var(--brand-main);
   padding: 12px 24px;
   gap: 10px;
 
-  background-color: var(--brand-main);
-  color: var(--white);
+  border-radius: 12px;
+  background-color: var(--gray-1);
 
   &.large {
     width: 100%;
   }
 
   &.medium {
-    width: 66.7%;
+    width: 50%;
     gap: 16px;
   }
 
   &.small {
-    width: 50%;
+    width: 33%;
     gap: 16px;
   }
 

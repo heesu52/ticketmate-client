@@ -1,23 +1,29 @@
 import styles from './user-card.module.scss';
+import { UserCardProps } from './user-card.type';
 
-export default function UserCard() {
+const UserCard = ({ user, onClick }: UserCardProps) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={onClick}>
       <div className={styles.left_container}>
-        {/* 추후 img 태그로 변경 */}
-        <div className={styles.profile} />
+        {/* 프로필 이미지 */}
+        <div
+          className={styles.profile}
+          style={{ backgroundImage: `url(${user.profileImage})` }}
+        />
         <div className={styles.user_container}>
-          <span className={styles.nickname}>의문의 티켓터</span>
-          <span>한 줄 소개를 작성해주세요</span>
+          <span className={styles.nickname}>{user.name}</span>
+          <span>{user.introduction || '한 줄 소개를 작성해주세요'}</span>
         </div>
       </div>
 
       <div className={styles.count_container}>
         <div className={styles.text}>
-          <span className={styles.count}>24</span>
+          <span className={styles.count}>{user.transactionCount}</span>
           <span>건</span>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default UserCard;

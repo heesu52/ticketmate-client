@@ -11,10 +11,10 @@ interface BottomSheetProps {
   isOpen: boolean;
 }
 
-const BottomSheet = ({ isOpen }: BottomSheetProps) => {
+const BottomSheet = ({ isOpen, onClose }: BottomSheetProps) => {
   return (
     <div className={`${styles.container} ${isOpen ? styles.open : ''}`}>
-      <div className={styles.icon} />
+      <div className={styles.icon} onClick={onClose} />
       <div className={styles.upper_container}>
         <span className={styles.title}>의문의 티켓터님의</span>
         <span className={styles.title}>티켓팅 대리 성공 건수는?</span>
@@ -34,7 +34,7 @@ const BottomSheet = ({ isOpen }: BottomSheetProps) => {
       </div>
 
       <div className={styles.button_container}>
-        <NegativeButton label="다음에" size="small" />
+        <NegativeButton label="다음에" size="small" onClick={onClose} />
         <PositiveButton label="요청하기" type="submit" size="medium" />
       </div>
     </div>

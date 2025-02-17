@@ -19,6 +19,14 @@ export const metadata: Metadata = {
   title: '티켓메이트',
   description:
     '티켓메이트는 공연, 스포츠 경기 등 각종 이벤트의 티켓을 원하는 시간에 대신 예매해줄 메이트를 쉽게 찾아 연결해주는 대리 티켓팅 플랫폼입니다. 신속하고 신뢰할 수 있는 서비스로 효율적인 티켓팅 경험을 제공합니다.',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/app-assets/icons/favicon.ico',
+    apple: '/app-assets/icons/apple-icon-180x180.png',
+  },
+  appleWebApp: {
+    statusBarStyle: 'default',
+  },
 };
 
 export const viewport: Viewport = {
@@ -27,7 +35,6 @@ export const viewport: Viewport = {
   maximumScale: 1,
   minimumScale: 1,
   userScalable: false,
-  viewportFit: 'cover',
 };
 
 export default function RootLayout({

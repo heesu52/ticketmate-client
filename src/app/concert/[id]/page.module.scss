@@ -17,7 +17,7 @@
   align-items: center;
   margin-top: 48px;
 
-  .title_container{
+  .title_container {
     width: 100%;
 
     .title {
@@ -33,23 +33,23 @@
       width: 100%;
       gap: 8px;
       margin-top: 20px;
-  
+
       .detail {
         display: flex;
         width: 100%;
-  
-        .category{
+
+        .category {
           @include Heading-04;
           color: var(--gray-4);
           flex: 1;
         }
-  
-        .info{
+
+        .info {
           @include Paragraph-02;
           color: var(--gray-5);
           flex: 2;
         }
-      } 
+      }
 
       .link {
         display: flex;
@@ -66,11 +66,11 @@
     width: 100%;
     border: 0;
     height: 1px;
-    background-color: var(--divider-line); 
-    margin: 40px 0; 
+    background-color: var(--divider-line);
+    margin: 40px 0;
   }
 
-  .list_container{
+  .list_container {
     width: 100%;
 
     .subtitle {

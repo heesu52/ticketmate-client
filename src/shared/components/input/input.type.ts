@@ -2,6 +2,7 @@ import type { InputHTMLAttributes, ReactNode } from 'react';
 
 interface IconProps {
   icon: ReactNode;
+  position?: 'left' | 'right';
   onIconClick?: () => void;
 }
 

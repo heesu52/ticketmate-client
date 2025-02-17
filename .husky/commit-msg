@@ -5,6 +5,12 @@ echo "---------------------------"
 echo "$COMMIT_MESSAGE"
 echo "---------------------------"
 
+# 머지 커밋 메시지 예외 처리
+if echo "$COMMIT_MESSAGE" | grep -qE "^Merge (branch|pull request)"; then
+  echo "✅ merge commit detected, skipping validation ✅"
+  exit 0
+fi
+
 if ! echo "$COMMIT_MESSAGE" | grep -qE " .#?[0-9]+"; then
   echo "❌ commit fail: 이슈 번호가 포함되어 있지 않거나 공백이 없습니다 ❌"
   exit 1

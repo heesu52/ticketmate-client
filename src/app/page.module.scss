@@ -1,6 +1,5 @@
 @use '../styles/index' as *;
 
-.page {
-  @include Heading-01;
-  color: var(--brand-main);
+.container {
+  width: 100%;
 }

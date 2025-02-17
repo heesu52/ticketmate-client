@@ -37,12 +37,24 @@
       color: var(--gray-4);
     }
 
-    &.with_icon {
-      padding-right: 64px;
+    &.left {
+      &.with_icon {
+        padding-left: 46px;
+      }
+
+      &.without_icon {
+        padding-right: 16px;
+      }
     }
 
-    &.without_icon {
-      padding-right: 16px;
+    &.right {
+      &.with_icon {
+        padding-right: 64px;
+      }
+
+      &.without_icon {
+        padding-right: 16px;
+      }
     }
 
     &:focus {
@@ -52,14 +64,24 @@
 
   .icon {
     position: absolute;
-    right: 0;
     top: 0;
-    padding: 0 16px 0 16px;
+
     color: var(--gray-4);
     height: 100%;
-    border-radius: 0 12px 12px 0;
 
     display: flex;
     align-items: center;
+
+    &.left {
+      left: 0;
+      border-radius: 12px 0 0 12px;
+      padding: 0 0 0 16px;
+    }
+
+    &.right {
+      right: 0;
+      border-radius: 0 12px 12px 0;
+      padding: 0 16px 0 16px;
+    }
   }
 }

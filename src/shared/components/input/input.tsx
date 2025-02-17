@@ -10,6 +10,8 @@ const cn = classNames.bind(styles);
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, id, iconProps, ...props }, ref) => {
+    const position = iconProps?.position || 'right';
+
     return (
       <div className={styles.container}>
         {label && <label htmlFor={id}>{label}</label>}
@@ -18,13 +20,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             className={cn(
               styles.input,
+              styles[position],
               iconProps ? styles.with_icon : styles.without_icon,
             )}
             id={id}
             {...props}
           />
           {iconProps && (
-            <span className={styles.icon} onClick={iconProps.onIconClick}>
+            <span
+              className={cn(styles.icon, styles[position])}
+              onClick={iconProps.onIconClick}
+            >
               {iconProps.icon}
             </span>
           )}

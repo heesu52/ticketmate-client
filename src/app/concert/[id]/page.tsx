@@ -90,7 +90,7 @@ export default function Page() {
         <hr className={styles.line} />
         <div className={styles.list_container}>
           <span className={styles.subtitle}>대리구매자 목록</span>
-          {data?.pages.map((page, index) =>
+          {data?.pages.map((page) =>
             page.map((user) => (
               <UserCard key={user.id} user={user} onClick={toggleBottomSheet} />
             )),

@@ -1,18 +1,5 @@
 import styles from './user-card.module.scss';
-
-// UserCardProps에 user 데이터를 추가
-interface User {
-  id: number;
-  name: string;
-  profileImage: string;
-  introduction: string;
-  transactionCount: number;
-}
-
-interface UserCardProps {
-  user: User;
-  onClick: () => void;
-}
+import { UserCardProps } from './user-card.type';
 
 const UserCard = ({ user, onClick }: UserCardProps) => {
   return (

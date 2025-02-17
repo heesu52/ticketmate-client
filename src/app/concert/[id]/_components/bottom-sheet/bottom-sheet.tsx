@@ -35,7 +35,7 @@ const BottomSheet = ({ isOpen, onClose }: BottomSheetProps) => {
 
       <div className={styles.button_container}>
         <NegativeButton label="다음에" size="small" onClick={onClose} />
-        <PositiveButton label="요청하기" type="submit" size="medium" />
+        <PositiveButton label="요청하기" type="button" size="medium" />
       </div>
     </div>
   );

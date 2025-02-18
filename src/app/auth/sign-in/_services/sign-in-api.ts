@@ -1,19 +1,12 @@
 import { SignInAPIBody } from '@/app/auth/sign-in/_services/sign-in-api.type';
-import httpClient from '@/shared/services';
-import { fetchWithErrorHandling } from '@/shared/utils/services/fetch-utils';
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-
-const instance = httpClient({
-  baseURL: BASE_URL,
-});
+import instance from '@/shared/services';
 
 const postSignInAPI = (data: SignInAPIBody) => {
-  return fetchWithErrorHandling(
-    instance('/auth/sign-in', {
+  return instance(
+    `/auth/sign-in?username=${data.username}&password=${data.password}`,
+    {
       method: 'POST',
-      body: JSON.stringify(data),
-    }),
+    },
   );
 };
 

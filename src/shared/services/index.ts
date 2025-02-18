@@ -1,74 +1,32 @@
-type FetchParameters = Parameters<typeof fetch>;
-type PromiseAble<T> = T | Promise<T>;
+import httpClient from '@/shared/utils/services/http-client';
 
-export type HttpClient<R = Response> = ReturnType<typeof httpClient<R>>;
+const instance = httpClient({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 
-export interface HttpClientOption<T = Response>
-  extends Omit<NonNullable<FetchParameters[1]>, 'body'> {
-  baseURL?: string;
-  authorization?: string;
-  interceptors?: {
-    request?(
-      input: NonNullable<FetchParameters[0]>,
-      init: NonNullable<FetchParameters[1]>,
-    ): PromiseAble<FetchParameters[1]>;
-    response?(response: Response): PromiseAble<T>;
-  };
-}
+  interceptors: {
+    async response<T = unknown>(response: Response): Promise<T> {
+      const apiResponse = await response;
 
-const applyBaseURL = (input: FetchParameters[0], baseURL?: string) => {
-  if (!baseURL) {
-    return input;
-  }
+      if (!apiResponse.ok) {
+        // unauthorized 401
+        if (apiResponse.status === 401) {
+          if (
+            window.confirm(
+              '로그인이 필요한 페이지입니다. 로그인 창으로 이동하시겠습니까?',
+            )
+          ) {
+            window.location.href = '/auth/sign-in';
+            return Promise.reject('Redirecting to login');
+          }
+        }
 
-  if (typeof input === 'object' && 'url' in input) {
-    return new Request(new URL(input.url, baseURL), input);
-  }
+        const errorText = await apiResponse.text();
+        throw new Error(`HTTP error ${apiResponse.status}: ${errorText}`);
+      }
 
-  return new URL(input, baseURL).toString();
-};
+      return apiResponse.json() as Promise<T>;
+    },
+  },
+});
 
-function httpClient<T = Response>({
-  baseURL,
-  authorization,
-  interceptors = {},
-  ...requestInit
-}: HttpClientOption<T> = {}) {
-  return async function <R = T extends Response ? Response : T>(
-    input: FetchParameters[0],
-    init?: FetchParameters[1],
-  ): Promise<R> {
-    const url = applyBaseURL(input, baseURL);
-    const option = { ...requestInit, ...init };
-
-    option.headers = {
-      'Content-Type': 'application/json',
-
-      ...(option.headers || {}),
-    };
-
-    // authorization 값이 있으면 헤더에 병합
-    if (authorization && option.headers) {
-      option.headers = {
-        'Content-Type': 'application/json',
-
-        ...(option.headers || {}),
-        Authorization: authorization,
-      };
-    }
-
-    const interceptorAppliedOption = interceptors.request
-      ? await interceptors.request(url, option)
-      : option;
-
-    const response = await fetch(url, interceptorAppliedOption);
-
-    if (interceptors.response) {
-      return (await interceptors.response(response)) as R;
-    }
-
-    return response as R;
-  };
-}
-
-export default httpClient;
+export default instance;

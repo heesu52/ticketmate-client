@@ -1,5 +1,5 @@
 import { SignInAPIBody } from '@/app/auth/sign-in/_services/sign-in-api.type';
-import instance from '@/shared/services';
+import instance from '@/shared/services/instance';
 
 const postSignInAPI = (data: SignInAPIBody) => {
   return instance(

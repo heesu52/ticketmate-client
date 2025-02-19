@@ -7,7 +7,7 @@ const Provider = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <HeadProvider />
-      <ReactQueryProviders>{children}</ReactQueryProviders>;
+      <ReactQueryProviders>{children}</ReactQueryProviders>
     </>
   );
 };

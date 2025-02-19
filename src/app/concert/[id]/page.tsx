@@ -29,7 +29,7 @@ export default function Page() {
 
   return (
     <>
-      <AppBarSetter title="콘서트 상세 페이지" />
+      <AppBarSetter title="공연 상세 페이지" />
 
       <div className={styles.container}>
         <div className={styles.title_container}>
@@ -66,7 +66,7 @@ export default function Page() {
 
         <hr className={styles.line} />
         <div className={styles.list_container}>
-          <span className={styles.subtitle}>대리구매자 목록</span>
+          <span className={styles.subtitle}>대리인</span>
           <UserCard />
         </div>
       </div>

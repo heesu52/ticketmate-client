@@ -76,7 +76,7 @@ const ConcertList = () => {
 
       {/* 리스트 */}
       <div className={styles.concert_container}>
-        <span className={styles.title}>신청 가능한 콘서트</span>
+        <span className={styles.title}>신청가능 공연</span>
 
         {concert.map((concertItem) => (
           <ConcertCard concertItem={concertItem} key={concertItem.title} />

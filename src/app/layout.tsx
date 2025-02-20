@@ -47,7 +47,6 @@ export default function RootLayout({
       <body className={notoSansKR.variable}>
         <Provider>
           <ResponsiveRootLayout>{children}</ResponsiveRootLayout>
-          <div id="modal-root"></div>
         </Provider>
       </body>
     </html>

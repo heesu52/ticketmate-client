@@ -24,6 +24,8 @@
   .dialog_content {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 16px;
   }
 
@@ -49,15 +51,15 @@
         color: var(--white);
 
         &.large {
-          width: 100%;
+          flex-basis: 100%;
         }
 
         &.medium {
-          width: 66.7%;
+          flex-basis: 66.7%;
         }
 
         &.small {
-          width: 50%;
+          flex-basis: 33%;
         }
       }
 
@@ -74,15 +76,15 @@
         color: var(--gray-4);
 
         &.large {
-          width: 100%;
+          flex-basis: 100%;
         }
 
         &.medium {
-          width: 50%;
+          flex-basis: 66.7%;
         }
 
         &.small {
-          width: 33%;
+          flex-basis: 33%;
         }
       }
     }

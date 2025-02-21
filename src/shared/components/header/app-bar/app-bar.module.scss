@@ -5,7 +5,6 @@
   z-index: 10;
   top: 0;
   margin: 0 auto;
-  padding: 0 24px 0 0;
 
   width: 100%;
   max-width: 600px;
@@ -15,7 +14,10 @@
   border-style: solid;
   border-color: var(--divider-line);
 
-  .button {
+  display: flex;
+  justify-content: space-between;
+
+  .back_button {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -24,12 +26,25 @@
 
     .icon {
       display: flex;
-      align-items: center;
+      align-self: center;
     }
 
     .title {
       @include Paragraph-01;
       color: var(--gray-5);
+    }
+  }
+
+  .more_button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 16px 24px 16px 24px;
+
+    .icon {
+      display: flex;
+      align-self: center;
     }
   }
 }

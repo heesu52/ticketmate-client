@@ -1,8 +1,12 @@
 'use client';
 
+import React, { useRef } from 'react';
+
 import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
+import ExampleModal from '@/app/_components/example-modal/example-modal';
 import SearchIcon from '@/assets/icons/search.svg';
 import Input from '@/shared/components/input/input';
+import { type DialogModalContextType } from '@/shared/components/modal/dialog-modal/dialog-modal';
 
 import styles from './concert-list.module.scss';
 
@@ -58,31 +62,43 @@ const concert = [
 ];
 
 const ConcertList = () => {
+  const exampleModalRef = useRef<DialogModalContextType>(null);
+
+  const handleOpenModal = () => {
+    exampleModalRef.current?.open();
+  };
+
   return (
-    <div className={styles.container}>
-      {/* 검색창 */}
-      <div className={styles.input_container}>
-        <Input
-          placeholder="콘서트 이름을 입력하세요."
-          label="콘서트명"
-          id="concert"
-          type="text"
-          iconProps={{
-            icon: <SearchIcon width={20} height={20} fill={'var(--gray-4)'} />,
-            position: 'left',
-          }}
-        />
+    <>
+      <div className={styles.container}>
+        {/* 검색창 */}
+        <div className={styles.input_container} onClick={handleOpenModal}>
+          <Input
+            placeholder="콘서트 이름을 입력하세요."
+            label="콘서트명"
+            id="concert"
+            type="text"
+            iconProps={{
+              icon: (
+                <SearchIcon width={20} height={20} fill={'var(--gray-4)'} />
+              ),
+              position: 'left',
+            }}
+          />
+        </div>
+
+        {/* 리스트 */}
+        <div className={styles.concert_container}>
+          <span className={styles.title}>신청가능 공연</span>
+
+          {concert.map((concertItem) => (
+            <ConcertCard concertItem={concertItem} key={concertItem.title} />
+          ))}
+        </div>
       </div>
 
-      {/* 리스트 */}
-      <div className={styles.concert_container}>
-        <span className={styles.title}>신청가능 공연</span>
-
-        {concert.map((concertItem) => (
-          <ConcertCard concertItem={concertItem} key={concertItem.title} />
-        ))}
-      </div>
-    </div>
+      <ExampleModal ref={exampleModalRef} />
+    </>
   );
 };
 

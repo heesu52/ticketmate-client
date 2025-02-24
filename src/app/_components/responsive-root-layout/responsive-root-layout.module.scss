@@ -7,16 +7,18 @@
 
   width: 100%;
   max-width: 600px;
-  min-height: 100dvh;
-  height: 100%;
+  min-height: 100%;
 
   @media screen and (min-width: 601px) {
+    box-sizing: content-box;
     border-right: 1px solid var(--divider-line);
     border-left: 1px solid var(--divider-line);
   }
 
   .content {
     background: var(--white);
+    height: 100%;
+    width: 100%;
 
     &.with_app_header {
       // app-header 높이

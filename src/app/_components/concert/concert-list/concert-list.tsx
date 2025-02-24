@@ -1,12 +1,10 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React from 'react';
 
 import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
-import ExampleModal from '@/app/_components/example-modal/example-modal';
 import SearchIcon from '@/assets/icons/search.svg';
 import Input from '@/shared/components/input/input';
-import { type DialogModalContextType } from '@/shared/components/modal/dialog-modal/dialog-modal';
 
 import styles from './concert-list.module.scss';
 
@@ -62,17 +60,11 @@ const concert = [
 ];
 
 const ConcertList = () => {
-  const exampleModalRef = useRef<DialogModalContextType>(null);
-
-  const handleOpenModal = () => {
-    exampleModalRef.current?.open();
-  };
-
   return (
     <>
       <div className={styles.container}>
         {/* 검색창 */}
-        <div className={styles.input_container} onClick={handleOpenModal}>
+        <div className={styles.input_container}>
           <Input
             placeholder="콘서트 이름을 입력하세요."
             label="콘서트명"
@@ -96,8 +88,6 @@ const ConcertList = () => {
           ))}
         </div>
       </div>
-
-      <ExampleModal ref={exampleModalRef} />
     </>
   );
 };

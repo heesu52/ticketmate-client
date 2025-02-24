@@ -7,7 +7,12 @@ const AppHeader = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title} aria-label="티켓메이트 로고">
-        <TicketMateLogoIcon role="img" aria-hidden="true" />
+        <TicketMateLogoIcon
+          width={102}
+          height={16}
+          role="img"
+          aria-hidden="true"
+        />
       </h1>
       <button className={styles.button} aria-label="알림">
         <span className={styles.icon}>

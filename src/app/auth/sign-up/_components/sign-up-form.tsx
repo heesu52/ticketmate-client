@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import VisibilityIcon from '@/assets/icons/visibility.svg';
-import PositiveButton from '@/shared/components/button/positive-button';
+import PositiveButton from '@/shared/components/button/positive-button/positive-button';
 import Input from '@/shared/components/input/input';
 
 import styles from './sign-up-form.module.scss';

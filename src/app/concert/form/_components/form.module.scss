@@ -1,0 +1,97 @@
+@use '@/styles/index' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 24px;
+
+  .form_container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+
+    .span {
+      @include Heading-03;
+      color: var(--gray-5);
+    }
+
+    .select,
+    .textarea {
+      @include Paragraph-02;
+      color: var(--gray-4);
+      display: flex;
+      width: 100%;
+      padding: 12px 16px;
+      align-items: center;
+      border-radius: 12px;
+      background: var(--gray-1);
+    }
+
+    .input_price,
+    .input_seat {
+      @include Paragraph-02;
+      color: var(--gray-4);
+
+      display: flex;
+      width: 100%;
+      padding: 12px 16px;
+      align-items: center;
+      border-radius: 12px;
+      background: var(--gray-1);
+      gap: 10px;
+      flex-shrink: 0;
+      border: none;
+    }
+
+    .select {
+      justify-content: space-between;
+    }
+
+    .textarea {
+      height: 182px;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .input_container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .text {
+        @include Paragraph-02;
+        color: var(--gray-5);
+        text-align: center;
+        min-width: 44px;
+      }
+
+      .input_price {
+        min-width: 109px;
+      }
+
+      .input_seat {
+        min-width: 137px;
+      }
+
+      & > :nth-child(1) {
+        flex: 1;
+      }
+
+      & > :nth-child(2) {
+        flex: 3;
+      }
+
+      & > :nth-child(3) {
+        flex: 3;
+      }
+
+      & > :nth-child(4) {
+        flex: 1;
+      }
+    }
+  }
+}

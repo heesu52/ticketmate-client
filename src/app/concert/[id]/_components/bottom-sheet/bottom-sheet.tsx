@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 
+import NegativeButton from '@/shared/components/button/negative-button/negative-button';
+import PositiveButton from '@/shared/components/button/positive-button/positive-button';
+
 import styles from './bottom-sheet.module.scss';
-import NegativeButton from '../../../../../shared/components/button/negative-button';
-import PositiveButton from '../../../../../shared/components/button/positive-button';
 
 interface BottomSheetProps {
   onClose: () => void;

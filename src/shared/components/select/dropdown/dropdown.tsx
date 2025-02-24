@@ -8,11 +8,17 @@ import {
   JSX,
 } from 'react';
 
+import classNames from 'classnames/bind';
+
+import BottomArrowIcon from '@/assets/icons/left_arrow.svg';
+
 import styles from './dropdown.module.scss';
 
+const cn = classNames.bind(styles);
+
 export interface DropdownContextType {
-  selected: string;
-  setSelected: (value: string) => void;
+  selectedValue: string;
+  setSelectedValue: (value: string) => void;
   options: { value: string; label: string; disabled?: boolean }[];
   addOption: (value: string, label: string, disabled?: boolean) => void;
 }
@@ -26,14 +32,22 @@ export interface DropdownProps {
 const DropdownContext = createContext<DropdownContextType | undefined>(
   undefined,
 );
-const useDropdownContext = () => useContext(DropdownContext);
+
+const useDropdownContext = () => {
+  const context = useContext(DropdownContext);
+  if (!context)
+    throw new Error(
+      'Dropdown 컴포넌트는 Dropdown.Provider 하위에서 사용되어야 합니다.',
+    );
+  return context;
+};
 
 const Dropdown = ({
   children,
   defaultValue = '',
   onSelect,
 }: DropdownProps): JSX.Element | null => {
-  const [selected, setSelected] = useState(defaultValue);
+  const [selectedValue, setSelectedValue] = useState(defaultValue);
   const [options, setOptions] = useState<
     { value: string; label: string; disabled?: boolean }[]
   >([]);
@@ -47,13 +61,13 @@ const Dropdown = ({
 
   useEffect(() => {
     if (onSelect) {
-      onSelect(selected);
+      onSelect(selectedValue);
     }
-  }, [selected, onSelect]);
+  }, [selectedValue, onSelect]);
 
   return (
     <DropdownContext.Provider
-      value={{ selected, setSelected, options, addOption }}
+      value={{ selectedValue, setSelectedValue, options, addOption }}
     >
       <div className={styles.dropdown}>{children}</div>
     </DropdownContext.Provider>
@@ -69,9 +83,7 @@ const DropdownTrigger = ({
   label,
   placeholder = '선택해주세요.',
 }: DropdownTriggerProps): JSX.Element => {
-  const context = useDropdownContext();
-  if (!context)
-    throw new Error('DropdownTrigger는 Dropdown 내부에서만 사용 가능합니다.');
+  const { selectedValue, setSelectedValue, options } = useDropdownContext();
 
   return (
     <>
@@ -80,20 +92,26 @@ const DropdownTrigger = ({
       </label>
 
       <select
-        className={styles.dropdown_select}
+        className={cn(
+          styles.dropdown_select,
+          selectedValue === '' && styles.placeholder,
+        )}
         id={label}
-        value={context.selected}
+        value={selectedValue}
         onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-          context.setSelected(e.target.value)
+          setSelectedValue(e.target.value)
         }
       >
-        {!context.selected && (
-          <option value="" disabled>
-            {placeholder}
-          </option>
-        )}
-        {context.options.map((option) => (
+        <option
+          className={cn(styles.option, styles.placeholder)}
+          value=""
+          disabled
+        >
+          {placeholder}
+        </option>
+        {options.map((option) => (
           <option
+            className={styles.option}
             key={option.value}
             value={option.value}
             disabled={option.disabled}
@@ -102,6 +120,13 @@ const DropdownTrigger = ({
           </option>
         ))}
       </select>
+
+      <BottomArrowIcon
+        className={styles.icon}
+        width={16}
+        height={16}
+        fill={'var(--gray-4)'}
+      />
     </>
   );
 };
@@ -117,13 +142,11 @@ const DropdownOption = ({
   children,
   disabled = false,
 }: DropdownOptionProps) => {
-  const context = useDropdownContext();
-  if (!context)
-    throw new Error('DropdownOption은 Dropdown 내부에서만 사용 가능합니다.');
+  const { addOption } = useDropdownContext();
 
   useEffect(() => {
-    context.addOption(value, String(children), disabled);
-  }, [context, value, children, disabled]);
+    addOption(value, String(children), disabled);
+  }, [value, children, disabled, addOption]);
 
   return null;
 };

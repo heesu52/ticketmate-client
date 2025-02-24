@@ -7,15 +7,16 @@
 
   width: 100%;
   max-width: 600px;
-  height: 100dvh;
+  min-height: 100dvh;
+  height: 100%;
+
+  @media screen and (min-width: 601px) {
+    border-right: 1px solid var(--divider-line);
+    border-left: 1px solid var(--divider-line);
+  }
 
   .content {
     background: var(--white);
-
-    @media screen and (min-width: 601px) {
-      border-right: 1px solid var(--divider-line);
-      border-left: 1px solid var(--divider-line);
-    }
 
     &.with_app_header {
       // app-header 높이
@@ -29,12 +30,12 @@
 
     &.with_nav {
       // 바텀 네비게이션 높이 + 여유 공간 + safe-area-inset-bottom
-      padding: 0 24px calc(84px + 40px + env(safe-area-inset-bottom)) 24px;
+      padding: 0 24px calc(84px + 48px + env(safe-area-inset-bottom)) 24px;
     }
 
     &.without_nav {
       //  여유 공간 + safe-area-inset-bottom
-      padding: 0 24px calc(40px + env(safe-area-inset-bottom)) 24px;
+      padding: 0 24px calc(48px + env(safe-area-inset-bottom)) 24px;
     }
   }
 }

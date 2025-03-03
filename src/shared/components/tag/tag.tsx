@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 
+import cn from 'classnames';
+
 import styles from './tag.module.scss';
 
 interface TagComponentProps {
@@ -8,7 +10,7 @@ interface TagComponentProps {
 }
 
 const Tag = ({ children, type = 'bank-positive' }: TagComponentProps) => {
-  const buttonClass = `${styles.button} ${type ? styles[type] : ''}`;
+  const buttonClass = cn(styles.button, styles[type]);
 
   return (
     <button className={buttonClass}>

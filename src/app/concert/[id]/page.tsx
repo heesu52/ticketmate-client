@@ -7,10 +7,10 @@ import Link from 'next/link';
 import { useInView } from 'react-intersection-observer';
 
 import BottomSheet from '@/app/concert/[id]/_components/bottom-sheet/bottom-sheet';
-import BankIcon from '@/assets/icons/bank_positive.svg';
-import EtcIcon from '@/assets/icons/tag.svg';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import Overlay from '@/shared/components/overlay/overlay';
+import BankPositive from '@/shared/components/tag/bank-positive/bank-positive';
+import Dday from '@/shared/components/tag/d-day/d-day';
 
 import UserCard from './_components/user-card/user-card';
 import styles from './page.module.scss';
@@ -58,8 +58,8 @@ export default function Page() {
       <div className={styles.container}>
         <div className={styles.title_container}>
           <div className={styles.tag}>
-            <BankIcon />
-            <EtcIcon />
+            <BankPositive />
+            <Dday />
           </div>
 
           <div className={styles.title}>

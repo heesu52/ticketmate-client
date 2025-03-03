@@ -1,0 +1,16 @@
+@use '@/styles/index' as *;
+
+.button{
+    display: flex;
+    padding: 4px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 50px;
+    background-color: var(-gray-4);
+
+    .label{
+        @include Heading-04;
+        color: var(--white);
+    }
+}

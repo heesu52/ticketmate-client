@@ -1,0 +1,32 @@
+@use '@/styles/index' as *;
+
+.button {
+    display: flex;
+    padding: 4px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 50px;
+
+    .label {
+        @include Heading-04;
+    }
+}
+
+.bank-positive {
+    @extend .button; 
+    background-color: var(--brand-main);
+    color: var(--white);
+}
+
+.bank-negative {
+    @extend .button; 
+    background-color: var(--gray-4);
+    color: var(--white);
+}
+
+.d-day {
+    @extend .button; 
+    background-color: #ADD8E6;
+    color: var(--gray-5);
+}

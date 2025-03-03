@@ -9,8 +9,7 @@ import { useInView } from 'react-intersection-observer';
 import BottomSheet from '@/app/concert/[id]/_components/bottom-sheet/bottom-sheet';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import Overlay from '@/shared/components/overlay/overlay';
-import BankPositive from '@/shared/components/tag/bank-positive/bank-positive';
-import Dday from '@/shared/components/tag/d-day/d-day';
+import Tag from '@/shared/components/tag/tag';
 
 import UserCard from './_components/user-card/user-card';
 import styles from './page.module.scss';
@@ -58,8 +57,8 @@ export default function Page() {
       <div className={styles.container}>
         <div className={styles.title_container}>
           <div className={styles.tag}>
-            <BankPositive />
-            <Dday />
+            <Tag type="bank-positive">무통장 가능</Tag>
+            <Tag type="d-day">오픈 D-6</Tag>
           </div>
 
           <div className={styles.title}>

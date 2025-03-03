@@ -3,8 +3,6 @@
 import React from 'react';
 
 import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
-import SearchIcon from '@/assets/icons/search.svg';
-import Input from '@/shared/components/input/input';
 
 import styles from './concert-list.module.scss';
 
@@ -63,22 +61,6 @@ const ConcertList = () => {
   return (
     <>
       <div className={styles.container}>
-        {/* 검색창 */}
-        <div className={styles.input_container}>
-          <Input
-            placeholder="콘서트 이름을 입력하세요."
-            label="콘서트명"
-            id="concert"
-            type="text"
-            iconProps={{
-              icon: (
-                <SearchIcon width={20} height={20} fill={'var(--gray-4)'} />
-              ),
-              position: 'left',
-            }}
-          />
-        </div>
-
         {/* 리스트 */}
         <div className={styles.concert_container}>
           <span className={styles.title}>신청가능 공연</span>

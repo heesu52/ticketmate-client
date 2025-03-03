@@ -1,15 +1,20 @@
 import { create } from 'zustand';
 
 interface AppBarState {
-  title: string;
+  isShow: boolean;
+  title: string | null;
   backURL: string | null;
   setTitle: (title: string) => void;
   setbackURL: (backURL: string | null) => void;
 }
 
 export const useAppBarStore = create<AppBarState>((set) => ({
-  title: '',
+  isShow: false,
+  title: null,
   backURL: null,
-  setTitle: (title) => set({ title }),
+  setTitle: (title) => {
+    set({ title });
+    set((state) => ({ isShow: title !== null }));
+  },
   setbackURL: (backURL) => set({ backURL }),
 }));

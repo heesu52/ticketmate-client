@@ -7,9 +7,9 @@ import Link from 'next/link';
 import { useInView } from 'react-intersection-observer';
 
 import BottomSheet from '@/app/concert/[id]/_components/bottom-sheet/bottom-sheet';
+import Badge from '@/shared/components/badge/badge';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import Overlay from '@/shared/components/overlay/overlay';
-import Tag from '@/shared/components/tag/tag';
 
 import UserCard from './_components/user-card/user-card';
 import styles from './page.module.scss';
@@ -57,8 +57,8 @@ export default function Page() {
       <div className={styles.container}>
         <div className={styles.title_container}>
           <div className={styles.tag}>
-            <Tag type="bank-positive">무통장 가능</Tag>
-            <Tag type="d-day">오픈 D-6</Tag>
+            <Badge type="bank-positive">무통장 가능</Badge>
+            <Badge type="d-day">오픈 D-6</Badge>
           </div>
 
           <div className={styles.title}>

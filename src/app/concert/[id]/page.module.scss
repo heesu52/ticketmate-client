@@ -10,44 +10,60 @@
   .title_container {
     width: 100%;
 
+    .tag {
+      display: flex;
+      gap: 8px;
+    }
+
     .title {
       @include Heading-02;
       color: var(--gray-5);
       text-align: start;
+      margin-top: 8px;
     }
 
-    .detail_container {
+    .info_container {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      width: 100%;
-      gap: 8px;
       margin-top: 20px;
+      gap: 16px;
 
-      .detail {
-        display: flex;
-        width: 100%;
-
-        .category {
-          @include Heading-04;
-          color: var(--gray-4);
-          flex: 1;
-        }
-
-        .info {
-          @include Paragraph-02;
-          color: var(--gray-5);
-          flex: 2;
-        }
+      .image {
+        border-radius: 12px;
       }
 
-      .link {
+      .detail_container {
         display: flex;
-        justify-content: baseline;
-        @include Paragraph-02;
-        color: var(--gray-4);
-        text-decoration: underline;
-        margin-top: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+        gap: 8px;
+
+        .detail {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+
+          .category {
+            @include Paragraph-02;
+            color: var(--gray-4);
+            flex: 1;
+          }
+
+          .info {
+            @include Heading-03;
+            color: var(--gray-5);
+            flex: 2;
+          }
+        }
+
+        .link {
+          display: flex;
+          justify-content: baseline;
+          @include Heading-03;
+          color: var(--gray-5);
+          text-decoration: underline;
+        }
       }
     }
   }

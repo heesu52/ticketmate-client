@@ -9,12 +9,6 @@
   max-width: var(--max-width);
   min-height: 100dvh;
 
-  @media screen and (min-width: 601px) {
-    box-sizing: content-box;
-    border-right: 1px solid var(--divider-line);
-    border-left: 1px solid var(--divider-line);
-  }
-
   .content {
     padding-left: 24px;
     padding-right: 24px;
@@ -22,6 +16,11 @@
     flex-grow: 1;
     width: 100%;
     background: var(--white);
+
+    @media screen and (min-width: 601px) {
+      border-right: 1px solid var(--divider-line);
+      border-left: 1px solid var(--divider-line);
+    }
 
     &.with_app_header {
       // app-header 높이

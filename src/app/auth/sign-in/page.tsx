@@ -1,40 +1,31 @@
-import classNames from 'classnames/bind';
+import Link from 'next/link';
 
-import KakaoLogoIcon from '@/assets/icons/kakao_logo.svg';
-import TicketMateLogoIcon from '@/assets/icons/main_logo.svg';
-import NaverLogoIcon from '@/assets/icons/naver_logo.svg';
+import SocialLogin from '@/app/auth/sign-in/_shared/components/social-login/social-login';
+import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 
 import styles from './page.module.scss';
-
-const cn = classNames.bind(styles);
 
 export default function Page() {
   return (
     <>
+      <AppBarSetter title="로그인" isShowMoreButton={false} />
+
       <div className={styles.container}>
         <div className={styles.title_container}>
-          <span className={styles.sub_title}>원하는 티켓, 원하는 순간</span>
-          <TicketMateLogoIcon
-            role="img"
-            aria-hidden="true"
-            width={184}
-            height={40}
-          />
+          <span className={styles.title}>로그인</span>
+          <span className={styles.sub_title}>
+            로그인이 필요한 서비스입니다.
+          </span>
         </div>
 
         <div className={styles.social_container}>
-          <button className={cn(styles.social_button, styles.naver)}>
-            <NaverLogoIcon width={24} height={24} />
-            <span className={cn(styles.social_text, styles.naver)}>
-              네이버로 시작하기
-            </span>
-          </button>
-          <button className={cn(styles.social_button, styles.kakao)}>
-            <KakaoLogoIcon width={24} height={24} />
-            <span className={cn(styles.social_text, styles.kakao)}>
-              카카오로 시작하기
-            </span>
-          </button>
+          <SocialLogin />
+        </div>
+
+        <div className={styles.etc_container}>
+          <Link className={styles.look_around} href="/">
+            둘러보기
+          </Link>
         </div>
       </div>
     </>

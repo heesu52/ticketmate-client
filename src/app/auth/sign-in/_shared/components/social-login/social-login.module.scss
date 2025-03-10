@@ -1,0 +1,38 @@
+@use '@/styles/index' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+
+  .social_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    border-radius: 8px;
+    padding: 12px 24px;
+
+    &.naver {
+      background-color: #03c75a;
+    }
+
+    &.kakao {
+      background: #fee500;
+    }
+
+    .social_text {
+      @include Heading-04;
+
+      &.naver {
+        color: var(--white);
+      }
+
+      &.kakao {
+        color: rgba(0, 0, 0, 0.85);
+      }
+    }
+  }
+}

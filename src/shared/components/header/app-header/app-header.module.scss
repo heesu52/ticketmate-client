@@ -8,12 +8,17 @@
   padding: 0 24px 0 24px;
 
   width: 100%;
-  max-width: 600px;
+  max-width: var(--max-width);
   background: var(--white);
 
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media screen and (min-width: 601px) {
+    border-right: 1px solid var(--divider-line);
+    border-left: 1px solid var(--divider-line);
+  }
 
   .title {
     @include Heading-02;

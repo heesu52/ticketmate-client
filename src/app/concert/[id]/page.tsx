@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useInView } from 'react-intersection-observer';
 
 import BottomSheet from '@/app/concert/[id]/_components/bottom-sheet/bottom-sheet';
+import Badge from '@/shared/components/badge/badge';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import Overlay from '@/shared/components/overlay/overlay';
 
@@ -55,34 +56,42 @@ export default function Page() {
 
       <div className={styles.container}>
         <div className={styles.title_container}>
+          <div className={styles.tag}>
+            <Badge type="bank-positive">무통장 가능</Badge>
+            <Badge type="d-day">오픈 D-6</Badge>
+          </div>
+
           <div className={styles.title}>
             터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’
           </div>
-
-          <div className={styles.detail_container}>
-            <div className={styles.detail}>
-              <span className={styles.category}>일자</span>
-              <span className={styles.info}>24/08/27 ~ 24/09/26</span>
+          <div className={styles.info_container}>
+            <div className={styles.image}>
+              {/* 추후 next의 Image 로 변경 예정 */}
+              <img
+                src={'https://placehold.co/400x600'}
+                alt="터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ"
+                width={122}
+                height={162}
+              />
             </div>
+            <div className={styles.detail_container}>
+              <div className={styles.detail}>
+                <span className={styles.category}>공연 일자</span>
+                <span className={styles.info}>24/08/27 ~ 24/09/26</span>
+              </div>
 
-            <div className={styles.detail}>
-              <span className={styles.category}>장소</span>
-              <span className={styles.info}>올림픽공원 핸드볼 경기장</span>
+              <div className={styles.detail}>
+                <span className={styles.category}>공연장</span>
+                <span className={styles.info}>올림픽공원 핸드볼 경기장</span>
+              </div>
+
+              <div className={styles.detail}>
+                <span className={styles.category}>예매처</span>
+                <Link className={styles.link} href="https://ticket.yes24.com">
+                  YES24
+                </Link>
+              </div>
             </div>
-
-            <div className={styles.detail}>
-              <span className={styles.category}>예매처</span>
-              <span className={styles.info}>YES24</span>
-            </div>
-
-            <div className={styles.detail}>
-              <span className={styles.category}>무통장입금</span>
-              <span className={styles.info}>가능</span>
-            </div>
-
-            <Link className={styles.link} href="/">
-              정보 자세히 보기
-            </Link>
           </div>
         </div>
 

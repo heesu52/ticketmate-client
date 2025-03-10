@@ -17,12 +17,24 @@
   display: flex;
   justify-content: space-between;
 
+  &.default {
+    color: var(--gray-5);
+    background: var(--white);
+  }
+
+  &.white {
+    color: var(--white);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
   .back_button {
     display: flex;
     align-items: center;
     gap: 8px;
 
     padding: 16px 16px 16px 24px;
+    color: inherit;
 
     .icon {
       display: flex;
@@ -31,7 +43,7 @@
 
     .title {
       @include Paragraph-01;
-      color: var(--gray-5);
+      color: inherit;
     }
   }
 

@@ -1,5 +1,6 @@
 'use client';
 
+import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 
 import LeftArrowIcon from '@/assets/icons/left_arrow.svg';
@@ -8,8 +9,10 @@ import { useAppBarStore } from '@/shared/components/header/app-bar/use-app-bar-s
 
 import styles from './app-bar.module.scss';
 
+const cn = classNames.bind(styles);
+
 const AppBar = () => {
-  const { title, backURL } = useAppBarStore();
+  const { title, backURL, isShowMoreButton, color } = useAppBarStore();
   const router = useRouter();
 
   const handleBack = () => {
@@ -25,25 +28,27 @@ const AppBar = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={cn(styles.container, color && styles[color])}>
       <button className={styles.back_button} onClick={handleBack}>
         <LeftArrowIcon
           className={styles.icon}
           width={16}
           height={16}
-          fill="var(--gray-5)"
+          fill={color ? `var(--${color})` : 'var(--gray-5)'}
         />
         {title && <span className={styles.title}>{title}</span>}
       </button>
 
-      <button className={styles.more_button} onClick={handleMore}>
-        <MoreIcon
-          className={styles.icon}
-          width={16}
-          height={16}
-          fill="var(--gray-5)"
-        />
-      </button>
+      {isShowMoreButton && (
+        <button className={styles.more_button} onClick={handleMore}>
+          <MoreIcon
+            className={styles.icon}
+            width={16}
+            height={16}
+            fill={color ? `var(--${color})` : 'var(--gray-5)'}
+          />
+        </button>
+      )}
     </div>
   );
 };

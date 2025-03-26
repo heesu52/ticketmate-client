@@ -1,3 +1,38 @@
+@mixin text-style($font-size, $font-weight) {
+  font-size: $font-size;
+  font-weight: $font-weight;
+  line-height: 1.4;
+}
+
+@mixin title-lg {
+  @include text-style(24px, 500);
+}
+
+@mixin title-md {
+  @include text-style(20px, 500);
+}
+
+@mixin title-sm {
+  @include text-style(16px, 500);
+}
+
+@mixin text-lg {
+  @include text-style(16px, 400);
+}
+
+@mixin text-md {
+  @include text-style(14px, 500);
+}
+
+@mixin text-sm {
+  @include text-style(14px, 400);
+}
+
+@mixin text-xs {
+  @include text-style(12px, 400);
+}
+
+// old
 @mixin Heading-01 {
   font-size: 28px;
   font-weight: 500;

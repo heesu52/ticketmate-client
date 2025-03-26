@@ -1,4 +1,27 @@
 :root {
+  --overlayColor: rgba(0, 0, 0, 0.5);
+
+  --textColor-main: #333;
+  --textColor-sub: #555;
+  --textColor-less: #767676;
+
+  --lineColor-main: #eee;
+  --lineColor-sub: #ccc;
+
+  --white: #fff;
+  --white-less: #f9f9f9;
+
+  --brandColor-main: #ff6a6a;
+  --brandColor-fillHover: #e05555;
+  --brandColor-border: #ff9c9c;
+  --borderColor-borderHover: #fff0f0;
+
+  --subColor-border: #add8e6;
+  --subColor-main: #2097bd;
+
+  --max-width: 600px;
+
+  // old
   --brand-main: #ff6a6a;
 
   --gray-1: #f9f9f9;
@@ -12,8 +35,6 @@
 
   --white: #ffffff;
   --black: #000000;
-
-  --max-width: 600px;
 }
 
 html,

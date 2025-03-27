@@ -1,0 +1,37 @@
+@use '@/styles/index' as *;
+
+.button {
+  display: inline-flex;
+  padding: 12px 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px solid var(--brandColor-main);
+
+  &:hover {
+    background: var(--borderColor-borderHover);
+  }
+
+  &.large {
+    width: 100%;
+  }
+
+  &.medium {
+    width: 50%;
+    gap: 16px;
+  }
+
+  &.small {
+    width: 33%;
+    gap: 16px;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+
+    @include Heading-04;
+    text-align: center;
+    color: var(--brandColor-main);
+  }
+}

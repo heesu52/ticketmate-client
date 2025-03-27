@@ -6,8 +6,8 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useInView } from 'react-intersection-observer';
 
-import BottomSheet from '@/app/concert/[id]/_components/bottom-sheet/bottom-sheet';
 import Badge from '@/shared/components/badge/badge';
+import BottomSheet from '@/shared/components/bottom-sheet/bottom-sheet';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import Overlay from '@/shared/components/overlay/overlay';
 

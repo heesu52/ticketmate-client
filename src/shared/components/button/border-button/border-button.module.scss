@@ -30,7 +30,7 @@
     display: flex;
     align-items: center;
 
-    @include Heading-04;
+    @include text-md;
     text-align: center;
     color: var(--brandColor-main);
   }

@@ -1,17 +1,22 @@
 :root {
-  --brand-main: #ff6a6a;
+  --brandColor-fillHover: #e05555;
+  --brandColor-main: #ff6a6a;
+  --brandColor-border: #ff9c9c;
+  --brandColor-borderHover: #FFF0F0;
 
-  --gray-1: #f9f9f9;
-  --gray-2: #eeeeee;
-  --gray-3: #cccccc;
-  --gray-4: #767676;
-  --gray-5: #333333;
-
-  --divider-line: #eee;
-  --image-outline: #ccc;
+  --subColor-main:#2097bd;
+  --subColor-border:#add8e6;
 
   --white: #ffffff;
+  --white-less: #f9f9f9;
+  --lineColor-main: #eeeeee;
+  --lineColor-sub: #cccccc;
+  --textColor-less: #767676;
+  --textColor-sub: #555555;
+  --textColor-main: #333333;
   --black: #000000;
+  --overlayColor: #00000050;
+
 
   --max-width: 600px;
 }

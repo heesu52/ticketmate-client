@@ -1,22 +1,39 @@
 :root {
-  --brandColor-fillHover: #e05555;
-  --brandColor-main: #ff6a6a;
-  --brandColor-border: #ff9c9c;
-  --brandColor-borderHover: #FFF0F0;
+  --overlayColor: rgba(0, 0, 0, 0.5);
 
-  --subColor-main:#2097bd;
-  --subColor-border:#add8e6;
+  --textColor-main: #333;
+  --textColor-sub: #555;
+  --textColor-less: #767676;
+
+  --lineColor-main: #eee;
+  --lineColor-sub: #ccc;
+
+  --white: #fff;
+  --white-less: #f9f9f9;
+
+  --brandColor-main: #ff6a6a;
+  --brandColor-fillHover: #e05555;
+  --brandColor-border: #ff9c9c;
+  --borderColor-borderHover: #fff0f0;
+
+  --subColor-border: #add8e6;
+  --subColor-main: #2097bd;
+
+  --max-width: 600px;
+
+  // old
+  --brand-main: #ff6a6a;
+
+  --gray-1: #f9f9f9;
+  --gray-2: #eeeeee;
+  --gray-3: #cccccc;
+  --gray-4: #767676;
+  --gray-5: #333333;
+  --divider-line: #eee;
+  --image-outline: #ccc;
 
   --white: #ffffff;
-  --white-less: #f9f9f9;
-  --lineColor-main: #eeeeee;
-  --lineColor-sub: #cccccc;
-  --textColor-less: #767676;
-  --textColor-sub: #555555;
-  --textColor-main: #333333;
   --black: #000000;
-  --overlayColor: #00000050;
-
 
   --max-width: 600px;
 }

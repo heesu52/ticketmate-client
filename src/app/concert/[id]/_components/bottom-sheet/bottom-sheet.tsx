@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 
-import NegativeButton from '@/shared/components/button/negative-button/negative-button';
-import PositiveButton from '@/shared/components/button/positive-button/positive-button';
+import NegativeButton from '@/shared/components/button/border-button/border-button';
+import PositiveButton from '@/shared/components/button/fill-button/fill-button';
 
 import styles from './bottom-sheet.module.scss';
 

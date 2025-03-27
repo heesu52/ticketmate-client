@@ -2,7 +2,7 @@
 
 import MinusIcon from '@/assets/icons/minus.svg';
 import PlusIcon from '@/assets/icons/plus.svg';
-import PositiveButton from '@/shared/components/button/positive-button/positive-button';
+import PositiveButton from '@/shared/components/button/fill-button/fill-button';
 import Input from '@/shared/components/input/input';
 
 import styles from './form.module.scss';

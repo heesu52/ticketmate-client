@@ -1,29 +1,31 @@
 @use '@/styles/index' as *;
 
 .button {
-  display: flex;
+  display: inline-flex;
   padding: 4px 12px;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  border-radius: 8px;
 
   .label {
-    @include Heading-04;
+    @include Paragraph-02;
   }
 }
 
 .bank-positive {
-  background-color: var(--brand-main);
-  color: var(--white);
-}
+  border-radius: 999px;
+  border: 1px solid var(--brandColor-border);
 
-.bank-negative {
-  background-color: var(--gray-4);
-  color: var(--white);
+  .label {
+    color: var(--brandColor-main);
+  }
 }
 
 .d-day {
-  background-color: #add8e6;
-  color: var(--gray-5);
+  border-radius: 999px;
+  border: 1px solid var(--subColor-border);
+
+  .label {
+    color: var(--subColor-main);
+  }
 }

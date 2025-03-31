@@ -3,40 +3,40 @@
 import { useLayoutEffect } from 'react';
 
 import {
-  AppBarColor,
+  BackgroundColor,
   useAppBarStore,
 } from '@/shared/components/header/app-bar/use-app-bar-store';
 
 interface AppBarSetterProps {
   title: string;
   backURL?: string | null;
-  isShowMoreButton?: boolean;
-  color?: keyof typeof AppBarColor;
+  hasShareButton?: boolean;
+  backgroundColor?: BackgroundColor;
 }
 
 const AppBarSetter = ({
   title,
   backURL,
-  isShowMoreButton,
-  color,
+  hasShareButton,
+  backgroundColor,
 }: AppBarSetterProps) => {
-  const { setTitle, setBackURL, setShowMoreButton, setColor } =
+  const { setTitle, setBackURL, setHasShareButton, setBackgroundColor } =
     useAppBarStore();
 
   useLayoutEffect(() => {
     setTitle(title);
     setBackURL(backURL ?? null);
-    setShowMoreButton(isShowMoreButton ?? true);
-    setColor(color ?? AppBarColor.default);
+    setHasShareButton(hasShareButton ?? true);
+    setBackgroundColor(backgroundColor ?? 'white');
   }, [
     title,
     backURL,
-    isShowMoreButton,
-    color,
+    hasShareButton,
+    backgroundColor,
     setTitle,
     setBackURL,
-    setShowMoreButton,
-    setColor,
+    setHasShareButton,
+    setBackgroundColor,
   ]);
 
   return null;

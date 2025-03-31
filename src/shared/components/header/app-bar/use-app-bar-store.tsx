@@ -1,33 +1,30 @@
 import { create } from 'zustand';
 
-export const AppBarColor = {
-  default: 'default',
-  white: 'white',
-} as const;
+export type BackgroundColor = 'white' | 'transparent';
 
 interface AppBarState {
   isShow: boolean;
   title: string | null;
   backURL: string | null;
-  isShowMoreButton: boolean;
-  color: keyof typeof AppBarColor;
+  hasShareButton: boolean;
+  backgroundColor: BackgroundColor;
   setTitle: (title: string | null) => void;
   setBackURL: (backURL: string | null) => void;
-  setShowMoreButton: (isShowMoreButton: boolean) => void;
-  setColor: (color: keyof typeof AppBarColor) => void;
+  setHasShareButton: (hasShareButton: boolean) => void;
+  setBackgroundColor: (backgroundColor: BackgroundColor) => void;
 }
 
 export const useAppBarStore = create<AppBarState>((set) => ({
   isShow: false,
   title: null,
   backURL: null,
-  isShowMoreButton: true,
-  color: AppBarColor.default,
+  hasShareButton: true,
+  backgroundColor: 'white',
   setTitle: (title) => {
     set({ title });
     set(() => ({ isShow: title !== null }));
   },
   setBackURL: (backURL) => set({ backURL }),
-  setShowMoreButton: (isShowMoreButton) => set({ isShowMoreButton }),
-  setColor: (color) => set({ color }),
+  setHasShareButton: (hasShareButton) => set({ hasShareButton }),
+  setBackgroundColor: (backgroundColor) => set({ backgroundColor }),
 }));

@@ -10,6 +10,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   id: string;
   iconProps?: IconProps;
+  error?: boolean;
+  errorMessage?: string;
 }
 
 export type { InputProps, IconProps };

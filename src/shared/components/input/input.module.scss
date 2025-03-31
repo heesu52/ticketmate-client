@@ -33,6 +33,7 @@
       color: var(--textColor-less);
     }
 
+    // disabled
     &:disabled {
       border-radius: 12px;
       background: var(--lineColor-main);
@@ -83,5 +84,16 @@
       right: 0;
       padding: 0 16px 0 16px;
     }
+  }
+
+  // error
+  .error_message {
+    @include text-xs;
+    color: var(--brandColor-main);
+    margin-top: 8px;
+
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 }

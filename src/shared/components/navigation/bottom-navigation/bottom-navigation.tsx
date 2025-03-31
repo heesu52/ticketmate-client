@@ -1,34 +1,49 @@
-import Link from 'next/link';
+'use client';
 
-import ChatIcon from '@/assets/icons/chat.svg';
-import HomeIcon from '@/assets/icons/home.svg';
-import MyIcon from '@/assets/icons/my.svg';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { ChatIcon, HomeIcon, ListIcon, MyIcon } from '@/assets/icons';
 
 import styles from './bottom-navigation.module.scss';
 
-export default function BottomNavigation() {
+function BottomNavigation() {
+  const pathname = usePathname();
+
+  const navItems = [
+    { href: '/', label: '홈', Icon: HomeIcon },
+    { href: '/chat', label: '채팅', Icon: ChatIcon },
+    { href: '/history', label: '신청내역', Icon: ListIcon },
+    { href: '/my', label: '마이', Icon: MyIcon },
+  ];
+
   return (
     <nav className={styles.container}>
       <ul>
-        <li className={styles.nav_item}>
-          <Link href="/" className={styles.nav_link}>
-            <HomeIcon fill="var(--gray-4)" width={28} height={28} />
-            <span>홈</span>
-          </Link>
-        </li>
-        <li className={styles.nav_item}>
-          <Link href="/" className={styles.nav_link}>
-            <ChatIcon fill="var(--gray-4)" width={28} height={28} />
-            <span>채팅</span>
-          </Link>
-        </li>
-        <li className={styles.nav_item}>
-          <Link href="/" className={styles.nav_link}>
-            <MyIcon fill="var(--gray-4)" width={28} height={28} />
-            <span>마이</span>
-          </Link>
-        </li>
+        {navItems.map(({ href, label, Icon }) => (
+          <li key={href} className={styles.nav_item}>
+            <Link
+              href={href}
+              className={`${styles.nav_link} ${
+                pathname === href ? styles.active : ''
+              }`}
+            >
+              <Icon
+                stroke={
+                  pathname === href
+                    ? 'var(--brandColor-main)'
+                    : 'var(--textColor-less)'
+                }
+                width={24}
+                height={24}
+              />
+              <span>{label}</span>
+            </Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );
 }
+
+export default BottomNavigation;

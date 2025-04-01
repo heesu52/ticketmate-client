@@ -22,6 +22,14 @@ const dropdownList = [
     value: 'option3',
     label: '옵션 3',
   },
+  {
+    value: 'option4',
+    label: '옵션 4',
+  },
+  {
+    value: 'option5',
+    label: '옵션 5',
+  },
 ];
 
 function Page() {
@@ -36,9 +44,35 @@ function Page() {
       <button className={styles.button} onClick={handleOpenModal}>
         예시 모달 클릭하기
       </button>
-
       <ExampleDropdown dropdownList={dropdownList} />
-
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />{' '}
+      <ExampleDropdown dropdownList={dropdownList} />
       <ExampleModal ref={exampleModalRef} />
     </>
   );

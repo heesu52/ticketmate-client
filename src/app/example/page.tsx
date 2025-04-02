@@ -25,8 +25,14 @@ function Page() {
       key: MODAL_KEYS.EXAMPLE,
       props: {
         title: '커스텀 예시 모달',
-        message: '이 모달은 props로 커스터마이징되었습니다.',
-        onConfirm: () => console.log('확인됨'),
+        message: '이 모달은 동기적으로 동작합니다.',
+        onConfirm: async () => {
+          console.log('확인됨');
+          await new Promise((resolve) => setTimeout(resolve, 0));
+          console.log('비동기 작업 완료');
+          // 다음 동작
+          console.log('다음 동작 시작');
+        },
         onCancel: () => console.log('취소됨'),
       },
     });

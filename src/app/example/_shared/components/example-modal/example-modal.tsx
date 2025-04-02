@@ -13,22 +13,29 @@ const cn = classNames.bind(styles);
 interface ExampleModalProps {
   title?: string;
   message?: string;
-  onConfirm?: () => void;
+  onConfirm?: () => Promise<void> | void;
   onCancel?: () => void;
 }
 
-const ExampleModal = ({
+const ExampleModal: React.FC<ExampleModalProps> = ({
   title = 'Example Modal',
   message = '이것은 예시 모달입니다.',
   onConfirm,
   onCancel,
-}: ExampleModalProps) => {
+}) => {
   const { closeTop } = useModal();
 
   const handleConfirm = () => {
     console.log('확인 버튼 클릭');
-    if (onConfirm) onConfirm();
-    closeTop();
+    if (onConfirm) {
+      Promise.resolve(onConfirm()).then(() => {
+        closeTop().then(() => {
+          console.log('모달 닫기 완료 후 다음 동작');
+        });
+      });
+    } else {
+      closeTop();
+    }
   };
 
   const handleCancel = () => {

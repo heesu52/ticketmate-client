@@ -27,12 +27,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {iconProps && (
-            <span
+            <button
               className={cn(styles.icon, styles[position])}
               onClick={iconProps.onIconClick}
             >
               {iconProps.icon}
-            </span>
+            </button>
           )}
         </div>
       </div>

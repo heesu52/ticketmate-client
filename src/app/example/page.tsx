@@ -2,9 +2,12 @@
 
 import { useRef } from 'react';
 
+import { toast } from 'react-toastify';
+
 import ExampleDropdown from '@/app/example/_shared/components/example-dropdown/example-dropdown';
 import ExampleModal from '@/app/example/_shared/components/example-modal/example-modal';
 import { DialogModalContextType } from '@/shared/components/modal/dialog-modal/dialog-modal';
+import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
 
 import styles from './page.module.scss';
 
@@ -39,40 +42,24 @@ function Page() {
     exampleModalRef.current?.open();
   };
 
+  const notify = () => toast('Wow so easy!');
+  const custom = () =>
+    customToast({
+      description: 'Wow so easy!',
+    });
   return (
     <>
       <button className={styles.button} onClick={handleOpenModal}>
         예시 모달 클릭하기
       </button>
       <ExampleDropdown dropdownList={dropdownList} />
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
-      <ExampleDropdown dropdownList={dropdownList} />{' '}
       <ExampleDropdown dropdownList={dropdownList} />
+      <ExampleDropdown dropdownList={dropdownList} />
+      <ExampleDropdown dropdownList={dropdownList} />
+      <ExampleDropdown dropdownList={dropdownList} />
+      <ExampleDropdown dropdownList={dropdownList} />
+      <button onClick={notify}>asd</button>
+      <button onClick={custom}>custom</button>
       <ExampleModal ref={exampleModalRef} />
     </>
   );

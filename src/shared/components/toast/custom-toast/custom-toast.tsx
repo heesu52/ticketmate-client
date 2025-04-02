@@ -9,38 +9,58 @@ import { CloseIcon } from '@/assets/icons';
 
 import styles from './custom-toast.module.scss';
 
-interface CustomToastProps extends ToastContentProps {
-  description: string;
-}
-
 const cn = classNames.bind(styles);
 
-function CustomToast({ description, closeToast }: CustomToastProps) {
+interface CustomToastComponentProps extends ToastContentProps {
+  description: string;
+  closeButton: boolean;
+}
+
+function CustomToastComponent({
+  description,
+  closeButton,
+  closeToast,
+}: CustomToastComponentProps) {
   return (
-    <div className={cn(styles.container)}>
-      <p className={cn(styles.description)}>{description}</p>
-      <button onClick={closeToast} aria-label="토스트 닫기">
-        <CloseIcon width={20} height={20} fill="var(--white)" />
-      </button>
+    <div className={cn('container')}>
+      <p className={cn('description')}>{description}</p>
+      {closeButton && (
+        <button onClick={closeToast} aria-label="토스트 닫기">
+          <CloseIcon width={20} height={20} fill="var(--white)" />
+        </button>
+      )}
     </div>
   );
 }
 
-interface CustomToastOptions {
+interface CustomToastOptions extends Omit<ToastOptions, 'closeButton'> {
   description: string;
+  closeButton?: boolean;
 }
 
-export const customToast = ({ description }: CustomToastOptions) => {
+// 커스텀 토스트 함수
+export const customToast = ({
+  description,
+  closeButton = true,
+  ...rest
+}: CustomToastOptions): void => {
   const toastOptions: ToastOptions = {
-    position: 'top-center',
-    hideProgressBar: true,
-    closeButton: false,
-    className: cn(styles.toast),
+    position: 'top-center', // 토스트 위치
+    hideProgressBar: true, // 진행바 숨기기
+    autoClose: 3500, // 자동 닫힘 시간
+    closeOnClick: true, // 토스트 클릭 시 닫기
+    closeButton: false, // 기본 닫기 버튼 숨기기
+    className: cn('toast'),
+    ...rest,
   };
 
   toast(
     (props: ToastContentProps) => (
-      <CustomToast description={description} {...props} />
+      <CustomToastComponent
+        {...props}
+        description={description}
+        closeButton={closeButton}
+      />
     ),
     toastOptions,
   );

@@ -47,17 +47,14 @@ function Page() {
     customToast({
       description: 'Wow so easy!',
     });
+
   return (
     <>
       <button className={styles.button} onClick={handleOpenModal}>
         예시 모달 클릭하기
       </button>
       <ExampleDropdown dropdownList={dropdownList} />
-      <ExampleDropdown dropdownList={dropdownList} />
-      <ExampleDropdown dropdownList={dropdownList} />
-      <ExampleDropdown dropdownList={dropdownList} />
-      <ExampleDropdown dropdownList={dropdownList} />
-      <ExampleDropdown dropdownList={dropdownList} />
+
       <button onClick={notify}>asd</button>
       <button onClick={custom}>custom</button>
       <ExampleModal ref={exampleModalRef} />

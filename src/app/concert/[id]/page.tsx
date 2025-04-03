@@ -18,7 +18,7 @@ import styles from './page.module.scss';
 const handleGetCard = async (pageParam: number) => {
   const mockData = Array.from({ length: 10 }, (_, index) => ({
     id: pageParam * 10 + index + 1,
-    name: `의문의 티켓터 ${pageParam * 10 + index + 1}`,
+    name: `대리인 닉네임 ${pageParam * 10 + index + 1}`,
     profileImage: 'https://via.placeholder.com/50',
     introduction: '한 줄 소개를 작성해주세요.',
     transactionCount: Math.floor(Math.random() * 100),
@@ -52,28 +52,28 @@ export default function Page() {
     <>
       <Overlay isOpen={isBottomSheetOpen} onClose={toggleBottomSheet} />
 
-      <AppBarSetter title="공연 상세 페이지" />
-
       <div className={styles.container}>
+        <AppBarSetter title="공연 상세 페이지" />
+        <div className={styles.background_container} />
         <div className={styles.title_container}>
+          <div className={styles.image}>
+            {/* 추후 next의 Image 로 변경 예정 */}
+            <img
+              src={'https://placehold.co/400x600'}
+              alt="터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ"
+              width={140}
+              height={186}
+            />
+          </div>
           <div className={styles.tag}>
-            <Badge type="bank-positive">무통장 가능</Badge>
-            <Badge type="d-day">오픈 D-6</Badge>
+            <Badge type="d-day">선예매까지 D-12</Badge>
+            <Badge type="d-day">일반예매까지 D-12</Badge>
           </div>
 
           <div className={styles.title}>
             터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’
           </div>
           <div className={styles.info_container}>
-            <div className={styles.image}>
-              {/* 추후 next의 Image 로 변경 예정 */}
-              <img
-                src={'https://placehold.co/400x600'}
-                alt="터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ"
-                width={122}
-                height={162}
-              />
-            </div>
             <div className={styles.detail_container}>
               <div className={styles.detail}>
                 <span className={styles.category}>공연 일자</span>
@@ -95,9 +95,9 @@ export default function Page() {
           </div>
         </div>
 
-        <hr className={styles.line} />
         <div className={styles.list_container}>
           <span className={styles.subtitle}>대리인</span>
+          <span>원하는 대리인에게 요청해보세요!</span>
           {data?.pages.map((page) =>
             page.map((user) => (
               <UserCard key={user.id} user={user} onClick={toggleBottomSheet} />

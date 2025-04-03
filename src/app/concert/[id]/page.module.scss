@@ -5,19 +5,31 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 40px;
+
+  .background_container {
+    width: calc(100% + 48px);
+    height: 247px;
+    background: var(--overlayColor);
+    backdrop-filter: blur(4px);
+    position: relative; // 기본적으로 relative가 필요
+    z-index: 1; // 낮은 값 (뒤쪽)
+  }
 
   .title_container {
+    position: relative;
     width: 100%;
+    margin-top: -80px;
+    z-index: 5;
 
     .tag {
       display: flex;
       gap: 8px;
+      margin-top: 24px;
     }
 
     .title {
-      @include Heading-02;
-      color: var(--gray-5);
+      @include title-md;
+      color: var(--textColor-Main);
       text-align: start;
       margin-top: 8px;
     }
@@ -41,47 +53,43 @@
 
         .detail {
           display: flex;
-          flex-direction: column;
+          justify-content: space-between;
           width: 100%;
 
+          @include title-sm;
+
           .category {
-            @include Paragraph-02;
-            color: var(--gray-4);
-            flex: 1;
+            color: var(--textColor-less);
           }
 
           .info {
-            @include Heading-03;
-            color: var(--gray-5);
-            flex: 2;
+            color: var(--textColor-Main);
           }
         }
 
         .link {
           display: flex;
-          justify-content: baseline;
-          @include Heading-03;
-          color: var(--gray-5);
+          color: var(--textColor-Main);
           text-decoration: underline;
         }
       }
     }
   }
 
-  .line {
-    width: 100%;
-    border: 0;
-    height: 1px;
-    background-color: var(--divider-line);
-    margin: 40px 0;
-  }
-
   .list_container {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 41px;
 
     .subtitle {
-      @include Heading-02;
-      color: var(--gray-5);
+      @include title-md;
+      color: var(--textColor-Main);
+    }
+
+    span{
+      @include text-sm;
+      color: var(--textColor-less);
     }
   }
 }

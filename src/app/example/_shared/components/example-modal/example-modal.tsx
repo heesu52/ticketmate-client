@@ -4,51 +4,38 @@ import React from 'react';
 
 import classNames from 'classnames/bind';
 
-import { useModal } from '@/shared/components/modal/use-modal';
+import CustomModal from '@/shared/components/modal/custom-modal';
 
 import styles from './example-modal.module.scss';
 
 const cn = classNames.bind(styles);
 
 interface ExampleModalProps {
-  title?: string;
-  message?: string;
+  title: string;
+  message: string;
   onConfirm?: () => Promise<void> | void;
   onCancel?: () => void;
 }
 
-const ExampleModal: React.FC<ExampleModalProps> = ({
-  title = 'Example Modal',
-  message = '이것은 예시 모달입니다.',
+const ExampleModal = ({
+  title,
+  message,
   onConfirm,
   onCancel,
-}) => {
-  const { closeTop } = useModal();
-
-  const handleConfirm = () => {
-    console.log('확인 버튼 클릭');
-    if (onConfirm) {
-      Promise.resolve(onConfirm()).then(() => {
-        closeTop().then(() => {
-          console.log('모달 닫기 완료 후 다음 동작');
-        });
-      });
-    } else {
-      closeTop();
-    }
+}: ExampleModalProps) => {
+  const handleConfirm = async () => {
+    if (onConfirm) await onConfirm();
   };
 
   const handleCancel = () => {
-    console.log('취소 버튼 클릭');
     if (onCancel) onCancel();
-    closeTop();
   };
 
   return (
-    <div className={cn('example_modal_content')}>
-      <h1 className={cn('modal_title')}>{title}</h1>
-      <p className={cn('modal_message')}>{message}</p>
-      <div className={cn('modal_actions')}>
+    <CustomModal>
+      <CustomModal.Title>{title}</CustomModal.Title>
+      <CustomModal.Description>{message}</CustomModal.Description>
+      <CustomModal.Action>
         <button
           type="button"
           onClick={handleConfirm}
@@ -63,8 +50,8 @@ const ExampleModal: React.FC<ExampleModalProps> = ({
         >
           취소
         </button>
-      </div>
-    </div>
+      </CustomModal.Action>
+    </CustomModal>
   );
 };
 

@@ -1,9 +1,10 @@
 'use client';
 
+import { lazy } from 'react';
+
 import { toast } from 'react-toastify';
 
 import ExampleDropdown from '@/app/example/_shared/components/example-dropdown/example-dropdown';
-import { MODAL_KEYS } from '@/shared/components/modal/modal-keys';
 import { useModal } from '@/shared/components/modal/use-modal';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
 
@@ -17,24 +18,32 @@ const dropdownList = [
   { value: 'option5', label: '옵션 5' },
 ];
 
+const ExampleModal = lazy(
+  () => import('@/app/example/_shared/components/example-modal/example-modal'),
+);
+
 function Page() {
-  const { open } = useModal();
+  const { open, closeTop } = useModal();
 
   const handleOpenModal = () => {
     open({
-      key: MODAL_KEYS.EXAMPLE,
-      props: {
-        title: '커스텀 예시 모달',
-        message: '이 모달은 동기적으로 동작합니다.',
-        onConfirm: async () => {
-          console.log('확인됨');
-          await new Promise((resolve) => setTimeout(resolve, 0));
-          console.log('비동기 작업 완료');
-          // 다음 동작
-          console.log('다음 동작 시작');
-        },
-        onCancel: () => console.log('취소됨'),
-      },
+      id: 'example-modal',
+      content: (
+        <ExampleModal
+          title="Lazy 모달"
+          message="이 모달은 lazy하게 import해오는 모달입니다."
+          onConfirm={async () => {
+            console.log('확인됨');
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            console.log('작업 완료');
+            closeTop();
+          }}
+          onCancel={() => {
+            console.log('취소됨');
+            closeTop();
+          }}
+        />
+      ),
     });
   };
 

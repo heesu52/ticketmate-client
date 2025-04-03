@@ -39,7 +39,7 @@ interface TitleProps {
   children: ReactNode;
 }
 
-const Title: React.FC<TitleProps> = ({ children }) => {
+const Title = ({ children }: TitleProps) => {
   return <span className={cn('modal_title')}>{children}</span>;
 };
 
@@ -47,7 +47,7 @@ interface DescriptionProps {
   children: ReactNode;
 }
 
-const Description: React.FC<DescriptionProps> = ({ children }) => {
+const Description = ({ children }: DescriptionProps) => {
   return <p className={cn('modal_description')}>{children}</p>;
 };
 
@@ -55,7 +55,7 @@ interface ContentProps {
   children: ReactNode;
 }
 
-const Content: React.FC<ContentProps> = ({ children }) => {
+const Content = ({ children }: ContentProps) => {
   return <div className={cn('modal_content')}>{children}</div>;
 };
 
@@ -63,7 +63,7 @@ interface ActionProps {
   children: ReactNode;
 }
 
-const Action: React.FC<ActionProps> = ({ children }) => {
+const Action = ({ children }: ActionProps) => {
   return <div className={cn('modal_actions')}>{children}</div>;
 };
 

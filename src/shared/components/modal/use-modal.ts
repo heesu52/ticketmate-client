@@ -1,11 +1,10 @@
-import { useCallback } from 'react';
+import { useCallback, ReactNode } from 'react';
 
-import { ModalKey } from '@/shared/components/modal/modal-keys';
-import { useModalStore } from '@/shared/components/modal/modal-store';
+import { useModalStore } from './modal-store';
 
 interface ModalOptions {
-  key?: ModalKey | string;
-  props?: Record<string, unknown>;
+  content: ReactNode;
+  id?: string;
 }
 
 export const useModal = () => {
@@ -13,14 +12,14 @@ export const useModal = () => {
     useModalStore();
 
   const open = useCallback(
-    ({ key, props }: ModalOptions) => {
-      const id = key || crypto.randomUUID();
-      return openModal({ id, props });
+    ({ content, id }: ModalOptions) => {
+      const modalId = id || crypto.randomUUID();
+      return openModal({ id: modalId, content });
     },
     [openModal],
   );
 
-  const close = useCallback((key: string) => closeModal(key), [closeModal]);
+  const close = useCallback((id: string) => closeModal(id), [closeModal]);
 
   const closeTop = useCallback(
     () =>

@@ -1,8 +1,10 @@
+import { ReactNode } from 'react';
+
 import { create } from 'zustand';
 
 interface ModalState {
-  id: string; // key 또는 자동 생성된 ID
-  props?: Record<string, unknown>;
+  id: string;
+  content: ReactNode;
 }
 
 interface ModalStore {
@@ -16,7 +18,7 @@ interface ModalStore {
 export const useModalStore = create<ModalStore>((set) => ({
   modals: [],
   openModal: (modal) => {
-    const id = modal.id || crypto.randomUUID(); // id가 없으면 자동 생성
+    const id = modal.id || crypto.randomUUID();
     set((state) => ({
       modals: [...state.modals, { ...modal, id }],
     }));

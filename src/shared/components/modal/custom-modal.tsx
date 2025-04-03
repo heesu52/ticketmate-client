@@ -1,74 +1,75 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { ReactNode, useEffect, useRef } from 'react';
 
 import classNames from 'classnames/bind';
-import ReactDOM from 'react-dom';
-
-import ModalContent from '@/shared/components/modal';
-import { useModalStore } from '@/shared/components/modal/modal-store';
+import { createPortal } from 'react-dom';
 
 import styles from './custom-modal.module.scss';
 
 const cn = classNames.bind(styles);
 
-interface CustomModalProps {
-  id: string;
-  modalKey?: string;
-  props?: Record<string, unknown>;
-  onClose?: () => void;
+interface ModalProps {
+  children: ReactNode;
 }
 
-const CustomModal = ({ id, modalKey, props, onClose }: CustomModalProps) => {
+const CustomModal = ({ children }: ModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const { closeModal } = useModalStore();
 
   useEffect(() => {
-    const modal = dialogRef.current;
-    if (modal) {
-      modal.showModal();
+    const dialog = dialogRef.current;
+    if (dialog) {
+      dialog.showModal();
     }
 
-    const handleClose = () => {
-      closeModal(id);
-      if (onClose) onClose();
+    return () => {
+      if (dialog) dialog.close();
     };
+  }, []);
 
-    modal?.addEventListener('close', handleClose);
-    return () => modal?.removeEventListener('close', handleClose);
-  }, [id, closeModal, onClose]);
-
-  const modalRoot = document.body;
-
-  return ReactDOM.createPortal(
-    <dialog ref={dialogRef} className={cn('custom_modal')}>
-      <div className={cn('custom_content')}>
-        {modalKey ? (
-          <ModalContent modalKey={modalKey} props={props} />
-        ) : (
-          <div>모달 키가 제공되지 않았습니다.</div>
-        )}
-      </div>
+  return createPortal(
+    <dialog ref={dialogRef} className={cn('container')}>
+      {children}
     </dialog>,
-    modalRoot,
+    document.getElementById('modal-root') as HTMLElement,
   );
 };
 
-export const ModalProvider = () => {
-  const { modals } = useModalStore();
+interface TitleProps {
+  children: ReactNode;
+}
 
-  return (
-    <>
-      {modals.map((modal) => (
-        <CustomModal
-          key={modal.id}
-          id={modal.id}
-          modalKey={modal.id} // id를 modalKey로 사용
-          props={modal.props}
-        />
-      ))}
-    </>
-  );
+const Title: React.FC<TitleProps> = ({ children }) => {
+  return <span className={cn('modal_title')}>{children}</span>;
 };
+
+interface DescriptionProps {
+  children: ReactNode;
+}
+
+const Description: React.FC<DescriptionProps> = ({ children }) => {
+  return <p className={cn('modal_description')}>{children}</p>;
+};
+
+interface ContentProps {
+  children: ReactNode;
+}
+
+const Content: React.FC<ContentProps> = ({ children }) => {
+  return <div className={cn('modal_content')}>{children}</div>;
+};
+
+interface ActionProps {
+  children: ReactNode;
+}
+
+const Action: React.FC<ActionProps> = ({ children }) => {
+  return <div className={cn('modal_actions')}>{children}</div>;
+};
+
+CustomModal.Title = Title;
+CustomModal.Description = Description;
+CustomModal.Content = Content;
+CustomModal.Action = Action;
 
 export default CustomModal;

@@ -9,12 +9,12 @@
   width: 100%;
   padding: 20px 0;
 
-  .tag{
+  .tag {
     display: flex;
     gap: 10px;
   }
 
-  .card_container{
+  .card_container {
     display: flex;
     gap: 16px;
 
@@ -23,14 +23,14 @@
         border-radius: 12px;
       }
     }
-  
+
     .concert_info {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: flex-start;
       align-self: stretch;
-  
+
       .description {
         display: flex;
         flex-direction: column;
@@ -39,23 +39,23 @@
           color: var(--textColor-main);
           word-break: break-all;
         }
-  
+
         .date {
           @include text-sm;
           color: var(--textColor-sub);
         }
       }
-  
+
       .place {
         display: flex;
         align-items: center;
         gap: 4px;
 
-        .location{
+        .location {
           @include text-sm;
           color: var(--textColor-sub);
         }
       }
-   }
+    }
   }
 }

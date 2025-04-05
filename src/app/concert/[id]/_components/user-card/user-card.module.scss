@@ -7,25 +7,25 @@
   gap: 16px;
   align-self: stretch;
 
-    .profile {
-      width: 48px;
-      height: 48px;
-      border-radius: 100px;
-      border: 1px solid var(--lineColor-sub);
-    }
+  .profile {
+    width: 48px;
+    height: 48px;
+    border-radius: 100px;
+    border: 1px solid var(--lineColor-sub);
+  }
 
-    .info_container {
+  .info_container {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex: 1 0 0;
+
+    .introduce {
       display: flex;
-      align-items: flex-end;
-      gap: 16px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
       flex: 1 0 0;
-
-      .introduce{
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-        flex: 1 0 0;
 
       .nickname {
         @include title-sm;
@@ -33,22 +33,21 @@
       }
     }
 
-        .review {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-      
-          .star {
-            @include text-md;
-            color: var(--textColor-main);
-            margin-right: 4px;
-          }
+    .review {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .star {
+        @include text-md;
+        color: var(--textColor-main);
+        margin-right: 4px;
       }
     }
   }
-  
-  .info_container span {
-    @include text-sm;
-    color: var(--textColor-less);
-  }
+}
 
+.info_container span {
+  @include text-sm;
+  color: var(--textColor-less);
+}

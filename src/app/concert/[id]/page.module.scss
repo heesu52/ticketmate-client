@@ -87,7 +87,7 @@
       color: var(--textColor-Main);
     }
 
-    span{
+    span {
       @include text-sm;
       color: var(--textColor-less);
     }

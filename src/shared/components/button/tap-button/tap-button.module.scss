@@ -8,13 +8,15 @@
   border-radius: 12px;
   border: 1px solid var(--lineColor-main);
   background: var(--white);
-  transition: background 0.2s ease-in-out, color 0.2s ease-in-out; // 부드러운 전환 효과 추가
+  transition:
+    background 0.2s ease-in-out,
+    color 0.2s ease-in-out; // 부드러운 전환 효과 추가
 
   &:active,
-  &.active { 
+  &.active {
     background: var(--brandColor-fillActive);
     color: var(--brandColor-main);
-    
+
     span {
       color: var(--brandColor-main);
     }
@@ -37,7 +39,7 @@
   span {
     display: flex;
     align-items: center;
-    
+
     @include text-sm;
     color: var(--textColor-less);
     text-align: center;

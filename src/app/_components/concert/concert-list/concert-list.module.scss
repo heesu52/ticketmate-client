@@ -9,8 +9,8 @@
     flex-direction: column;
     justify-content: center;
     margin-top: 40px;
-    
-    .title_contanier{
+
+    .title_contanier {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -18,20 +18,17 @@
         @include title-md;
         color: var(--textColor-main);
       }
-      
-      .dropdown_container{
+
+      .dropdown_container {
         display: flex;
         align-items: center;
         gap: 4px;
-        
+
         .drop {
           @include text-sm;
           color: var(--textColor-main);
         }
       }
-      
     }
-
-   
   }
 }

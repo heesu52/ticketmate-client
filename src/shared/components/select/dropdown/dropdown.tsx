@@ -106,7 +106,7 @@ interface DropdownTriggerProps {
 const DropdownTrigger = ({
   label,
   placeholder = '선택해주세요.',
-  maxHeight = '200px',
+  maxHeight = 'auto',
 }: DropdownTriggerProps): JSX.Element => {
   const {
     selectedValue,

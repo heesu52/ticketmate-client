@@ -21,7 +21,7 @@ const ExampleDropdown = ({ dropdownList }: ExampleDropdownProps) => {
 
   return (
     <Dropdown onSelect={setSelected} defaultValue="option1">
-      <Dropdown.Trigger label="example" maxHeight="50px" />
+      <Dropdown.Trigger label="example" />
       {dropdownList.map((item) => {
         return (
           <Dropdown.Option

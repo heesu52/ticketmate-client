@@ -52,34 +52,40 @@
     position: absolute;
     top: 100%;
     left: 0;
+    z-index: 9;
+
     width: 100%;
-    max-height: 100px;
     overflow-y: auto;
     margin: 4px 0 0;
-    padding: 4px 0;
-    background-color: white;
+
     border: 1px solid var(--lineColor-main);
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 9;
+
+    border-radius: 12px;
+    background: var(--white);
+
+    /* DropSD_FloatingItem */
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
 
     .option {
       padding: 8px 12px;
       color: var(--textColor-main);
       cursor: pointer;
 
-      &:hover,
-      &.focused {
-        background-color: var(--gray-1);
-      }
+      // &:hover,
+      // &.focused {
+      //   background-color: var(--brandColor-border);
+      //   color: var(--white);
+      // }
 
       &[aria-disabled='true'] {
         background-color: var(--lineColor-main);
+        color: var(--textColor-sub);
         cursor: not-allowed;
       }
 
       &.selected {
-        background-color: var(--gray-2);
+        background-color: var(--brandColor-main);
+        color: var(--white);
       }
     }
   }

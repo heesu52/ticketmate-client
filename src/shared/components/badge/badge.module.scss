@@ -1,7 +1,7 @@
 @use '@/styles/index' as *;
 
 .button {
-  display: inline-flex;
+  display: flex;
   padding: 4px 12px;
   justify-content: center;
   align-items: center;

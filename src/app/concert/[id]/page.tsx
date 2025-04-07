@@ -66,8 +66,8 @@ export default function Page() {
             />
           </div>
           <div className={styles.tag}>
-            <Badge type="d-day">선예매까지 D-12</Badge>
-            <Badge type="d-day">일반예매까지 D-12</Badge>
+            <Badge type="type-a">선예매까지 D-12</Badge>
+            <Badge type="type-a">일반예매까지 D-12</Badge>
           </div>
 
           <div className={styles.title}>

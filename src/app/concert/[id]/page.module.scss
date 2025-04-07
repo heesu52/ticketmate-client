@@ -29,7 +29,7 @@
 
     .title {
       @include title-md;
-      color: var(--textColor-Main);
+      color: var(--textColor-main);
       text-align: start;
       margin-top: 8px;
     }
@@ -63,13 +63,13 @@
           }
 
           .info {
-            color: var(--textColor-Main);
+            color: var(--textColor-main);
           }
         }
 
         .link {
           display: flex;
-          color: var(--textColor-Main);
+          color: var(--textColor-main);
           text-decoration: underline;
         }
       }
@@ -84,7 +84,7 @@
 
     .subtitle {
       @include title-md;
-      color: var(--textColor-Main);
+      color: var(--textColor-main);
     }
 
     span {

@@ -22,8 +22,8 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
       <Link href={'concert/:id'}>
         <div className={styles.container}>
           <div className={styles.tag}>
-            <Badge type="d-day">선예매까지 D-12</Badge>
-            <Badge type="d-day">일반예매까지 D-12</Badge>
+            <Badge type="type-a">선예매까지 D-12</Badge>
+            <Badge type="type-a">일반예매까지 D-12</Badge>
           </div>
           <div className={styles.card_container}>
             <div className={styles.concert_img}>

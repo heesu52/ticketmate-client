@@ -1,8 +1,7 @@
 'use client';
 
 import { StarIcon } from '@/assets/icons';
-import BorderButton from '@/shared/components/button/border-button/border-button';
-import FillButton from '@/shared/components/button/fill-button/fill-button';
+import Button from '@/shared/components/button/functional-button/functional-button';
 
 import styles from './bottom-sheet.module.scss';
 
@@ -28,8 +27,13 @@ const BottomSheet = ({ isOpen, onClose }: BottomSheetProps) => {
         <span className={styles.info}>한 줄 소개를 작성해주세요.</span>
       </div>
       <div className={styles.button_container}>
-        <FillButton label="선예매 요청하기" size="small" onClick={onClose} />
-        <BorderButton label="일반예매 요청하기" type="button" size="medium" />
+        <Button
+          label="선예매 요청하기"
+          size="medium"
+          variant="back"
+          onClick={onClose}
+        />
+        <Button label="일반예매 요청하기" size="medium" variant="fill" />
       </div>
     </div>
   );

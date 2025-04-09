@@ -7,10 +7,28 @@
   .concert_container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     margin-top: 40px;
 
-    .title {
-      @include Heading-02;
+    .title_contanier {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .title {
+        @include title-md;
+        color: var(--textColor-main);
+      }
+
+      .dropdown_container {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        .drop {
+          @include text-sm;
+          color: var(--textColor-main);
+        }
+      }
     }
   }
 }

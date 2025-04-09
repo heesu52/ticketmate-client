@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import VisibilityIcon from '@/assets/icons/visibility.svg';
-import PositiveButton from '@/shared/components/button/positive-button/positive-button';
+import Button from '@/shared/components/button/functional-button/functional-button';
 import Input from '@/shared/components/input/input';
 
 import styles from './sign-up-form.module.scss';
@@ -68,7 +68,7 @@ const SignUpForm = () => {
                   id="phone"
                   type="tel"
                 />
-                <PositiveButton label="인증번호 받기" />
+                <Button label="인증번호 받기" variant="fill" />
               </div>
               <div className={styles.with_button}>
                 <Input
@@ -77,7 +77,7 @@ const SignUpForm = () => {
                   id="verification"
                   type="text"
                 />
-                <PositiveButton label="인증" />
+                <Button label="인증" variant="fill" />
               </div>
             </div>
           </div>
@@ -168,7 +168,7 @@ const SignUpForm = () => {
       </div>
 
       <div className={styles.form_button}>
-        <PositiveButton label="회원가입" type="submit" size="large" />
+        <Button label="회원가입" type="submit" size="large" variant="fill" />
       </div>
     </form>
   );

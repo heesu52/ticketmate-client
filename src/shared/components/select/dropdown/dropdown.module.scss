@@ -10,7 +10,7 @@
   }
 
   .dropdown_select {
-    @include Paragraph-02;
+    @include text-sm;
 
     display: flex;
     padding: 11px 16px;
@@ -31,18 +31,18 @@
     }
 
     &.placeholder {
-      color: var(--gray-4);
+      color: var(---textColor-sub);
     }
 
     .option {
-      color: var(--gray-5);
+      color: var(--textColor-sub);
 
       &:disabled {
-        color: var(--gray-3);
+        color: var(--textColor-sub);
       }
 
       &.placeholder {
-        color: var(--gray-4);
+        color: var(--textColor-sub);
       }
     }
   }

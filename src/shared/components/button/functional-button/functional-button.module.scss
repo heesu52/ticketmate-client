@@ -1,0 +1,60 @@
+@use '@/styles/index' as *;
+
+.button {
+  display: inline-flex;
+  padding: 12px 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+
+  &.large {
+    width: 100%;
+  }
+
+  &.medium {
+    width: 50%;
+    gap: 16px;
+  }
+
+  &.small {
+    width: 33%;
+    gap: 16px;
+  }
+
+  &.border {
+    border: 1px solid var(--brandColor-main);
+    color: var(--brandColor-main);
+  }
+
+  &.fill {
+    background: var(--brandColor-main);
+    color: var(--white);
+  }
+
+  &.back {
+    @include text-sm;
+    border: 1px solid var(--lineColor-main);
+    color: var(--textColor-less);
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    @include text-md;
+    text-align: center;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--borderColor-borderHover);
+    }
+
+    &.fill:hover {
+      background: var(--brandColor-fillHover);
+    }
+
+    &.back:hover {
+      background: var(--white-less);
+    }
+  }
+}

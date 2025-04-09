@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import VisibilityIcon from '@/assets/icons/visibility.svg';
-import PositiveButton from '@/shared/components/button/positive-button/positive-button';
+import Button from '@/shared/components/button/functional-button/functional-button';
 import Input from '@/shared/components/input/input';
 
 import styles from './sign-in-form.module.scss';
@@ -71,7 +71,7 @@ const SignInForm = () => {
       </div>
 
       <div className={styles.button_container}>
-        <PositiveButton label="로그인" type="submit" />
+        <Button label="로그인" type="submit" variant="fill" />
       </div>
     </form>
   );

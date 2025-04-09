@@ -6,24 +6,26 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  border-radius: 8px;
 
   .label {
-    @include Heading-04;
+    @include text-xs;
   }
 }
 
-.bank-positive {
-  background-color: var(--brand-main);
-  color: var(--white);
+.type-b {
+  border-radius: 999px;
+  border: 1px solid var(--brandColor-border);
+
+  .label {
+    color: var(--brandColor-main);
+  }
 }
 
-.bank-negative {
-  background-color: var(--gray-4);
-  color: var(--white);
-}
+.type-a {
+  border-radius: 999px;
+  border: 1px solid var(--subColor-border);
 
-.d-day {
-  background-color: #add8e6;
-  color: var(--gray-5);
+  .label {
+    color: var(--subColor-main);
+  }
 }

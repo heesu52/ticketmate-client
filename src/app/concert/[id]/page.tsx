@@ -52,12 +52,10 @@ export default function Page() {
     <>
       <Overlay isOpen={isBottomSheetOpen} onClose={toggleBottomSheet} />
 
-      <main className={styles.container}>
+      <div className={styles.container}>
         <AppBarSetter title="공연 상세 페이지" />
         <div className={styles.background_container} />
-
-        {/* 공연 정보 */}
-        <article className={styles.title_container}>
+        <div className={styles.title_container}>
           <div className={styles.image}>
             {/* 추후 next의 Image 로 변경 예정 */}
             <img
@@ -71,13 +69,12 @@ export default function Page() {
             <Badge type="type-a">선예매까지 D-12</Badge>
             <Badge type="type-a">일반예매까지 D-12</Badge>
           </div>
-          <h1 className={styles.title}>
-            터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’
-          </h1>
 
-          {/* 공연 싱세 정보 */}
-          <section className={styles.info_container}>
-            <dl className={styles.detail_container}>
+          <div className={styles.title}>
+            터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’
+          </div>
+          <div className={styles.info_container}>
+            <div className={styles.detail_container}>
               <div className={styles.detail}>
                 <span className={styles.category}>공연 일자</span>
                 <span className={styles.info}>24/08/27 ~ 24/09/26</span>
@@ -94,13 +91,12 @@ export default function Page() {
                   YES24
                 </Link>
               </div>
-            </dl>
-          </section>
-        </article>
+            </div>
+          </div>
+        </div>
 
-        {/* 대리인 리스트 */}
-        <section className={styles.list_container}>
-          <h2 className={styles.subtitle}>대리인</h2>
+        <div className={styles.list_container}>
+          <span className={styles.subtitle}>대리인</span>
           <span>원하는 대리인에게 요청해보세요!</span>
           {data?.pages.map((page) =>
             page.map((user) => (
@@ -114,10 +110,10 @@ export default function Page() {
 
           {/* 무한 스크롤 트리거 */}
           <div ref={ref} style={{ height: 10 }} />
-        </section>
+        </div>
 
         <BottomSheet onClose={toggleBottomSheet} isOpen={isBottomSheetOpen} />
-      </main>
+      </div>
     </>
   );
 }

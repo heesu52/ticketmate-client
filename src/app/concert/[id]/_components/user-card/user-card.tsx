@@ -5,15 +5,13 @@ import { UserCardProps } from './user-card.type';
 
 const UserCard = ({ user, onClick }: UserCardProps) => {
   return (
-    <article className={styles.container} onClick={onClick}>
+    <div className={styles.container} onClick={onClick}>
       {/* 프로필 이미지 */}
       <div
         className={styles.profile}
         style={{ backgroundImage: `url(${user.profileImage})` }}
       />
-
-      {/* 대리인 정보 */}
-      <section className={styles.info_container}>
+      <div className={styles.info_container}>
         <div className={styles.introduce}>
           <span className={styles.nickname}>{user.name}</span>
           <span>{user.introduction || '한 줄 소개를 작성해주세요'}</span>
@@ -23,8 +21,8 @@ const UserCard = ({ user, onClick }: UserCardProps) => {
           <span className={styles.star}>4.6</span>
           <span className={styles.info}>(12)</span>
         </div>
-      </section>
-    </article>
+      </div>
+    </div>
   );
 };
 

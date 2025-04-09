@@ -73,22 +73,22 @@ const dropdownList = [
 const ConcertList = () => {
   return (
     <>
-      <main className={styles.container}>
+      <div className={styles.container}>
         {/* 리스트 */}
-        <section className={styles.concert_container}>
-          <header className={styles.title_contanier}>
+        <div className={styles.concert_container}>
+          <div className={styles.title_contanier}>
             <span className={styles.title}>신청가능 공연</span>
+
             <div className={styles.dropdown_container}>
               <ConcertDropdown dropdownList={dropdownList} />
               <FilterListIcon width={20} height={20} />
             </div>
-          </header>
-
+          </div>
           {concert.map((concertItem) => (
             <ConcertCard concertItem={concertItem} key={concertItem.title} />
           ))}
-        </section>
-      </main>
+        </div>
+      </div>
     </>
   );
 };

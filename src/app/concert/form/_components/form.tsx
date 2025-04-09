@@ -2,7 +2,7 @@
 
 import MinusIcon from '@/assets/icons/minus.svg';
 import PlusIcon from '@/assets/icons/plus.svg';
-import PositiveButton from '@/shared/components/button/fill-button/fill-button';
+import Button from '@/shared/components/button/functional-button/functional-button';
 import Input from '@/shared/components/input/input';
 
 import styles from './form.module.scss';
@@ -77,7 +77,7 @@ export default function Form() {
           placeholder="자유롭게 입력해주세요."
         />
       </div>
-      <PositiveButton label="신청하기" type="button" size="large" />
+      <Button label="신청하기" type="button" size="large" variant="fill" />
     </div>
   );
 }

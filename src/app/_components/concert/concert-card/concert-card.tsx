@@ -20,12 +20,14 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
   return (
     <>
       <Link href={'concert/:id'}>
-        <div className={styles.container}>
-          <div className={styles.tag}>
+        <article className={styles.container}>
+          <header className={styles.tag}>
             <Badge type="type-a">선예매까지 D-12</Badge>
             <Badge type="type-a">일반예매까지 D-12</Badge>
-          </div>
-          <div className={styles.card_container}>
+          </header>
+
+          {/* 콘서트 정보 */}
+          <section className={styles.card_container}>
             <div className={styles.concert_img}>
               {/* 추후 next의 Image 로 변경 예정 */}
               <img
@@ -35,6 +37,7 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
                 height={139}
               />
             </div>
+
             <div className={styles.concert_info}>
               <div className={styles.description}>
                 <span className={styles.date}>{concertItem.date}</span>
@@ -45,8 +48,8 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
                 <span className={styles.location}>{concertItem.place}</span>
               </div>
             </div>
-          </div>
-        </div>
+          </section>
+        </article>
       </Link>
     </>
   );

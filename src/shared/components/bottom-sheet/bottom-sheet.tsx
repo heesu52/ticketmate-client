@@ -18,7 +18,7 @@ const BottomSheet = ({ isOpen, onClose }: BottomSheetProps) => {
         <span className={styles.info}>프로필 보기</span>
 
         <div className={styles.title_container}>
-          <span className={styles.title}>의문의 티켓터</span>
+          <h1 className={styles.title}>의문의 티켓터</h1>
           <StarIcon width={20} height={20} />
           <span className={styles.star}>4.6</span>
           <span className={styles.info}>(12)</span>

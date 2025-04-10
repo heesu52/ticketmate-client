@@ -71,7 +71,9 @@ const SignInForm = () => {
       </div>
 
       <div className={styles.button_container}>
-        <Button label="로그인" type="submit" variant="fill" />
+        <Button type="submit" variant="fill">
+          로그인
+        </Button>
       </div>
     </form>
   );

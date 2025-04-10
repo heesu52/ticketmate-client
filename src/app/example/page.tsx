@@ -5,6 +5,7 @@ import { lazy, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import ExampleDropdown from '@/app/example/_shared/components/example-dropdown/example-dropdown';
+import Button from '@/shared/components/button/functional-button/functional-button';
 import { useModal } from '@/shared/components/modal/use-modal';
 import RadioGroup from '@/shared/components/radio/radio';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
@@ -65,8 +66,8 @@ function Page() {
         예시 모달 클릭하기
       </button>
       <ExampleDropdown dropdownList={dropdownList} />
-      <button onClick={notify}>asd</button>
-      <button onClick={custom}>custom</button>
+      <Button onClick={notify}>기본 toast</Button>
+      <Button onClick={custom}>커스텀 toast</Button>
 
       {/* RadioGroup 사용 */}
       <RadioGroup name="options" value={selectedValue} onChange={handleChange}>

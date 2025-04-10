@@ -16,47 +16,38 @@
 
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
-  &.default {
-    color: var(--gray-5);
-    background: var(--white);
-  }
+  padding: 16px 24px;
 
-  &.white {
-    color: var(--white);
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-  }
-
-  .back_button {
+  .left_container {
     display: flex;
     align-items: center;
     gap: 8px;
 
-    padding: 16px 16px 16px 24px;
-    color: inherit;
-
-    .icon {
-      display: flex;
-      align-self: center;
+    .back_button {
+      @include expand-touch-area();
     }
 
     .title {
-      @include Paragraph-01;
-      color: inherit;
+      @include text-lg;
     }
   }
 
-  .more_button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    padding: 16px 24px 16px 24px;
-
-    .icon {
-      display: flex;
-      align-self: center;
+  .right_container {
+    .more_button {
+      @include expand-touch-area();
     }
+  }
+
+  // app bar color type
+  &.white {
+    color: var(--textColor-main);
+    background: var(--white);
+  }
+
+  &.transparent {
+    color: var(--white);
+    background: transparent;
   }
 }

@@ -77,7 +77,9 @@ export default function Form() {
           placeholder="자유롭게 입력해주세요."
         />
       </div>
-      <Button label="신청하기" type="button" size="large" variant="fill" />
+      <Button type="button" size="large" variant="fill">
+        신청하기
+      </Button>
     </div>
   );
 }

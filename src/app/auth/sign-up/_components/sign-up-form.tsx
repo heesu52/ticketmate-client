@@ -68,7 +68,7 @@ const SignUpForm = () => {
                   id="phone"
                   type="tel"
                 />
-                <Button label="인증번호 받기" variant="fill" />
+                <Button variant="fill">인증번호 받기</Button>
               </div>
               <div className={styles.with_button}>
                 <Input
@@ -77,7 +77,7 @@ const SignUpForm = () => {
                   id="verification"
                   type="text"
                 />
-                <Button label="인증" variant="fill" />
+                <Button variant="fill">인증</Button>
               </div>
             </div>
           </div>
@@ -168,7 +168,9 @@ const SignUpForm = () => {
       </div>
 
       <div className={styles.form_button}>
-        <Button label="회원가입" type="submit" size="large" variant="fill" />
+        <Button type="submit" size="large" variant="fill">
+          회원가입
+        </Button>
       </div>
     </form>
   );

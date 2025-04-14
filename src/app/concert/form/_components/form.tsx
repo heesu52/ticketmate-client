@@ -51,7 +51,9 @@ export default function Form() {
         </div>
       </div>
       <FormTabManager />
-      <Button label="신청하기" type="button" size="large" variant="fill" />
+      <Button type="button" size="large" variant="fill">
+        신청하기
+      </Button>
     </div>
   );
 }

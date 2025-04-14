@@ -1,17 +1,17 @@
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, ReactNode } from 'react';
 
 import styles from './functional-button.module.scss';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'large' | 'medium' | 'small';
   variant?: 'border' | 'fill' | 'back';
-  label: string;
+  children: ReactNode;
 }
 
 export default function Button({
   size = 'large',
   variant = 'border',
-  label,
+  children,
   ...props
 }: ButtonProps) {
   return (
@@ -19,7 +19,7 @@ export default function Button({
       className={`${styles.button} ${styles[size]} ${styles[variant]}`}
       {...props}
     >
-      <span>{label}</span>
+      <span>{children}</span>
     </button>
   );
 }

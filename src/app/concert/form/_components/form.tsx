@@ -1,82 +1,56 @@
 'use client';
 
-import MinusIcon from '@/assets/icons/minus.svg';
-import PlusIcon from '@/assets/icons/plus.svg';
+import Link from 'next/link';
+
+import Badge from '@/shared/components/badge/badge';
+import FormTabManager from '@/shared/components/button/form-tab-button/form-tab-manager';
 import Button from '@/shared/components/button/functional-button/functional-button';
-import Input from '@/shared/components/input/input';
 
 import styles from './form.module.scss';
 
 export default function Form() {
   return (
     <div className={styles.container}>
-      <div className={styles.form_container}>
-        <span className={styles.span}>회차</span>
-        <div className={styles.select}>2024/12/09(월) (2회차)</div>
-      </div>
-      <div className={styles.form_container}>
-        <span className={styles.span}>매수</span>
-        <div className={styles.select}>1매</div>
-      </div>
-      <div className={styles.form_container}>
-        <span className={styles.span}>희망구역</span>
+      <div className={styles.title_container}>
+        <div className={styles.tag}>
+          <Badge type="type-a">일반예매</Badge>
+          <Badge type="type-b">무통장 가능</Badge>
+        </div>
+        <div className={styles.title}>
+          터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’
+        </div>
+        <div className={styles.info_container}>
+          <div className={styles.image}>
+            {/* 추후 next의 Image 로 변경 예정 */}
+            <img
+              src={'https://placehold.co/400x600'}
+              alt="터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ"
+              width={140}
+              height={186}
+            />
+            <span>좌석배치도</span>
+          </div>
+          <div className={styles.detail_container}>
+            <div className={styles.detail}>
+              <span className={styles.category}>공연 일자</span>
+              <span className={styles.info}>24/08/27 ~ 24/09/26</span>
+            </div>
 
-        <div className={styles.input_container}>
-          <span className={styles.text}>1순위</span>
-          <Input
-            label="구역명"
-            placeholder="구역명"
-            id="seat"
-            className={styles.input_seat}
-          />
-          <Input
-            label="가격"
-            placeholder="가격"
-            id="price"
-            className={styles.input_price}
-          />
-          <MinusIcon width={16} height={16} fill={'var(--gray-4)'} />
-        </div>
-        <div className={styles.input_container}>
-          <span className={styles.text}>2순위</span>
-          <Input
-            label="구역명"
-            placeholder="구역명"
-            id="seat"
-            className={styles.input_seat}
-          />
-          <Input
-            label="가격"
-            placeholder="가격"
-            id="price"
-            className={styles.input_price}
-          />
-          <MinusIcon width={16} height={16} fill={'var(--gray-4)'} />
-        </div>
-        <div className={styles.input_container}>
-          <span className={styles.text}>3순위</span>
-          <Input
-            label="구역명"
-            placeholder="구역명"
-            id="seat"
-            className={styles.input_seat}
-          />
-          <Input
-            label="가격"
-            placeholder="가격"
-            id="price"
-            className={styles.input_price}
-          />
-          <PlusIcon width={16} height={16} fill={'var(--gray-4)'} />
+            <div className={styles.detail}>
+              <span className={styles.category}>공연장</span>
+              <span className={styles.info}>올림픽공원 핸드볼 경기장</span>
+            </div>
+
+            <div className={styles.detail}>
+              <span className={styles.category}>예매처</span>
+              <Link className={styles.link} href="https://ticket.yes24.com">
+                YES24
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
-      <div className={styles.form_container}>
-        <span className={styles.span}>요청사항</span>
-        <textarea
-          className={styles.textarea}
-          placeholder="자유롭게 입력해주세요."
-        />
-      </div>
+      <FormTabManager />
       <Button label="신청하기" type="button" size="large" variant="fill" />
     </div>
   );

@@ -8,89 +8,74 @@
   width: 100%;
   gap: 24px;
 
-  .form_container {
-    display: flex;
-    flex-direction: column;
+  .title_container {
+    position: relative;
     width: 100%;
-    gap: 12px;
+    margin-top: 40px;
 
-    .span {
-      @include Heading-03;
-      color: var(--gray-5);
-    }
-
-    .select,
-    .textarea {
-      @include Paragraph-02;
-      color: var(--gray-4);
+    .tag {
       display: flex;
-      width: 100%;
-      padding: 12px 16px;
-      align-items: center;
-      border-radius: 12px;
-      background: var(--gray-1);
+      gap: 8px;
     }
 
-    .input_price,
-    .input_seat {
-      @include Paragraph-02;
-      color: var(--gray-4);
+    .title {
+      @include title-md;
+      color: var(--textColor-main);
+      text-align: start;
+      margin-top: 8px;
+    }
 
+    .info_container {
       display: flex;
-      width: 100%;
-      padding: 12px 16px;
-      align-items: center;
-      border-radius: 12px;
-      background: var(--gray-1);
-      gap: 10px;
-      flex-shrink: 0;
-      border: none;
-    }
+      margin-top: 20px;
+      gap: 16px;
 
-    .select {
-      justify-content: space-between;
-    }
+      .image {
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-    .textarea {
-      height: 182px;
-      align-items: flex-start;
-      gap: 10px;
-    }
+        span {
+          @include text-sm;
 
-    .input_container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-
-      .text {
-        @include Paragraph-02;
-        color: var(--gray-5);
-        text-align: center;
-        min-width: 44px;
+          margin-top: 12px;
+          color: var(--textColor-less);
+          text-decoration-line: underline;
+        }
       }
 
-      .input_price {
-        min-width: 109px;
-      }
+      .detail_container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+        gap: 12px;
 
-      .input_seat {
-        min-width: 137px;
-      }
+        .detail {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: 4px;
+          width: 100%;
 
-      & > :nth-child(1) {
-        flex: 1;
-      }
+          .category {
+            @include text-sm;
+            color: var(--textColor-less);
+          }
 
-      & > :nth-child(2) {
-        flex: 3;
-      }
+          .info {
+            @include title-sm;
+            color: var(--textColor-main);
+          }
+        }
 
-      & > :nth-child(3) {
-        flex: 3;
-      }
-
-      & > :nth-child(4) {
-        flex: 1;
+        .link {
+          display: flex;
+          color: var(--textColor-main);
+          text-decoration: underline;
+        }
       }
     }
   }

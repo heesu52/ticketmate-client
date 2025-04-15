@@ -36,11 +36,8 @@ const instance = httpClient({
       init: NonNullable<Parameters<typeof fetch>[1]>,
     ): Promise<T> {
       if (!response.ok) {
-        console.log(response);
         if (response.status === 401) {
           const newAccessToken = await refreshAccessToken();
-
-          console.log(response, newAccessToken);
 
           if (newAccessToken) {
             const accessToken = await getCookie('accessToken');

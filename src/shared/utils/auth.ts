@@ -4,8 +4,6 @@ export const refreshAccessToken = async () => {
     credentials: 'include',
   });
 
-  console.log('reissue', res);
-
   if (!res.ok || res.status !== 200) return false;
 
   return res.ok;

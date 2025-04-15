@@ -1,6 +1,6 @@
 import { getCookie } from 'cookies-next';
 
-import { getAccessTokenFromServer } from '@/shared/utils/auth';
+import { refreshAccessToken } from '@/shared/utils/auth';
 import httpClient from '@/shared/utils/services/http-client';
 
 const instance = httpClient({
@@ -38,7 +38,7 @@ const instance = httpClient({
       if (!response.ok) {
         console.log(response);
         if (response.status === 401) {
-          const newAccessToken = await getAccessTokenFromServer();
+          const newAccessToken = await refreshAccessToken();
 
           console.log(response, newAccessToken);
 

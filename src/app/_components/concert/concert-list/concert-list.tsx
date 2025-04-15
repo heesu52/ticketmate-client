@@ -3,61 +3,11 @@
 import React from 'react';
 
 import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
+import { useGetConcertList } from '@/app/_shared/services/query';
 import { FilterListIcon } from '@/assets/icons';
 
 import ConcertDropdown from '../concert-dropdown';
 import styles from './concert-list.module.scss';
-
-const concert = [
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-];
 
 const dropdownList = [
   {
@@ -71,6 +21,10 @@ const dropdownList = [
 ];
 
 const ConcertList = () => {
+  const { data } = useGetConcertList();
+
+  const concertList = data?.content;
+
   return (
     <>
       <div className={styles.container}>
@@ -84,8 +38,8 @@ const ConcertList = () => {
               <FilterListIcon width={20} height={20} />
             </div>
           </div>
-          {concert.map((concertItem) => (
-            <ConcertCard concertItem={concertItem} key={concertItem.title} />
+          {concertList?.map((concertItem, index) => (
+            <ConcertCard concertItem={concertItem} key={index} />
           ))}
         </div>
       </div>

@@ -36,13 +36,18 @@ const instance = httpClient({
       init: NonNullable<Parameters<typeof fetch>[1]>,
     ): Promise<T> {
       if (!response.ok) {
+        console.log(response);
         if (response.status === 401) {
           const newAccessToken = await getAccessTokenFromServer();
 
+          console.log(response, newAccessToken);
+
           if (newAccessToken) {
+            const accessToken = await getCookie('accessToken');
+
             const retryHeaders = {
               ...init.headers,
-              Authorization: `Bearer ${newAccessToken}`,
+              Authorization: `Bearer ${accessToken}`,
             };
 
             const retryResponse = await fetch(input, {
@@ -57,16 +62,16 @@ const instance = httpClient({
               const retryErrorText = await retryResponse.text();
               throw new Error(`Retry failed: ${retryErrorText}`);
             }
-          }
-
-          // 재발급 실패 시 로그인으로
-          if (
-            window.confirm(
-              '로그인이 필요한 페이지입니다. 로그인 창으로 이동하시겠습니까?',
-            )
-          ) {
-            window.location.href = '/auth/sign-in';
-            return Promise.reject('Redirecting to login');
+          } else {
+            // 재발급 실패 시 로그인으로
+            if (
+              window.confirm(
+                '로그인이 필요한 페이지입니다. 로그인 창으로 이동하시겠습니까?',
+              )
+            ) {
+              window.location.href = '/auth/sign-in';
+              return Promise.reject('Redirecting to login');
+            }
           }
         }
 

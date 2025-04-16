@@ -1,25 +1,36 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { LocationOnIcon } from '@/assets/icons';
 import Badge from '@/shared/components/badge/badge';
+import { Concert } from '@/shared/types';
 
 import styles from './concert-card.module.scss';
 
-interface ConcertItem {
-  title: string;
-  date: string;
-  place: string;
-  img: string;
-}
-
 interface ConcertCardProps {
-  concertItem: ConcertItem;
+  concertItem: Concert;
 }
 
 const ConcertCard = ({ concertItem }: ConcertCardProps) => {
+  const {
+    concertId,
+    concertName,
+    concertHallName,
+    concertType,
+    ticketReservationSite,
+    ticketPreOpenDate,
+    preOpenBankTransfer,
+    ticketGeneralOpenDate,
+    generalOpenBankTransfer,
+    startDate,
+    endDate,
+    concertThumbnailUrl,
+    seatingChartUrl,
+  } = concertItem;
+
   return (
     <>
-      <Link href={'concert/:id'}>
+      <Link href={`concert/${concertId}`}>
         <div className={styles.container}>
           <div className={styles.tag}>
             <Badge type="type-a">선예매까지 D-12</Badge>
@@ -29,10 +40,9 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
           {/* 콘서트 정보 */}
           <div className={styles.card_container}>
             <div className={styles.concert_img}>
-              {/* 추후 next의 Image 로 변경 예정 */}
-              <img
-                src={concertItem.img}
-                alt={concertItem.title}
+              <Image
+                src={concertThumbnailUrl}
+                alt={concertHallName}
                 width={104}
                 height={139}
               />
@@ -40,12 +50,14 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
 
             <div className={styles.concert_info}>
               <div className={styles.description}>
-                <span className={styles.date}>{concertItem.date}</span>
-                <span className={styles.title}>{concertItem.title}</span>
+                <span
+                  className={styles.date}
+                >{`${startDate} ~ ${endDate}`}</span>
+                <span className={styles.title}>{concertName}</span>
               </div>
               <div className={styles.place}>
                 <LocationOnIcon width={16} height={16} />
-                <span className={styles.location}>{concertItem.place}</span>
+                <span className={styles.location}>{concertHallName}</span>
               </div>
             </div>
           </div>

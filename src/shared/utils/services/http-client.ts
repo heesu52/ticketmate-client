@@ -10,7 +10,11 @@ export interface HTTPClientOption<T = Response>
       input: NonNullable<FetchParameters[0]>,
       init: NonNullable<FetchParameters[1]>,
     ): PromiseAble<FetchParameters[1]>;
-    response?(response: Response): PromiseAble<T>;
+    response?(
+      response: Response,
+      input: NonNullable<FetchParameters[0]>,
+      init: NonNullable<FetchParameters[1]>,
+    ): PromiseAble<T>;
   };
 }
 
@@ -42,10 +46,12 @@ export default function httpClient<T = Response>({
     const interceptorAppliedOption = interceptors.request
       ? await interceptors.request(url, option)
       : option;
-    const response = await fetch(url, interceptorAppliedOption);
+
+    const finalOption = interceptorAppliedOption ?? option;
+    const response = await fetch(url, finalOption);
 
     if (interceptors.response) {
-      return (await interceptors.response(response)) as R;
+      return (await interceptors.response(response, url, finalOption)) as R;
     }
 
     return response as R;

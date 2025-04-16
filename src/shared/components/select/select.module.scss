@@ -1,15 +1,15 @@
 @use '@/styles/index' as *;
 
-.dropdown {
+.select {
   position: relative;
   display: flex;
   align-items: center;
 
-  .dropdown_label {
+  .select_label {
     @include a11y-hidden;
   }
 
-  .dropdown_select {
+  .select_trigger {
     @include text-sm;
 
     display: flex;

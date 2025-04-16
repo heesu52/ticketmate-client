@@ -6,10 +6,10 @@ import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
 import { useGetConcertList } from '@/app/_shared/services/query';
 import { FilterListIcon } from '@/assets/icons';
 
-import ConcertDropdown from '../concert-dropdown';
+import ConcertSelect from '../concert-select';
 import styles from './concert-list.module.scss';
 
-const dropdownList = [
+const selectList = [
   {
     value: 'popularity',
     label: '인기순',
@@ -33,8 +33,8 @@ const ConcertList = () => {
           <div className={styles.title_contanier}>
             <span className={styles.title}>신청가능 공연</span>
 
-            <div className={styles.dropdown_container}>
-              <ConcertDropdown dropdownList={dropdownList} />
+            <div className={styles.select_container}>
+              <ConcertSelect selectList={selectList} />
               <FilterListIcon width={20} height={20} />
             </div>
           </div>

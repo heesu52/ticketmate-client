@@ -4,7 +4,7 @@ import { lazy, useState } from 'react';
 
 import { toast } from 'react-toastify';
 
-import ExampleDropdown from '@/app/example/_shared/components/example-dropdown/example-dropdown';
+import ExampleSelect from '@/app/example/_shared/components/example-select/example-select';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { useModal } from '@/shared/components/modal/use-modal';
 import RadioGroup from '@/shared/components/radio/radio';
@@ -12,7 +12,7 @@ import { customToast } from '@/shared/components/toast/custom-toast/custom-toast
 
 import styles from './page.module.scss';
 
-const dropdownList = [
+const selectList = [
   { value: 'option1', label: '옵션 1' },
   { value: 'option2', label: '옵션 2 (비활성화)', disabled: true },
   { value: 'option3', label: '옵션 3' },
@@ -65,7 +65,7 @@ function Page() {
       <button className={styles.button} onClick={handleOpenModal}>
         예시 모달 클릭하기
       </button>
-      <ExampleDropdown dropdownList={dropdownList} />
+      <ExampleSelect selectList={selectList} />
       <Button onClick={notify}>기본 toast</Button>
       <Button onClick={custom}>커스텀 toast</Button>
 

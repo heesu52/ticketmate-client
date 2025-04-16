@@ -14,11 +14,11 @@ import classNames from 'classnames/bind';
 import BottomArrowIcon from '@/assets/icons/left_arrow.svg';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
 
-import styles from './dropdown.module.scss';
+import styles from './select.module.scss';
 
 const cn = classNames.bind(styles);
 
-export interface DropdownContextType {
+export interface SelectContextType {
   selectedValue: string; // 선택된 값
   setSelectedValue: (value: string) => void;
   options: { value: string; label: string; disabled?: boolean }[]; // 옵션 목록
@@ -29,31 +29,29 @@ export interface DropdownContextType {
   setFocusedIndex: (index: number | ((prev: number) => number)) => void;
 }
 
-export interface DropdownProps {
+export interface SelectProps {
   children: ReactNode;
   defaultValue?: string;
   onSelect?: (value: string) => void;
 }
 
-const DropdownContext = createContext<DropdownContextType | undefined>(
-  undefined,
-);
+const SelectContext = createContext<SelectContextType | undefined>(undefined);
 
-const useDropdownContext = () => {
-  const context = useContext(DropdownContext);
+const useSelectContext = () => {
+  const context = useContext(SelectContext);
   if (!context) {
     throw new Error(
-      'Dropdown 컴포넌트는 Dropdown.Provider 하위에서 사용되어야 합니다.',
+      'Select 컴포넌트는 Select.Provider 하위에서 사용되어야 합니다.',
     );
   }
   return context;
 };
 
-const Dropdown = ({
+const Select = ({
   children,
   defaultValue = '',
   onSelect,
-}: DropdownProps): JSX.Element => {
+}: SelectProps): JSX.Element => {
   const [selectedValue, setSelectedValue] = useState(defaultValue);
   const [options, setOptions] = useState<
     { value: string; label: string; disabled?: boolean }[]
@@ -78,7 +76,7 @@ const Dropdown = ({
   }, [selectedValue, onSelect]);
 
   return (
-    <DropdownContext.Provider
+    <SelectContext.Provider
       value={{
         selectedValue,
         setSelectedValue,
@@ -90,24 +88,24 @@ const Dropdown = ({
         setFocusedIndex,
       }}
     >
-      <div className={cn('dropdown')} ref={wrapperRef}>
+      <div className={cn('select')} ref={wrapperRef}>
         {children}
       </div>
-    </DropdownContext.Provider>
+    </SelectContext.Provider>
   );
 };
 
-interface DropdownTriggerProps {
+interface SelectTriggerProps {
   label: string;
   placeholder?: string;
   maxHeight?: string;
 }
 
-const DropdownTrigger = ({
+const SelectTrigger = ({
   label,
   placeholder = '선택해주세요.',
   maxHeight = 'auto',
-}: DropdownTriggerProps): JSX.Element => {
+}: SelectTriggerProps): JSX.Element => {
   const {
     selectedValue,
     setSelectedValue,
@@ -116,14 +114,14 @@ const DropdownTrigger = ({
     setIsOpen,
     focusedIndex,
     setFocusedIndex,
-  } = useDropdownContext();
+  } = useSelectContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const optionsRef = useRef<(HTMLLIElement | null)[]>([]);
 
   // 고유한 ID 생성 (label이 있으면 이를 기반으로, 없으면 기본값)
   const triggerId = label
-    ? `dropdown-${label.toLowerCase().replace(/\s+/g, '-')}`
-    : 'dropdown-trigger';
+    ? `select-${label.toLowerCase().replace(/\s+/g, '-')}`
+    : 'select-trigger';
 
   // 다음 disabled 되지 않은 index를 return
   const findNextEnabledIndex = (start: number, direction: 'up' | 'down') => {
@@ -187,7 +185,7 @@ const DropdownTrigger = ({
 
   return (
     <>
-      <label className={cn('dropdown_label')} htmlFor={triggerId}>
+      <label className={cn('select_label')} htmlFor={triggerId}>
         {label}
       </label>
 
@@ -195,7 +193,7 @@ const DropdownTrigger = ({
         type="button"
         id={triggerId}
         ref={triggerRef}
-        className={cn('dropdown_select', !selectedValue && 'placeholder')}
+        className={cn('select_trigger', !selectedValue && 'placeholder')}
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
         aria-haspopup="listbox"
@@ -251,18 +249,18 @@ const DropdownTrigger = ({
   );
 };
 
-interface DropdownOptionProps {
+interface SelectOptionProps {
   value: string;
   children: ReactNode;
   disabled?: boolean;
 }
 
-const DropdownOption = ({
+const SelectOption = ({
   value,
   children,
   disabled = false,
-}: DropdownOptionProps) => {
-  const { addOption } = useDropdownContext();
+}: SelectOptionProps) => {
+  const { addOption } = useSelectContext();
 
   useEffect(() => {
     addOption(value, String(children), disabled);
@@ -271,7 +269,7 @@ const DropdownOption = ({
   return null;
 };
 
-Dropdown.Trigger = DropdownTrigger;
-Dropdown.Option = DropdownOption;
+Select.Trigger = SelectTrigger;
+Select.Option = SelectOption;
 
-export default Dropdown;
+export default Select;

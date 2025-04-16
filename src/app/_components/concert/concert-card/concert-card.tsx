@@ -30,7 +30,7 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
 
   return (
     <>
-      <Link href={'concert/:id'}>
+      <Link href={`concert/${concertId}`}>
         <div className={styles.container}>
           <div className={styles.tag}>
             <Badge type="type-a">선예매까지 D-12</Badge>

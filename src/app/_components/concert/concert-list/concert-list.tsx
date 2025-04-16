@@ -4,7 +4,6 @@ import React from 'react';
 
 import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
 import { useGetConcertList } from '@/app/_shared/services/query';
-import { FilterListIcon } from '@/assets/icons';
 
 import ConcertSelect from '../concert-select';
 import styles from './concert-list.module.scss';
@@ -35,7 +34,6 @@ const ConcertList = () => {
 
             <div className={styles.select_container}>
               <ConcertSelect selectList={selectList} />
-              <FilterListIcon width={20} height={20} />
             </div>
           </div>
           {concertList?.map((concertItem, index) => (

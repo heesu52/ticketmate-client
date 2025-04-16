@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { FilterListIcon } from '@/assets/icons';
 import Select from '@/shared/components/select/select';
 
 interface SelectList {
@@ -20,8 +21,12 @@ const ConcertSelect = ({ selectList }: ConcertSelectProps) => {
   }, [selected]);
 
   return (
-    <Select onSelect={setSelected}>
-      <Select.Trigger label="Select Label" />
+    <Select onSelect={setSelected} defaultValue="popularity">
+      <Select.Trigger
+        label="Select Label"
+        listMinWidth="140px"
+        icon={<FilterListIcon width={20} height={20} />}
+      />
       {selectList.map((item) => {
         return (
           <Select.Option

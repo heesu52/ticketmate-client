@@ -44,6 +44,11 @@
         color: var(--textColor-sub);
       }
     }
+
+    &.has_icon {
+      border-bottom: none;
+      gap: 8px;
+    }
   }
 
   .icon {
@@ -63,7 +68,7 @@
 
     position: absolute;
     top: 100%;
-    left: 0;
+    right: 0;
     z-index: 9;
 
     width: 100%;

@@ -97,14 +97,18 @@ const Select = ({
 
 interface SelectTriggerProps {
   label: string;
+  icon?: ReactNode;
   placeholder?: string;
-  maxHeight?: string;
+  listMaxHeight?: string;
+  listMinWidth?: string;
 }
 
 const SelectTrigger = ({
   label,
+  icon,
   placeholder = '선택해주세요.',
-  maxHeight = 'auto',
+  listMaxHeight = 'auto',
+  listMinWidth = 'auto',
 }: SelectTriggerProps): JSX.Element => {
   const {
     selectedValue,
@@ -193,26 +197,32 @@ const SelectTrigger = ({
         type="button"
         id={triggerId}
         ref={triggerRef}
-        className={cn('select_trigger', !selectedValue && 'placeholder')}
+        className={cn(
+          'select_trigger',
+          !selectedValue && 'placeholder',
+          icon ? 'has_icon' : '',
+        )}
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-label={label ? `${label}, 현재 선택: ${selectedLabel}` : undefined}
       >
-        {selectedLabel}
-        <BottomArrowIcon
-          className={cn('icon', { open: isOpen })}
-          width={16}
-          height={16}
-          fill="var(--gray-4)"
-        />
+        <span>{selectedLabel}</span>
+        {icon ?? (
+          <BottomArrowIcon
+            className={cn('icon', { open: isOpen })}
+            width={16}
+            height={16}
+            fill="var(--gray-4)"
+          />
+        )}
       </button>
 
       {isOpen && (
         <ul
           className={cn('options_list')}
-          style={{ maxHeight }}
+          style={{ maxHeight: listMaxHeight, minWidth: listMinWidth }}
           role="listbox"
           aria-activedescendant={
             focusedIndex >= 0 ? `option-${focusedIndex}` : undefined

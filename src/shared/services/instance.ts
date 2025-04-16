@@ -11,13 +11,10 @@ const instance = httpClient({
       input: NonNullable<Parameters<typeof fetch>[0]>,
       init: NonNullable<Parameters<typeof fetch>[1]>,
     ): Promise<NonNullable<Parameters<typeof fetch>[1]>> {
-      let accessToken;
-
-      if (process.env.NODE_ENV === 'development') {
-        accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
-      } else if (process.env.NODE_ENV === 'production') {
-        accessToken = getCookie('accessToken');
-      }
+      const accessToken =
+        process.env.NODE_ENV === 'development'
+          ? process.env.NEXT_PUBLIC_ACCESS_TOKEN
+          : getCookie('accessToken');
 
       if (accessToken) {
         init.headers = {

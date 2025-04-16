@@ -89,10 +89,10 @@
       cursor: pointer;
 
       // &:hover,
-      // &.focused {
-      //   background-color: var(--brandColor-border);
-      //   color: var(--white);
-      // }
+      &.focused {
+        background-color: var(--brandColor-border);
+        color: var(--white);
+      }
 
       &[aria-disabled='true'] {
         background-color: var(--lineColor-main);

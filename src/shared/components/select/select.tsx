@@ -71,6 +71,12 @@ const Select = ({
   // 외부 클릭 시 드롭다운 닫기
   useClickOutside(wrapperRef, () => setIsOpen(false));
 
+  // selectedValue가 변경될 때 focusedIndex를 업데이트
+  useEffect(() => {
+    const index = options.findIndex((option) => option.value === selectedValue);
+    setFocusedIndex(index);
+  }, [selectedValue, options]);
+
   useEffect(() => {
     if (onSelect) onSelect(selectedValue);
   }, [selectedValue, onSelect]);

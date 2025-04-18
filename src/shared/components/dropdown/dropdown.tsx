@@ -103,7 +103,6 @@ const DropdownTrigger = ({ children }: DropdownTriggerProps): JSX.Element => {
     <button
       ref={triggerRef}
       onClick={() => setIsOpen(!isOpen)}
-      className={styles.trigger}
       aria-haspopup="menu"
       aria-expanded={isOpen}
       aria-controls={`dropdown-content-${label}`}
@@ -129,7 +128,8 @@ const DropdownContent = ({
 }: DropdownContentProps): JSX.Element => {
   const { isOpen, label } = useDropdownContext();
   const contentRef = useRef<HTMLDivElement>(null);
-  const [positionClass, setPositionClass] = useState<string>('left');
+  const [positionClass, setPositionClass] =
+    useState<keyof typeof styles>('left');
 
   useEffect(() => {
     if (!isOpen || !contentRef.current) return;

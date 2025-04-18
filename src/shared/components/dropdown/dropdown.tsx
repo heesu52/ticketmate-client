@@ -17,6 +17,7 @@ interface DropdownContextType {
   setIsOpen: (open: boolean) => void;
   focusedItem: number;
   setFocusedItem: (index: number) => void;
+  label: string;
 }
 
 const DropdownContext = createContext<DropdownContextType | undefined>(
@@ -35,9 +36,10 @@ const useDropdownContext = () => {
 
 interface DropdownProps {
   children: ReactNode;
+  label: string;
 }
 
-const Dropdown = ({ children }: DropdownProps): JSX.Element => {
+const Dropdown = ({ children, label }: DropdownProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
   const [focusedItem, setFocusedItem] = useState(-1);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -49,28 +51,22 @@ const Dropdown = ({ children }: DropdownProps): JSX.Element => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!isOpen) return;
 
-      const items = dropdownRef.current?.querySelectorAll(
-        `.${styles.item}, .${styles.subTrigger}`,
-      );
+      const items = dropdownRef.current?.querySelectorAll(`.${styles.item}`);
       if (!items) return;
 
       switch (event.key) {
-        case 'ArrowDown':
-          event.preventDefault();
-          setFocusedItem((prev) => {
-            const next = Math.min(prev + 1, items.length - 1);
-            (items[next] as HTMLElement)?.focus();
-            return next;
-          });
+        case 'Tab': {
+          const activeElement = document.activeElement;
+          const lastItem = items[items.length - 1];
+
+          // 마지막 index에서 tab누르면 dropdown 닫기
+          if (activeElement === lastItem) {
+            setIsOpen(false);
+            setFocusedItem(-1);
+          }
           break;
-        case 'ArrowUp':
-          event.preventDefault();
-          setFocusedItem((prev) => {
-            const next = Math.max(prev - 1, 0);
-            (items[next] as HTMLElement)?.focus();
-            return next;
-          });
-          break;
+        }
+
         case 'Escape':
           event.preventDefault();
           setIsOpen(false);
@@ -86,7 +82,7 @@ const Dropdown = ({ children }: DropdownProps): JSX.Element => {
 
   return (
     <DropdownContext.Provider
-      value={{ isOpen, setIsOpen, focusedItem, setFocusedItem }}
+      value={{ isOpen, setIsOpen, focusedItem, setFocusedItem, label }}
     >
       <div ref={dropdownRef} className={styles.dropdown}>
         {children}
@@ -97,30 +93,11 @@ const Dropdown = ({ children }: DropdownProps): JSX.Element => {
 
 interface DropdownTriggerProps {
   children: ReactNode;
-  asChild?: boolean;
-  ariaLabel?: string;
 }
 
-const DropdownTrigger = ({
-  children,
-  asChild,
-  ariaLabel,
-}: DropdownTriggerProps): JSX.Element => {
-  const { isOpen, setIsOpen } = useDropdownContext();
+const DropdownTrigger = ({ children }: DropdownTriggerProps): JSX.Element => {
+  const { isOpen, setIsOpen, label } = useDropdownContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
-
-  if (asChild) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return React.cloneElement(children as React.ReactElement<any>, {
-      onClick: () => setIsOpen(!isOpen),
-      'aria-haspopup': 'menu',
-      'aria-expanded': isOpen,
-      'aria-controls': 'dropdown-content',
-      'aria-label': ariaLabel,
-      ref: triggerRef,
-      className: styles.trigger,
-    });
-  }
 
   return (
     <button
@@ -129,8 +106,8 @@ const DropdownTrigger = ({
       className={styles.trigger}
       aria-haspopup="menu"
       aria-expanded={isOpen}
-      aria-controls="dropdown-content"
-      aria-label={ariaLabel}
+      aria-controls={`dropdown-content-${label}`}
+      aria-label={label}
     >
       {children}
     </button>
@@ -140,33 +117,48 @@ const DropdownTrigger = ({
 interface DropdownContentProps {
   children: ReactNode;
   className?: string;
+  listMaxHeight?: string;
+  listMinWidth?: string;
 }
 
 const DropdownContent = ({
   children,
   className,
+  listMaxHeight = 'auto',
+  listMinWidth = 'auto',
 }: DropdownContentProps): JSX.Element => {
-  const { isOpen } = useDropdownContext();
+  const { isOpen, label } = useDropdownContext();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [positionClass, setPositionClass] = useState<string>('left');
+
+  useEffect(() => {
+    if (!isOpen || !contentRef.current) return;
+
+    const rect = contentRef.current.getBoundingClientRect();
+    const screenWidth = window.innerWidth;
+
+    // 화면의 50% 기준으로 위치 결정
+    if (rect.left + rect.width / 2 < screenWidth / 2) {
+      setPositionClass('left');
+    } else {
+      setPositionClass('right');
+    }
+  }, [isOpen]);
+
   return isOpen ? (
     <div
-      className={`${styles.content} ${className || ''}`}
+      ref={contentRef}
+      className={`${styles.content} ${styles[positionClass]} ${className || ''}`}
+      style={{ maxHeight: listMaxHeight, minWidth: listMinWidth }}
       role="menu"
-      id="dropdown-content"
-      aria-labelledby="dropdown"
+      id={`dropdown-content-${label}`}
+      aria-labelledby={label}
     >
       {children}
     </div>
   ) : (
     <></>
   );
-};
-
-interface DropdownGroupProps {
-  children: ReactNode;
-}
-
-const DropdownGroup = ({ children }: DropdownGroupProps): JSX.Element => {
-  return <div className={styles.group}>{children}</div>;
 };
 
 interface DropdownItemProps {
@@ -186,9 +178,8 @@ const DropdownItem = ({
   const handleMouseEnter = () => {
     if (triggerRef.current && !disabled) {
       const index = Array.from(
-        triggerRef.current.parentElement?.querySelectorAll(
-          `.${styles.item}, .${styles.subTrigger}`,
-        ) || [],
+        triggerRef.current.parentElement?.querySelectorAll(`.${styles.item}`) ||
+          [],
       ).indexOf(triggerRef.current);
       setFocusedItem(index);
       triggerRef.current.focus();
@@ -205,7 +196,7 @@ const DropdownItem = ({
   return (
     <button
       ref={triggerRef}
-      className={`${styles.item} ${disabled ? styles.disabled : ''}`}
+      className={`${styles.item}`}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       role="menuitem"
@@ -224,7 +215,6 @@ const DropdownSeparator = (): JSX.Element => {
 
 Dropdown.Trigger = DropdownTrigger;
 Dropdown.Content = DropdownContent;
-Dropdown.Group = DropdownGroup;
 Dropdown.Item = DropdownItem;
 Dropdown.Separator = DropdownSeparator;
 

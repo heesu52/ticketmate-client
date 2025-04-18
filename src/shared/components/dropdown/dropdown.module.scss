@@ -1,158 +1,56 @@
-$primary-color: #1e40af; // WCAG-compliant blue
-$background-color: #ffffff;
-$border-color: #e2e8f0;
-$hover-background: #f1f5f9;
-$focus-ring: rgba($primary-color, 0.3);
-$shadow-color: rgba(0, 0, 0, 0.1);
-$transition-duration: 0.2s;
-$text-color: #1e293b;
-$item-hover-color: #0f172a;
-$disabled-color: #94a3b8;
-$sub-background: #f8fafc;
-
 .dropdown {
   position: relative;
-}
-
-.trigger {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-  background-color: $background-color;
-  border: 1px solid $border-color;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: $text-color;
-  transition:
-    border-color $transition-duration ease-in-out,
-    background-color $transition-duration ease-in-out;
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-    margin-right: 0.5rem;
-    stroke: $text-color;
-    transition: stroke $transition-duration ease-in-out;
-  }
-
-  &:hover {
-    background-color: $hover-background;
-    border-color: $primary-color;
-
-    svg {
-      stroke: $primary-color;
-    }
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px $focus-ring;
-    border-color: $primary-color;
-
-    svg {
-      stroke: $primary-color;
-    }
-  }
-
-  &[aria-expanded='true'] {
-    border-color: $primary-color;
-  }
 }
 
 .content {
   position: absolute;
-  z-index: 50;
-  width: 14rem; // Matches shadcn/ui w-56
-  margin-top: 0.5rem;
-  background-color: $background-color;
-  border: 1px solid $border-color;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px $shadow-color;
-  opacity: 0;
-  transform: translateY(-8px);
-  animation: slideIn $transition-duration ease-out forwards;
+  z-index: 9;
+  top: calc(100% + 8px);
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    opacity: 1;
-    transform: translateY(0);
+  &.left {
+    left: 0;
   }
 
-  @keyframes slideIn {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  &.right {
+    right: 0;
   }
-}
 
-.group {
-  padding: 0.25rem 0;
+  display: flex;
+  flex-direction: column;
+
+  background: var(--white);
+  border-radius: 12px;
+
+  /* DropSD_FloatingItem */
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
 }
 
 .item {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 0.5rem 1rem;
-  background: none;
-  border: none;
-  font-size: 0.875rem;
-  color: $text-color;
-  cursor: pointer;
-  transition:
-    background-color $transition-duration ease-in-out,
-    color $transition-duration ease-in-out;
+  text-align: left;
+  padding: 16px 12px;
+  white-space: nowrap;
 
-  svg {
-    width: 1rem;
-    height: 1rem;
-    margin-right: 0.75rem;
-    stroke: $text-color;
+  &:first-child {
+    border-radius: 12px 12px 0 0;
   }
 
-  &:hover {
-    background-color: $hover-background;
-    color: $item-hover-color;
-
-    svg {
-      stroke: $item-hover-color;
-    }
+  &:last-child {
+    border-radius: 0 0 12px 12px;
   }
 
   &:focus {
-    outline: none;
-    background-color: $hover-background;
-    color: $item-hover-color;
-    box-shadow: inset 0 0 0 1px $primary-color;
-
-    svg {
-      stroke: $item-hover-color;
-    }
+    background-color: var(--brandColor-main);
+    color: var(--white);
   }
 
-  &.disabled {
-    color: $disabled-color;
+  &[aria-disabled='true'] {
+    background-color: var(--lineColor-main);
     cursor: not-allowed;
-    pointer-events: none;
-
-    svg {
-      stroke: $disabled-color;
-    }
   }
 }
 
 .separator {
   height: 1px;
-  background-color: $border-color;
-  margin: 0.25rem 0;
-}
-
-.shortcut {
-  margin-left: auto;
-  font-size: 0.75rem;
-  color: $disabled-color;
 }

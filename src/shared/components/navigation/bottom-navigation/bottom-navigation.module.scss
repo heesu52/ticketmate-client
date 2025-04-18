@@ -44,5 +44,9 @@
     &.active {
       color: var(--brandColor-main);
     }
+
+    .label {
+      white-space: nowrap;
+    }
   }
 }

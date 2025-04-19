@@ -16,23 +16,24 @@ const ExampleSelect = ({ selectList }: ExampleSelectProps) => {
   const [selected, setSelected] = useState<string>('');
 
   useEffect(() => {
-    console.log('selected', selected);
+    console.log('Selected value:', selected);
   }, [selected]);
-
   return (
     <Select onSelect={setSelected} defaultValue="option1">
       <Select.Trigger label="example" />
-      {selectList.map((item) => {
-        return (
-          <Select.Option
-            value={item.value}
-            key={item.value}
-            disabled={item.disabled}
-          >
-            {item.label}
-          </Select.Option>
-        );
-      })}
+      <Select.OptionList>
+        {selectList.map((item) => {
+          return (
+            <Select.Option
+              value={item.value}
+              key={item.value}
+              disabled={item.disabled}
+            >
+              {item.label}
+            </Select.Option>
+          );
+        })}
+      </Select.OptionList>
     </Select>
   );
 };

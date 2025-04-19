@@ -24,20 +24,21 @@ const ConcertSelect = ({ selectList }: ConcertSelectProps) => {
     <Select onSelect={setSelected} defaultValue="popularity">
       <Select.Trigger
         label="Select Label"
-        listMinWidth="140px"
         icon={<FilterListIcon width={20} height={20} />}
       />
-      {selectList.map((item) => {
-        return (
-          <Select.Option
-            value={item.value}
-            key={item.value}
-            disabled={item.disabled}
-          >
-            {item.label}
-          </Select.Option>
-        );
-      })}
+      <Select.OptionList listMinWidth="140px">
+        {selectList.map((item) => {
+          return (
+            <Select.Option
+              value={item.value}
+              key={item.value}
+              disabled={item.disabled}
+            >
+              {item.label}
+            </Select.Option>
+          );
+        })}
+      </Select.OptionList>
     </Select>
   );
 };

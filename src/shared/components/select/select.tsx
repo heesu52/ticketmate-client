@@ -18,21 +18,21 @@ import styles from './select.module.scss';
 
 const cn = classNames.bind(styles);
 
-export interface SelectContextType {
+interface OptionType {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+
+interface SelectContextType {
   selectedValue: string; // 선택된 값
   setSelectedValue: (value: string) => void;
-  options: { value: string; label: string; disabled?: boolean }[]; // 옵션 목록
-  addOption: (value: string, label: string, disabled?: boolean) => void; // 옵션 추가 함수
+  options: OptionType[]; // 옵션 목록
+  setOptions: (value: string, label: string, disabled?: boolean) => void; // 옵션 추가 함수
   isOpen: boolean; // 드롭다운 열림 여부
   setIsOpen: (open: boolean) => void;
   focusedIndex: number; // 현재 포커스된 옵션 인덱스
   setFocusedIndex: (index: number | ((prev: number) => number)) => void;
-}
-
-export interface SelectProps {
-  children: ReactNode;
-  defaultValue?: string;
-  onSelect?: (value: string) => void;
 }
 
 const SelectContext = createContext<SelectContextType | undefined>(undefined);
@@ -47,15 +47,18 @@ const useSelectContext = () => {
   return context;
 };
 
+interface SelectProps {
+  children: ReactNode;
+  defaultValue?: string;
+  onSelect?: (value: string) => void;
+}
 const Select = ({
   children,
   defaultValue = '',
   onSelect,
 }: SelectProps): JSX.Element => {
   const [selectedValue, setSelectedValue] = useState(defaultValue);
-  const [options, setOptions] = useState<
-    { value: string; label: string; disabled?: boolean }[]
-  >([]);
+  const [options, setOptions] = useState<OptionType[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -87,7 +90,7 @@ const Select = ({
         selectedValue,
         setSelectedValue,
         options,
-        addOption,
+        setOptions: addOption,
         isOpen,
         setIsOpen,
         focusedIndex,
@@ -105,16 +108,11 @@ interface SelectTriggerProps {
   label: string;
   icon?: ReactNode;
   placeholder?: string;
-  listMaxHeight?: string;
-  listMinWidth?: string;
 }
-
 const SelectTrigger = ({
   label,
   icon,
   placeholder = '선택해주세요.',
-  listMaxHeight = 'auto',
-  listMinWidth = 'auto',
 }: SelectTriggerProps): JSX.Element => {
   const {
     selectedValue,
@@ -126,27 +124,22 @@ const SelectTrigger = ({
     setFocusedIndex,
   } = useSelectContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const optionsRef = useRef<(HTMLLIElement | null)[]>([]);
 
-  // 고유한 ID 생성 (label이 있으면 이를 기반으로, 없으면 기본값)
-  const triggerId = label
-    ? `select-${label.toLowerCase().replace(/\s+/g, '-')}`
-    : 'select-trigger';
+  const triggerId = `select-${label.toLowerCase().replace(/\s+/g, '-')}`;
 
-  // 다음 disabled 되지 않은 index를 return
-  const findNextEnabledIndex = (start: number, direction: 'up' | 'down') => {
-    let nextIndex = start;
+  const findNextEnabledIndex = (
+    start: number,
+    direction: 'up' | 'down',
+  ): number => {
+    let next = start;
     const step = direction === 'down' ? 1 : -1;
-
     do {
-      nextIndex += step;
-      if (nextIndex < 0 || nextIndex >= options.length) return start; // 범위를 벗어나면 현재 인덱스 유지
-    } while (options[nextIndex]?.disabled); // disabled가 아닌 옵션을 찾을 때까지 반복
-
-    return nextIndex;
+      next += step;
+      if (next < 0 || next >= options.length) return start; // 범위를 벗어나면 현재 인덱스 유지
+    } while (options[next]?.disabled); // disabled가 아닌 옵션을 찾을 때까지 반복
+    return next;
   };
 
-  // 접근성을 위한 키보드 접근
   const handleKeyDown = (e: KeyboardEvent) => {
     switch (e.key) {
       case 'ArrowDown':
@@ -156,15 +149,15 @@ const SelectTrigger = ({
           setFocusedIndex(-1);
         }
         setFocusedIndex((prev) => {
-          const nextIndex = findNextEnabledIndex(prev, 'down');
-          return nextIndex < options.length ? nextIndex : prev;
+          const next = findNextEnabledIndex(prev, 'down');
+          return next < options.length ? next : prev;
         });
         break;
       case 'ArrowUp':
         e.preventDefault();
         setFocusedIndex((prev) => {
-          const nextIndex = findNextEnabledIndex(prev, 'up');
-          return nextIndex >= 0 ? nextIndex : prev;
+          const next = findNextEnabledIndex(prev, 'up');
+          return next >= 0 ? next : prev;
         });
         break;
       case 'Enter':
@@ -205,14 +198,14 @@ const SelectTrigger = ({
         ref={triggerRef}
         className={cn(
           'select_trigger',
-          !selectedValue && 'placeholder',
+          !selectedValue ? 'placeholder' : '',
           icon ? 'has_icon' : '',
         )}
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        aria-label={label ? `${label}, 현재 선택: ${selectedLabel}` : undefined}
+        aria-label={`${label}, 현재 선택: ${selectedLabel}`}
       >
         <span>{selectedLabel}</span>
         {icon ?? (
@@ -224,44 +217,40 @@ const SelectTrigger = ({
           />
         )}
       </button>
-
-      {isOpen && (
-        <ul
-          className={cn('options_list')}
-          style={{ maxHeight: listMaxHeight, minWidth: listMinWidth }}
-          role="listbox"
-          aria-activedescendant={
-            focusedIndex >= 0 ? `option-${focusedIndex}` : undefined
-          }
-        >
-          {options.map((option, index) => (
-            <li
-              key={option.value}
-              ref={(el) => {
-                optionsRef.current[index] = el;
-              }}
-              id={`option-${index}`}
-              className={cn('option', {
-                selected: option.value === selectedValue,
-                focused: index === focusedIndex,
-              })}
-              role="option"
-              aria-selected={option.value === selectedValue}
-              aria-disabled={option.disabled}
-              onClick={() => {
-                if (!option.disabled) {
-                  setSelectedValue(option.value);
-                  setIsOpen(false);
-                  triggerRef.current?.focus();
-                }
-              }}
-            >
-              {option.label}
-            </li>
-          ))}
-        </ul>
-      )}
     </>
+  );
+};
+
+interface SelectOptionListProps {
+  children: ReactNode;
+  className?: string;
+  listMaxHeight?: string;
+  listMinWidth?: string;
+}
+
+const SelectOptionList = ({
+  children,
+  className,
+  listMaxHeight = 'auto',
+  listMinWidth = 'auto',
+}: SelectOptionListProps) => {
+  const { isOpen, focusedIndex } = useSelectContext();
+
+  return (
+    <ul
+      className={cn('options_list', className)}
+      style={{
+        maxHeight: listMaxHeight,
+        minWidth: listMinWidth,
+        display: isOpen ? 'block' : 'none',
+      }}
+      role="listbox"
+      aria-activedescendant={
+        focusedIndex >= 0 ? `option-${focusedIndex}` : undefined
+      }
+    >
+      {children}
+    </ul>
   );
 };
 
@@ -270,22 +259,51 @@ interface SelectOptionProps {
   children: ReactNode;
   disabled?: boolean;
 }
-
 const SelectOption = ({
   value,
   children,
   disabled = false,
 }: SelectOptionProps) => {
-  const { addOption } = useSelectContext();
+  const {
+    setOptions,
+    selectedValue,
+    setSelectedValue,
+    setIsOpen,
+    focusedIndex,
+    options,
+  } = useSelectContext();
 
   useEffect(() => {
-    addOption(value, String(children), disabled);
-  }, [value, children, disabled, addOption]);
+    setOptions(value, String(children), disabled);
+  }, [value, children, disabled, setOptions]);
 
-  return null;
+  const index = options.findIndex((opt) => opt.value === value);
+
+  return (
+    <li
+      id={`option-${index}`}
+      className={cn('option', {
+        selected: selectedValue === value,
+        focused: focusedIndex === index,
+        disabled,
+      })}
+      role="option"
+      aria-selected={selectedValue === value}
+      aria-disabled={disabled}
+      onClick={() => {
+        if (!disabled) {
+          setSelectedValue(value);
+          setIsOpen(false);
+        }
+      }}
+    >
+      {children}
+    </li>
+  );
 };
 
 Select.Trigger = SelectTrigger;
+Select.OptionList = SelectOptionList;
 Select.Option = SelectOption;
 
 export default Select;

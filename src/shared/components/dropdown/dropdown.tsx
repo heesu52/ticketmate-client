@@ -8,9 +8,13 @@ import React, {
   JSX,
 } from 'react';
 
+import classNames from 'classnames/bind';
+
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
 
 import styles from './dropdown.module.scss';
+
+const cn = classNames.bind(styles);
 
 interface DropdownContextType {
   isOpen: boolean;
@@ -148,7 +152,7 @@ const DropdownContent = ({
   return isOpen ? (
     <div
       ref={contentRef}
-      className={`${styles.content} ${styles[positionClass]} ${className || ''}`}
+      className={cn(styles.content, styles[positionClass], className || '')}
       style={{ maxHeight: listMaxHeight, minWidth: listMinWidth }}
       role="menu"
       id={`dropdown-content-${label}`}

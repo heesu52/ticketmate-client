@@ -6,7 +6,38 @@ import MinusIcon from '@/assets/icons/minus.svg';
 import PlusIcon from '@/assets/icons/plus.svg';
 import Input from '@/shared/components/input/input';
 
+import FormDropdown from './form-dropdown';
 import styles from './form-input.module.scss';
+
+const dateList = [
+  {
+    value: 'date1',
+    label: '2024/12/01(금) (1회차)',
+  },
+  {
+    value: 'date2',
+    label: '2024/12/02(토) (2회차)',
+  },
+  {
+    value: 'date3',
+    label: '2024/12/03(일) (3회차)',
+  },
+];
+
+const countList = [
+  {
+    value: 'count1',
+    label: '1매',
+  },
+  {
+    value: 'count2',
+    label: '2매',
+  },
+  {
+    value: 'count3',
+    label: '3매',
+  },
+];
 
 export default function FormInput() {
   const [inputs, setInputs] = useState([{ id: 1 }]);
@@ -23,12 +54,12 @@ export default function FormInput() {
     <div className={styles.container}>
       <div className={styles.form_container}>
         <span className={styles.span}>회차</span>
-        <div className={styles.select}>2024/12/09(월) (2회차)</div>
+        <FormDropdown dropdownList={dateList} />
       </div>
 
       <div className={styles.form_container}>
         <span className={styles.span}>매수</span>
-        <div className={styles.select}>1매</div>
+        <FormDropdown dropdownList={countList} />
       </div>
 
       <div className={styles.form_container}>

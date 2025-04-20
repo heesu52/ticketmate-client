@@ -9,10 +9,11 @@
   .background_container {
     width: calc(100% + 48px);
     height: 247px;
-    background: var(--overlayColor);
-    backdrop-filter: blur(4px);
-    position: relative; // 기본적으로 relative가 필요
-    z-index: 1; // 낮은 값 (뒤쪽)
+    position: relative;
+    z-index: 1;
+    background-size: cover;
+    background-position: center;
+    filter: blur(4px);
   }
 
   .title_container {

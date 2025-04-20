@@ -54,7 +54,10 @@ export default function Page() {
 
       <div className={styles.container}>
         <AppBarSetter title="공연 상세 페이지" />
-        <div className={styles.background_container} />
+        <div
+          className={styles.background_container}
+          style={{ backgroundImage: `url(${'https://placehold.co/400x600'})` }}
+        />
         <div className={styles.title_container}>
           <div className={styles.image}>
             {/* 추후 next의 Image 로 변경 예정 */}

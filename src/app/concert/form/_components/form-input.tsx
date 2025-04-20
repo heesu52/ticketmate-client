@@ -6,8 +6,8 @@ import MinusIcon from '@/assets/icons/minus.svg';
 import PlusIcon from '@/assets/icons/plus.svg';
 import Input from '@/shared/components/input/input';
 
-import FormDropdown from './form-dropdown';
 import styles from './form-input.module.scss';
+import FormDropdown from './form-select';
 
 const dateList = [
   {
@@ -54,12 +54,12 @@ export default function FormInput() {
     <div className={styles.container}>
       <div className={styles.form_container}>
         <span className={styles.span}>회차</span>
-        <FormDropdown dropdownList={dateList} />
+        <FormDropdown selectList={dateList} />
       </div>
 
       <div className={styles.form_container}>
         <span className={styles.span}>매수</span>
-        <FormDropdown dropdownList={countList} />
+        <FormDropdown selectList={countList} />
       </div>
 
       <div className={styles.form_container}>
@@ -72,14 +72,8 @@ export default function FormInput() {
               label="구역명"
               placeholder="구역명"
               id={`seat-${input.id}`}
-              className={styles.input_seat}
             />
-            <Input
-              label="가격"
-              placeholder="가격"
-              id={`price-${input.id}`}
-              className={styles.input_price}
-            />
+            <Input label="가격" placeholder="가격" id={`price-${input.id}`} />
             {idx === inputs.length - 1 ? (
               <PlusIcon
                 width={16}
@@ -103,9 +97,10 @@ export default function FormInput() {
 
       <div className={styles.form_container}>
         <span className={styles.span}>요청사항</span>
-        <textarea
-          className={styles.textarea}
-          placeholder="자유롭게 입력해주세요."
+        <Input
+          label="요청사항"
+          placeholder="자유롭게 작성해주세요"
+          id={'free'}
         />
       </div>
     </div>

@@ -37,7 +37,7 @@ function BottomNavigation() {
                 width={24}
                 height={24}
               />
-              <span>{label}</span>
+              <span className={styles.label}>{label}</span>
             </Link>
           </li>
         ))}

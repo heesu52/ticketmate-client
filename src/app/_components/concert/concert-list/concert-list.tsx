@@ -3,63 +3,12 @@
 import React from 'react';
 
 import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
-import { FilterListIcon } from '@/assets/icons';
+import { useGetConcertList } from '@/app/_shared/services/query';
 
-import ConcertDropdown from '../concert-dropdown';
+import ConcertSelect from '../concert-select';
 import styles from './concert-list.module.scss';
 
-const concert = [
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-  {
-    title: '터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’',
-    date: '2025.01.25 ~ 2025.02.01 ',
-    place: '블루스퀘어 마스터카드홀',
-    img: 'https://placehold.co/400x600',
-  },
-];
-
-const dropdownList = [
+const selectList = [
   {
     value: 'popularity',
     label: '인기순',
@@ -71,6 +20,10 @@ const dropdownList = [
 ];
 
 const ConcertList = () => {
+  const { data } = useGetConcertList();
+
+  const concertList = data?.content;
+
   return (
     <>
       <div className={styles.container}>
@@ -79,13 +32,12 @@ const ConcertList = () => {
           <div className={styles.title_contanier}>
             <span className={styles.title}>신청가능 공연</span>
 
-            <div className={styles.dropdown_container}>
-              <ConcertDropdown dropdownList={dropdownList} />
-              <FilterListIcon width={20} height={20} />
+            <div className={styles.select_container}>
+              <ConcertSelect selectList={selectList} />
             </div>
           </div>
-          {concert.map((concertItem) => (
-            <ConcertCard concertItem={concertItem} key={concertItem.title} />
+          {concertList?.map((concertItem, index) => (
+            <ConcertCard concertItem={concertItem} key={index} />
           ))}
         </div>
       </div>

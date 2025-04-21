@@ -1,19 +1,41 @@
 import { useState } from 'react';
 
-import FormInput from '@/app/concert/form/_components/form-input';
+import FormInput from '@/app/concert/form/_shared/components/input/form-input';
+import {
+  dateList,
+  FormData,
+} from '@/app/concert/form/_shared/components/input/form-input.type'; // FormData 임포트
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 
-import FormTapButton from './form-tab-button';
 import styles from './form-tab-manager.module.scss';
+import FormTabButton from '../button/form-tab-button';
 
 export default function FormTabManager() {
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
 
+  const [formData, setFormData] = useState<Record<number, FormData>>({
+    1: {
+      date: '',
+      count: '',
+      inputs: [{ id: 1, seat: '', price: '' }],
+      note: '',
+    }, // FormData 형태로 초기화
+  });
+
   const addNewTab = () => {
     setTabs((prev) => [...prev, nextId]);
     setActiveTab(nextId);
+    setFormData((prev) => ({
+      ...prev,
+      [nextId]: {
+        date: '',
+        count: '',
+        inputs: [{ id: 1, seat: '', price: '' }],
+        note: '',
+      },
+    }));
     setNextId((id) => id + 1);
   };
 
@@ -23,15 +45,28 @@ export default function FormTabManager() {
     if (activeTab === id && newTabs.length > 0) {
       setActiveTab(newTabs[0]);
     }
+    const newFormData = { ...formData };
+    delete newFormData[id];
+    setFormData(newFormData);
+  };
+
+  const updateFormData = (id: number, data: FormData) => {
+    setFormData((prev) => ({ ...prev, [id]: data }));
+  };
+
+  const getTabLabel = (tabId: number) => {
+    const tabData = formData[tabId];
+    const selectedDate = dateList.find((item) => item.value === tabData?.date);
+    return selectedDate ? selectedDate.label : '회차를 선택해주세요';
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.tab_container}>
         {tabs.map((tabId) => (
-          <FormTapButton
+          <FormTabButton
             key={tabId}
-            label="회차를 선택해주세요"
+            label={getTabLabel(tabId)}
             isActive={activeTab === tabId}
             onClick={() => setActiveTab(tabId)}
             rightIcon={
@@ -47,8 +82,7 @@ export default function FormTabManager() {
             }
           />
         ))}
-
-        <FormTapButton
+        <FormTabButton
           label="추가하기"
           isActive={false}
           onClick={addNewTab}
@@ -58,7 +92,13 @@ export default function FormTabManager() {
 
       <div>
         {tabs.map((tabId) =>
-          activeTab === tabId ? <FormInput key={tabId} /> : null,
+          activeTab === tabId ? (
+            <FormInput
+              key={tabId}
+              value={formData[tabId]}
+              onChange={(data) => updateFormData(tabId, data)}
+            />
+          ) : null,
         )}
       </div>
     </div>

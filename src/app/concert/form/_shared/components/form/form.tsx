@@ -1,12 +1,13 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 import Badge from '@/shared/components/badge/badge';
-import FormTabManager from '@/shared/components/button/form-tab-button/form-tab-manager';
 import Button from '@/shared/components/button/functional-button/functional-button';
 
 import styles from './form.module.scss';
+import FormTabManager from '../tab-button/manager/form-tab-manager';
 
 export default function Form() {
   return (
@@ -22,8 +23,9 @@ export default function Form() {
         <div className={styles.info_container}>
           <div className={styles.image}>
             {/* 추후 next의 Image 로 변경 예정 */}
-            <img
-              src={'https://placehold.co/400x600'}
+            <Image
+              className={styles.image}
+              src={'https://picsum.photos/1366/768'}
               alt="터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ"
               width={140}
               height={186}

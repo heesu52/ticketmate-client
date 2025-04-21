@@ -20,15 +20,21 @@
       color: var(--textColor-main);
     }
 
-    .select,
+    .asterisk{
+      @include title-sm;
+      color: var(--brandColor-main);
+      margin-left: 4px;
+
+    }
+
     .textarea {
       @include text-sm;
       color: var(--textColor-main);
       display: flex;
       width: 100%;
-      padding: 12px 16px;
-      align-items: center;
-      border-radius: 12
+      padding: 12px 0px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--lineColor-main);
     }
 
     .input_price,
@@ -55,6 +61,29 @@
       height: 182px;
       align-items: flex-start;
       gap: 10px;
+    }
+
+    .guide_container{
+      display: flex;
+      justify-content: space-between;
+
+      .guide{
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+        span{
+          @include text-sm;
+          color: var(--textColor-less);
+          text-decoration-line: underline;
+          text-decoration-style: solid;
+          text-decoration-skip-ink: auto;
+          text-decoration-thickness: auto;
+          text-underline-offset: auto;
+          text-underline-position: from-font;
+          cursor: pointer;
+        }
+      }
     }
 
     .input_container {

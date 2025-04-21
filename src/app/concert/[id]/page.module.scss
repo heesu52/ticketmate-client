@@ -13,7 +13,13 @@
     z-index: 1;
     background-size: cover;
     background-position: center;
-    filter: blur(4px);
+    overflow: hidden; //blur 밖으로 안나오도록 hidden 처리
+
+    .background_image{
+      width: 100%;
+      height: 100%;
+      filter: blur(4px);
+    }
   }
 
   .title_container {

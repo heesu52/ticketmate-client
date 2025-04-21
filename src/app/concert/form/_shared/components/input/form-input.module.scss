@@ -61,6 +61,12 @@
       height: 182px;
       align-items: flex-start;
       gap: 10px;
+
+      outline: none;
+
+      &:focus{
+        border-bottom: 1px solid var(--brand-main);
+      }
     }
 
     .guide_container{

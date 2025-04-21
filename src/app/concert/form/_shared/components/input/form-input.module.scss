@@ -20,11 +20,10 @@
       color: var(--textColor-main);
     }
 
-    .asterisk{
+    .asterisk {
       @include title-sm;
       color: var(--brandColor-main);
       margin-left: 4px;
-
     }
 
     .textarea {
@@ -64,21 +63,21 @@
 
       outline: none;
 
-      &:focus{
+      &:focus {
         border-bottom: 1px solid var(--brand-main);
       }
     }
 
-    .guide_container{
+    .guide_container {
       display: flex;
       justify-content: space-between;
 
-      .guide{
-      display: flex;
-      gap: 8px;
-      align-items: center;
+      .guide {
+        display: flex;
+        gap: 8px;
+        align-items: center;
 
-        span{
+        span {
           @include text-sm;
           color: var(--textColor-less);
           text-decoration-line: underline;

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useInView } from 'react-intersection-observer';
 
@@ -11,7 +12,7 @@ import BottomSheet from '@/shared/components/bottom-sheet/bottom-sheet';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import Overlay from '@/shared/components/overlay/overlay';
 
-import UserCard from './_components/user-card/user-card';
+import UserCard from './_shared/components/user-card/user-card';
 import styles from './page.module.scss';
 
 // Mock API 호출 함수
@@ -54,17 +55,22 @@ export default function Page() {
 
       <div className={styles.container}>
         <AppBarSetter title="공연 상세 페이지" />
-        <div className={styles.background_container} />
+        <div className={styles.background_container}>
+          <Image
+            className={styles.background_image}
+            src={'https://picsum.photos/1366/768'}
+            alt="터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ"
+            layout="fill"
+          />
+        </div>
         <div className={styles.title_container}>
-          <div className={styles.image}>
-            {/* 추후 next의 Image 로 변경 예정 */}
-            <img
-              src={'https://placehold.co/400x600'}
-              alt="터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ"
-              width={140}
-              height={186}
-            />
-          </div>
+          <Image
+            className={styles.image}
+            src={'https://picsum.photos/1366/768'}
+            alt="터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ"
+            width={140}
+            height={186}
+          />
           <div className={styles.tag}>
             <Badge type="type-a">선예매까지 D-12</Badge>
             <Badge type="type-a">일반예매까지 D-12</Badge>

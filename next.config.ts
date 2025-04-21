@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    domains: ['picsum.photos'],
+    domains: ['picsum.photos', 'placehold.co'],
   },
 };
 

@@ -10,7 +10,7 @@ type ConcertType =
 type TicketReservationSite =
   | 'INTERPARK_TICKET'
   | 'YES24_TICKET'
-  | 'TICKEK_LINK'
+  | 'TICKET_LINK'
   | 'MELON_TICKET'
   | 'COUPANG_PLAY'
   | 'ETC';

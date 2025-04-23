@@ -18,7 +18,7 @@ const getConcertList = async (request?: GetConcertListRequest) => {
   const data = await instance<GetConcertListResponse>(`${BASE_URL}${query}`, {
     method: 'GET',
   });
-
+  console.log(data);
   return data;
 };
 

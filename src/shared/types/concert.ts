@@ -21,10 +21,12 @@ interface Concert {
   concertHallName: string; // 공연장 이름
   concertType: string; // 공연 카테고리
   ticketReservationSite: string; // 예매처 사이트
-  ticketPreOpenDate: string; // 선예매 시작일
-  preOpenBankTransfer: boolean; // 선예매 계좌이체 가능 여부
-  ticketGeneralOpenDate: string; // 일반 예매 시작일
-  generalOpenBankTransfer: boolean; // 일반 예매 계좌이체 가능 여부
+  preOpenDate: string; // 선예매 시작일
+  preOpenIsBankTransfer: boolean; // 선예매 계좌이체 가능 여부
+  preOpenRequestMaxCount: number; //선예매 최대 예매 매수
+  generalOpenDate: string; // 일반 예매 시작일
+  generalOpenIsBankTransfer: boolean; // 일반 예매 계좌이체 가능 여부
+  generalOpenRequestMaxCount: number; //일반 예매 최대 예매 매수
   startDate: string; // 공연 시작일
   endDate: string; // 공연 종료일
   concertThumbnailUrl: string; // 공연 썸네일 URL

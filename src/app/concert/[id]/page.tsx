@@ -88,7 +88,11 @@ const Page = () => {
           <div ref={ref} style={{ height: 10 }} />
         </div>
 
-        <BottomSheet onClose={toggleBottomSheet} isOpen={isBottomSheetOpen} />
+        <BottomSheet
+          onClose={toggleBottomSheet}
+          isOpen={isBottomSheetOpen}
+          OpenDate={concertData}
+        />
       </div>
     </>
   );

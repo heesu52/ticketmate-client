@@ -10,23 +10,24 @@ import {
   TICKET_SITE_LABEL_MAP,
 } from '@/shared/constants/ticketsite-url';
 import { TicketReservationSite, Concert } from '@/shared/types';
-import calculateDday from '@/shared/utils/caclueateDday';
+import calculateDday from '@/shared/utils/caclueate-dday';
+import formatDate from '@/shared/utils/services/format-date';
 
 import styles from './concert-info.module.scss';
 
-interface ConcertCardProps {
+interface ConcertInfoProps {
   concertItem: Concert;
 }
 
-const ConcertInfo = ({ concertItem }: ConcertCardProps) => {
+const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
   const {
     concertId,
     concertName,
     concertHallName,
     concertType,
     ticketReservationSite,
-    ticketPreOpenDate,
-    ticketGeneralOpenDate,
+    preOpenDate,
+    generalOpenDate,
     startDate,
     endDate,
     concertThumbnailUrl,
@@ -38,8 +39,8 @@ const ConcertInfo = ({ concertItem }: ConcertCardProps) => {
   const siteLabel = TICKET_SITE_LABEL_MAP[sitekey] ?? '기타';
 
   //선예매 & 일반예매 d-day 변환
-  const preOpenday = calculateDday(ticketPreOpenDate);
-  const generalOpenday = calculateDday(ticketGeneralOpenDate);
+  const preOpenday = calculateDday(preOpenDate);
+  const generalOpenday = calculateDday(generalOpenDate);
 
   return (
     <>
@@ -62,8 +63,12 @@ const ConcertInfo = ({ concertItem }: ConcertCardProps) => {
             height={186}
           />
           <div className={styles.tag}>
-            <Badge type="type-a">선예매까지 {preOpenday}</Badge>
-            <Badge type="type-a">일반예매까지 {generalOpenday}</Badge>
+            {preOpenDate && (
+              <Badge type="type-a">선예매까지 {preOpenday}</Badge>
+            )}
+            {generalOpenDate && (
+              <Badge type="type-a">일반예매까지 {generalOpenday}</Badge>
+            )}
           </div>
 
           <div className={styles.title}>{concertName}</div>
@@ -71,9 +76,10 @@ const ConcertInfo = ({ concertItem }: ConcertCardProps) => {
             <div className={styles.detail_container}>
               <div className={styles.detail}>
                 <span className={styles.category}>공연 일자</span>
-                <span
-                  className={styles.info}
-                >{`${startDate} ~ ${endDate}`}</span>
+                <span className={styles.info}>
+                  {' '}
+                  {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
+                </span>
               </div>
 
               <div className={styles.detail}>

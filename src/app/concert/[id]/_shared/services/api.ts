@@ -12,16 +12,12 @@ const BASE_URL = '/concert';
 const getConcertDetail = async (request?: GetConcertDetailRequest) => {
   const { concertId } = request || {};
 
-  if (!concertId) throw new Error('concertId is required');
-
   const data = await instance<GetConcertDetailResponse>(
     `${BASE_URL}/${concertId}`,
     {
       method: 'GET',
     },
   );
-
-  console.log(data);
   return data;
 };
 

@@ -13,7 +13,5 @@ export const useGetConcertDetail = (request?: GetConcertDetailRequest) => {
     enabled: !!concertId,
   });
 
-  console.log('concert detail data:', data);
-
   return { data, isLoading, isError };
 };

@@ -1,18 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useInView } from 'react-intersection-observer';
 
-import Badge from '@/shared/components/badge/badge';
+import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
+import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
 import BottomSheet from '@/shared/components/bottom-sheet/bottom-sheet';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import Overlay from '@/shared/components/overlay/overlay';
 
-import UserCard from './_shared/components/user-card/user-card';
+import { useGetConcertDetail } from './_shared/services/query';
 import styles from './page.module.scss';
 
 // Mock API 호출 함수
@@ -27,7 +26,13 @@ const handleGetCard = async (pageParam: number) => {
   return mockData;
 };
 
-export default function Page() {
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = use(params);
+
+  const { data: concertItem } = useGetConcertDetail(
+    id ? { concertId: id } : undefined,
+  );
+
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
@@ -35,15 +40,20 @@ export default function Page() {
 
   const { ref, inView } = useInView();
 
-  const { data, fetchNextPage, isLoading, isFetchingNextPage, hasNextPage } =
-    useInfiniteQuery({
-      queryKey: ['cards'],
-      queryFn: ({ pageParam = 0 }) => handleGetCard(pageParam),
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, allPages) => {
-        return lastPage.length === 10 ? allPages.length * 10 : undefined;
-      },
-    });
+  const {
+    data: userData,
+    fetchNextPage,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['cards'],
+    queryFn: ({ pageParam = 0 }) => handleGetCard(pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length === 10 ? allPages.length * 10 : undefined;
+    },
+  });
 
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage();
@@ -55,56 +65,12 @@ export default function Page() {
 
       <div className={styles.container}>
         <AppBarSetter title="공연 상세 페이지" />
-        <div className={styles.background_container}>
-          <Image
-            className={styles.background_image}
-            src={'https://picsum.photos/1366/768'}
-            alt="터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ"
-            layout="fill"
-          />
-        </div>
-        <div className={styles.title_container}>
-          <Image
-            className={styles.image}
-            src={'https://picsum.photos/1366/768'}
-            alt="터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ"
-            width={140}
-            height={186}
-          />
-          <div className={styles.tag}>
-            <Badge type="type-a">선예매까지 D-12</Badge>
-            <Badge type="type-a">일반예매까지 D-12</Badge>
-          </div>
-
-          <div className={styles.title}>
-            터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’
-          </div>
-          <div className={styles.info_container}>
-            <div className={styles.detail_container}>
-              <div className={styles.detail}>
-                <span className={styles.category}>공연 일자</span>
-                <span className={styles.info}>24/08/27 ~ 24/09/26</span>
-              </div>
-
-              <div className={styles.detail}>
-                <span className={styles.category}>공연장</span>
-                <span className={styles.info}>올림픽공원 핸드볼 경기장</span>
-              </div>
-
-              <div className={styles.detail}>
-                <span className={styles.category}>예매처</span>
-                <Link className={styles.link} href="https://ticket.yes24.com">
-                  YES24
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+        {concertItem && <ConcertInfo concertItem={concertItem} />}
 
         <div className={styles.list_container}>
           <span className={styles.subtitle}>대리인</span>
           <span>원하는 대리인에게 요청해보세요!</span>
-          {data?.pages.map((page) =>
+          {userData?.pages.map((page) =>
             page.map((user) => (
               <UserCard key={user.id} user={user} onClick={toggleBottomSheet} />
             )),
@@ -118,8 +84,14 @@ export default function Page() {
           <div ref={ref} style={{ height: 10 }} />
         </div>
 
-        <BottomSheet onClose={toggleBottomSheet} isOpen={isBottomSheetOpen} />
+        <BottomSheet
+          onClose={toggleBottomSheet}
+          isOpen={isBottomSheetOpen}
+          concertItem={concertItem}
+        />
       </div>
     </>
   );
-}
+};
+
+export default Page;

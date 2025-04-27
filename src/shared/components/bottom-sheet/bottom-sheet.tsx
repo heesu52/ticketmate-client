@@ -2,15 +2,19 @@
 
 import { StarIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
+import { Concert } from '@/shared/types';
 
 import styles from './bottom-sheet.module.scss';
 
 interface BottomSheetProps {
   onClose: () => void;
   isOpen: boolean;
+  concertItem: Concert | undefined;
 }
 
-const BottomSheet = ({ isOpen, onClose }: BottomSheetProps) => {
+const BottomSheet = ({ isOpen, onClose, concertItem }: BottomSheetProps) => {
+  const { preOpenDate, generalOpenDate } = concertItem ?? {};
+
   return (
     <div className={`${styles.container} ${isOpen ? styles.open : ''}`}>
       <div className={styles.icon} onClick={onClose} />
@@ -27,12 +31,16 @@ const BottomSheet = ({ isOpen, onClose }: BottomSheetProps) => {
         <span className={styles.info}>한 줄 소개를 작성해주세요.</span>
       </div>
       <div className={styles.button_container}>
-        <Button size="medium" variant="back" onClick={onClose}>
-          선예매 요청하기
-        </Button>
-        <Button size="medium" variant="fill">
-          일반예매 요청하기
-        </Button>
+        {preOpenDate && (
+          <Button size="medium" variant="fill" onClick={onClose}>
+            선예매 요청하기
+          </Button>
+        )}
+        {generalOpenDate && (
+          <Button size={preOpenDate ? 'medium' : 'large'} variant="border">
+            일반예매 요청하기
+          </Button>
+        )}
       </div>
     </div>
   );

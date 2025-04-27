@@ -10,7 +10,7 @@ type ConcertType =
 type TicketReservationSite =
   | 'INTERPARK_TICKET'
   | 'YES24_TICKET'
-  | 'TICKEK_LINK'
+  | 'TICKET_LINK'
   | 'MELON_TICKET'
   | 'COUPANG_PLAY'
   | 'ETC';
@@ -25,6 +25,15 @@ interface Concert {
   preOpenBankTransfer: boolean; // 선예매 계좌이체 가능 여부
   ticketGeneralOpenDate: string; // 일반 예매 시작일
   generalOpenBankTransfer: boolean; // 일반 예매 계좌이체 가능 여부
+
+  //상세공연 정보 조회 시 선예매, 일반예매에 대한 응답값
+  preOpenDate: string; // 선예매 시작일
+  preOpenIsBankTransfer: boolean; // 선예매 계좌이체 가능 여부
+  preOpenRequestMaxCount: number; // 선예매 최대 예매 매수
+  generalOpenDate: string; // 일반 예매 시작일
+  generalOpenIsBankTransfer: boolean; // 일반 예매 계좌이체 가능 여부
+  generalOpenRequestMaxCount: number; // 일반예매 최대 예매 매수
+
   startDate: string; // 공연 시작일
   endDate: string; // 공연 종료일
   concertThumbnailUrl: string; // 공연 썸네일 URL

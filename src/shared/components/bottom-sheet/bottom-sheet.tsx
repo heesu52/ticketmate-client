@@ -9,11 +9,11 @@ import styles from './bottom-sheet.module.scss';
 interface BottomSheetProps {
   onClose: () => void;
   isOpen: boolean;
-  OpenDate: Concert | undefined;
+  concertItem: Concert | undefined;
 }
 
-const BottomSheet = ({ isOpen, onClose, OpenDate }: BottomSheetProps) => {
-  const { preOpenDate, generalOpenDate } = OpenDate ?? {};
+const BottomSheet = ({ isOpen, onClose, concertItem }: BottomSheetProps) => {
+  const { preOpenDate, generalOpenDate } = concertItem ?? {};
 
   return (
     <div className={`${styles.container} ${isOpen ? styles.open : ''}`}>

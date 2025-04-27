@@ -29,7 +29,7 @@ const handleGetCard = async (pageParam: number) => {
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
 
-  const { data: concertData } = useGetConcertDetail(
+  const { data: concertItem } = useGetConcertDetail(
     id ? { concertId: id } : undefined,
   );
 
@@ -65,7 +65,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
 
       <div className={styles.container}>
         <AppBarSetter title="공연 상세 페이지" />
-        {concertData && <ConcertInfo concertItem={concertData} />}
+        {concertItem && <ConcertInfo concertItem={concertItem} />}
 
         <div className={styles.list_container}>
           <span className={styles.subtitle}>대리인</span>
@@ -87,7 +87,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
         <BottomSheet
           onClose={toggleBottomSheet}
           isOpen={isBottomSheetOpen}
-          OpenDate={concertData}
+          concertItem={concertItem}
         />
       </div>
     </>

@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { usePathname } from 'next/navigation';
 import { useInView } from 'react-intersection-observer';
 
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
@@ -27,14 +26,11 @@ const handleGetCard = async (pageParam: number) => {
   return mockData;
 };
 
-const Page = () => {
-  const pathname = usePathname();
-
-  const match = pathname.match(/\/concert\/([^/]+)/);
-  const concertId = match?.[1];
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = use(params);
 
   const { data: concertData } = useGetConcertDetail(
-    concertId ? { concertId } : undefined,
+    id ? { concertId: id } : undefined,
   );
 
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);

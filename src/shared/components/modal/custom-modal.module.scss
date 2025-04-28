@@ -31,6 +31,7 @@
     @include text-sm;
     color: var(--textColor-less);
     margin-top: 8px;
+    white-space: pre-line;
   }
 
   .modal_content {

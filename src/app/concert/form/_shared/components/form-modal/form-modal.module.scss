@@ -1,0 +1,19 @@
+@use '@/styles/index' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .title {
+    @include title-md;
+
+    color: var(--textColor-main);
+  }
+
+  .content {
+    @include text-sm;
+
+    color: var(--textColor-less);
+  }
+}

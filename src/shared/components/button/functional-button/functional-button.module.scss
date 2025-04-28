@@ -1,7 +1,7 @@
 @use '@/styles/index' as *;
 
 .button {
-  display: inline-flex;
+  display: flex;
   padding: 12px 20px;
   justify-content: center;
   align-items: center;
@@ -13,12 +13,10 @@
 
   &.medium {
     width: 50%;
-    gap: 16px;
   }
 
   &.small {
     width: 33%;
-    gap: 16px;
   }
 
   &.border {

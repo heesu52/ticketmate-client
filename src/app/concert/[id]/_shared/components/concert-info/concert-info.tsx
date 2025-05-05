@@ -10,8 +10,7 @@ import {
   TICKET_SITE_LABEL_MAP,
 } from '@/shared/constants/ticketsite-url';
 import { TicketReservationSite, Concert } from '@/shared/types';
-import calculateDday from '@/shared/utils/calculate-dday';
-import formatDate from '@/shared/utils/services/format-date';
+import { formatDate, calculateDday } from '@/shared/utils/dates';
 
 import styles from './concert-info.module.scss';
 

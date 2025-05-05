@@ -8,7 +8,6 @@
   gap: 28px;
   border-bottom: 1px solid var(--lineColor-main);
 
-
   .title_container {
     display: flex;
     justify-content: space-between;
@@ -19,7 +18,7 @@
       @include title-sm;
       color: var(--textColor-main);
     }
-    .image{
+    .image {
       width: 48px;
       height: 48px;
       border-radius: 100px;
@@ -49,21 +48,24 @@
         color: var(--textColor-main);
       }
     }
-
   }
-  .footer_container{
+  .footer_container {
     display: flex;
     justify-content: space-between;
     width: 100%;
 
     .link {
-      @include text-sm; 
+      @include text-sm;
       color: var(--textColor-less);
       text-decoration: underline;
     }
-    .info {
+    .current {
       @include title-sm;
       color: var(--textColor-main);
+    }
+    .past {
+      @include title-sm;
+      color: var(--subColor-main);
     }
   }
 }

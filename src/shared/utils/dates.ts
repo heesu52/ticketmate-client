@@ -1,22 +1,20 @@
-import formatDate from './services/format-date';
+export const formatDate = (date: string | number | Date): string => {
+  return new Date(date).toLocaleDateString('en-CA'); // YYYY-MM-DD
+};
 
-const calculateDday = (targetDate: string): string => {
+export const calculateDday = (targetDate: string | number | Date): string => {
   const today = new Date();
-
-  // formattedToday는 Date 객체로 생성
   const formattedToday = formatDate(today);
   const formattedTargetDate = formatDate(targetDate);
 
-  console.log(formattedToday, formattedTargetDate);
-
+  const todayDate = new Date(formattedToday);
   const target = new Date(formattedTargetDate);
-  const todayFormatted = new Date(formattedToday);
 
   // 시간을 00:00:00으로 맞추기
-  todayFormatted.setHours(0, 0, 0, 0);
+  todayDate.setHours(0, 0, 0, 0);
   target.setHours(0, 0, 0, 0);
 
-  const diffInTime = target.getTime() - todayFormatted.getTime();
+  const diffInTime = target.getTime() - todayDate.getTime();
   const diffInDays = Math.floor(diffInTime / (1000 * 3600 * 24));
 
   if (diffInDays > 0) {
@@ -27,5 +25,3 @@ const calculateDday = (targetDate: string): string => {
     return `D+${Math.abs(diffInDays)}`;
   }
 };
-
-export default calculateDday;

@@ -9,9 +9,7 @@ import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import styles from './page.module.scss';
 
 export default function Page() {
-  const [selectedTab, setSelectedTab] = useState<'current' | 'past' | 'cancel'>(
-    'current',
-  );
+  const [selectedTab, setSelectedTab] = useState<'current' | 'past'>('current');
 
   return (
     <>

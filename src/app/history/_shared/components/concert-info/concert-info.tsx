@@ -3,8 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import styles from './concert-info.module.scss';
+interface ConcertInfoProps {
+  tab: 'current' | 'past';
+}
 
-const ConcertInfo = () => {
+const ConcertInfo = ({ tab }: ConcertInfoProps) => {
   return (
     <>
       <div className={styles.container}>
@@ -31,12 +34,22 @@ const ConcertInfo = () => {
             <span className={styles.info}>대리인 닉네임</span>
           </div>
         </div>
-
         <div className={styles.footer_container}>
-          <Link className={styles.link} href={`/`}>
-            신청 취소
-          </Link>
-          <span className={styles.info}>수락대기중</span>
+          {tab === 'current' ? (
+            <>
+              <Link className={styles.link} href={`/`}>
+                신청 취소
+              </Link>
+              <span className={styles.current}>수락대기중</span>
+            </>
+          ) : (
+            <>
+              <Link className={styles.link} href={`/`}>
+                채팅하기
+              </Link>
+              <span className={styles.past}>수락완료</span>
+            </>
+          )}
         </div>
       </div>
     </>

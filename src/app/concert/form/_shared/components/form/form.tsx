@@ -5,11 +5,36 @@ import Link from 'next/link';
 
 import Badge from '@/shared/components/badge/badge';
 import Button from '@/shared/components/button/functional-button/functional-button';
+import { useModal } from '@/shared/components/modal/use-modal';
 
 import styles from './form.module.scss';
+import FormModal from '../form-modal/form-modal';
 import FormTabManager from '../tab-button/manager/form-tab-manager';
 
 export default function Form() {
+  const { open, closeTop } = useModal();
+  const handleOpenModal = () => {
+    open({
+      id: 'example-modal',
+      content: (
+        <FormModal
+          title="일반예매 신청이 완료되었습니다."
+          message={`대리인이 수락하게 되면 매칭이 완료됩니다.\n매칭이 완료되면 채팅을 통해 이야기를 나눠보세요.`}
+          onConfirm={async () => {
+            console.log('확인됨');
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            console.log('작업 완료');
+            closeTop();
+          }}
+          onCancel={() => {
+            console.log('취소됨');
+            closeTop();
+          }}
+        />
+      ),
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.title_container}>
@@ -53,7 +78,12 @@ export default function Form() {
         </div>
       </div>
       <FormTabManager />
-      <Button type="button" size="large" variant="fill">
+      <Button
+        type="button"
+        size="large"
+        variant="fill"
+        onClick={handleOpenModal}
+      >
         신청하기
       </Button>
     </div>

@@ -5,19 +5,15 @@
   padding: 12px 16px;
   justify-content: center;
   align-items: center;
-  border-radius: 12px;
+  border-radius: 100px;
   border: 1px solid var(--lineColor-main);
-  background: var(--white);
-  transition:
-    background 0.2s ease-in-out,
-    color 0.2s ease-in-out; // 부드러운 전환 효과 추가
-
+ 
   &:active,
   &.active {
-    background: var(--brandColor-fillActive);
-    color: var(--brandColor-main);
+    border: 1px solid var(--brandColor-main);
 
     span {
+      @include text-md;
       color: var(--brandColor-main);
     }
   }
@@ -28,12 +24,10 @@
 
   &.medium {
     width: 66.7%;
-    gap: 16px;
   }
 
   &.small {
     width: 50%;
-    gap: 16px;
   }
 
   span {
@@ -42,6 +36,5 @@
 
     @include text-sm;
     color: var(--textColor-less);
-    text-align: center;
   }
 }

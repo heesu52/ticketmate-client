@@ -1,16 +1,22 @@
 import { useState } from 'react';
 
-import FormInput from '@/app/concert/form/_shared/components/input/form-input';
+import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
 import {
   dateList,
   FormData,
-} from '@/app/concert/form/_shared/components/input/form-input.type'; // FormData 임포트
+} from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
 import { PlusIcon, CloseIcon } from '@/assets/icons';
+import Button from '@/shared/components/button/functional-button/functional-button';
 
 import styles from './form-tab-manager.module.scss';
 import FormTabButton from '../button/form-tab-button';
 
-export default function FormTabManager() {
+interface FormTabManagerProps {
+  handleOpenModal: () => void;
+}
+export default function FormTabManager({
+  handleOpenModal,
+}: FormTabManagerProps) {
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
@@ -101,6 +107,14 @@ export default function FormTabManager() {
           ) : null,
         )}
       </div>
+      <Button
+        type="button"
+        size="large"
+        variant="fill"
+        onClick={handleOpenModal}
+      >
+        신청하기
+      </Button>
     </div>
   );
 }

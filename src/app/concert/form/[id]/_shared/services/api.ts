@@ -1,4 +1,4 @@
-import { CreateConcertFormRequest } from '@/app/concert/form/_shared/services/type';
+import { CreateConcertFormRequest } from '@/app/concert/form/[id]/_shared/services/type';
 import instance from '@/shared/services/instance';
 
 const BASE_URL = '/application';

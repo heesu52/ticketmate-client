@@ -8,7 +8,7 @@ import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import {
   TICKET_SITE_URL_MAP,
   TICKET_SITE_LABEL_MAP,
-} from '@/shared/constants/ticketsite-url';
+} from '@/shared/constants/type-mapping';
 import { TicketReservationSite, Concert } from '@/shared/types';
 import { formatDate, calculateDday } from '@/shared/utils/dates';
 

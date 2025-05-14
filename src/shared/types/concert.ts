@@ -40,21 +40,4 @@ interface Concert {
   seatingChartUrl: string; // 좌석 배치도 URL
 }
 
-interface Form {
-  applicationFormId: string;
-  clientId: string;
-  agentId: string;
-  concertId: string;
-  requestCount: number;
-  hopeAreaResponseList: [
-    {
-      priority: number;
-      location: string;
-      price: string;
-    },
-  ];
-  requestDetails: string;
-  applicationFormStatus: string;
-}
-
-export type { ConcertType, TicketReservationSite, Concert, Form };
+export type { ConcertType, TicketReservationSite, Concert };

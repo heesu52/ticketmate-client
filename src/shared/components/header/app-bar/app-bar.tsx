@@ -40,7 +40,6 @@ const AppBar = () => {
           aria-label="뒤로가기"
         >
           <LeftArrowIcon
-            className={styles.icon}
             width={16}
             height={16}
             fill={
@@ -49,8 +48,8 @@ const AppBar = () => {
                 : `var(--textColor-main)`
             }
           />
+          {title && <span className={styles.title}>{title}</span>}
         </button>
-        {title && <span className={styles.title}>{title}</span>}
       </div>
 
       <div className={cn(styles.right_container)}>
@@ -61,7 +60,6 @@ const AppBar = () => {
             aria-label="공유하기"
           >
             <ShareIcon
-              className={styles.icon}
               width={20}
               height={20}
               fill={

@@ -5,7 +5,7 @@
   z-index: 10;
   bottom: 0;
   margin: 0 auto;
-  padding: 0 24px env(safe-area-inset-bottom) 24px;
+  padding-bottom: calc(env(safe-area-inset-bottom));
 
   width: 100%;
   max-width: var(--max-width);

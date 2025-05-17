@@ -69,14 +69,16 @@ const FormCard = ({ formItem }: FormCardProps) => {
             <div className={styles.footer_container}>
               {isCurrent ? (
                 <>
-                  <div className={styles.link}>신청취소</div>
+                  <button className={styles.link}>신청취소</button>
                   <span className={styles.default}>{statusLabel}</span>
                 </>
               ) : (
                 <>
                   {statusKey === 'APPROVED' && (
                     <>
-                      <div className={styles.link}>채팅하기</div>
+                      <a className={styles.link} href="/chat">
+                        채팅하기
+                      </a>
                       <span className={styles.approved}>{statusLabel}</span>
                     </>
                   )}

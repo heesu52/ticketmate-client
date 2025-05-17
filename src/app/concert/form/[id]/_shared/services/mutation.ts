@@ -4,10 +4,10 @@ import { createConcertForm } from './api';
 import { CreateConcertFormRequest } from './type';
 
 export const useCreateConcertForm = () => {
-  const { mutate, isError, data } = useMutation({
+  return useMutation({
     mutationFn: (request: CreateConcertFormRequest) =>
       createConcertForm(request),
+    onSuccess: () => {},
+    onError: () => {},
   });
-
-  return { mutate, isError, data };
 };

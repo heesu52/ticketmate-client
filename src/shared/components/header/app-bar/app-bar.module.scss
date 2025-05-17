@@ -18,7 +18,7 @@
   justify-content: space-between;
   align-items: center;
 
-  padding: 16px 24px;
+  padding: 0 24px;
 
   .left_container {
     display: flex;
@@ -26,11 +26,15 @@
     gap: 8px;
 
     .back_button {
-      @include expand-touch-area();
-    }
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 0;
+      color: inherit;
 
-    .title {
-      @include text-lg;
+      .title {
+        @include text-lg;
+      }
     }
   }
 

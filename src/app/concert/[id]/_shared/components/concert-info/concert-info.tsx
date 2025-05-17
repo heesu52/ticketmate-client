@@ -1,10 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
 import Badge from '@/shared/components/badge/badge';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
+import { useAppBarStore } from '@/shared/components/header/app-bar/use-app-bar-store';
 import {
   TICKET_SITE_URL_MAP,
   TICKET_SITE_LABEL_MAP,
@@ -19,6 +22,9 @@ interface ConcertInfoProps {
 }
 
 const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
+  const { setIsShowSpacer } = useAppBarStore();
+
+  const [isScrolled, setIsScrolled] = useState(false);
   const {
     concertId,
     concertName,
@@ -41,10 +47,32 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
   const preOpenday = calculateDday(preOpenDate);
   const generalOpenday = calculateDday(generalOpenDate);
 
+  useEffect(() => {
+    // 배경 높이 - 앱바 높이
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 247 - 56);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 스크롤 시 app-bar 와 컨텐츠 간격 조절
+  useEffect(() => {
+    setIsShowSpacer(false);
+
+    return () => {
+      setIsShowSpacer(true);
+    };
+  }, [setIsShowSpacer]);
+
   return (
     <>
       <div className={styles.container}>
-        <AppBarSetter title="공연 상세 페이지" />
+        <AppBarSetter
+          title="공연 상세 페이지"
+          backgroundColor={isScrolled ? 'white' : 'transparent'}
+        />
         <div className={styles.background_container}>
           <Image
             className={styles.background_image}

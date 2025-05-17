@@ -9,6 +9,7 @@ import AppBar from '@/shared/components/header/app-bar/app-bar';
 import { useAppBarStore } from '@/shared/components/header/app-bar/use-app-bar-store';
 import AppHeader from '@/shared/components/header/app-header/app-header';
 import BottomNavigation from '@/shared/components/navigation/bottom-navigation/bottom-navigation';
+import Spacer from '@/shared/components/spacer/spacer';
 
 import styles from './responsive-root-layout.module.scss';
 
@@ -19,6 +20,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isShowSpacer } = useAppBarStore();
   const pathname = usePathname();
   const { isShow } = useAppBarStore();
 
@@ -34,6 +36,8 @@ export default function RootLayout({
   const isShowAppBar =
     isShow && !hiddenAppBarRoutes.some((route) => pathname === route);
 
+  const spacerSize = isShowAppBar ? 54 : isShowAppHeader ? 56 : 0;
+
   return (
     <div className={styles.container}>
       {isShowAppHeader && <AppHeader />}
@@ -42,13 +46,9 @@ export default function RootLayout({
         className={cn(
           styles.content,
           isShowBottomNav ? styles.with_nav : styles.without_nav,
-          isShowAppHeader
-            ? styles.with_app_header
-            : isShowAppBar
-              ? styles.with_app_bar
-              : '',
         )}
       >
+        {isShowSpacer && <Spacer size={spacerSize} />}
         {children}
       </div>
       {isShowBottomNav && <BottomNavigation />}

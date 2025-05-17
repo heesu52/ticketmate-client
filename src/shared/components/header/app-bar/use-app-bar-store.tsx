@@ -8,10 +8,12 @@ interface AppBarState {
   backURL: string | null;
   hasShareButton: boolean;
   backgroundColor: BackgroundColor;
+  isShowSpacer: boolean;
   setTitle: (title: string | null) => void;
   setBackURL: (backURL: string | null) => void;
   setHasShareButton: (hasShareButton: boolean) => void;
   setBackgroundColor: (backgroundColor: BackgroundColor) => void;
+  setIsShowSpacer: (isShowSpacer: boolean) => void;
 }
 
 export const useAppBarStore = create<AppBarState>((set) => ({
@@ -20,6 +22,7 @@ export const useAppBarStore = create<AppBarState>((set) => ({
   backURL: null,
   hasShareButton: true,
   backgroundColor: 'white',
+  isShowSpacer: true,
   setTitle: (title) => {
     set({ title });
     set(() => ({ isShow: title !== null }));
@@ -27,4 +30,5 @@ export const useAppBarStore = create<AppBarState>((set) => ({
   setBackURL: (backURL) => set({ backURL }),
   setHasShareButton: (hasShareButton) => set({ hasShareButton }),
   setBackgroundColor: (backgroundColor) => set({ backgroundColor }),
+  setIsShowSpacer: (isShowSpacer) => set({ isShowSpacer }),
 }));

@@ -5,11 +5,11 @@ import {
   dateList,
   FormData,
 } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
+import { useCreateConcertForm } from '@/app/concert/form/[id]/_shared/services/mutation';
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
 
 import styles from './form-tab-manager.module.scss';
-import { useCreateConcertForm } from '../../../services/query';
 import FormTabButton from '../button/form-tab-button';
 
 interface FormTabManagerProps {

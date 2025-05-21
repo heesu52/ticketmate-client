@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import { StarIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { Concert } from '@/shared/types';
@@ -10,9 +12,15 @@ interface BottomSheetProps {
   onClose: () => void;
   isOpen: boolean;
   concertItem: Concert | undefined;
+  concertId: string;
 }
 
-const BottomSheet = ({ isOpen, onClose, concertItem }: BottomSheetProps) => {
+const BottomSheet = ({
+  isOpen,
+  onClose,
+  concertItem,
+  concertId,
+}: BottomSheetProps) => {
   const { preOpenDate, generalOpenDate } = concertItem ?? {};
 
   return (
@@ -32,14 +40,22 @@ const BottomSheet = ({ isOpen, onClose, concertItem }: BottomSheetProps) => {
       </div>
       <div className={styles.button_container}>
         {preOpenDate && (
-          <Button size="medium" variant="fill" onClick={onClose}>
-            선예매 요청하기
-          </Button>
+          <Link href={`/concert/form/${concertId}`}>
+            <Button size="medium" variant="fill" onClick={onClose}>
+              선예매 요청하기
+            </Button>
+          </Link>
         )}
         {generalOpenDate && (
-          <Button size={preOpenDate ? 'medium' : 'large'} variant="border">
-            일반예매 요청하기
-          </Button>
+          <Link href={`/concert/form/${concertId}`}>
+            <Button
+              size={preOpenDate ? 'medium' : 'large'}
+              variant="border"
+              onClick={onClose}
+            >
+              일반예매 요청하기
+            </Button>
+          </Link>
         )}
       </div>
     </div>

@@ -11,7 +11,7 @@ import { useAppBarStore } from '@/shared/components/header/app-bar/use-app-bar-s
 import {
   TICKET_SITE_URL_MAP,
   TICKET_SITE_LABEL_MAP,
-} from '@/shared/constants/ticketsite-url';
+} from '@/shared/constants/type-mapping';
 import { TicketReservationSite, Concert } from '@/shared/types';
 import { formatDate, calculateDday } from '@/shared/utils/dates';
 

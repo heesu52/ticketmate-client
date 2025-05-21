@@ -1,5 +1,8 @@
 // src/constants/ticketSite.ts
-import type { TicketReservationSite } from '@/shared/types';
+import type {
+  TicketReservationSite,
+  ApplicationFormStatus,
+} from '@/shared/types';
 
 export const TICKET_SITE_URL_MAP: Record<TicketReservationSite, string> = {
   INTERPARK_TICKET: '',
@@ -17,4 +20,14 @@ export const TICKET_SITE_LABEL_MAP: Record<TicketReservationSite, string> = {
   MELON_TICKET: '멜론티켓',
   COUPANG_PLAY: '쿠팡플레이',
   ETC: '기타', // 기타는 임시 처리
+};
+
+export const APPLICATION_STATUS_LABEL_MAP: Record<
+  ApplicationFormStatus,
+  string
+> = {
+  PENDING: '수락 대기 중',
+  APPROVED: '수락 완료',
+  REJECTED: '거절됨',
+  EXPIRED: '만료',
 };

@@ -88,6 +88,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           onClose={toggleBottomSheet}
           isOpen={isBottomSheetOpen}
           concertItem={concertItem}
+          concertId={id}
         />
       </div>
     </>

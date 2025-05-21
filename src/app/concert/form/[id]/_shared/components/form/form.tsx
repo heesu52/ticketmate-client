@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Badge from '@/shared/components/badge/badge';
-import Button from '@/shared/components/button/functional-button/functional-button';
 import { useModal } from '@/shared/components/modal/use-modal';
 
 import styles from './form.module.scss';
@@ -77,15 +76,7 @@ export default function Form() {
           </div>
         </div>
       </div>
-      <FormTabManager />
-      <Button
-        type="button"
-        size="large"
-        variant="fill"
-        onClick={handleOpenModal}
-      >
-        신청하기
-      </Button>
+      <FormTabManager handleOpenModal={handleOpenModal} />
     </div>
   );
 }

@@ -59,13 +59,18 @@
       color: var(--textColor-less);
       text-decoration: underline;
     }
-    .current {
+    .default {
       @include title-sm;
       color: var(--textColor-main);
     }
-    .past {
+    .approved {
       @include title-sm;
       color: var(--subColor-main);
+    }
+    .rejected {
+      @include title-sm;
+      justify-content: flex-end;
+      color: var(--brandColor-main);
     }
   }
 }

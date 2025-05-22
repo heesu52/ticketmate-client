@@ -41,18 +41,14 @@ const BottomSheet = ({
       <div className={styles.button_container}>
         {preOpenDate && (
           <Link href={`/concert/form/${concertId}`}>
-            <Button size="medium" variant="fill" onClick={onClose}>
+            <Button size="large" variant="fill" onClick={onClose}>
               선예매 요청하기
             </Button>
           </Link>
         )}
         {generalOpenDate && (
           <Link href={`/concert/form/${concertId}`}>
-            <Button
-              size={preOpenDate ? 'medium' : 'large'}
-              variant="border"
-              onClick={onClose}
-            >
+            <Button size="large" variant="border" onClick={onClose}>
               일반예매 요청하기
             </Button>
           </Link>

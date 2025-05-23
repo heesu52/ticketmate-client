@@ -24,12 +24,13 @@ export default function RootLayout({
   const pathname = usePathname();
   const { isShow } = useAppBarStore();
 
-  // AppBar와 BottomNavigation을 숨길 경로
-  const hiddenAppBarRoutes = ['/', '/404']; // 숨길 경로 추가
-  const hiddenBottomNavRoutes = ['/auth', '/404'];
+  // AppBar 숨길 경로
+  const hiddenAppBarRoutes = ['/', '/404'];
+  // BottomNavigation 보여줄 경로
+  const showBottomNavRoutes = ['/', '/history'];
 
-  const isShowBottomNav = !hiddenBottomNavRoutes.some((route) =>
-    pathname.includes(route),
+  const isShowBottomNav = showBottomNavRoutes.some(
+    (route) => pathname === route,
   );
 
   const isShowAppHeader = pathname === '/';

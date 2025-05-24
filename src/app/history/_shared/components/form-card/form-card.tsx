@@ -3,11 +3,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/query';
+import { useModal } from '@/shared/components/modal/use-modal';
 import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { Form, ApplicationFormStatus } from '@/shared/types';
 
-// import { formatDate } from '@/shared/utils/dates';
 import styles from './form-card.module.scss';
+import CancelModal from '../modal/cancel-modal';
+import RejectedModal from '../modal/rejected-modal';
+// import { formatDate } from '@/shared/utils/dates';
 
 interface FormCardProps {
   formItem: Form;
@@ -26,6 +29,7 @@ const FormCard = ({ formItem }: FormCardProps) => {
   } = formItem;
 
   const { data: concertItem } = useGetConcertDetail({ concertId });
+  const { open, closeTop } = useModal();
 
   if (!concertItem) {
     return null;
@@ -38,6 +42,41 @@ const FormCard = ({ formItem }: FormCardProps) => {
 
   const isCurrent = applicationFormStatus === 'PENDING';
 
+  const handleOpenCancelModal = () => {
+    open({
+      id: 'cancel-modal',
+      content: (
+        <CancelModal
+          title="신청을 취소하시겠습니까?"
+          message={`취소 시 신청했던 내역은 \n과거신청내역에서 확인가능합니다.`}
+          onConfirm={async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            closeTop();
+          }}
+          onCancel={() => {
+            closeTop();
+          }}
+        />
+      ),
+    });
+  };
+
+  const handleOpenRejectedModal = () => {
+    open({
+      id: 'rejected-modal',
+      content: (
+        <RejectedModal
+          title="대리인 닉네임님의 거절 사유"
+          description={`작성한 신청양식을 통해 동일한 대리인에게 다시 티켓팅을 의뢰할 수 있습니다.\n`}
+          reason={`수고비가 단가랑 맞지 않음`}
+          onConfirm={async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            closeTop();
+          }}
+        />
+      ),
+    });
+  };
   return (
     <>
       <Link href={`concert/form/${applicationFormId}`}>
@@ -69,7 +108,12 @@ const FormCard = ({ formItem }: FormCardProps) => {
             <div className={styles.footer_container}>
               {isCurrent ? (
                 <>
-                  <button className={styles.link}>신청취소</button>
+                  <button
+                    className={styles.link}
+                    onClick={handleOpenCancelModal}
+                  >
+                    신청취소
+                  </button>
                   <span className={styles.default}>{statusLabel}</span>
                 </>
               ) : (
@@ -84,7 +128,7 @@ const FormCard = ({ formItem }: FormCardProps) => {
                   )}
                   {statusKey === 'REJECTED' && (
                     <>
-                      <div />
+                      <div onClick={handleOpenRejectedModal} />
                       <span className={styles.rejected}>{statusLabel}</span>
                     </>
                   )}

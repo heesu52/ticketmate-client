@@ -8,7 +8,7 @@ import styles from '@/app/history/_shared/components/modal/rejected-modal.module
 import Button from '@/shared/components/button/functional-button/functional-button';
 import CustomModal from '@/shared/components/modal/custom-modal';
 
-interface REjectedModalProps {
+interface RejectedModalProps {
   title: string;
   reason: string;
   description?: string;
@@ -20,7 +20,7 @@ const RejectedModal = ({
   reason,
   description,
   onConfirm,
-}: REjectedModalProps) => {
+}: RejectedModalProps) => {
   const router = useRouter(); // useRouter 훅을 사용하여 라우팅 처리
 
   const handleConfirm = async () => {

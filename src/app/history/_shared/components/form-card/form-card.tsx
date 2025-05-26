@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/query';
+import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
 import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { Form, ApplicationFormStatus } from '@/shared/types';
@@ -44,7 +45,7 @@ const FormCard = ({ formItem }: FormCardProps) => {
 
   const handleOpenCancelModal = () => {
     open({
-      id: 'cancel-modal',
+      id: MODAL_ID.CANCEL_MODAL,
       content: (
         <CancelModal
           title="신청을 취소하시겠습니까?"
@@ -63,7 +64,7 @@ const FormCard = ({ formItem }: FormCardProps) => {
 
   const handleOpenRejectedModal = () => {
     open({
-      id: 'rejected-modal',
+      id: MODAL_ID.REJECTED_MODAL,
       content: (
         <RejectedModal
           title="대리인 닉네임님의 거절 사유"
@@ -128,7 +129,7 @@ const FormCard = ({ formItem }: FormCardProps) => {
                   )}
                   {statusKey === 'REJECTED' && (
                     <>
-                      <div onClick={handleOpenRejectedModal} />
+                      <button onClick={handleOpenRejectedModal} />
                       <span className={styles.rejected}>{statusLabel}</span>
                     </>
                   )}

@@ -14,19 +14,16 @@ export default function Form() {
   const { open, closeTop } = useModal();
   const handleOpenModal = () => {
     open({
-      id: 'example-modal',
+      id: 'form-modal',
       content: (
         <FormModal
           title="일반예매 신청이 완료되었습니다."
           message={`대리인이 수락하게 되면 매칭이 완료됩니다.\n매칭이 완료되면 채팅을 통해 이야기를 나눠보세요.`}
           onConfirm={async () => {
-            console.log('확인됨');
             await new Promise((resolve) => setTimeout(resolve, 1000));
-            console.log('작업 완료');
             closeTop();
           }}
           onCancel={() => {
-            console.log('취소됨');
             closeTop();
           }}
         />

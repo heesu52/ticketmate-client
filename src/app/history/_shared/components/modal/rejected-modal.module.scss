@@ -1,0 +1,6 @@
+@use '@/styles/index' as *;
+
+.reason {
+  @include title-sm;
+  color: var(--brandColor-main);
+}

@@ -3,7 +3,7 @@
 import { useGetFormList } from '@/app/history/_shared/services/query';
 
 import styles from './history-list.module.scss';
-import FormCard from '../client-form-card/client-form-card';
+import FormCard from '../agent-form-card/agent-form-card';
 
 interface HistoryListProps {
   tab: 'current' | 'past';
@@ -27,10 +27,16 @@ const HistoryList = ({ tab }: HistoryListProps) => {
           총<span className={styles.asterisk}>{filteredList.length}</span>
           <span>개</span>
         </span>
-        <div>
+        {/* <div>
           {filteredList?.map((formItem, index) => (
             <FormCard formItem={formItem} key={index} />
           ))}
+        </div> */}
+        <div>
+          <FormCard />
+          <FormCard />
+          <FormCard />
+          <FormCard />
         </div>
       </div>
     </>

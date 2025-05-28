@@ -1,28 +1,27 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useRouter } from 'next/navigation';
 
 import styles from '@/app/history/_shared/components/modal/rejected-modal.module.scss';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import CustomModal from '@/shared/components/modal/custom-modal';
-import RadioGroup from '@/shared/components/radio/radio';
 
-interface RejectedModalProps {
+interface ReasonModalProps {
   title: string;
   reason: string;
   description?: string;
   onConfirm?: () => Promise<void> | void;
 }
 
-const RejectedModal = ({
+const ReasonModal = ({
   title,
+  reason,
   description,
   onConfirm,
-}: RejectedModalProps) => {
+}: ReasonModalProps) => {
   const router = useRouter(); // useRouter 훅을 사용하여 라우팅 처리
-  const [selected, setSelected] = useState<string | null>(null);
 
   const handleConfirm = async () => {
     if (onConfirm) await onConfirm();
@@ -34,29 +33,15 @@ const RejectedModal = ({
       <CustomModal.Title>{title}</CustomModal.Title>
       <CustomModal.Description>{description}</CustomModal.Description>
       <CustomModal.Description>
-        <p className={styles.reason}>거절 사유를 선택해주세요.</p>
-        <CustomModal.Action>
-          <RadioGroup name="example" value={selected} onChange={setSelected}>
-            <RadioGroup.Radio
-              value="option1"
-              label="수고비가 시세와 맞지않음"
-            />
-            <RadioGroup.Radio value="option2" label="예약이 마감됨" />
-            <RadioGroup.Radio value="option3" label="티켓팅 일정이 안됨" />
-            <RadioGroup.RadioInput placeholder="기타" />
-          </RadioGroup>
-        </CustomModal.Action>
+        <p className={styles.reason}>“{reason}”</p>
       </CustomModal.Description>
       <CustomModal.Action>
         <Button size="large" variant="back" onClick={handleConfirm}>
-          다음에
-        </Button>
-        <Button size="large" variant="fill" onClick={handleConfirm}>
-          거절
+          확인했어요
         </Button>
       </CustomModal.Action>
     </CustomModal>
   );
 };
 
-export default RejectedModal;
+export default ReasonModal;

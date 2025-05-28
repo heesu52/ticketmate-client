@@ -1,8 +1,10 @@
 'use client';
 
-import React, { ReactNode, useContext, ChangeEvent } from 'react';
+import React, { ReactNode, useContext, ChangeEvent, useState } from 'react';
 
 import classNames from 'classnames/bind';
+
+import { AlertCircleIcon } from '@/assets/icons';
 
 import styles from './radio.module.scss';
 
@@ -69,35 +71,66 @@ const RadioInput = ({
 
   const { name, value, onChange } = context;
   const isChecked = value !== null && !context.value?.startsWith('option');
+  const [error, setError] = useState('');
 
   const handleRadioChange = () => {
     if (!disabled) onChange('');
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!disabled) onChange(e.target.value);
+    if (disabled) return;
+
+    const newValue = e.target.value;
+
+    if (newValue.length < 10) {
+      setError('최소 10자 이상 입력해야합니다.');
+    } else if (newValue.length > 50) {
+      setError('최대 50자까지만 입력할 수 있습니다.');
+    } else {
+      setError('');
+    }
+
+    onChange(newValue);
   };
 
   return (
-    <label className={cn('radio_container', { checked: isChecked, disabled })}>
-      <input
-        type="radio"
-        name={name}
-        checked={isChecked}
-        onChange={handleRadioChange}
-        disabled={disabled}
-        className={cn('radio_button')}
-      />
-      <input
-        type="text"
-        value={isChecked ? value || '' : ''}
-        onChange={handleInputChange}
-        onClick={() => !isChecked && onChange('')}
-        disabled={disabled}
-        placeholder={placeholder}
-        className={cn('radio_input', { checked: isChecked })}
-      />
-    </label>
+    <>
+      <label
+        className={cn('radio_container', { checked: isChecked, disabled })}
+      >
+        <input
+          type="radio"
+          name={name}
+          checked={isChecked}
+          onChange={handleRadioChange}
+          disabled={disabled}
+          className={cn('radio_button')}
+        />
+        <input
+          type="text"
+          value={isChecked ? value || '' : ''}
+          onChange={handleInputChange}
+          onClick={() => !isChecked && onChange('')}
+          disabled={disabled}
+          placeholder={placeholder}
+          className={cn('radio_input', { checked: isChecked })}
+          minLength={10}
+          maxLength={50}
+        />
+      </label>
+      <>
+        {isChecked && error && (
+          <div className={cn('error_container')}>
+            <AlertCircleIcon
+              width={16}
+              height={16}
+              fill="var(--brandColor-main)"
+            />
+            <p className={cn('error_message')}>{error}</p>
+          </div>
+        )}
+      </>
+    </>
   );
 };
 

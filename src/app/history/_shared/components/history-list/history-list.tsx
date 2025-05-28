@@ -32,6 +32,7 @@ const HistoryList = ({ tab }: HistoryListProps) => {
             <FormCard formItem={formItem} key={index} />
           ))}
         </div> */}
+        {/*테스트를 위한 하드코딩 */}
         <div>
           <FormCard />
           <FormCard />

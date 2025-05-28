@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import CustomModal from '@/shared/components/modal/custom-modal';
 
-interface AccpetModalProps {
+interface AcceptModalProps {
   title: string;
   message: string;
   onConfirm?: () => Promise<void> | void;
@@ -19,7 +19,7 @@ const AcceptModal = ({
   message,
   onConfirm,
   onCancel,
-}: AccpetModalProps) => {
+}: AcceptModalProps) => {
   const router = useRouter(); // useRouter 훅을 사용하여 라우팅 처리
 
   const handleConfirm = async () => {

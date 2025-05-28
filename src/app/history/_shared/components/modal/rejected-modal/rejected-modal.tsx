@@ -4,14 +4,13 @@ import React, { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import styles from '@/app/history/_shared/components/modal/rejected-modal.module.scss';
+import styles from '@/app/history/_shared/components/modal/rejected-modal/rejected-modal.module.scss';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import CustomModal from '@/shared/components/modal/custom-modal';
 import RadioGroup from '@/shared/components/radio/radio';
 
 interface RejectedModalProps {
   title: string;
-  reason: string;
   description?: string;
   onConfirm?: () => Promise<void> | void;
 }

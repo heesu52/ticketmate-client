@@ -10,7 +10,7 @@ import { Form, ApplicationFormStatus } from '@/shared/types';
 
 import styles from './client-form-card.module.scss';
 import CancelModal from '../modal/cancel-modal';
-import ReasonModal from '../modal/reason-modal';
+import ReasonModal from '../modal/reason-modal/reason-modal';
 // import { formatDate } from '@/shared/utils/dates';
 interface FormCardProps {
   formItem: Form;

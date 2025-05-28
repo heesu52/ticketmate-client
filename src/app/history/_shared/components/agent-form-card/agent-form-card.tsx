@@ -8,7 +8,7 @@ import { useModal } from '@/shared/components/modal/use-modal';
 
 import styles from './agent-form-card.module.scss';
 import AcceptModal from '../modal/accept-modal';
-import RejectedModal from '../modal/rejected-modal';
+import RejectedModal from '../modal/rejected-modal/rejected-modal';
 
 const AgentFormCard = () => {
   const { open, closeTop } = useModal();
@@ -39,7 +39,6 @@ const AgentFormCard = () => {
         <RejectedModal
           title="요청을 거절하시겠습니까?"
           description={`의뢰인 닉네임의 요청을 거절할 시 해당 신청내역이 삭제되고 복구할 수 없습니다.\n`}
-          reason={`거절사유를 선택해주세요.`}
           onConfirm={async () => {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             closeTop();

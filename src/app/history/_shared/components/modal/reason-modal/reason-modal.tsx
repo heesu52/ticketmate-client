@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import styles from '@/app/history/_shared/components/modal/rejected-modal.module.scss';
+import styles from '@/app/history/_shared/components/modal/reason-modal/reason-modal.module.scss';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import CustomModal from '@/shared/components/modal/custom-modal';
 

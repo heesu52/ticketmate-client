@@ -3,7 +3,7 @@
 import { useGetFormList } from '@/app/history/_shared/services/query';
 
 import styles from './history-list.module.scss';
-import FormCard from '../form-card/form-card';
+import FormCard from '../client-form-card/client-form-card';
 
 interface HistoryListProps {
   tab: 'current' | 'past';

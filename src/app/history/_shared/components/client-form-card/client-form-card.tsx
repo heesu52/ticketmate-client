@@ -8,7 +8,7 @@ import { useModal } from '@/shared/components/modal/use-modal';
 import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { Form, ApplicationFormStatus } from '@/shared/types';
 
-import styles from './form-card.module.scss';
+import styles from './client-form-card.module.scss';
 import CancelModal from '../modal/cancel-modal';
 import RejectedModal from '../modal/rejected-modal';
 // import { formatDate } from '@/shared/utils/dates';

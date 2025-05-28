@@ -10,14 +10,13 @@ import { Form, ApplicationFormStatus } from '@/shared/types';
 
 import styles from './client-form-card.module.scss';
 import CancelModal from '../modal/cancel-modal';
-import RejectedModal from '../modal/rejected-modal';
+import ReasonModal from '../modal/reason-modal';
 // import { formatDate } from '@/shared/utils/dates';
-
 interface FormCardProps {
   formItem: Form;
 }
 
-const FormCard = ({ formItem }: FormCardProps) => {
+const ClientFormCard = ({ formItem }: FormCardProps) => {
   const {
     applicationFormId,
     clientId,
@@ -62,14 +61,14 @@ const FormCard = ({ formItem }: FormCardProps) => {
     });
   };
 
-  const handleOpenRejectedModal = () => {
+  const handleOpenReasonModal = () => {
     open({
-      id: MODAL_ID.REJECTED_MODAL,
+      id: MODAL_ID.REASON_MODAL,
       content: (
-        <RejectedModal
+        <ReasonModal
           title="대리인 닉네임님의 거절 사유"
           description={`작성한 신청양식을 통해 동일한 대리인에게 다시 티켓팅을 의뢰할 수 있습니다.\n`}
-          reason={`수고비가 단가랑 맞지 않음`}
+          reason={`수고비가 단가랑 맞지않음`}
           onConfirm={async () => {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             closeTop();
@@ -79,68 +78,64 @@ const FormCard = ({ formItem }: FormCardProps) => {
     });
   };
   return (
-    <>
-      <Link href={`concert/form/${applicationFormId}`}>
-        <div className={styles.container}>
-          <div className={styles.title_container}>
-            <div className={styles.title}>{concertName}</div>
-            <Image
-              className={styles.image}
-              src={concertThumbnailUrl}
-              alt={concertHallName}
-              width={48}
-              height={48}
-            />
-          </div>
+    <div className={styles.container}>
+      <Link
+        className={styles.upper_container}
+        href={`concert/form/${applicationFormId}`}
+      >
+        <div className={styles.title_container}>
+          <div className={styles.title}>{concertName}</div>
+          <Image
+            className={styles.image}
+            src={concertThumbnailUrl}
+            alt={concertHallName}
+            width={48}
+            height={48}
+          />
+        </div>
 
-          <div className={styles.info_container}>
-            <div className={styles.detail}>
-              <span className={styles.category}>신청 일자</span>
-              {/* 현재 신청일자에 대한 data가 없음 */}
-              <span className={styles.info}>신청 일자</span>
-            </div>
-            <div className={styles.detail}>
-              <span className={styles.category}>대리인</span>
-              {/* 추후 대리인 닉네임을 변경 */}
-              <span className={styles.info}>{agentId}</span>
-            </div>
+        <div className={styles.info_container}>
+          <div className={styles.detail}>
+            <span className={styles.category}>신청 일자</span>
+            {/* 현재 신청일자에 대한 data가 없음 */}
+            <span className={styles.info}>신청 일자</span>
           </div>
-          <div className={styles.footer_container}>
-            <div className={styles.footer_container}>
-              {isCurrent ? (
-                <>
-                  <button
-                    className={styles.link}
-                    onClick={handleOpenCancelModal}
-                  >
-                    신청취소
-                  </button>
-                  <span className={styles.default}>{statusLabel}</span>
-                </>
-              ) : (
-                <>
-                  {statusKey === 'APPROVED' && (
-                    <>
-                      <a className={styles.link} href="/chat">
-                        채팅하기
-                      </a>
-                      <span className={styles.approved}>{statusLabel}</span>
-                    </>
-                  )}
-                  {statusKey === 'REJECTED' && (
-                    <>
-                      <button onClick={handleOpenRejectedModal} />
-                      <span className={styles.rejected}>{statusLabel}</span>
-                    </>
-                  )}
-                </>
-              )}
-            </div>
+          <div className={styles.detail}>
+            <span className={styles.category}>대리인</span>
+            {/* 추후 대리인 닉네임을 변경 */}
+            <span className={styles.info}>{agentId}</span>
           </div>
         </div>
       </Link>
-    </>
+      <div className={styles.footer_container}>
+        {isCurrent ? (
+          <>
+            <button className={styles.link} onClick={handleOpenCancelModal}>
+              신청취소
+            </button>
+            <span className={styles.default}>{statusLabel}</span>
+          </>
+        ) : (
+          <>
+            {statusKey === 'APPROVED' && (
+              <>
+                <a className={styles.link} href="/chat">
+                  채팅하기
+                </a>
+                <span className={styles.approved}>{statusLabel}</span>
+              </>
+            )}
+            {statusKey === 'REJECTED' && (
+              <>
+                <button onClick={handleOpenReasonModal} />
+                <span className={styles.rejected}>{statusLabel}</span>
+              </>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
-export default FormCard;
+export default ClientFormCard;

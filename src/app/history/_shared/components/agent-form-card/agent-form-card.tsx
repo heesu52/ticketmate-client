@@ -2,30 +2,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-// import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/query';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
-import { Form } from '@/shared/types';
-// import { ApplicationFormStatus } from '@/shared/types';
 
 import styles from './agent-form-card.module.scss';
 import AcceptModal from '../modal/accept-modal';
 import RejectedModal from '../modal/rejected-modal';
 
-// import { formatDate } from '@/shared/utils/dates';
-interface FormCardProps {
-  formItem: Form;
-}
-
 const AgentFormCard = () => {
-  // const { data: concertItem } = useGetConcertDetail({ concertId });
   const { open, closeTop } = useModal();
-
-  // if (!concertItem) {
-  //   return null;
-  // }
-  // const { concertName, concertHallName, concertThumbnailUrl } = concertItem;
 
   const handleOpenAcceptModal = () => {
     open({

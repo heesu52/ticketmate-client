@@ -126,7 +126,7 @@ const RadioInput = ({
               height={16}
               fill="var(--brandColor-main)"
             />
-            <p className={cn('error_message')}>{error}</p>
+            <span className={cn('error_message')}>{error}</span>
           </div>
         )}
       </>

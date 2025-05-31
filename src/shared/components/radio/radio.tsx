@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useContext, ChangeEvent, useState } from 'react';
+import React, { ReactNode, useContext, ChangeEvent } from 'react';
 
 import classNames from 'classnames/bind';
 
@@ -57,11 +57,13 @@ const Radio = ({ value, label, disabled = false }: RadioProps) => {
 interface RadioInputProps {
   placeholder?: string;
   disabled?: boolean;
+  error?: string;
 }
 
 const RadioInput = ({
   placeholder = '직접 입력',
   disabled = false,
+  error = '',
 }: RadioInputProps) => {
   const context = useContext(RadioGroupContext);
   if (!context)
@@ -71,26 +73,13 @@ const RadioInput = ({
 
   const { name, value, onChange } = context;
   const isChecked = value !== null && !context.value?.startsWith('option');
-  const [error, setError] = useState('');
 
   const handleRadioChange = () => {
     if (!disabled) onChange('');
   };
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
-
-    const newValue = e.target.value;
-
-    if (newValue.length < 10) {
-      setError('최소 10자 이상 입력해야합니다.');
-    } else if (newValue.length > 50) {
-      setError('최대 50자까지만 입력할 수 있습니다.');
-    } else {
-      setError('');
-    }
-
-    onChange(newValue);
+    onChange(e.target.value);
   };
 
   return (
@@ -118,18 +107,16 @@ const RadioInput = ({
           maxLength={50}
         />
       </label>
-      <>
-        {isChecked && error && (
-          <div className={cn('error_container')}>
-            <AlertCircleIcon
-              width={16}
-              height={16}
-              fill="var(--brandColor-main)"
-            />
-            <span className={cn('error_message')}>{error}</span>
-          </div>
-        )}
-      </>
+      {isChecked && error && (
+        <div className={cn('error_container')}>
+          <AlertCircleIcon
+            width={16}
+            height={16}
+            fill="var(--brandColor-main)"
+          />
+          <span className={cn('error_message')}>{error}</span>
+        </div>
+      )}
     </>
   );
 };

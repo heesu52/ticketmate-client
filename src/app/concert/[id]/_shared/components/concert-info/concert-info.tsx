@@ -26,10 +26,8 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
 
   const [isScrolled, setIsScrolled] = useState(false);
   const {
-    concertId,
     concertName,
     concertHallName,
-    concertType,
     ticketReservationSite,
     concertThumbnailUrl,
     ticketOpenDateInfoResponses,
@@ -54,10 +52,10 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
   const endDate = sortedDates[sortedDates.length - 1]?.performanceDate;
 
   // 선예매, 일반예매 날짜 추출해서 D-day 계산
-  const preOpen = ticketOpenDateInfoResponses.find(
+  const preOpen = ticketOpenDateInfoResponses?.find(
     (info) => info.ticketOpenType === 'PRE_OPEN',
   );
-  const generalOpen = ticketOpenDateInfoResponses.find(
+  const generalOpen = ticketOpenDateInfoResponses?.find(
     (info) => info.ticketOpenType === 'GENERAL_OPEN',
   );
 

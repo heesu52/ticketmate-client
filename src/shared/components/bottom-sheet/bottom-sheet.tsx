@@ -21,7 +21,14 @@ const BottomSheet = ({
   concertItem,
   concertId,
 }: BottomSheetProps) => {
-  const { preOpenDate, generalOpenDate } = concertItem ?? {};
+  const { ticketOpenDateInfoResponses } = concertItem ?? {};
+
+  const preOpen = ticketOpenDateInfoResponses?.find(
+    (info) => info.ticketOpenType === 'PRE_OPEN',
+  );
+  const generalOpen = ticketOpenDateInfoResponses?.find(
+    (info) => info.ticketOpenType === 'GENERAL_OPEN',
+  );
 
   return (
     <div className={`${styles.container} ${isOpen ? styles.open : ''}`}>
@@ -39,14 +46,14 @@ const BottomSheet = ({
         <span className={styles.info}>한 줄 소개를 작성해주세요.</span>
       </div>
       <div className={styles.button_container}>
-        {preOpenDate && (
+        {preOpen && (
           <Link href={`/concert/form/${concertId}`}>
             <Button size="large" variant="fill" onClick={onClose}>
               선예매 요청하기
             </Button>
           </Link>
         )}
-        {generalOpenDate && (
+        {generalOpen && (
           <Link href={`/concert/form/${concertId}`}>
             <Button size="large" variant="border" onClick={onClose}>
               일반예매 요청하기

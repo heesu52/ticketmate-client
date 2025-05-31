@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { LocationOnIcon } from '@/assets/icons';
 import Badge from '@/shared/components/badge/badge';
 import { Concert } from '@/shared/types';
+import { formatDate } from '@/shared/utils/dates';
 
 import styles from './concert-card.module.scss';
 
@@ -50,9 +51,10 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
 
             <div className={styles.concert_info}>
               <div className={styles.description}>
-                <span
-                  className={styles.date}
-                >{`${startDate} ~ ${endDate}`}</span>
+                <span className={styles.date}>
+                  {' '}
+                  {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
+                </span>
                 <span className={styles.title}>{concertName}</span>
               </div>
               <div className={styles.place}>

@@ -31,11 +31,9 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
     concertHallName,
     concertType,
     ticketReservationSite,
-    preOpenDate,
-    generalOpenDate,
-    startDate,
-    endDate,
     concertThumbnailUrl,
+    ticketOpenDateInfoResponses,
+    concertDateInfoResponseList,
   } = concertItem;
 
   //type별 url과 사이트 이름 변환
@@ -43,9 +41,25 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
   const siteUrl = TICKET_SITE_URL_MAP[sitekey] ?? '#';
   const siteLabel = TICKET_SITE_LABEL_MAP[sitekey] ?? '기타';
 
-  //선예매 & 일반예매 d-day 변환
-  const preOpenday = calculateDday(preOpenDate);
-  const generalOpenday = calculateDday(generalOpenDate);
+  //공연 시작 날짜, 종료날짜 계산
+  const sortedDates = concertDateInfoResponseList
+    .slice()
+    .sort(
+      (a, b) =>
+        new Date(a.performanceDate).getTime() -
+        new Date(b.performanceDate).getTime(),
+    );
+
+  const startDate = sortedDates[0]?.performanceDate;
+  const endDate = sortedDates[sortedDates.length - 1]?.performanceDate;
+
+  // 선예매, 일반예매 날짜 추출해서 D-day 계산
+  const preOpen = ticketOpenDateInfoResponses.find(
+    (info) => info.ticketOpenType === 'PRE_OPEN',
+  );
+  const generalOpen = ticketOpenDateInfoResponses.find(
+    (info) => info.ticketOpenType === 'GENERAL_OPEN',
+  );
 
   useEffect(() => {
     // 배경 높이 - 앱바 높이
@@ -90,11 +104,15 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
             height={186}
           />
           <div className={styles.tag}>
-            {preOpenDate && (
-              <Badge type="type-a">선예매까지 {preOpenday}</Badge>
+            {preOpen && (
+              <Badge type="type-a">
+                선예매까지 {calculateDday(preOpen.openDate)}
+              </Badge>
             )}
-            {generalOpenDate && (
-              <Badge type="type-a">일반예매까지 {generalOpenday}</Badge>
+            {generalOpen && (
+              <Badge type="type-a">
+                일반예매까지 {calculateDday(generalOpen.openDate)}
+              </Badge>
             )}
           </div>
 

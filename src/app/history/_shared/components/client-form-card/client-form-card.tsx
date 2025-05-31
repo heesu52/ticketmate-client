@@ -9,7 +9,7 @@ import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { Form, ApplicationFormStatus } from '@/shared/types';
 
 import styles from './client-form-card.module.scss';
-import CancelModal from '../modal/cancel-modal';
+import CancelModal from '../modal/common-modal';
 import ReasonModal from '../modal/reason-modal/reason-modal';
 // import { formatDate } from '@/shared/utils/dates';
 interface FormCardProps {
@@ -49,6 +49,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
         <CancelModal
           title="신청을 취소하시겠습니까?"
           message={`취소 시 신청했던 내역은 \n과거신청내역에서 확인가능합니다.`}
+          confirmbtn={`취소하기`}
           onConfirm={async () => {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             closeTop();

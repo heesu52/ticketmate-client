@@ -7,7 +7,7 @@ import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
 
 import styles from './agent-form-card.module.scss';
-import AcceptModal from '../modal/accept-modal';
+import AcceptModal from '../modal/common-modal';
 import RejectedModal from '../modal/rejected-modal/rejected-modal';
 
 const AgentFormCard = () => {
@@ -15,11 +15,12 @@ const AgentFormCard = () => {
 
   const handleOpenAcceptModal = () => {
     open({
-      id: MODAL_ID.CANCEL_MODAL,
+      id: MODAL_ID.ACCEPT_MODAL,
       content: (
         <AcceptModal
           title="요청을 수락하시겠습니까?"
           message={`의뢰인 닉네임의 요청을 수락할 시 의뢰인과 매칭이 성사되어 채팅이 가능해집니다`}
+          confirmbtn={`수락`}
           onConfirm={async () => {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             closeTop();

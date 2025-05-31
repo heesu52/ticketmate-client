@@ -2,8 +2,6 @@
 
 import React from 'react';
 
-import { useRouter } from 'next/navigation';
-
 import styles from '@/app/history/_shared/components/modal/reason-modal/reason-modal.module.scss';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import CustomModal from '@/shared/components/modal/custom-modal';
@@ -21,11 +19,8 @@ const ReasonModal = ({
   description,
   onConfirm,
 }: ReasonModalProps) => {
-  const router = useRouter(); // useRouter 훅을 사용하여 라우팅 처리
-
-  const handleConfirm = async () => {
-    if (onConfirm) await onConfirm();
-    router.push(`/history`);
+  const handelConfirm = () => {
+    if (onConfirm) onConfirm();
   };
 
   return (
@@ -36,7 +31,7 @@ const ReasonModal = ({
         <p className={styles.reason}>“{reason}”</p>
       </CustomModal.Description>
       <CustomModal.Action>
-        <Button size="large" variant="back" onClick={handleConfirm}>
+        <Button size="large" variant="back" onClick={handelConfirm}>
           확인했어요
         </Button>
       </CustomModal.Action>

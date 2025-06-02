@@ -13,7 +13,11 @@ import {
   TICKET_SITE_LABEL_MAP,
 } from '@/shared/constants/type-mapping';
 import { TicketReservationSite, Concert } from '@/shared/types';
-import { formatDate, calculateDday } from '@/shared/utils/dates';
+import {
+  formatDate,
+  calculateDday,
+  getPerformancePeriod,
+} from '@/shared/utils/dates';
 
 import styles from './concert-info.module.scss';
 
@@ -40,18 +44,10 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
   const siteLabel = TICKET_SITE_LABEL_MAP[sitekey] ?? '기타';
 
   //공연 시작 날짜, 종료날짜 계산
-  const sortedDates = concertDateInfoResponseList
-    .slice()
-    .sort(
-      (a, b) =>
-        new Date(a.performanceDate).getTime() -
-        new Date(b.performanceDate).getTime(),
-    );
+  const { startDate, endDate } = getPerformancePeriod(
+    concertDateInfoResponseList,
+  );
 
-  const startDate = sortedDates[0]?.performanceDate;
-  const endDate = sortedDates[sortedDates.length - 1]?.performanceDate;
-
-  // 선예매, 일반예매 날짜 추출해서 D-day 계산
   const preOpen = ticketOpenDateInfoResponses?.find(
     (info) => info.ticketOpenType === 'PRE_OPEN',
   );

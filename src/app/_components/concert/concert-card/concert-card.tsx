@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { LocationOnIcon } from '@/assets/icons';
 import Badge from '@/shared/components/badge/badge';
 import { Concert } from '@/shared/types';
-import { formatDate } from '@/shared/utils/dates';
+import { calculateDday, formatDate } from '@/shared/utils/dates';
 
 import styles from './concert-card.module.scss';
 
@@ -34,8 +34,16 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
       <Link href={`concert/${concertId}`}>
         <div className={styles.container}>
           <div className={styles.tag}>
-            <Badge type="type-a">선예매까지 D-12</Badge>
-            <Badge type="type-a">일반예매까지 D-12</Badge>
+            {ticketPreOpenDate && (
+              <Badge type="type-a">
+                선예매까지 {calculateDday(ticketPreOpenDate)}
+              </Badge>
+            )}
+            {ticketGeneralOpenDate && (
+              <Badge type="type-a">
+                일반예매까지 {calculateDday(ticketGeneralOpenDate)}
+              </Badge>
+            )}
           </div>
 
           {/* 콘서트 정보 */}

@@ -30,10 +30,10 @@ export default function FormTabManager({
 
   const [formData, setFormData] = useState<Record<number, FormData>>({
     1: {
-      date: '',
-      count: '',
-      inputs: [{ id: 1, seat: '', price: '' }],
-      note: '',
+      performanceDate: '',
+      requestCount: '',
+      hopeAreaList: [{ id: 1, location: '', price: '' }],
+      requestDetails: '',
     }, // FormData 형태로 초기화
   });
 
@@ -43,10 +43,10 @@ export default function FormTabManager({
     setFormData((prev) => ({
       ...prev,
       [nextId]: {
-        date: '',
-        count: '',
-        inputs: [{ id: 1, seat: '', price: '' }],
-        note: '',
+        performanceDate: '',
+        requestCount: '',
+        hopeAreaList: [{ id: 1, location: '', price: '' }],
+        requestDetails: '',
       },
     }));
     setNextId((id) => id + 1);
@@ -69,7 +69,9 @@ export default function FormTabManager({
 
   const getTabLabel = (tabId: number) => {
     const tabData = formData[tabId];
-    const selectedDate = dateList.find((item) => item.value === tabData?.date);
+    const selectedDate = dateList.find(
+      (item) => item.value === tabData?.performanceDate,
+    );
     return selectedDate ? selectedDate.label : '회차를 선택해주세요';
   };
 
@@ -80,23 +82,25 @@ export default function FormTabManager({
 
     // CreateConcertFormRequest 타입에 맞게 수정된 데이터 구조
     const requestBody = {
-      agentId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      concertId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      performanceDate: currentFormData.date,
-      requestCount: Number(currentFormData.count),
-      hopeAreaList: currentFormData.inputs.map((item, index) => ({
-        priority: index + 1,
-        location: item.seat,
-        price: Number(item.price),
-      })),
-      requestDetails: currentFormData.note,
-      isPreOpen: false,
+      agentId: '3fa85f64-5717-4562-b3fc-2c963f66afa6', //moak agentId로 연결
+      concertId,
+      ticketOpenType,
+      applicationFormDetailRequestList: [
+        {
+          performanceDate: currentFormData.performanceDate,
+          requestCount: Number(currentFormData.requestCount),
+          hopeAreaList: currentFormData.hopeAreaList.map((item, index) => ({
+            priority: index + 1,
+            location: item.location,
+            price: Number(item.price),
+          })),
+          requestDetails: currentFormData.requestDetails,
+        },
+      ],
     };
 
     // requestBody를 콘솔에 출력하여 잘 생성되었는지 확인
     console.log('Request Body:', requestBody);
-
-    // mutate 함수 실행
     mutate(requestBody);
   };
 
@@ -137,6 +141,8 @@ export default function FormTabManager({
               key={tabId}
               value={formData[tabId]}
               onChange={(data) => updateFormData(tabId, data)}
+              dateList={dateList}
+              countList={countList}
             />
           ) : null,
         )}

@@ -50,4 +50,10 @@ interface Concert {
   seatingChartUrl: string; // 좌석 배치도 URL
 }
 
-export type { ConcertType, TicketReservationSite, Concert, TicketOpenType };
+export type {
+  ConcertType,
+  TicketReservationSite,
+  Concert,
+  TicketOpenType,
+  TicketOpenDateInfo,
+};

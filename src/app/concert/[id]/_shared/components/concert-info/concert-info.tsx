@@ -120,7 +120,6 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
               <div className={styles.detail}>
                 <span className={styles.category}>공연 일자</span>
                 <span className={styles.info}>
-                  {' '}
                   {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
                 </span>
               </div>

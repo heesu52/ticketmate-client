@@ -48,7 +48,7 @@ interface DescriptionProps {
 }
 
 const Description = ({ children }: DescriptionProps) => {
-  return <p className={cn('modal_description')}>{children}</p>;
+  return <span className={cn('modal_description')}>{children}</span>;
 };
 
 interface ContentProps {

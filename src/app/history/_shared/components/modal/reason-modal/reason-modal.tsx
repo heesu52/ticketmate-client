@@ -28,7 +28,7 @@ const ReasonModal = ({
       <CustomModal.Title>{title}</CustomModal.Title>
       <CustomModal.Description>{description}</CustomModal.Description>
       <CustomModal.Description>
-        <p className={styles.reason}>“{reason}”</p>
+        <span className={styles.reason}>“{reason}”</span>
       </CustomModal.Description>
       <CustomModal.Action>
         <Button size="large" variant="back" onClick={handelConfirm}>

@@ -27,18 +27,9 @@ const HistoryList = ({ tab }: HistoryListProps) => {
           총<span className={styles.asterisk}>{filteredList.length}</span>
           <span>개</span>
         </span>
-        {/* <div>
-          {filteredList?.map((formItem, index) => (
-            <AgentFormCard formItem={formItem} key={index} />
-          ))}
-        </div> */}
-        {/*테스트를 위한 하드코딩 */}
-        <div>
-          <AgentFormCard />
-          <AgentFormCard />
-          <AgentFormCard />
-          <AgentFormCard />
-        </div>
+        {filteredList.map((formItem, index) => (
+          <AgentFormCard formItem={formItem} key={index} />
+        ))}
       </div>
     </>
   );

@@ -13,6 +13,7 @@
   padding: 12px 20px;
   border-radius: 12px;
   border: 1px solid transparent;
+  text-align: left;
 
   &.checked {
     color: var(--brandColor-main);
@@ -54,5 +55,15 @@
     &::placeholder {
       color: var(--textColor-less);
     }
+  }
+}
+.error_container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  .error_message {
+    @include text-xs;
+    color: var(--brandColor-main);
   }
 }

@@ -4,23 +4,24 @@ import React from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import styles from '@/app/history/_shared/components/modal/rejected-modal.module.scss';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import CustomModal from '@/shared/components/modal/custom-modal';
 
-interface RejectedModalProps {
+interface CommonModalProps {
   title: string;
-  reason: string;
-  description?: string;
+  message: string;
+  confirmbtn: string;
   onConfirm?: () => Promise<void> | void;
+  onCancel?: () => void;
 }
 
-const RejectedModal = ({
+const CommonModal = ({
   title,
-  reason,
-  description,
+  message,
+  confirmbtn,
   onConfirm,
-}: RejectedModalProps) => {
+  onCancel,
+}: CommonModalProps) => {
   const router = useRouter(); // useRouter 훅을 사용하여 라우팅 처리
 
   const handleConfirm = async () => {
@@ -28,20 +29,24 @@ const RejectedModal = ({
     router.push(`/history`);
   };
 
+  const handleCancel = () => {
+    if (onCancel) onCancel();
+  };
+
   return (
     <CustomModal>
       <CustomModal.Title>{title}</CustomModal.Title>
-      <CustomModal.Description>{description}</CustomModal.Description>
-      <CustomModal.Description>
-        <p className={styles.reason}>“{reason}”</p>
-      </CustomModal.Description>
+      <CustomModal.Description>{message}</CustomModal.Description>
       <CustomModal.Action>
-        <Button size="large" variant="back" onClick={handleConfirm}>
-          확인했어요
+        <Button size="medium" variant="back" onClick={handleCancel}>
+          다음에
+        </Button>
+        <Button size="medium" variant="fill" onClick={handleConfirm}>
+          {confirmbtn}
         </Button>
       </CustomModal.Action>
     </CustomModal>
   );
 };
 
-export default RejectedModal;
+export default CommonModal;

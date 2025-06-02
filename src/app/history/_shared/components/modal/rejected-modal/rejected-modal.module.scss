@@ -1,0 +1,6 @@
+@use '@/styles/index' as *;
+
+.reason {
+  @include text-sm;
+  color: var(--textColor-main);
+}

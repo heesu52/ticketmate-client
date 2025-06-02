@@ -1,7 +1,13 @@
+export interface PerformanceDateInfo {
+  performanceDate: string;
+}
+
+// YYYY-MM-DD로 변환
 export const formatDate = (date: string | number | Date): string => {
-  return new Date(date).toLocaleDateString('en-CA'); // YYYY-MM-DD
+  return new Date(date).toLocaleDateString('en-CA');
 };
 
+//Open 날짜를 기준으로 디데이 계산
 export const calculateDday = (targetDate: string | number | Date): string => {
   const today = new Date();
   const formattedToday = formatDate(today);
@@ -24,4 +30,22 @@ export const calculateDday = (targetDate: string | number | Date): string => {
   } else {
     return `D+${Math.abs(diffInDays)}`;
   }
+};
+
+//공연 시작 ~ 종료 날짜 계산
+export const getPerformancePeriod = (
+  concertDateInfoResponseList: PerformanceDateInfo[],
+): { startDate: string; endDate: string } => {
+  const sortedDates = concertDateInfoResponseList
+    .slice()
+    .sort(
+      (a, b) =>
+        new Date(a.performanceDate).getTime() -
+        new Date(b.performanceDate).getTime(),
+    );
+
+  const startDate = sortedDates[0]?.performanceDate ?? '';
+  const endDate = sortedDates[sortedDates.length - 1]?.performanceDate ?? '';
+
+  return { startDate, endDate };
 };

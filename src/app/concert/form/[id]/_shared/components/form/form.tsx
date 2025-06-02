@@ -18,10 +18,11 @@ import FormTabManager from '../tab-button/manager/form-tab-manager';
 
 interface ConcertInfoProps {
   concertItem: Concert;
-  ticketOpenType?: TicketOpenType;
+  ticketOpenType: TicketOpenType;
+  concertId: string;
 }
 
-const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
+const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
   const { open, closeTop } = useModal();
   const {
     concertName,
@@ -49,9 +50,27 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
   const startDate = sortedDates[0]?.performanceDate;
   const endDate = sortedDates[sortedDates.length - 1]?.performanceDate;
 
-  const selectedOpenInfo = ticketOpenDateInfoResponses.find(
-    (info) => info.ticketOpenType === ticketOpenType,
+  // 선택된 티켓 오픈 정보
+  const matchedOpenInfo = ticketOpenDateInfoResponses.find(
+    (item) => item.ticketOpenType === ticketOpenType,
   );
+
+  // 최대 예매 매수 구하기
+  const maxCount = matchedOpenInfo?.requestMaxCount ?? 1;
+
+  const countList = Array.from({ length: maxCount }, (_, i) => ({
+    value: (i + 1).toString(),
+    label: `${i + 1}매`,
+  }));
+
+  // 공연 날짜 리스트
+  const dateList = concertDateInfoResponseList.map((item) => {
+    const formatted = formatDate(item.performanceDate);
+    return {
+      value: formatted.split('(')[0],
+      label: `${formatted} (${item.session}회차)`,
+    };
+  });
 
   const handleOpenModal = () => {
     open({
@@ -80,7 +99,7 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
           {ticketOpenType === 'GENERAL_OPEN' && (
             <Badge type="type-a">일반예매</Badge>
           )}
-          {selectedOpenInfo?.isBankTransfer && (
+          {matchedOpenInfo?.isBankTransfer && (
             <Badge type="type-b">무통장 가능</Badge>
           )}
         </div>
@@ -119,7 +138,13 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
           </div>
         </div>
       </div>
-      <FormTabManager handleOpenModal={handleOpenModal} />
+      <FormTabManager
+        handleOpenModal={handleOpenModal}
+        dateList={dateList}
+        countList={countList}
+        ticketOpenType={ticketOpenType}
+        concertId={concertId}
+      />
     </div>
   );
 };

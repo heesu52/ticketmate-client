@@ -78,28 +78,27 @@ export default function FormTabManager({
   const { mutate } = useCreateConcertForm();
 
   const handleSubmit = () => {
-    const currentFormData = formData[activeTab];
+    // formData의 모든 탭 데이터를 배열로 변환
+    const applicationFormDetailRequestList = Object.values(formData).map(
+      (currentFormData) => ({
+        performanceDate: currentFormData.performanceDate,
+        requestCount: Number(currentFormData.requestCount),
+        hopeAreaList: currentFormData.hopeAreaList.map((item, index) => ({
+          priority: index + 1,
+          location: item.location,
+          price: Number(item.price),
+        })),
+        requestDetails: currentFormData.requestDetails,
+      }),
+    );
 
-    // CreateConcertFormRequest 타입에 맞게 수정된 데이터 구조
     const requestBody = {
-      agentId: '3fa85f64-5717-4562-b3fc-2c963f66afa6', //moak agentId로 연결
+      agentId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       concertId,
       ticketOpenType,
-      applicationFormDetailRequestList: [
-        {
-          performanceDate: currentFormData.performanceDate,
-          requestCount: Number(currentFormData.requestCount),
-          hopeAreaList: currentFormData.hopeAreaList.map((item, index) => ({
-            priority: index + 1,
-            location: item.location,
-            price: Number(item.price),
-          })),
-          requestDetails: currentFormData.requestDetails,
-        },
-      ],
+      applicationFormDetailRequestList,
     };
 
-    // requestBody를 콘솔에 출력하여 잘 생성되었는지 확인
     console.log('Request Body:', requestBody);
     mutate(requestBody);
   };

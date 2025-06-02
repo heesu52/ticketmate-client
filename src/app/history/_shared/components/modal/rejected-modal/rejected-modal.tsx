@@ -56,7 +56,7 @@ const RejectedModal = ({
       <CustomModal.Title>{title}</CustomModal.Title>
       <CustomModal.Description>{description}</CustomModal.Description>
       <CustomModal.Description>
-        <p className={styles.reason}>거절 사유를 선택해주세요.</p>
+        <span className={styles.reason}>거절 사유를 선택해주세요.</span>
         <CustomModal.Action>
           <RadioGroup
             name="example"

@@ -60,7 +60,6 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
             <div className={styles.concert_info}>
               <div className={styles.description}>
                 <span className={styles.date}>
-                  {' '}
                   {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
                 </span>
                 <span className={styles.title}>{concertName}</span>

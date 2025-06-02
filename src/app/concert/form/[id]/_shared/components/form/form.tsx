@@ -86,6 +86,7 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
           onCancel={() => {
             closeTop();
           }}
+          concertId={concertId}
         />
       ),
     });

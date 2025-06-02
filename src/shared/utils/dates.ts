@@ -4,7 +4,10 @@ export interface PerformanceDateInfo {
 
 // YYYY-MM-DD로 변환
 export const formatDate = (date: string | number | Date): string => {
-  return new Date(date).toLocaleDateString('en-CA');
+  const d = new Date(date);
+  const formattedDate = d.toLocaleDateString('en-CA'); // YYYY-MM-DD
+  const dayName = ['일', '월', '화', '수', '목', '금', '토'][d.getDay()];
+  return `${formattedDate} (${dayName})`;
 };
 
 //Open 날짜를 기준으로 디데이 계산

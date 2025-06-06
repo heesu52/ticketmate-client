@@ -1,9 +1,12 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import Link from 'next/link';
 
 import { StarIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
+import { useCheckDuplicateForm } from '@/shared/services/bottom-sheet/mutation';
 import { Concert } from '@/shared/types';
 
 import styles from './bottom-sheet.module.scss';
@@ -13,6 +16,7 @@ interface BottomSheetProps {
   isOpen: boolean;
   concertItem: Concert | undefined;
   concertId: string;
+  agentId: string;
 }
 
 const BottomSheet = ({
@@ -20,6 +24,7 @@ const BottomSheet = ({
   onClose,
   concertItem,
   concertId,
+  agentId,
 }: BottomSheetProps) => {
   const { ticketOpenDateInfoResponses } = concertItem ?? {};
 
@@ -29,6 +34,31 @@ const BottomSheet = ({
   const generalOpen = ticketOpenDateInfoResponses?.find(
     (info) => info.ticketOpenType === 'GENERAL_OPEN',
   );
+
+  // 우선순위에 따라 ticketOpenType 설정
+  const ticketOpenType = preOpen
+    ? preOpen.ticketOpenType
+    : generalOpen
+      ? generalOpen.ticketOpenType
+      : undefined;
+
+  //이미 신청한 신청서가 있는지 확인
+  const [isDuplicate, setIsDuplicate] = useState<boolean | null>(null);
+  const { mutate } = useCheckDuplicateForm();
+
+  useEffect(() => {
+    if (isOpen && agentId && concertId && ticketOpenType) {
+      mutate(
+        { agentId, concertId, ticketOpenType },
+        {
+          onSuccess: (res) => setIsDuplicate(res as boolean),
+          onError: () => setIsDuplicate(null),
+        },
+      );
+    } else {
+      setIsDuplicate(null);
+    }
+  }, [isOpen, agentId, concertId, ticketOpenType, mutate]);
 
   return (
     <div className={`${styles.container} ${isOpen ? styles.open : ''}`}>
@@ -46,19 +76,36 @@ const BottomSheet = ({
         <span className={styles.info}>한 줄 소개를 작성해주세요.</span>
       </div>
       <div className={styles.button_container}>
-        {preOpen && (
-          <Link href={`/concert/form/${concertId}?ticketOpenType=PRE_OPEN`}>
-            <Button size="large" variant="fill" onClick={onClose}>
-              선예매 요청하기
-            </Button>
-          </Link>
-        )}
-        {generalOpen && (
-          <Link href={`/concert/form/${concertId}?ticketOpenType=GENERAL_OPEN`}>
-            <Button size="large" variant="border" onClick={onClose}>
-              일반예매 요청하기
-            </Button>
-          </Link>
+        {isDuplicate ? (
+          <>
+            {preOpen && (
+              <Button size="large" variant="fill-disabled" onClick={onClose}>
+                신청된 요청입니다
+              </Button>
+            )}
+            {generalOpen && (
+              <Button size="large" variant="fill-disabled" onClick={onClose}>
+                신청된 요청입니다
+              </Button>
+            )}
+          </>
+        ) : (
+          <>
+            {preOpen && (
+              <Link href={`/concert/form/${concertId}`}>
+                <Button size="large" variant="fill" onClick={onClose}>
+                  선예매 요청하기
+                </Button>
+              </Link>
+            )}
+            {generalOpen && (
+              <Link href={`/concert/form/${concertId}`}>
+                <Button size="large" variant="border" onClick={onClose}>
+                  일반예매 요청하기
+                </Button>
+              </Link>
+            )}
+          </>
         )}
       </div>
     </div>

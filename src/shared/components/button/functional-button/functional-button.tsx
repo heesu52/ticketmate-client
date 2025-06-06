@@ -4,7 +4,7 @@ import styles from './functional-button.module.scss';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'large' | 'medium' | 'small';
-  variant?: 'border' | 'fill' | 'back';
+  variant?: 'border' | 'fill' | 'back' | 'fill-disabled';
   children: ReactNode;
 }
 

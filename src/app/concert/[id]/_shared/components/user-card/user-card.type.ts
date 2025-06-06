@@ -1,5 +1,5 @@
 interface UserProps {
-  id: number;
+  agentId: string;
   name: string;
   profileImage: string;
   introduction: string;

@@ -31,6 +31,11 @@
     color: var(--white);
   }
 
+  &.fill-disabled {
+    background: var(--lineColor-main);
+    color: var(--textColor-main);
+  }
+
   &.back {
     @include text-sm;
     border: 1px solid var(--lineColor-main);

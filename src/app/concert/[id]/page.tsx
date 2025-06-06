@@ -14,10 +14,12 @@ import Overlay from '@/shared/components/overlay/overlay';
 import { useGetConcertDetail } from './_shared/services/query';
 import styles from './page.module.scss';
 
+const FIXED_AGENT_ID = 'a618fdf6-fa1d-431e-bbea-d3e4494e10f1';
+
 // Mock API 호출 함수
 const handleGetCard = async (pageParam: number) => {
   const mockData = Array.from({ length: 10 }, (_, index) => ({
-    id: pageParam * 10 + index + 1,
+    agentId: FIXED_AGENT_ID,
     name: `대리인 닉네임 ${pageParam * 10 + index + 1}`,
     profileImage: 'https://via.placeholder.com/50',
     introduction: '한 줄 소개를 작성해주세요.',
@@ -34,8 +36,15 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   );
 
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
+  };
+
+  const handleUserCardClick = (agentId: string) => {
+    setSelectedAgentId(agentId);
+    setIsBottomSheetOpen(true);
   };
 
   const { ref, inView } = useInView();
@@ -72,7 +81,13 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           <span>원하는 대리인에게 요청해보세요!</span>
           {userData?.pages.map((page) =>
             page.map((user) => (
-              <UserCard key={user.id} user={user} onClick={toggleBottomSheet} />
+              // <UserCard key={user.agentId} user={user} onClick={toggleBottomSheet} />
+              //agentId를 고정해놔서 수정한 코드, 추후에 위의 코드로 바꿔놓을 예정
+              <UserCard
+                key={`${user.agentId}-${user.name}`}
+                user={user}
+                onClick={() => handleUserCardClick(user.agentId)}
+              />
             )),
           )}
 
@@ -89,6 +104,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           isOpen={isBottomSheetOpen}
           concertItem={concertItem}
           concertId={id}
+          agentId={selectedAgentId ?? ''}
         />
       </div>
     </>

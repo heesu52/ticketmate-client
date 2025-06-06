@@ -35,7 +35,7 @@ export default function FormInput({
 
   useEffect(() => {
     onChange({ performanceDate, requestCount, hopeAreaList, requestDetails });
-  }, [performanceDate, requestCount, hopeAreaList, requestDetails]);
+  }, [performanceDate, requestCount, hopeAreaList, requestDetails, onChange]);
 
   const addInput = () => {
     setHopeAreaList((prev) => [
@@ -45,7 +45,10 @@ export default function FormInput({
   };
 
   const removeInput = (id: number) => {
-    setHopeAreaList((prev) => prev.filter((input) => input.id !== id));
+    setHopeAreaList((prev) => {
+      if (prev.length <= 1) return prev; // 최소 1개는 유지
+      return prev.filter((input) => input.id !== id);
+    });
   };
 
   const handleInputChange = (id: number, field: string, value: string) => {

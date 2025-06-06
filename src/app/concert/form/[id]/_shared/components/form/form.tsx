@@ -39,7 +39,7 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
   const siteLabel = TICKET_SITE_LABEL_MAP[sitekey] ?? '기타';
 
   //공연 시작 날짜, 종료날짜 계산
-  const sortedDates = concertDateInfoResponseList
+  const sortedDates = (concertDateInfoResponseList || [])
     .slice()
     .sort(
       (a, b) =>
@@ -123,7 +123,9 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
             <div className={styles.detail}>
               <span className={styles.category}>공연 일자</span>
               <span className={styles.info}>
-                {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
+                {startDate && endDate
+                  ? `${formatDate(startDate)} ~ ${formatDate(endDate)}`
+                  : '공연 날짜 미정'}
               </span>
             </div>
 

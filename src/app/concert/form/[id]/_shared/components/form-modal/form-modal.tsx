@@ -24,12 +24,12 @@ const FormModal = ({
 }: FormeModalProps) => {
   const router = useRouter(); // useRouter 훅을 사용하여 라우팅 처리
 
-  const handleCancel = async () => {
+  const handleConfirm = async () => {
     if (onConfirm) await onConfirm();
     router.push(`/concert/${concertId}`);
   };
 
-  const handleConfirm = () => {
+  const handleCheck = () => {
     if (onCancel) onCancel();
     router.push('/history');
   };
@@ -39,10 +39,10 @@ const FormModal = ({
       <CustomModal.Title>{title}</CustomModal.Title>
       <CustomModal.Description>{message}</CustomModal.Description>
       <CustomModal.Action>
-        <Button size="medium" variant="border" onClick={handleCancel}>
+        <Button size="medium" variant="border" onClick={handleConfirm}>
           확인했어요
         </Button>
-        <Button size="medium" variant="fill" onClick={handleConfirm}>
+        <Button size="medium" variant="fill" onClick={handleCheck}>
           신청내역 보러가기
         </Button>
       </CustomModal.Action>

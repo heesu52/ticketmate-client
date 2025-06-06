@@ -67,7 +67,7 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
   const dateList = concertDateInfoResponseList.map((item) => {
     const formatted = formatDate(item.performanceDate);
     return {
-      value: formatted.split('(')[0],
+      value: item.performanceDate, // 원본 날짜 값 사용
       label: `${formatted} (${item.session}회차)`,
     };
   });

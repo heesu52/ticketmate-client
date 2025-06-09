@@ -8,7 +8,7 @@ export const ERROR_MESSAGES: Record<string, string> = {
 
   // MEMBER
   DUPLICATE_USERNAME: '이미 가입된 이메일입니다.',
-  MEMBER_NOT_FOUND: '해당 회원 정보를 찾을 수 없습니다.',
+  MEMBER_NOT_FOUND: '회원 정보를 찾을 수 없습니다.',
   INVALID_MEMBER_TYPE: '잘못된 회원 유형입니다.',
 
   // CONCERT

@@ -25,9 +25,15 @@ interface ConcertInfoProps {
   concertItem: Concert;
   ticketOpenType: TicketOpenType;
   concertId: string;
+  onError: (message: string) => void;
 }
 
-const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
+const Form = ({
+  concertItem,
+  ticketOpenType,
+  concertId,
+  onError,
+}: ConcertInfoProps) => {
   const { open, closeTop } = useModal();
   const {
     concertName,
@@ -155,6 +161,7 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
         countList={countList}
         ticketOpenType={ticketOpenType}
         concertId={concertId}
+        onError={onError}
       />
     </div>
   );

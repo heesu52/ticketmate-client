@@ -5,6 +5,7 @@ import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-
 import { useCreateConcertForm } from '@/app/concert/form/[id]/_shared/services/mutation';
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
+import { ERROR_MESSAGES } from '@/shared/constants/error-type';
 import { TicketOpenType } from '@/shared/types';
 
 import styles from './form-tab-manager.module.scss';
@@ -16,6 +17,7 @@ interface FormTabManagerProps {
   countList: { value: string; label: string }[];
   ticketOpenType: TicketOpenType;
   concertId: string;
+  onError: (message: string) => void;
 }
 export default function FormTabManager({
   handleOpenModal,
@@ -23,6 +25,7 @@ export default function FormTabManager({
   countList,
   ticketOpenType,
   concertId,
+  onError,
 }: FormTabManagerProps) {
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
@@ -100,8 +103,28 @@ export default function FormTabManager({
       applicationFormDetailRequestList,
     };
 
-    console.log('Request Body:', requestBody);
-    mutate(requestBody);
+    // mutate 함수 실행
+    mutate(requestBody, {
+      onSuccess: () => {
+        handleOpenModal();
+      },
+      onError: async (error: unknown) => {
+        try {
+          if (error instanceof Response) {
+            const data = await error.json();
+            const code: string = data?.errorCode;
+            const message =
+              ERROR_MESSAGES[code] || '알 수 없는 오류가 발생했습니다.';
+
+            onError(message);
+          } else {
+            onError('서버 응답이 없습니다.');
+          }
+        } catch (e) {
+          onError('에러 응답을 파싱하지 못했습니다.');
+        }
+      },
+    });
   };
 
   return (
@@ -153,7 +176,6 @@ export default function FormTabManager({
         variant="fill"
         onClick={() => {
           handleSubmit(); // 제출 처리
-          handleOpenModal(); // 모달 열기
         }}
       >
         신청하기

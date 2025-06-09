@@ -2,6 +2,7 @@
 import { use } from 'react';
 
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
+import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
 import { TicketOpenType } from '@/shared/types';
 
 import Form from './_shared/components/form/form';
@@ -26,6 +27,11 @@ export default function Page({
     id ? { concertId: id } : undefined,
   );
 
+  const handleErrorToast = (message: string) =>
+    customToast({
+      description: message,
+    });
+
   return (
     <>
       <AppBarSetter title="신청 양식" />
@@ -36,6 +42,7 @@ export default function Page({
             concertItem={concertItem}
             ticketOpenType={ticketOpenType}
             concertId={id}
+            onError={handleErrorToast}
           />
         )}
       </div>

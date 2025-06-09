@@ -11,6 +11,11 @@ import {
 } from '@/shared/constants/type-mapping';
 import { TicketReservationSite, TicketOpenType, Concert } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
+import {
+  getTicketOpenInfoByType,
+  getPreOpenInfo,
+  getGeneralOpenInfo,
+} from '@/shared/utils/tickets';
 
 import styles from './form.module.scss';
 import FormModal from '../form-modal/form-modal';
@@ -51,8 +56,11 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
   const endDate = sortedDates[sortedDates.length - 1]?.performanceDate;
 
   // 선택된 티켓 오픈 정보
-  const matchedOpenInfo = ticketOpenDateInfoResponses.find(
-    (item) => item.ticketOpenType === ticketOpenType,
+  const preOpen = getPreOpenInfo(ticketOpenDateInfoResponses ?? []);
+  const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponses ?? []);
+  const matchedOpenInfo = getTicketOpenInfoByType(
+    ticketOpenDateInfoResponses,
+    ticketOpenType,
   );
 
   // 최대 예매 매수 구하기
@@ -96,10 +104,8 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
     <div className={styles.container}>
       <div className={styles.title_container}>
         <div className={styles.tag}>
-          {ticketOpenType === 'PRE_OPEN' && <Badge type="type-a">선예매</Badge>}
-          {ticketOpenType === 'GENERAL_OPEN' && (
-            <Badge type="type-a">일반예매</Badge>
-          )}
+          {preOpen && <Badge type="type-a">선예매</Badge>}
+          {generalOpen && <Badge type="type-a">일반예매</Badge>}
           {matchedOpenInfo?.isBankTransfer ? (
             <Badge type="type-b">무통장 가능</Badge>
           ) : (

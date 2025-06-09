@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Badge from '@/shared/components/badge/badge';
-import { useModal } from '@/shared/components/modal/use-modal';
 import {
   TICKET_SITE_URL_MAP,
   TICKET_SITE_LABEL_MAP,
@@ -18,23 +17,14 @@ import {
 } from '@/shared/utils/tickets';
 
 import styles from './form.module.scss';
-import FormModal from '../form-modal/form-modal';
-import FormTabManager from '../tab-button/manager/form-tab-manager';
 
 interface ConcertInfoProps {
   concertItem: Concert;
   ticketOpenType: TicketOpenType;
   concertId: string;
-  onError: (message: string) => void;
 }
 
-const Form = ({
-  concertItem,
-  ticketOpenType,
-  concertId,
-  onError,
-}: ConcertInfoProps) => {
-  const { open, closeTop } = useModal();
+const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
   const {
     concertName,
     concertHallName,
@@ -68,43 +58,6 @@ const Form = ({
     ticketOpenDateInfoResponses,
     ticketOpenType,
   );
-
-  // 최대 예매 매수 구하기
-  const maxCount = matchedOpenInfo?.requestMaxCount ?? 1;
-
-  const countList = Array.from({ length: maxCount }, (_, i) => ({
-    value: (i + 1).toString(),
-    label: `${i + 1}매`,
-  }));
-
-  // 공연 날짜 리스트
-  const dateList = concertDateInfoResponseList.map((item) => {
-    const formatted = formatDate(item.performanceDate);
-    return {
-      value: item.performanceDate, // 원본 날짜 값 사용
-      label: `${formatted} (${item.session}회차)`,
-    };
-  });
-
-  const handleOpenModal = () => {
-    open({
-      id: 'form-modal',
-      content: (
-        <FormModal
-          title="일반예매 신청이 완료되었습니다."
-          message={`대리인이 수락하게 되면 매칭이 완료됩니다.\n매칭이 완료되면 채팅을 통해 이야기를 나눠보세요.`}
-          onConfirm={async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            closeTop();
-          }}
-          onCancel={() => {
-            closeTop();
-          }}
-          concertId={concertId}
-        />
-      ),
-    });
-  };
 
   return (
     <div className={styles.container}>
@@ -155,14 +108,6 @@ const Form = ({
           </div>
         </div>
       </div>
-      <FormTabManager
-        handleOpenModal={handleOpenModal}
-        dateList={dateList}
-        countList={countList}
-        ticketOpenType={ticketOpenType}
-        concertId={concertId}
-        onError={onError}
-      />
     </div>
   );
 };

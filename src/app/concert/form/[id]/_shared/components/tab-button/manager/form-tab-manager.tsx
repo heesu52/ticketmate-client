@@ -6,26 +6,25 @@ import { useCreateConcertForm } from '@/app/concert/form/[id]/_shared/services/m
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
-import { TicketOpenType } from '@/shared/types';
+import { TicketOpenType, Concert } from '@/shared/types';
+import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
 import FormTabButton from '../button/form-tab-button';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;
-  dateList: { value: string; label: string }[];
-  countList: { value: string; label: string }[];
   ticketOpenType: TicketOpenType;
   concertId: string;
   onError: (message: string) => void;
+  concertItem: Concert;
 }
 export default function FormTabManager({
   handleOpenModal,
-  dateList,
-  countList,
   ticketOpenType,
   concertId,
   onError,
+  concertItem,
 }: FormTabManagerProps) {
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
@@ -40,6 +39,21 @@ export default function FormTabManager({
       requestDetails: '',
     },
   });
+
+  const getTabLabel = (tabId: number) => {
+    const tabData = formData[tabId];
+    if (!tabData?.performanceDate) return '회차를 선택해주세요';
+
+    const selectedDateInfo = concertItem.concertDateInfoResponseList.find(
+      (item) => item.performanceDate === tabData.performanceDate,
+    );
+
+    if (!selectedDateInfo) return '회차를 선택해주세요';
+
+    const formatted = formatDate(selectedDateInfo.performanceDate);
+
+    return `${formatted} (${selectedDateInfo.session}회차)`;
+  };
 
   const addNewTab = () => {
     setTabs((prev) => [...prev, nextId]);
@@ -70,14 +84,6 @@ export default function FormTabManager({
   const updateFormData = useCallback((id: number, data: FormData) => {
     setFormData((prev) => ({ ...prev, [id]: data }));
   }, []);
-
-  const getTabLabel = (tabId: number) => {
-    const tabData = formData[tabId];
-    const selectedDate = dateList.find(
-      (item) => item.value === tabData?.performanceDate,
-    );
-    return selectedDate ? selectedDate.label : '회차를 선택해주세요';
-  };
 
   const { mutate } = useCreateConcertForm();
 
@@ -164,8 +170,13 @@ export default function FormTabManager({
               key={tabId}
               value={formData[tabId]}
               onChange={(data) => updateFormData(tabId, data)}
-              dateList={dateList}
-              countList={countList}
+              concertDateInfoResponseList={
+                concertItem.concertDateInfoResponseList
+              }
+              ticketOpenDateInfoResponses={
+                concertItem.ticketOpenDateInfoResponses
+              }
+              ticketOpenType={ticketOpenType}
             />
           ) : null,
         )}

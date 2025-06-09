@@ -36,6 +36,7 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
     ticketOpenDateInfoResponses,
     concertThumbnailUrl,
     concertDateInfoResponseList,
+    seatingChartUrl,
   } = concertItem;
 
   //type별 url과 사이트 이름 변환
@@ -122,8 +123,16 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
               alt={concertName}
               width={140}
               height={186}
+              unoptimized
             />
-            <span>좌석배치도</span>
+            <a
+              href={seatingChartUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.link}
+            >
+              좌석배치도
+            </a>
           </div>
           <div className={styles.detail_container}>
             <div className={styles.detail}>

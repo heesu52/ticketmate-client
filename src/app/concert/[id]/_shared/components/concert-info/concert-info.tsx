@@ -85,6 +85,7 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
             src={concertThumbnailUrl}
             alt={concertName}
             layout="fill"
+            unoptimized
           />
         </div>
         <div className={styles.title_container}>
@@ -94,6 +95,7 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
             alt={concertName}
             width={140}
             height={186}
+            unoptimized
           />
           <div className={styles.tag}>
             {preOpen && (

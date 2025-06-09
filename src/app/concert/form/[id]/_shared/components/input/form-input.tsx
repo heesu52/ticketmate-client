@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import { MinusIcon, PlusIcon, HelpCircleIcon } from '@/assets/icons';
 import Input from '@/shared/components/input/input';
@@ -33,9 +33,14 @@ export default function FormInput({
     value?.requestDetails || '',
   );
 
+  const isFirstRender = useRef(true);
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     onChange({ performanceDate, requestCount, hopeAreaList, requestDetails });
-  }, [performanceDate, requestCount, hopeAreaList, requestDetails, onChange]);
+  }, [performanceDate, requestCount, hopeAreaList, requestDetails]);
 
   const addInput = () => {
     setHopeAreaList((prev) => [

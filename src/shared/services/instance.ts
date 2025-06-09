@@ -69,8 +69,11 @@ const instance = httpClient({
           }
         }
 
-        const errorText = await response.text();
-        throw new Error(`HTTP error ${response.status}: ${errorText}`);
+        const errorBody = await response.json().catch(() => ({}));
+        throw {
+          status: response.status,
+          data: errorBody,
+        };
       }
 
       return response.json() as Promise<T>;

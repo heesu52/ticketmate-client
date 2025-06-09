@@ -114,21 +114,18 @@ export default function FormTabManager({
       onSuccess: () => {
         handleOpenModal();
       },
-      onError: async (error: unknown) => {
-        try {
-          if (error instanceof Response) {
-            const data = await error.json();
-            const code: string = data?.errorCode;
-            const message =
-              ERROR_MESSAGES[code] || '알 수 없는 오류가 발생했습니다.';
+      onError: (error: unknown) => {
+        const errorData = (
+          error as { data?: { errorCode?: string; errormessage?: string } }
+        )?.data;
 
-            onError(message);
-          } else {
-            onError('서버 응답이 없습니다.');
-          }
-        } catch (e) {
-          onError('에러 응답을 파싱하지 못했습니다.');
-        }
+        const code = errorData?.errorCode;
+        const message =
+          errorData?.errormessage ||
+          (code && ERROR_MESSAGES[code]) ||
+          '알 수 없는 오류가 발생했습니다.';
+
+        onError(message);
       },
     });
   };

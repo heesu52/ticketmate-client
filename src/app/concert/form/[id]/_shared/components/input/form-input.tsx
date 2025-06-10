@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import { MinusIcon, PlusIcon, HelpCircleIcon } from '@/assets/icons';
 import Input from '@/shared/components/input/input';
+import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
 
 import styles from './form-input.module.scss';
 import { FormData, HopeArea } from './form-input.type';
@@ -33,15 +34,25 @@ export default function FormInput({
     value?.requestDetails || '',
   );
 
+  const isFirstRender = useRef(true);
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     onChange({ performanceDate, requestCount, hopeAreaList, requestDetails });
-  }, [performanceDate, requestCount, hopeAreaList, requestDetails, onChange]);
+  }, [performanceDate, requestCount, hopeAreaList, requestDetails]);
 
   const addInput = () => {
-    setHopeAreaList((prev) => [
-      ...prev,
-      { id: Date.now(), location: '', price: '' },
-    ]);
+    setHopeAreaList((prev) => {
+      if (prev.length >= 10) {
+        customToast({
+          description: '최대 10개까지만 가능합니다.',
+        });
+        return prev;
+      }
+      return [...prev, { id: Date.now(), location: '', price: '' }];
+    });
   };
 
   const removeInput = (id: number) => {

@@ -18,6 +18,7 @@ import {
   calculateDday,
   getPerformancePeriod,
 } from '@/shared/utils/dates';
+import { getPreOpenInfo, getGeneralOpenInfo } from '@/shared/utils/tickets';
 
 import styles from './concert-info.module.scss';
 
@@ -48,12 +49,9 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
     concertDateInfoResponseList,
   );
 
-  const preOpen = ticketOpenDateInfoResponses?.find(
-    (info) => info.ticketOpenType === 'PRE_OPEN',
-  );
-  const generalOpen = ticketOpenDateInfoResponses?.find(
-    (info) => info.ticketOpenType === 'GENERAL_OPEN',
-  );
+  //선예매, 일반예매 계산
+  const preOpen = getPreOpenInfo(ticketOpenDateInfoResponses ?? []);
+  const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponses ?? []);
 
   useEffect(() => {
     // 배경 높이 - 앱바 높이
@@ -86,7 +84,8 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
             className={styles.background_image}
             src={concertThumbnailUrl}
             alt={concertName}
-            layout="fill"
+            fill
+            unoptimized
           />
         </div>
         <div className={styles.title_container}>
@@ -96,6 +95,7 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
             alt={concertName}
             width={140}
             height={186}
+            unoptimized
           />
           <div className={styles.tag}>
             {preOpen && (

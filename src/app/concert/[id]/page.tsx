@@ -21,7 +21,8 @@ const handleGetCard = async (pageParam: number) => {
   const mockData = Array.from({ length: 10 }, (_, index) => ({
     agentId: FIXED_AGENT_ID,
     name: `대리인 닉네임 ${pageParam * 10 + index + 1}`,
-    profileImage: 'https://via.placeholder.com/50',
+    profileImage:
+      'https://fastly.picsum.photos/id/515/320/200.jpg?hmac=d24pyllgU-WPlvGiChI8O4t8Wc2P3I67c3hVWDCLA-4',
     introduction: '한 줄 소개를 작성해주세요.',
     transactionCount: Math.floor(Math.random() * 100),
   }));

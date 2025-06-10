@@ -51,9 +51,11 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
             <div className={styles.concert_img}>
               <Image
                 src={concertThumbnailUrl}
-                alt={concertHallName}
+                alt={concertName}
                 width={104}
                 height={139}
+                unoptimized
+                priority
               />
             </div>
 

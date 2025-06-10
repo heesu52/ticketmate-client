@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
@@ -28,13 +28,14 @@ export default function FormTabManager({
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
 
+  // FormData 형태로 초기화
   const [formData, setFormData] = useState<Record<number, FormData>>({
     1: {
       performanceDate: '',
       requestCount: '',
       hopeAreaList: [{ id: 1, location: '', price: '' }],
       requestDetails: '',
-    }, // FormData 형태로 초기화
+    },
   });
 
   const addNewTab = () => {
@@ -63,9 +64,9 @@ export default function FormTabManager({
     setFormData(newFormData);
   };
 
-  const updateFormData = (id: number, data: FormData) => {
+  const updateFormData = useCallback((id: number, data: FormData) => {
     setFormData((prev) => ({ ...prev, [id]: data }));
-  };
+  }, []);
 
   const getTabLabel = (tabId: number) => {
     const tabData = formData[tabId];

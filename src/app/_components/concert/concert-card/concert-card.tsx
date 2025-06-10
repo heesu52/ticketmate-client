@@ -52,8 +52,8 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
               <Image
                 src={concertThumbnailUrl}
                 alt={concertName}
-                width={104}
-                height={139}
+                width={100}
+                height={133}
                 unoptimized
                 priority
               />

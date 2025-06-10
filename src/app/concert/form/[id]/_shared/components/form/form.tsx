@@ -125,14 +125,7 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
               height={186}
               unoptimized
             />
-            <a
-              href={seatingChartUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.link}
-            >
-              좌석배치도
-            </a>
+            <span className={styles.link}>좌석배치도</span>
           </div>
           <div className={styles.detail_container}>
             <div className={styles.detail}>

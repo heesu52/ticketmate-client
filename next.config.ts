@@ -18,7 +18,6 @@ const nextConfig: NextConfig = {
   images: {
     domains: [
       'picsum.photos',
-      'placehold.co',
       'ticketmate.site',
       'ticketmate-storage.s3.ap-northeast-2.amazonaws.com',
     ],

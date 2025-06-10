@@ -84,7 +84,7 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
             className={styles.background_image}
             src={concertThumbnailUrl}
             alt={concertName}
-            layout="fill"
+            fill
             unoptimized
           />
         </div>

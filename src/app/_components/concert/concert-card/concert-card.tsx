@@ -55,6 +55,7 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
                 width={104}
                 height={139}
                 unoptimized
+                priority
               />
             </div>
 

@@ -31,4 +31,13 @@
       }
     }
   }
+
+  .card_wrapper {
+    width: 100%;
+    border-bottom: 1px solid var(--lineColor-main);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
 }

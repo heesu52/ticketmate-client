@@ -37,7 +37,9 @@ const ConcertList = () => {
             </div>
           </div>
           {concertList?.map((concertItem, index) => (
-            <ConcertCard concertItem={concertItem} key={index} />
+            <div key={index} className={styles.card_wrapper}>
+              <ConcertCard concertItem={concertItem} />
+            </div>
           ))}
         </div>
       </div>

@@ -4,17 +4,16 @@ export interface PerformanceDateInfo {
 
 // YYYY-MM-DD로 변환
 export const formatDate = (date: string | number | Date): string => {
-  return new Date(date).toLocaleDateString('en-CA');
+  const d = new Date(date);
+  const formattedDate = d.toLocaleDateString('en-CA'); // YYYY-MM-DD
+  const dayName = ['일', '월', '화', '수', '목', '금', '토'][d.getDay()];
+  return `${formattedDate} (${dayName})`;
 };
 
 //Open 날짜를 기준으로 디데이 계산
 export const calculateDday = (targetDate: string | number | Date): string => {
-  const today = new Date();
-  const formattedToday = formatDate(today);
-  const formattedTargetDate = formatDate(targetDate);
-
-  const todayDate = new Date(formattedToday);
-  const target = new Date(formattedTargetDate);
+  const todayDate = new Date();
+  const target = new Date(targetDate);
 
   // 시간을 00:00:00으로 맞추기
   todayDate.setHours(0, 0, 0, 0);

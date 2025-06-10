@@ -1,34 +1,41 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
-import {
-  dateList,
-  FormData,
-} from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
+import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
 import { useCreateConcertForm } from '@/app/concert/form/[id]/_shared/services/mutation';
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
+import { TicketOpenType } from '@/shared/types';
 
 import styles from './form-tab-manager.module.scss';
 import FormTabButton from '../button/form-tab-button';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;
+  dateList: { value: string; label: string }[];
+  countList: { value: string; label: string }[];
+  ticketOpenType: TicketOpenType;
+  concertId: string;
 }
 export default function FormTabManager({
   handleOpenModal,
+  dateList,
+  countList,
+  ticketOpenType,
+  concertId,
 }: FormTabManagerProps) {
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
 
+  // FormData 형태로 초기화
   const [formData, setFormData] = useState<Record<number, FormData>>({
     1: {
-      date: '',
-      count: '',
-      inputs: [{ id: 1, seat: '', price: '' }],
-      note: '',
-    }, // FormData 형태로 초기화
+      performanceDate: '',
+      requestCount: '',
+      hopeAreaList: [{ id: 1, location: '', price: '' }],
+      requestDetails: '',
+    },
   });
 
   const addNewTab = () => {
@@ -37,10 +44,10 @@ export default function FormTabManager({
     setFormData((prev) => ({
       ...prev,
       [nextId]: {
-        date: '',
-        count: '',
-        inputs: [{ id: 1, seat: '', price: '' }],
-        note: '',
+        performanceDate: '',
+        requestCount: '',
+        hopeAreaList: [{ id: 1, location: '', price: '' }],
+        requestDetails: '',
       },
     }));
     setNextId((id) => id + 1);
@@ -57,40 +64,43 @@ export default function FormTabManager({
     setFormData(newFormData);
   };
 
-  const updateFormData = (id: number, data: FormData) => {
+  const updateFormData = useCallback((id: number, data: FormData) => {
     setFormData((prev) => ({ ...prev, [id]: data }));
-  };
+  }, []);
 
   const getTabLabel = (tabId: number) => {
     const tabData = formData[tabId];
-    const selectedDate = dateList.find((item) => item.value === tabData?.date);
+    const selectedDate = dateList.find(
+      (item) => item.value === tabData?.performanceDate,
+    );
     return selectedDate ? selectedDate.label : '회차를 선택해주세요';
   };
 
   const { mutate } = useCreateConcertForm();
 
   const handleSubmit = () => {
-    const currentFormData = formData[activeTab];
+    // formData의 모든 탭 데이터를 배열로 변환
+    const applicationFormDetailRequestList = Object.values(formData).map(
+      (currentFormData) => ({
+        performanceDate: currentFormData.performanceDate,
+        requestCount: Number(currentFormData.requestCount),
+        hopeAreaList: currentFormData.hopeAreaList.map((item, index) => ({
+          priority: index + 1,
+          location: item.location,
+          price: Number(item.price),
+        })),
+        requestDetails: currentFormData.requestDetails,
+      }),
+    );
 
-    // CreateConcertFormRequest 타입에 맞게 수정된 데이터 구조
     const requestBody = {
-      agentId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      concertId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      performanceDate: currentFormData.date,
-      requestCount: Number(currentFormData.count),
-      hopeAreaList: currentFormData.inputs.map((item, index) => ({
-        priority: index + 1,
-        location: item.seat,
-        price: Number(item.price),
-      })),
-      requestDetails: currentFormData.note,
-      isPreOpen: false,
+      agentId: 'a618fdf6-fa1d-431e-bbea-d3e4494e10f1',
+      concertId,
+      ticketOpenType,
+      applicationFormDetailRequestList,
     };
 
-    // requestBody를 콘솔에 출력하여 잘 생성되었는지 확인
     console.log('Request Body:', requestBody);
-
-    // mutate 함수 실행
     mutate(requestBody);
   };
 
@@ -131,6 +141,8 @@ export default function FormTabManager({
               key={tabId}
               value={formData[tabId]}
               onChange={(data) => updateFormData(tabId, data)}
+              dateList={dateList}
+              countList={countList}
             />
           ) : null,
         )}

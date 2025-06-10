@@ -116,7 +116,6 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
         <div className={styles.title}>{concertName}</div>
         <div className={styles.info_container}>
           <div className={styles.image}>
-            {/* 추후 next의 Image 로 변경 예정 */}
             <Image
               className={styles.image}
               src={concertThumbnailUrl}
@@ -125,6 +124,7 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
               height={186}
               unoptimized
             />
+            {/* 좌석배치도의 디자인이 결정되면 반영예정 */}
             <span className={styles.link}>좌석배치도</span>
           </div>
           <div className={styles.detail_container}>

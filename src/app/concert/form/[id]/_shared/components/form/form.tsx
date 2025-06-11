@@ -32,6 +32,7 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
     ticketOpenDateInfoResponses,
     concertThumbnailUrl,
     concertDateInfoResponseList,
+    seatingChartUrl,
   } = concertItem;
 
   //type별 url과 사이트 이름 변환
@@ -74,15 +75,16 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
         <div className={styles.title}>{concertName}</div>
         <div className={styles.info_container}>
           <div className={styles.image}>
-            {/* 추후 next의 Image 로 변경 예정 */}
             <Image
               className={styles.image}
               src={concertThumbnailUrl}
               alt={concertName}
               width={140}
               height={186}
+              unoptimized
             />
-            <span>좌석배치도</span>
+            {/* 좌석배치도의 디자인이 결정되면 반영예정 */}
+            <span className={styles.link}>좌석배치도</span>
           </div>
           <div className={styles.detail_container}>
             <div className={styles.detail}>

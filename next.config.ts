@@ -16,7 +16,11 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    domains: ['picsum.photos', 'placehold.co', 'ticketmate.site'],
+    domains: [
+      'picsum.photos',
+      'ticketmate.site',
+      'ticketmate-storage.s3.ap-northeast-2.amazonaws.com',
+    ],
   },
 };
 

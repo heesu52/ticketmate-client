@@ -36,9 +36,8 @@
         flex-direction: column;
         align-items: center;
 
-        span {
+        .link {
           @include text-sm;
-
           margin-top: 12px;
           color: var(--textColor-less);
           text-decoration-line: underline;

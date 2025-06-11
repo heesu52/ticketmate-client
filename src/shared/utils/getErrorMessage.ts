@@ -12,10 +12,14 @@ const AUTH_ERROR_CODES = new Set([
   'COOKIES_NOT_FOUND',
 ]);
 
-export const getErrorMessage = (errorCode: string): string => {
-  if (AUTH_ERROR_CODES.has(errorCode)) {
+export const getErrorMessage = (errorCode?: string): string => {
+  if (AUTH_ERROR_CODES.has(errorCode ?? '')) {
     return ERROR_MESSAGES['AUTH_RETRY_REQUIRED'];
   }
 
-  return ERROR_MESSAGES[errorCode] ?? '알 수 없는 에러가 발생했습니다.';
+  if (errorCode && ERROR_MESSAGES[errorCode]) {
+    return ERROR_MESSAGES[errorCode];
+  }
+
+  return '알 수 없는 에러가 발생했습니다.';
 };

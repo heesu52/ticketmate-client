@@ -21,7 +21,6 @@ import styles from './form.module.scss';
 interface ConcertInfoProps {
   concertItem: Concert;
   ticketOpenType: TicketOpenType;
-  concertId: string;
 }
 
 const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {

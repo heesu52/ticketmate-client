@@ -9,7 +9,7 @@ import {
   TICKET_SITE_LABEL_MAP,
 } from '@/shared/constants/type-mapping';
 import { TicketReservationSite, TicketOpenType, Concert } from '@/shared/types';
-import { formatDate } from '@/shared/utils/dates';
+import { formatDate, getPerformancePeriod } from '@/shared/utils/dates';
 import {
   getTicketOpenInfoByType,
   getPreOpenInfo,
@@ -41,16 +41,9 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
   const siteLabel = TICKET_SITE_LABEL_MAP[sitekey] ?? '기타';
 
   //공연 시작 날짜, 종료날짜 계산
-  const sortedDates = (concertDateInfoResponseList || [])
-    .slice()
-    .sort(
-      (a, b) =>
-        new Date(a.performanceDate).getTime() -
-        new Date(b.performanceDate).getTime(),
-    );
-
-  const startDate = sortedDates[0]?.performanceDate;
-  const endDate = sortedDates[sortedDates.length - 1]?.performanceDate;
+  const { startDate, endDate } = getPerformancePeriod(
+    concertDateInfoResponseList,
+  );
 
   // 선택된 티켓 오픈 정보
   const preOpen = getPreOpenInfo(ticketOpenDateInfoResponses ?? []);

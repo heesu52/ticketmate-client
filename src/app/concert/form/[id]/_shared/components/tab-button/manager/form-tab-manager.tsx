@@ -103,7 +103,7 @@ export default function FormTabManager({
     );
 
     const requestBody = {
-      agentId: 'a618fdf6-fa1d-431e-bbea-d3e4494e10f1',
+      agentId: '194641e9-84da-43fb-a763-6ef41710f714',
       concertId,
       ticketOpenType,
       applicationFormDetailRequestList,
@@ -115,16 +115,9 @@ export default function FormTabManager({
         handleOpenModal();
       },
       onError: (error: unknown) => {
-        const errorData = (
-          error as { data?: { errorCode?: string; errormessage?: string } }
-        )?.data;
-
-        const code = errorData?.errorCode;
+        const code = error instanceof Error ? error.message : undefined;
         const message =
-          errorData?.errormessage ||
-          (code && ERROR_MESSAGES[code]) ||
-          '알 수 없는 오류가 발생했습니다.';
-
+          (code && ERROR_MESSAGES[code]) || '알 수 없는 오류가 발생했습니다.';
         onError(message);
       },
     });

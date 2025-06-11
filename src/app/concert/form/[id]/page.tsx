@@ -62,11 +62,7 @@ export default function Page({
       <div className={styles.container}>
         {concertItem && (
           <>
-            <Form
-              concertItem={concertItem}
-              ticketOpenType={ticketOpenType}
-              concertId={id}
-            />
+            <Form concertItem={concertItem} ticketOpenType={ticketOpenType} />
             <FormTabManager
               handleOpenModal={handleOpenModal}
               concertItem={concertItem}

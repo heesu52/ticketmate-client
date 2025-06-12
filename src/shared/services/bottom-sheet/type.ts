@@ -1,4 +1,4 @@
-type TicketOpenType = 'GENERAL_OPEN' | 'PRE_OPEN';
+import { TicketOpenType } from '@/shared/types/concert';
 
 interface CheckDuplicateFormRequest {
   agentId: string; // 대리인 PK (UUID)

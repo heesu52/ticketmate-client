@@ -56,8 +56,12 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
     <div className={styles.container}>
       <div className={styles.title_container}>
         <div className={styles.tag}>
-          {preOpen && <Badge type="type-a">선예매</Badge>}
-          {generalOpen && <Badge type="type-a">일반예매</Badge>}
+          {ticketOpenType === 'PRE_OPEN' && preOpen && (
+            <Badge type="type-a">선예매</Badge>
+          )}
+          {ticketOpenType === 'GENERAL_OPEN' && generalOpen && (
+            <Badge type="type-a">일반예매</Badge>
+          )}
           {matchedOpenInfo?.isBankTransfer ? (
             <Badge type="type-b">무통장 가능</Badge>
           ) : (

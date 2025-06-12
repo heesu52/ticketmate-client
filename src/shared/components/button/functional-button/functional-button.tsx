@@ -17,6 +17,7 @@ export default function Button({
   return (
     <button
       className={`${styles.button} ${styles[size]} ${styles[variant]}`}
+      disabled={variant === 'fill-disabled' || props.disabled}
       {...props}
     >
       <span>{children}</span>

@@ -4,13 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Badge from '@/shared/components/badge/badge';
-import { useModal } from '@/shared/components/modal/use-modal';
 import {
   TICKET_SITE_URL_MAP,
   TICKET_SITE_LABEL_MAP,
 } from '@/shared/constants/type-mapping';
 import { TicketReservationSite, TicketOpenType, Concert } from '@/shared/types';
-import { formatDate } from '@/shared/utils/dates';
+import { formatDate, getPerformancePeriod } from '@/shared/utils/dates';
 import {
   getTicketOpenInfoByType,
   getPreOpenInfo,
@@ -18,17 +17,13 @@ import {
 } from '@/shared/utils/tickets';
 
 import styles from './form.module.scss';
-import FormModal from '../form-modal/form-modal';
-import FormTabManager from '../tab-button/manager/form-tab-manager';
 
 interface ConcertInfoProps {
   concertItem: Concert;
   ticketOpenType: TicketOpenType;
-  concertId: string;
 }
 
-const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
-  const { open, closeTop } = useModal();
+const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
   const {
     concertName,
     concertHallName,
@@ -45,16 +40,9 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
   const siteLabel = TICKET_SITE_LABEL_MAP[sitekey] ?? '기타';
 
   //공연 시작 날짜, 종료날짜 계산
-  const sortedDates = (concertDateInfoResponseList || [])
-    .slice()
-    .sort(
-      (a, b) =>
-        new Date(a.performanceDate).getTime() -
-        new Date(b.performanceDate).getTime(),
-    );
-
-  const startDate = sortedDates[0]?.performanceDate;
-  const endDate = sortedDates[sortedDates.length - 1]?.performanceDate;
+  const { startDate, endDate } = getPerformancePeriod(
+    concertDateInfoResponseList,
+  );
 
   // 선택된 티켓 오픈 정보
   const preOpen = getPreOpenInfo(ticketOpenDateInfoResponses ?? []);
@@ -63,43 +51,6 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
     ticketOpenDateInfoResponses,
     ticketOpenType,
   );
-
-  // 최대 예매 매수 구하기
-  const maxCount = matchedOpenInfo?.requestMaxCount ?? 1;
-
-  const countList = Array.from({ length: maxCount }, (_, i) => ({
-    value: (i + 1).toString(),
-    label: `${i + 1}매`,
-  }));
-
-  // 공연 날짜 리스트
-  const dateList = concertDateInfoResponseList.map((item) => {
-    const formatted = formatDate(item.performanceDate);
-    return {
-      value: item.performanceDate, // 원본 날짜 값 사용
-      label: `${formatted} (${item.session}회차)`,
-    };
-  });
-
-  const handleOpenModal = () => {
-    open({
-      id: 'form-modal',
-      content: (
-        <FormModal
-          title="일반예매 신청이 완료되었습니다."
-          message={`대리인이 수락하게 되면 매칭이 완료됩니다.\n매칭이 완료되면 채팅을 통해 이야기를 나눠보세요.`}
-          onConfirm={async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            closeTop();
-          }}
-          onCancel={() => {
-            closeTop();
-          }}
-          concertId={concertId}
-        />
-      ),
-    });
-  };
 
   return (
     <div className={styles.container}>
@@ -151,13 +102,6 @@ const Form = ({ concertItem, ticketOpenType, concertId }: ConcertInfoProps) => {
           </div>
         </div>
       </div>
-      <FormTabManager
-        handleOpenModal={handleOpenModal}
-        dateList={dateList}
-        countList={countList}
-        ticketOpenType={ticketOpenType}
-        concertId={concertId}
-      />
     </div>
   );
 };

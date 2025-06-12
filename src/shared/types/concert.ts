@@ -56,4 +56,5 @@ export type {
   Concert,
   TicketOpenType,
   TicketOpenDateInfo,
+  ConcertDateInfo,
 };

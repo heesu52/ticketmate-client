@@ -69,11 +69,32 @@ const instance = httpClient({
           }
         }
 
-        const errorText = await response.text();
-        throw new Error(`HTTP error ${response.status}: ${errorText}`);
+        // 에러 응답 처리
+        let errorCode: string | undefined = undefined;
+        try {
+          const text = await response.text();
+          if (text) {
+            const errorData = JSON.parse(text);
+            errorCode = errorData.errorCode;
+          }
+        } catch {
+          // JSON 파싱 실패 시 errorCode는 undefined
+        }
+
+        throw new Error(errorCode ?? 'UNKNOWN_ERROR');
+      }
+      // 정상 응답 처리
+      const text = await response.text();
+
+      if (!text) {
+        return {} as T;
       }
 
-      return response.json() as Promise<T>;
+      try {
+        return JSON.parse(text) as T;
+      } catch {
+        throw new Error('Response JSON parsing failed');
+      }
     },
   },
 });

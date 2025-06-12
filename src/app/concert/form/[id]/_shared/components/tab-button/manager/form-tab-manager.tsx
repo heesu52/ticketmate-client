@@ -123,7 +123,6 @@ export default function FormTabManager({
     });
   };
 
-  //현재 ticketopentype을 찾을 수 없다는 에러가 발생하고 있음 이부분 해결하고 pr날리기
   return (
     <div className={styles.container}>
       <div className={styles.tab_container}>

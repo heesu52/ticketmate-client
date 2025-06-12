@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { StarIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { useCheckDuplicateForm } from '@/shared/services/bottom-sheet/mutation';
-import { Concert } from '@/shared/types';
+import { Concert, TicketOpenType } from '@/shared/types';
 
 import styles from './bottom-sheet.module.scss';
 
@@ -36,10 +36,9 @@ const BottomSheet = ({
   );
 
   // 각 타입별로 중복 여부 관리
-  const [isDuplicateMap, setIsDuplicateMap] = useState<{
-    PRE_OPEN?: boolean;
-    GENERAL_OPEN?: boolean;
-  }>({});
+  const [isDuplicateMap, setIsDuplicateMap] = useState<
+    Record<TicketOpenType, boolean>
+  >({ PRE_OPEN: false, GENERAL_OPEN: false });
 
   //선예매/일반예매를 분리해서 중복확인
   const { mutate: checkPreOpen } = useCheckDuplicateForm();
@@ -112,12 +111,7 @@ const BottomSheet = ({
       <div className={styles.button_container}>
         {preOpen &&
           (isDuplicateMap.PRE_OPEN ? (
-            <Button
-              size="large"
-              variant="fill-disabled"
-              onClick={onClose}
-              disabled
-            >
+            <Button size="large" variant="fill-disabled" onClick={onClose}>
               신청된 요청입니다
             </Button>
           ) : (
@@ -130,12 +124,7 @@ const BottomSheet = ({
 
         {generalOpen &&
           (isDuplicateMap.GENERAL_OPEN ? (
-            <Button
-              size="large"
-              variant="fill-disabled"
-              onClick={onClose}
-              disabled
-            >
+            <Button size="large" variant="fill-disabled" onClick={onClose}>
               신청된 요청입니다
             </Button>
           ) : (

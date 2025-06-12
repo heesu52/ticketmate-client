@@ -9,9 +9,6 @@ const BASE_URL = '/application';
 const createConcertForm = async (request: CreateConcertFormRequest) => {
   const data = await instance(`${BASE_URL}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify(request),
   });
 

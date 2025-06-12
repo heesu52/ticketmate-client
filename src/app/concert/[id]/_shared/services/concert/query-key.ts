@@ -1,4 +1,4 @@
-import { GetConcertDetailRequest } from '@/app/concert/[id]/_shared/services/type';
+import { GetConcertDetailRequest } from './type';
 
 const queryKey = {
   getConcertDetail: (request?: GetConcertDetailRequest) => [

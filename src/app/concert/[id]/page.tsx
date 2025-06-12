@@ -5,19 +5,21 @@ import { use, useEffect, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
+import BottomSheet from '@/app/concert/[id]/_shared/components/bottom-sheet/bottom-sheet';
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
 import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
-import BottomSheet from '@/shared/components/bottom-sheet/bottom-sheet';
+import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import Overlay from '@/shared/components/overlay/overlay';
 
-import { useGetConcertDetail } from './_shared/services/query';
 import styles from './page.module.scss';
+
+const FIXED_AGENT_ID = '194641e9-84da-43fb-a763-6ef41710f714';
 
 // Mock API 호출 함수
 const handleGetCard = async (pageParam: number) => {
   const mockData = Array.from({ length: 10 }, (_, index) => ({
-    id: pageParam * 10 + index + 1,
+    agentId: FIXED_AGENT_ID,
     name: `대리인 닉네임 ${pageParam * 10 + index + 1}`,
     profileImage:
       'https://fastly.picsum.photos/id/515/320/200.jpg?hmac=d24pyllgU-WPlvGiChI8O4t8Wc2P3I67c3hVWDCLA-4',
@@ -35,8 +37,15 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   );
 
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
+  };
+
+  const handleUserCardClick = (agentId: string) => {
+    setSelectedAgentId(agentId);
+    setIsBottomSheetOpen(true);
   };
 
   const { ref, inView } = useInView();
@@ -73,7 +82,13 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           <span>원하는 대리인에게 요청해보세요!</span>
           {userData?.pages.map((page) =>
             page.map((user) => (
-              <UserCard key={user.id} user={user} onClick={toggleBottomSheet} />
+              // <UserCard key={user.agentId} user={user} onClick={toggleBottomSheet} />
+              //agentId를 고정해놔서 수정한 코드, 추후에 위의 코드로 바꿔놓을 예정
+              <UserCard
+                key={`${user.agentId}-${user.name}`}
+                user={user}
+                onClick={() => handleUserCardClick(user.agentId)}
+              />
             )),
           )}
 
@@ -90,6 +105,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           isOpen={isBottomSheetOpen}
           concertItem={concertItem}
           concertId={id}
+          agentId={selectedAgentId ?? ''}
         />
       </div>
     </>

@@ -4,7 +4,7 @@ import styles from './functional-button.module.scss';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'large' | 'medium' | 'small';
-  variant?: 'border' | 'fill' | 'back';
+  variant?: 'border' | 'fill' | 'back' | 'fill-disabled';
   children: ReactNode;
 }
 
@@ -17,6 +17,7 @@ export default function Button({
   return (
     <button
       className={`${styles.button} ${styles[size]} ${styles[variant]}`}
+      disabled={variant === 'fill-disabled' || props.disabled}
       {...props}
     >
       <span>{children}</span>

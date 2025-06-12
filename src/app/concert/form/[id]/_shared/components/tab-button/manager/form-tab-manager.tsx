@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 
 import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
+import FormTabButton from '@/app/concert/form/[id]/_shared/components/tab-button/button/form-tab-button';
 import { useCreateConcertForm } from '@/app/concert/form/[id]/_shared/services/mutation';
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
@@ -10,7 +11,6 @@ import { TicketOpenType, Concert } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
-import FormTabButton from '../button/form-tab-button';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;

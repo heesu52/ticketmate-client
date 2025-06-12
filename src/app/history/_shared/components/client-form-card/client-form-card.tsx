@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/query';
+import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
 import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';

@@ -14,7 +14,7 @@ import Overlay from '@/shared/components/overlay/overlay';
 import { useGetConcertDetail } from './_shared/services/query';
 import styles from './page.module.scss';
 
-const FIXED_AGENT_ID = 'a618fdf6-fa1d-431e-bbea-d3e4494e10f1';
+const FIXED_AGENT_ID = '194641e9-84da-43fb-a763-6ef41710f714';
 
 // Mock API 호출 함수
 const handleGetCard = async (pageParam: number) => {

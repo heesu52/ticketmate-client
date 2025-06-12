@@ -5,13 +5,13 @@ import { use, useEffect, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
+import BottomSheet from '@/app/concert/[id]/_shared/components/bottom-sheet/bottom-sheet';
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
 import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
-import BottomSheet from '@/shared/components/bottom-sheet/bottom-sheet';
+import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import Overlay from '@/shared/components/overlay/overlay';
 
-import { useGetConcertDetail } from './_shared/services/query';
 import styles from './page.module.scss';
 
 const FIXED_AGENT_ID = '194641e9-84da-43fb-a763-6ef41710f714';

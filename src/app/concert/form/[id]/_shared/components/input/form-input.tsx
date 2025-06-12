@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 
+import FormSelect from '@/app/concert/form/[id]/_shared/components/select/form-select';
 import { MinusIcon, PlusIcon, HelpCircleIcon } from '@/assets/icons';
 import Input from '@/shared/components/input/input';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
@@ -13,7 +14,6 @@ import { getTicketOpenInfoByType } from '@/shared/utils/tickets';
 
 import styles from './form-input.module.scss';
 import { FormData, HopeArea } from './form-input.type';
-import FormSelect from '../select/form-select';
 
 interface FormInputProps {
   value: FormData;

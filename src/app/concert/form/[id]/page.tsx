@@ -1,16 +1,16 @@
 'use client';
 import { use } from 'react';
 
+import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
+import Form from '@/app/concert/form/[id]/_shared/components/form/form';
+import FormModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-modal';
 import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import { useModal } from '@/shared/components/modal/use-modal';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
 import { TicketOpenType } from '@/shared/types';
 
-import Form from './_shared/components/form/form';
-import FormModal from './_shared/components/form-modal/form-modal';
-import styles from './page.module.scss';
-import { useGetConcertDetail } from '../../[id]/_shared/services/query';
 import FormTabManager from './_shared/components/tab-button/manager/form-tab-manager';
+import styles from './page.module.scss';
 
 export default function Page({
   params,

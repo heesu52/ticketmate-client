@@ -1,9 +1,9 @@
 'use client';
 
+import AgentFormCard from '@/app/history/_shared/components/agent-form-card/agent-form-card';
 import { useGetFormList } from '@/app/history/_shared/services/query';
 
 import styles from './history-list.module.scss';
-import AgentFormCard from '../agent-form-card/agent-form-card';
 
 interface HistoryListProps {
   tab: 'current' | 'past';

@@ -81,6 +81,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             />
           </button>
         }
+        isDynamicColor={true}
       />
 
       <Overlay isOpen={isBottomSheetOpen} onClose={toggleBottomSheet} />

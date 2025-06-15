@@ -47,20 +47,14 @@ const BottomSheet = ({
       </div>
       <div className={styles.button_container}>
         {preOpen && (
-          <Link
-            href={`/concert/form/${concertId}?ticketOpenType=PRE_OPEN`}
-            scroll={false}
-          >
+          <Link href={`/concert/form/${concertId}?ticketOpenType=PRE_OPEN`}>
             <Button size="large" variant="fill" onClick={onClose}>
               선예매 요청하기
             </Button>
           </Link>
         )}
         {generalOpen && (
-          <Link
-            href={`/concert/form/${concertId}?ticketOpenType=GENERAL_OPEN`}
-            scroll={false}
-          >
+          <Link href={`/concert/form/${concertId}?ticketOpenType=GENERAL_OPEN`}>
             <Button size="large" variant="border" onClick={onClose}>
               일반예매 요청하기
             </Button>

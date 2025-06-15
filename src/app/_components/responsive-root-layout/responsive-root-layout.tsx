@@ -35,6 +35,7 @@ export default function RootLayout({
         className={cn(
           styles.content,
           isShowBottomNav ? styles.with_nav : styles.without_nav,
+          isShowAppHeader ? styles.with_app_header : '',
         )}
       >
         {children}

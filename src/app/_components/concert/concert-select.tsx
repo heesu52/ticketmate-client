@@ -3,37 +3,37 @@ import { useEffect, useState } from 'react';
 import { FilterListIcon } from '@/assets/icons';
 import Select from '@/shared/components/select/select';
 
-interface SelectList {
-  value: string;
-  label: string;
-  disabled?: boolean;
-}
-
 interface ConcertSelectProps {
-  selectList: SelectList[];
+  onSelect: (value: string) => void;
 }
 
-const ConcertSelect = ({ selectList }: ConcertSelectProps) => {
-  const [selected, setSelected] = useState<string>('');
+const selectList = [
+  {
+    value: 'created_date',
+    label: '최신순',
+  },
+  {
+    value: 'ticket_open_date',
+    label: '오픈일순',
+  },
+];
+const ConcertSelect = ({ onSelect }: ConcertSelectProps) => {
+  const [selected, setSelected] = useState<string>('created_date');
 
   useEffect(() => {
-    console.log('selected', selected);
+    onSelect(selected);
   }, [selected]);
 
   return (
-    <Select onSelect={setSelected} defaultValue="popularity">
+    <Select onSelect={setSelected} defaultValue={selected}>
       <Select.Trigger
-        label="Select Label"
+        label="공연 정렬"
         icon={<FilterListIcon width={20} height={20} />}
       />
       <Select.OptionList listMinWidth="140px">
         {selectList.map((item) => {
           return (
-            <Select.Option
-              value={item.value}
-              key={item.value}
-              disabled={item.disabled}
-            >
+            <Select.Option value={item.value} key={item.value}>
               {item.label}
             </Select.Option>
           );

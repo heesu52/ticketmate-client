@@ -1,6 +1,7 @@
 'use client';
 import { use } from 'react';
 
+import AppBar from '@/shared/components/header/app-bar/app-bar';
 import { TicketOpenType } from '@/shared/types';
 
 import Form from './_shared/components/form/form';
@@ -27,6 +28,8 @@ export default function Page({
 
   return (
     <>
+      <AppBar title="공연 신청" />
+
       <div className={styles.container}>
         {concertItem && (
           <Form

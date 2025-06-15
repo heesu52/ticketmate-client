@@ -8,7 +8,6 @@ import { useInView } from 'react-intersection-observer';
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
 import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
 import BottomSheet from '@/shared/components/bottom-sheet/bottom-sheet';
-import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import Overlay from '@/shared/components/overlay/overlay';
 
 import { useGetConcertDetail } from './_shared/services/query';
@@ -65,7 +64,6 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
       <Overlay isOpen={isBottomSheetOpen} onClose={toggleBottomSheet} />
 
       <div className={styles.container}>
-        <AppBarSetter title="공연 상세 페이지" />
         {concertItem && <ConcertInfo concertItem={concertItem} />}
 
         <div className={styles.list_container}>

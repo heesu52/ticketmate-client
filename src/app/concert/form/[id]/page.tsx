@@ -1,7 +1,6 @@
 'use client';
 import { use } from 'react';
 
-import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import { TicketOpenType } from '@/shared/types';
 
 import Form from './_shared/components/form/form';
@@ -28,8 +27,6 @@ export default function Page({
 
   return (
     <>
-      <AppBarSetter title="신청 양식" />
-
       <div className={styles.container}>
         {concertItem && (
           <Form

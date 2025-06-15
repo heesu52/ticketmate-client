@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import HistoryList from '@/app/history/_shared/components/history-list/history-list';
 import TabButton from '@/shared/components/button/tab-button/tab-button';
-import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 
 import styles from './page.module.scss';
 
@@ -13,8 +12,6 @@ export default function Page() {
 
   return (
     <>
-      <AppBarSetter title="신청 내역" />
-
       <div className={styles.container}>
         <div className={styles.button_container}>
           <TabButton

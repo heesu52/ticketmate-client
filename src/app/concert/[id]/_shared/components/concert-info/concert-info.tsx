@@ -6,7 +6,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Badge from '@/shared/components/badge/badge';
-import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 import { useAppBarStore } from '@/shared/components/header/app-bar/use-app-bar-store';
 import {
   TICKET_SITE_URL_MAP,
@@ -75,10 +74,6 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
   return (
     <>
       <div className={styles.container}>
-        <AppBarSetter
-          title="공연 상세 페이지"
-          backgroundColor={isScrolled ? 'white' : 'transparent'}
-        />
         <div className={styles.background_container}>
           <Image
             className={styles.background_image}

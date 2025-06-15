@@ -1,19 +1,32 @@
 'use client';
 
+import { ReactNode } from 'react';
+
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 
-import { LeftArrowIcon, ShareIcon } from '@/assets/icons';
-import { useAppBarStore } from '@/shared/components/header/app-bar/use-app-bar-store';
+import { LeftArrowIcon } from '@/assets/icons';
 
 import styles from './app-bar.module.scss';
 
 const cn = classNames.bind(styles);
 
-const AppBar = () => {
-  const { title, backURL, hasShareButton, backgroundColor } = useAppBarStore();
+interface AppBarProps {
+  title: string;
+  backURL?: string;
+  action?: ReactNode;
+  hasBackground?: boolean;
+}
+
+const AppBar = ({
+  title,
+  backURL,
+  action,
+  hasBackground = true,
+}: AppBarProps) => {
   const router = useRouter();
 
+  // 뒤로가기 버튼
   const handleBack = () => {
     if (backURL) {
       router.push(backURL);
@@ -22,17 +35,8 @@ const AppBar = () => {
     }
   };
 
-  const handleShare = () => {
-    console.log('more');
-  };
-
   return (
-    <div
-      className={cn(
-        styles.container,
-        backgroundColor && styles[backgroundColor],
-      )}
-    >
+    <div className={cn(styles.container)}>
       <div className={cn(styles.left_container)}>
         <button
           className={styles.back_button}
@@ -42,35 +46,13 @@ const AppBar = () => {
           <LeftArrowIcon
             width={16}
             height={16}
-            fill={
-              backgroundColor === 'transparent'
-                ? `var(--white)`
-                : `var(--textColor-main)`
-            }
+            fill={hasBackground ? `var(--white)` : `var(--textColor-main)`}
           />
           {title && <span className={styles.title}>{title}</span>}
         </button>
       </div>
 
-      <div className={cn(styles.right_container)}>
-        {hasShareButton && (
-          <button
-            className={styles.more_button}
-            onClick={handleShare}
-            aria-label="공유하기"
-          >
-            <ShareIcon
-              width={20}
-              height={20}
-              fill={
-                backgroundColor === 'transparent'
-                  ? `var(--white)`
-                  : `var(--textColor-main)`
-              }
-            />
-          </button>
-        )}
-      </div>
+      <div className={cn(styles.right_container)}>{action}</div>
     </div>
   );
 };

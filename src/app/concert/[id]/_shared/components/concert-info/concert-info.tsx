@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
 import Badge from '@/shared/components/badge/badge';
-import { useAppBarStore } from '@/shared/components/header/app-bar/use-app-bar-store';
 import {
   TICKET_SITE_URL_MAP,
   TICKET_SITE_LABEL_MAP,
@@ -26,8 +25,6 @@ interface ConcertInfoProps {
 }
 
 const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
-  const { setIsShowSpacer } = useAppBarStore();
-
   const [isScrolled, setIsScrolled] = useState(false);
   const {
     concertName,
@@ -51,25 +48,6 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
   //선예매, 일반예매 계산
   const preOpen = getPreOpenInfo(ticketOpenDateInfoResponses ?? []);
   const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponses ?? []);
-
-  useEffect(() => {
-    // 배경 높이 - 앱바 높이
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 247 - 56);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // 스크롤 시 app-bar 와 컨텐츠 간격 조절
-  useEffect(() => {
-    setIsShowSpacer(false);
-
-    return () => {
-      setIsShowSpacer(true);
-    };
-  }, [setIsShowSpacer]);
 
   return (
     <>

@@ -4,6 +4,8 @@
   position: fixed;
   z-index: 20;
   top: 0;
+  left: 0;
+  right: 0;
   margin: 0 auto;
 
   width: 100%;
@@ -45,13 +47,12 @@
   }
 
   // app bar color type
-  &.default {
-    color: var(--textColor-main);
+  &.has_background {
     background: var(--white);
   }
 
   &.transparent {
-    color: var(--white);
     background: transparent;
+    color: var(--white);
   }
 }

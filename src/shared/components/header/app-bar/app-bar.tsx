@@ -36,7 +36,12 @@ const AppBar = ({
   };
 
   return (
-    <div className={cn(styles.container)}>
+    <div
+      className={cn(
+        styles.container,
+        hasBackground ? styles.has_background : styles.transparent,
+      )}
+    >
       <div className={cn(styles.left_container)}>
         <button
           className={styles.back_button}
@@ -46,7 +51,7 @@ const AppBar = ({
           <LeftArrowIcon
             width={16}
             height={16}
-            fill={hasBackground ? `var(--white)` : `var(--textColor-main)`}
+            fill={hasBackground ? `var(--textColor-main)` : `var(--white)`}
           />
           {title && <span className={styles.title}>{title}</span>}
         </button>

@@ -7,8 +7,11 @@ import { useInView } from 'react-intersection-observer';
 
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
 import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
+import { ShareIcon } from '@/assets/icons';
 import BottomSheet from '@/shared/components/bottom-sheet/bottom-sheet';
+import AppBar from '@/shared/components/header/app-bar/app-bar';
 import Overlay from '@/shared/components/overlay/overlay';
+import { useScroll } from '@/shared/hooks/use-scroll';
 
 import { useGetConcertDetail } from './_shared/services/query';
 import styles from './page.module.scss';
@@ -59,8 +62,27 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
     if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, fetchNextPage]);
 
+  const isScrolled = useScroll({ threshold: 247 - 56 });
   return (
     <>
+      <AppBar
+        hasBackground={isScrolled}
+        title="공연 상세 페이지"
+        action={
+          <button
+            onClick={() => {
+              alert('준비중인 기능입니다.');
+            }}
+          >
+            <ShareIcon
+              width={20}
+              height={20}
+              fill={isScrolled ? 'var(--textColor-main)' : 'var(--white)'}
+            />
+          </button>
+        }
+      />
+
       <Overlay isOpen={isBottomSheetOpen} onClose={toggleBottomSheet} />
 
       <div className={styles.container}>

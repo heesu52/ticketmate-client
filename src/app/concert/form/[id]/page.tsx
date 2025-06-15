@@ -1,13 +1,12 @@
 'use client';
 import { use } from 'react';
 
-import AppBar from '@/shared/components/header/app-bar/app-bar';
+import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import { TicketOpenType } from '@/shared/types';
 
 import Form from './_shared/components/form/form';
 import styles from './page.module.scss';
 import { useGetConcertDetail } from '../../[id]/_shared/services/query';
-
 export default function Page({
   params,
   searchParams,
@@ -28,7 +27,7 @@ export default function Page({
 
   return (
     <>
-      <AppBar title="공연 신청" />
+      <AppBarSetter title="공연 신청" />
 
       <div className={styles.container}>
         {concertItem && (

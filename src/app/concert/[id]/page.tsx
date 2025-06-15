@@ -5,11 +5,11 @@ import { use, useEffect, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
+import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
 import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
 import { ShareIcon } from '@/assets/icons';
 import BottomSheet from '@/shared/components/bottom-sheet/bottom-sheet';
-import AppBar from '@/shared/components/header/app-bar/app-bar';
 import Overlay from '@/shared/components/overlay/overlay';
 import { useScroll } from '@/shared/hooks/use-scroll';
 
@@ -65,7 +65,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const isScrolled = useScroll({ threshold: 247 - 56 });
   return (
     <>
-      <AppBar
+      <AppBarSetter
         hasBackground={isScrolled}
         title="공연 상세 페이지"
         action={

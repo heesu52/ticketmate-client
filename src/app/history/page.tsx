@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
+import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import HistoryList from '@/app/history/_shared/components/history-list/history-list';
 import TabButton from '@/shared/components/button/tab-button/tab-button';
-import AppBar from '@/shared/components/header/app-bar/app-bar';
 
 import styles from './page.module.scss';
 
@@ -13,7 +13,7 @@ export default function Page() {
 
   return (
     <>
-      <AppBar title="신청내역" />
+      <AppBarSetter title="신청내역" />
 
       <div className={styles.container}>
         <div className={styles.button_container}>

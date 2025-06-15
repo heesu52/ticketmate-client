@@ -1,12 +1,11 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 
 import { LeftArrowIcon } from '@/assets/icons';
-import { useAppBarStore } from '@/shared/components/header/app-bar/use-app-bar-store';
 
 import styles from './app-bar.module.scss';
 
@@ -17,7 +16,6 @@ interface AppBarProps {
   backURL?: string;
   action?: ReactNode;
   hasBackground?: boolean;
-  isDynamicColor?: boolean;
 }
 
 const AppBar = ({
@@ -25,20 +23,8 @@ const AppBar = ({
   backURL,
   action,
   hasBackground = true,
-  isDynamicColor = false,
 }: AppBarProps) => {
   const router = useRouter();
-  const { setHasAppBar } = useAppBarStore();
-
-  useEffect(() => {
-    if (isDynamicColor) {
-      setHasAppBar(false);
-    } else {
-      setHasAppBar(hasBackground);
-    }
-
-    return () => setHasAppBar(false);
-  }, [hasBackground, isDynamicColor, setHasAppBar]);
 
   // 뒤로가기 버튼
   const handleBack = () => {

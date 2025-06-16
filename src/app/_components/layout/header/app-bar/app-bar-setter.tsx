@@ -28,7 +28,15 @@ export default function AppBarSetter({
       hasAppBar: true,
     });
 
-    return () => setAppBar({ hasAppBar: false });
+    return () => {
+      setAppBar({
+        hasAppBar: false,
+        title: '',
+        hasBackground: true,
+        isDynamicColor: false,
+        action: null,
+      });
+    };
   }, [setAppBar, title, hasBackground, isDynamicColor, action]);
 
   return null;

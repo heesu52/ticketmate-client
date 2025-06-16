@@ -53,7 +53,7 @@ const ConcertList = () => {
           </div>
           {concertList?.map((concertItem, index) => (
             <div
-              key={index}
+              key={concertItem.concertId}
               ref={
                 index === concertList.length - 1 ? lastElementRef : undefined
               }

@@ -31,7 +31,7 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
 
   return (
     <>
-      <Link href={`concert/${concertId}`}>
+      <Link href={`/concert/${concertId}`}>
         <div className={styles.container}>
           <div className={styles.tag}>
             {ticketPreOpenDate && (

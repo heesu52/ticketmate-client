@@ -23,10 +23,10 @@ export const useAppBarStore = create<AppBarStore>((set) => ({
   hasBackground: true,
   isDynamicColor: false,
   action: null,
-  setAppBar: (options) =>
+  setAppBar: ({ title, ...rest }) =>
     set((state) => ({
       ...state,
-      ...options,
-      appBarTitle: options.title ?? state.appBarTitle,
+      ...rest,
+      appBarTitle: title ?? state.appBarTitle,
     })),
 }));

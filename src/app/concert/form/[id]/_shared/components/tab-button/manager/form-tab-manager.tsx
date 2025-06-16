@@ -2,27 +2,29 @@ import { useCallback, useState } from 'react';
 
 import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
+import FormTabButton from '@/app/concert/form/[id]/_shared/components/tab-button/button/form-tab-button';
 import { useCreateConcertForm } from '@/app/concert/form/[id]/_shared/services/mutation';
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
-import { TicketOpenType } from '@/shared/types';
+import { ERROR_MESSAGES } from '@/shared/constants/error-type';
+import { TicketOpenType, Concert } from '@/shared/types';
+import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
-import FormTabButton from '../button/form-tab-button';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;
-  dateList: { value: string; label: string }[];
-  countList: { value: string; label: string }[];
   ticketOpenType: TicketOpenType;
   concertId: string;
+  onError: (message: string) => void;
+  concertItem: Concert;
 }
 export default function FormTabManager({
   handleOpenModal,
-  dateList,
-  countList,
   ticketOpenType,
   concertId,
+  onError,
+  concertItem,
 }: FormTabManagerProps) {
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
@@ -37,6 +39,21 @@ export default function FormTabManager({
       requestDetails: '',
     },
   });
+
+  const getTabLabel = (tabId: number) => {
+    const tabData = formData[tabId];
+    if (!tabData?.performanceDate) return '회차를 선택해주세요';
+
+    const selectedDateInfo = concertItem.concertDateInfoResponseList.find(
+      (item) => item.performanceDate === tabData.performanceDate,
+    );
+
+    if (!selectedDateInfo) return '회차를 선택해주세요';
+
+    const formatted = formatDate(selectedDateInfo.performanceDate);
+
+    return `${formatted} (${selectedDateInfo.session}회차)`;
+  };
 
   const addNewTab = () => {
     setTabs((prev) => [...prev, nextId]);
@@ -68,14 +85,6 @@ export default function FormTabManager({
     setFormData((prev) => ({ ...prev, [id]: data }));
   }, []);
 
-  const getTabLabel = (tabId: number) => {
-    const tabData = formData[tabId];
-    const selectedDate = dateList.find(
-      (item) => item.value === tabData?.performanceDate,
-    );
-    return selectedDate ? selectedDate.label : '회차를 선택해주세요';
-  };
-
   const { mutate } = useCreateConcertForm();
 
   const handleSubmit = () => {
@@ -94,14 +103,24 @@ export default function FormTabManager({
     );
 
     const requestBody = {
-      agentId: 'a618fdf6-fa1d-431e-bbea-d3e4494e10f1',
+      agentId: '194641e9-84da-43fb-a763-6ef41710f714',
       concertId,
       ticketOpenType,
       applicationFormDetailRequestList,
     };
 
-    console.log('Request Body:', requestBody);
-    mutate(requestBody);
+    // mutate 함수 실행
+    mutate(requestBody, {
+      onSuccess: () => {
+        handleOpenModal();
+      },
+      onError: (error: unknown) => {
+        const code = error instanceof Error ? error.message : undefined;
+        const message =
+          (code && ERROR_MESSAGES[code]) || '알 수 없는 오류가 발생했습니다.';
+        onError(message);
+      },
+    });
   };
 
   return (
@@ -141,8 +160,13 @@ export default function FormTabManager({
               key={tabId}
               value={formData[tabId]}
               onChange={(data) => updateFormData(tabId, data)}
-              dateList={dateList}
-              countList={countList}
+              concertDateInfoResponseList={
+                concertItem.concertDateInfoResponseList
+              }
+              ticketOpenDateInfoResponses={
+                concertItem.ticketOpenDateInfoResponses
+              }
+              ticketOpenType={ticketOpenType}
             />
           ) : null,
         )}
@@ -153,7 +177,6 @@ export default function FormTabManager({
         variant="fill"
         onClick={() => {
           handleSubmit(); // 제출 처리
-          handleOpenModal(); // 모달 열기
         }}
       >
         신청하기

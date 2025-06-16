@@ -1,8 +1,6 @@
-import {
-  GetConcertDetailRequest,
-  GetConcertDetailResponse,
-} from '@/app/concert/[id]/_shared/services/type';
 import instance from '@/shared/services/instance';
+
+import { GetConcertDetailRequest, GetConcertDetailResponse } from './type';
 
 const BASE_URL = '/concert';
 

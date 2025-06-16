@@ -7,7 +7,5 @@ export const useCreateConcertForm = () => {
   return useMutation({
     mutationFn: (request: CreateConcertFormRequest) =>
       createConcertForm(request),
-    onSuccess: () => {},
-    onError: () => {},
   });
 };

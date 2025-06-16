@@ -1,25 +1,34 @@
 import { useEffect, useState, useRef } from 'react';
 
+import FormSelect from '@/app/concert/form/[id]/_shared/components/select/form-select';
 import { MinusIcon, PlusIcon, HelpCircleIcon } from '@/assets/icons';
 import Input from '@/shared/components/input/input';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
+import {
+  ConcertDateInfo,
+  TicketOpenDateInfo,
+  TicketOpenType,
+} from '@/shared/types';
+import { formatDate } from '@/shared/utils/dates';
+import { getTicketOpenInfoByType } from '@/shared/utils/tickets';
 
 import styles from './form-input.module.scss';
 import { FormData, HopeArea } from './form-input.type';
-import FormSelect from '../select/form-select';
 
 interface FormInputProps {
   value: FormData;
   onChange: (data: FormData) => void;
-  dateList: { value: string; label: string }[];
-  countList: { value: string; label: string }[];
+  concertDateInfoResponseList: ConcertDateInfo[];
+  ticketOpenDateInfoResponses: TicketOpenDateInfo[];
+  ticketOpenType: TicketOpenType;
 }
 
 export default function FormInput({
   value,
   onChange,
-  dateList,
-  countList,
+  concertDateInfoResponseList,
+  ticketOpenDateInfoResponses,
+  ticketOpenType,
 }: FormInputProps) {
   const [hopeAreaList, setHopeAreaList] = useState<HopeArea[]>(
     value?.hopeAreaList || [{ id: 1, location: '', price: '' }],
@@ -69,6 +78,28 @@ export default function FormInput({
       ),
     );
   };
+
+  // 공연 날짜 리스트
+  const dateList = concertDateInfoResponseList.map((item) => {
+    const formatted = formatDate(item.performanceDate);
+    return {
+      value: item.performanceDate, // 원본 날짜 값 사용
+      label: `${formatted} (${item.session}회차)`,
+    };
+  });
+
+  const matchedOpenInfo = getTicketOpenInfoByType(
+    ticketOpenDateInfoResponses,
+    ticketOpenType,
+  );
+
+  // 최대 예매 매수 구하기
+  const maxCount = matchedOpenInfo?.requestMaxCount ?? 1;
+
+  const countList = Array.from({ length: maxCount }, (_, i) => ({
+    value: (i + 1).toString(),
+    label: `${i + 1}매`,
+  }));
 
   return (
     <div className={styles.container}>

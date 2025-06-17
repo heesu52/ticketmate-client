@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 
-import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
 import FormTabButton from '@/app/concert/form/[id]/_shared/components/tab-button/button/form-tab-button';
 import { useCreateConcertForm } from '@/app/concert/form/[id]/_shared/services/mutation';
@@ -11,6 +10,7 @@ import { TicketOpenType, Concert } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
+import FormReadOnly from '../../readonlyinput/form-readonly';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;
@@ -152,35 +152,36 @@ export default function FormTabManager({
           rightIcon={<PlusIcon width={16} height={16} />}
         />
       </div>
-
-      <div>
-        {tabs.map((tabId) =>
-          activeTab === tabId ? (
-            <FormInput
-              key={tabId}
-              value={formData[tabId]}
-              onChange={(data) => updateFormData(tabId, data)}
-              concertDateInfoResponseList={
-                concertItem.concertDateInfoResponseList
-              }
-              ticketOpenDateInfoResponses={
-                concertItem.ticketOpenDateInfoResponses
-              }
-              ticketOpenType={ticketOpenType}
-            />
-          ) : null,
-        )}
+      <div className={styles.input_container}>
+        <div>
+          {tabs.map((tabId) =>
+            activeTab === tabId ? (
+              <FormReadOnly
+                key={tabId}
+                value={formData[tabId]}
+                onChange={(data) => updateFormData(tabId, data)}
+                concertDateInfoResponseList={
+                  concertItem.concertDateInfoResponseList
+                }
+                ticketOpenDateInfoResponses={
+                  concertItem.ticketOpenDateInfoResponses
+                }
+                ticketOpenType={ticketOpenType}
+              />
+            ) : null,
+          )}
+        </div>
+        <Button
+          type="button"
+          size="large"
+          variant="fill"
+          onClick={() => {
+            handleSubmit(); // 제출 처리
+          }}
+        >
+          신청하기
+        </Button>
       </div>
-      <Button
-        type="button"
-        size="large"
-        variant="fill"
-        onClick={() => {
-          handleSubmit(); // 제출 처리
-        }}
-      >
-        신청하기
-      </Button>
     </div>
   );
 }

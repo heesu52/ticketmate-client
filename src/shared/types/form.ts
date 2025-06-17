@@ -1,4 +1,9 @@
-type ApplicationFormStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXPIRED';
+type ApplicationFormStatus =
+  | 'PENDING'
+  | 'REJECTED'
+  | 'CANCELED'
+  | 'ACCEPTED'
+  | 'CANCELED_IN_PROCESS';
 
 interface Form {
   applicationFormId: string;

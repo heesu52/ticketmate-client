@@ -65,15 +65,15 @@
       color: var(--textColor-less);
       text-decoration: underline;
     }
-    .default {
+    .pendding {
       @include title-sm;
       color: var(--textColor-main);
     }
-    .approved {
+    .accepted {
       @include title-sm;
       color: var(--subColor-main);
     }
-    .rejected {
+    .canceled {
       @include title-sm;
       justify-content: flex-end;
       color: var(--brandColor-main);

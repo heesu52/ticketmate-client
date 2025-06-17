@@ -40,8 +40,6 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
   const statusKey = applicationFormStatus as ApplicationFormStatus;
   const statusLabel = APPLICATION_STATUS_LABEL_MAP[statusKey] ?? '';
 
-  const isCurrent = applicationFormStatus === 'PENDING';
-
   const handleOpenCancelModal = () => {
     open({
       id: MODAL_ID.CANCEL_MODAL,
@@ -109,29 +107,24 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
         </div>
       </Link>
       <div className={styles.footer_container}>
-        {isCurrent ? (
+        {statusKey === 'ACCEPTED' ? (
+          <>
+            <a className={styles.link} href="/chat">
+              채팅하기
+            </a>
+            <span className={styles.accepted}>{statusLabel}</span>
+          </>
+        ) : statusKey === 'PENDING' ? (
           <>
             <button className={styles.link} onClick={handleOpenCancelModal}>
               신청취소
             </button>
-            <span className={styles.default}>{statusLabel}</span>
+            <span className={styles.pendding}>{statusLabel}</span>
           </>
         ) : (
           <>
-            {statusKey === 'APPROVED' && (
-              <>
-                <a className={styles.link} href="/chat">
-                  채팅하기
-                </a>
-                <span className={styles.approved}>{statusLabel}</span>
-              </>
-            )}
-            {statusKey === 'REJECTED' && (
-              <>
-                <button onClick={handleOpenReasonModal} />
-                <span className={styles.rejected}>{statusLabel}</span>
-              </>
-            )}
+            <button onClick={handleOpenReasonModal} />
+            <span className={styles.canceled}>{statusLabel}</span>
           </>
         )}
       </div>

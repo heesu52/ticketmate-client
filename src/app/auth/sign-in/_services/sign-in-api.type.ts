@@ -3,4 +3,10 @@ interface SignInAPIBody {
   password: string;
 }
 
-export type { SignInAPIBody };
+interface SignInAPIResponse {
+  memberType: string;
+  memberId: string;
+  accessToken: string;
+}
+
+export type { SignInAPIBody, SignInAPIResponse };

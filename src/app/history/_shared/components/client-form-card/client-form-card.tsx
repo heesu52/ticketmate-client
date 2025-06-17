@@ -26,6 +26,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
     hopeAreaResponseList,
     requestDetails,
     applicationFormStatus,
+    ticketOpenType,
   } = formItem;
 
   const { data: concertItem } = useGetConcertDetail({ concertId });
@@ -80,7 +81,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
     <div className={styles.container}>
       <Link
         className={styles.upper_container}
-        href={`concert/form/${applicationFormId}`}
+        href={`/concert/form/${applicationFormId}?ticketOpenType=${ticketOpenType}`}
       >
         <div className={styles.title_container}>
           <div className={styles.title}>{concertName}</div>

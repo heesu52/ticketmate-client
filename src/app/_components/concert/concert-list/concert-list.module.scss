@@ -8,7 +8,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 40px;
 
     .title_contanier {
       display: flex;
@@ -29,6 +28,15 @@
           color: var(--textColor-main);
         }
       }
+    }
+  }
+
+  .card_wrapper {
+    width: 100%;
+    border-bottom: 1px solid var(--lineColor-main);
+
+    &:last-child {
+      border-bottom: none;
     }
   }
 }

@@ -1,15 +1,12 @@
 import Link from 'next/link';
 
 import SocialLogin from '@/app/auth/sign-in/_shared/components/social-login/social-login';
-import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
 
 import styles from './page.module.scss';
 
 export default function Page() {
   return (
     <>
-      <AppBarSetter title="로그인" hasShareButton={false} />
-
       <div className={styles.container}>
         <div className={styles.title_container}>
           <span className={styles.title}>로그인</span>

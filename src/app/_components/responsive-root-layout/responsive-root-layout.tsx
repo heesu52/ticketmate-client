@@ -5,11 +5,10 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import { usePathname } from 'next/navigation';
 
-import AppBar from '@/shared/components/header/app-bar/app-bar';
-import { useAppBarStore } from '@/shared/components/header/app-bar/use-app-bar-store';
-import AppHeader from '@/shared/components/header/app-header/app-header';
+import AppBar from '@/app/_components/layout/header/app-bar/app-bar';
+import { useAppBarStore } from '@/app/_components/layout/header/app-bar/use-app-bar-store';
+import AppHeader from '@/app/_components/layout/header/app-header/app-header';
 import BottomNavigation from '@/shared/components/navigation/bottom-navigation/bottom-navigation';
-import Spacer from '@/shared/components/spacer/spacer';
 
 import styles from './responsive-root-layout.module.scss';
 
@@ -20,39 +19,41 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isShowSpacer } = useAppBarStore();
   const pathname = usePathname();
-  const { isShow } = useAppBarStore();
+  const { hasAppBar, appBarTitle, hasBackground, isDynamicColor, action } =
+    useAppBarStore();
 
-  // AppBar 숨길 경로
-  const hiddenAppBarRoutes = ['/', '/404'];
   // BottomNavigation 보여줄 경로
   const showBottomNavRoutes = ['/', '/history'];
 
-  const isShowBottomNav = showBottomNavRoutes.some(
-    (route) => pathname === route,
-  );
+  const hasBottomNav = showBottomNavRoutes.some((route) => pathname === route);
 
-  const isShowAppHeader = pathname === '/';
-  const isShowAppBar =
-    isShow && !hiddenAppBarRoutes.some((route) => pathname === route);
-
-  const spacerSize = isShowAppBar ? 54 : isShowAppHeader ? 56 : 0;
+  const hasAppHeader = pathname === '/';
 
   return (
     <div className={styles.container}>
-      {isShowAppHeader && <AppHeader />}
-      {isShowAppBar && <AppBar />}
+      <header>
+        {hasAppHeader ? (
+          <AppHeader />
+        ) : hasAppBar ? (
+          <AppBar
+            title={appBarTitle}
+            hasBackground={hasBackground}
+            action={action}
+          />
+        ) : null}
+      </header>
       <div
         className={cn(
           styles.content,
-          isShowBottomNav ? styles.with_nav : styles.without_nav,
+          hasBottomNav ? styles.with_nav : styles.without_nav,
+          hasAppHeader ? styles.with_app_header : '',
+          hasAppBar ? (isDynamicColor ? '' : styles.with_app_bar) : '',
         )}
       >
-        {isShowSpacer && <Spacer size={spacerSize} />}
         {children}
       </div>
-      {isShowBottomNav && <BottomNavigation />}
+      {hasBottomNav && <BottomNavigation />}
     </div>
   );
 }

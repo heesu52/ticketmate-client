@@ -5,12 +5,14 @@ import { use, useEffect, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
+import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import BottomSheet from '@/app/concert/[id]/_shared/components/bottom-sheet/bottom-sheet';
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
 import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
-import AppBarSetter from '@/shared/components/header/app-bar/app-bar-setter';
+import { ShareIcon } from '@/assets/icons';
 import Overlay from '@/shared/components/overlay/overlay';
+import { useScroll } from '@/shared/hooks/use-scroll';
 
 import styles from './page.module.scss';
 
@@ -69,12 +71,31 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
     if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, fetchNextPage]);
 
+  const isScrolled = useScroll({ threshold: 247 - 56 });
   return (
     <>
+      <AppBarSetter
+        hasBackground={isScrolled}
+        title="공연 상세 페이지"
+        action={
+          <button
+            onClick={() => {
+              alert('준비중인 기능입니다.');
+            }}
+          >
+            <ShareIcon
+              width={20}
+              height={20}
+              fill={isScrolled ? 'var(--textColor-main)' : 'var(--white)'}
+            />
+          </button>
+        }
+        isDynamicColor={true}
+      />
+
       <Overlay isOpen={isBottomSheetOpen} onClose={toggleBottomSheet} />
 
       <div className={styles.container}>
-        <AppBarSetter title="공연 상세 페이지" />
         {concertItem && <ConcertInfo concertItem={concertItem} />}
 
         <div className={styles.list_container}>

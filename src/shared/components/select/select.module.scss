@@ -50,6 +50,14 @@
       gap: 8px;
       padding: 0;
     }
+
+    &.disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+      background: var(--lineColor-main);
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
   }
 
   .icon {

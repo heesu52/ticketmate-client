@@ -33,6 +33,7 @@ interface SelectContextType {
   setIsOpen: (open: boolean) => void;
   focusedIndex: number; // 현재 포커스된 옵션 인덱스
   setFocusedIndex: (index: number | ((prev: number) => number)) => void;
+  disabled: boolean;
 }
 
 const SelectContext = createContext<SelectContextType | undefined>(undefined);
@@ -51,11 +52,13 @@ interface SelectProps {
   children: ReactNode;
   defaultValue?: string;
   onSelect?: (value: string) => void;
+  disabled?: boolean;
 }
 const Select = ({
   children,
   defaultValue = '',
   onSelect,
+  disabled = false,
 }: SelectProps): JSX.Element => {
   const [selectedValue, setSelectedValue] = useState(defaultValue);
   const [options, setOptions] = useState<OptionType[]>([]);
@@ -95,6 +98,7 @@ const Select = ({
         setIsOpen,
         focusedIndex,
         setFocusedIndex,
+        disabled,
       }}
     >
       <div className={cn('select')} ref={wrapperRef}>
@@ -108,6 +112,7 @@ interface SelectTriggerProps {
   label: string;
   icon?: ReactNode;
   placeholder?: string;
+  disabled?: boolean;
 }
 const SelectTrigger = ({
   label,
@@ -122,6 +127,7 @@ const SelectTrigger = ({
     setIsOpen,
     focusedIndex,
     setFocusedIndex,
+    disabled,
   } = useSelectContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
 
@@ -200,6 +206,7 @@ const SelectTrigger = ({
           'select_trigger',
           !selectedValue ? 'placeholder' : '',
           icon ? 'has_icon' : '',
+          disabled && 'disabled',
         )}
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
@@ -208,14 +215,15 @@ const SelectTrigger = ({
         aria-label={`${label}, 현재 선택: ${selectedLabel}`}
       >
         <span>{selectedLabel}</span>
-        {icon ?? (
-          <BottomArrowIcon
-            className={cn('icon', { open: isOpen })}
-            width={16}
-            height={16}
-            fill="var(--gray-4)"
-          />
-        )}
+        {!disabled &&
+          (icon ?? (
+            <BottomArrowIcon
+              className={cn('icon', { open: isOpen })}
+              width={16}
+              height={16}
+              fill="var(--gray-4)"
+            />
+          ))}
       </button>
     </>
   );

@@ -10,21 +10,31 @@ interface FormSelectProps {
   selectList: SelectList[];
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 }
 
-const FormSelect = ({ selectList, value, onChange }: FormSelectProps) => {
+const FormSelect = ({
+  selectList,
+  value,
+  onChange,
+  disabled,
+}: FormSelectProps) => {
   const selectedLabel =
     selectList.find((item) => item.value === value)?.label || '선택해주세요.';
 
   return (
-    <Select defaultValue={value} onSelect={onChange}>
-      <Select.Trigger label="Select Label" placeholder={selectedLabel} />
+    <Select defaultValue={value} onSelect={onChange} disabled={disabled}>
+      <Select.Trigger
+        label="Select Label"
+        placeholder={selectedLabel}
+        disabled={disabled}
+      />
       <Select.OptionList listMinWidth="140px">
         {selectList.map((item) => (
           <Select.Option
             value={item.value}
             key={item.value}
-            disabled={item.disabled}
+            disabled={disabled || item.disabled}
           >
             {item.label}
           </Select.Option>

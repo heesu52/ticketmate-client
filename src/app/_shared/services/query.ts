@@ -7,15 +7,15 @@ import { GetConcertListRequest } from '@/app/_shared/services/type';
 export const useGetConcertList = (request?: GetConcertListRequest) => {
   return useInfiniteQuery({
     queryKey: queryKey.getConcertList(request),
+    initialPageParam: 1,
     queryFn: ({ pageParam = 1 }) =>
       getConcertList({ ...request, pageNumber: pageParam }),
-    getNextPageParam: (pageData) => {
-      const current = pageData.number;
-      const total = pageData.totalPages;
+    getNextPageParam: (lastPage, allPages) => {
+      const current = lastPage.number; // 현재 페이지
+      const total = lastPage.totalPages; // 총 페이지
 
-      return current < total - 1 ? current + 1 : undefined;
+      return current < total - 1 ? allPages.length + 1 : undefined;
     },
-    initialPageParam: request?.pageNumber,
     select: (data) => ({
       content: data?.pages.flatMap((page) => page.content),
       pageParams: data.pageParams,

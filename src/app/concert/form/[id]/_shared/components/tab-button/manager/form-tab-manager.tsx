@@ -10,6 +10,7 @@ import { TicketOpenType, Concert } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
+import FormInput from '../../input/form-input';
 import FormReadOnly from '../../readonlyinput/form-readonly';
 
 interface FormTabManagerProps {
@@ -162,28 +163,44 @@ export default function FormTabManager({
         <div>
           {tabs.map((tabId) =>
             activeTab === tabId ? (
-              <FormReadOnly
-                key={tabId}
-                value={formData[tabId]}
-                onChange={(data) => updateFormData(tabId, data)}
-                concertDateInfoResponseList={
-                  concertItem.concertDateInfoResponseList
-                }
-                ticketOpenDateInfoResponses={
-                  concertItem.ticketOpenDateInfoResponses
-                }
-                ticketOpenType={ticketOpenType}
-              />
+              status ? (
+                <FormReadOnly
+                  key={tabId}
+                  value={formData[tabId]}
+                  onChange={(data) => updateFormData(tabId, data)}
+                  concertDateInfoResponseList={
+                    concertItem.concertDateInfoResponseList
+                  }
+                  ticketOpenDateInfoResponses={
+                    concertItem.ticketOpenDateInfoResponses
+                  }
+                  ticketOpenType={ticketOpenType}
+                />
+              ) : (
+                <FormInput
+                  key={tabId}
+                  value={formData[tabId]}
+                  onChange={(data) => updateFormData(tabId, data)}
+                  concertDateInfoResponseList={
+                    concertItem.concertDateInfoResponseList
+                  }
+                  ticketOpenDateInfoResponses={
+                    concertItem.ticketOpenDateInfoResponses
+                  }
+                  ticketOpenType={ticketOpenType}
+                />
+              )
             ) : null,
           )}
         </div>
+
         {!status && (
           <Button
             type="button"
             size="large"
             variant="fill"
             onClick={() => {
-              handleSubmit(); // 제출 처리
+              handleSubmit();
             }}
           >
             신청하기

@@ -1,5 +1,5 @@
 'use client';
-import { use } from 'react';
+import { use, useEffect } from 'react';
 
 import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
@@ -73,6 +73,14 @@ export default function Page({
       ),
     });
   };
+
+  useEffect(() => {
+    if (status) {
+      customToast({
+        description: `수정 불가능한 양식입니다.`, // 필요한 메시지로 변경하세요
+      });
+    }
+  }, [status]);
 
   return (
     <>

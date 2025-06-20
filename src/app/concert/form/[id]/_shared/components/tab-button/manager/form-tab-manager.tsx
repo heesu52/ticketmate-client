@@ -18,6 +18,7 @@ interface FormTabManagerProps {
   concertId: string;
   onError: (message: string) => void;
   concertItem: Concert;
+  status: string;
 }
 export default function FormTabManager({
   handleOpenModal,
@@ -25,6 +26,7 @@ export default function FormTabManager({
   concertId,
   onError,
   concertItem,
+  status,
 }: FormTabManagerProps) {
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
@@ -133,24 +135,28 @@ export default function FormTabManager({
             isActive={activeTab === tabId}
             onClick={() => setActiveTab(tabId)}
             rightIcon={
-              <div
-                className={styles.icon}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeTab(tabId);
-                }}
-              >
-                <CloseIcon width={16} height={16} />
-              </div>
+              !status && (
+                <div
+                  className={styles.icon}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeTab(tabId);
+                  }}
+                >
+                  <CloseIcon width={16} height={16} />
+                </div>
+              )
             }
           />
         ))}
-        <FormTabButton
-          label="추가하기"
-          isActive={false}
-          onClick={addNewTab}
-          rightIcon={<PlusIcon width={16} height={16} />}
-        />
+        {!status && (
+          <FormTabButton
+            label="추가하기"
+            isActive={false}
+            onClick={addNewTab}
+            rightIcon={<PlusIcon width={16} height={16} />}
+          />
+        )}
       </div>
       <div className={styles.input_container}>
         <div>
@@ -171,16 +177,18 @@ export default function FormTabManager({
             ) : null,
           )}
         </div>
-        <Button
-          type="button"
-          size="large"
-          variant="fill"
-          onClick={() => {
-            handleSubmit(); // 제출 처리
-          }}
-        >
-          신청하기
-        </Button>
+        {!status && (
+          <Button
+            type="button"
+            size="large"
+            variant="fill"
+            onClick={() => {
+              handleSubmit(); // 제출 처리
+            }}
+          >
+            신청하기
+          </Button>
+        )}
       </div>
     </div>
   );

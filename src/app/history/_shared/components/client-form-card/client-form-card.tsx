@@ -81,7 +81,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
     <div className={styles.container}>
       <Link
         className={styles.upper_container}
-        href={`/concert/form/${applicationFormId}?ticketOpenType=${ticketOpenType}`}
+        href={`/concert/form/${applicationFormId}?ticketOpenType=${ticketOpenType}&status=${applicationFormStatus}`}
       >
         <div className={styles.title_container}>
           <div className={styles.title}>{concertName}</div>

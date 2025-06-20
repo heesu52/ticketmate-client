@@ -1,3 +1,5 @@
+import { Form } from '@/shared/types';
+
 interface HopeArea {
   priority: number; // 우선순위
   location: string; // 구역명
@@ -21,4 +23,14 @@ interface CreateConcertFormRequest {
   ticketOpenType: TicketOpenType; // 선예매 여부
 }
 
-export type { CreateConcertFormRequest };
+interface GetFormDetailRequest {
+  applicationFormId: string; // 폼ID [필수]
+}
+
+type GetFormDetailResponse = Form;
+
+export type {
+  CreateConcertFormRequest,
+  GetFormDetailRequest,
+  GetFormDetailResponse,
+};

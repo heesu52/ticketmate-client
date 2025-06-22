@@ -30,6 +30,8 @@ export default function RootLayout({
 
   const hasAppHeader = pathname === '/';
 
+  const hasNoPadding = pathname.includes('/chat/');
+
   return (
     <div className={styles.container}>
       <header>
@@ -49,6 +51,7 @@ export default function RootLayout({
           hasBottomNav ? styles.with_nav : styles.without_nav,
           hasAppHeader ? styles.with_app_header : '',
           hasAppBar ? (isDynamicColor ? '' : styles.with_app_bar) : '',
+          hasNoPadding ? styles.no_padding : '',
         )}
       >
         {children}

@@ -1,0 +1,72 @@
+@use '@/styles/index' as *;
+
+.container {
+  position: sticky;
+  top: 54px;
+  z-index: 10;
+  background: var(--white);
+  border-bottom: 1px solid var(--lineColor-sub, #ccc);
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .chat_header {
+    display: flex;
+    justify-content: space-between;
+
+    cursor: pointer;
+    text-align: left;
+
+    .profile_info {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+
+      .profile_image {
+        border-radius: 50%;
+        border: 1px solid var(--lineColor-sub, #ccc);
+      }
+
+      .concert_name {
+        @include title-sm;
+        color: var(--textColor-main, #333);
+      }
+    }
+
+    .arrow_icon {
+      transition: transform 0.3s ease;
+      transform: rotate(180deg);
+
+      &.open {
+        transform: rotate(0deg);
+      }
+    }
+  }
+
+  .content_panel {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .content_item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .label {
+        @include text-xs;
+        color: var(--textColor-less, #767676);
+      }
+
+      .value {
+        @include text-md;
+
+        &.colored {
+          color: var(--subColor-main, #2097bd);
+        }
+      }
+    }
+  }
+}

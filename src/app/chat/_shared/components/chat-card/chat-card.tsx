@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import Badge from '@/shared/components/badge/badge';
 
@@ -20,8 +21,17 @@ interface ChatCardProps {
 }
 
 const ChatCard = ({ chat }: ChatCardProps) => {
+  const router = useRouter();
+
+  const handleChatClick = (chatRoomId: number) => {
+    router.push(`/chat/${chatRoomId}`);
+  };
+
   return (
-    <button className={styles.container}>
+    <button
+      className={styles.container}
+      onClick={() => handleChatClick(chat.chatRoomId)}
+    >
       <div className={styles.profile_wrapper}>
         <Image
           className={styles.profile_image}

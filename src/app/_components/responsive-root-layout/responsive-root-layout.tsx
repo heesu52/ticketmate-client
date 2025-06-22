@@ -24,7 +24,7 @@ export default function RootLayout({
     useAppBarStore();
 
   // BottomNavigation 보여줄 경로
-  const showBottomNavRoutes = ['/', '/history'];
+  const showBottomNavRoutes = ['/', '/history', '/chat'];
 
   const hasBottomNav = showBottomNavRoutes.some((route) => pathname === route);
 

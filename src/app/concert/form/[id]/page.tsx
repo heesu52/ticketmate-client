@@ -31,23 +31,17 @@ export default function Page({
 
   // status 존재 여부에 따른 분기
   const isApplicationFormPage = !!status;
-
   const applicationFormId = isApplicationFormPage ? id : undefined;
-
   const { data: formItem } = useGetFormDetail(
-    id ? { applicationFormId: id } : undefined,
+    applicationFormId ? { applicationFormId } : undefined,
   );
+
   // concertId는 분기 처리
   const concertId = isApplicationFormPage ? formItem?.concertId : id;
-
   // concertId가 준비되면 조회
   const { data: concertItem } = useGetConcertDetail(
     concertId ? { concertId } : undefined,
   );
-
-  console.log('applicationFormId', applicationFormId);
-  console.log('concertId', concertId);
-  console.log('formItem', formItem);
 
   const handleErrorToast = (message: string) =>
     customToast({
@@ -75,7 +69,7 @@ export default function Page({
   };
 
   useEffect(() => {
-    if (status) {
+    if (status === 'PENDING') {
       customToast({
         description: `수정 불가능한 양식입니다.`, // 필요한 메시지로 변경하세요
       });
@@ -87,12 +81,13 @@ export default function Page({
       <AppBarSetter title="공연 신청" />
 
       <div className={styles.container}>
-        {concertItem && (
+        {concertItem && formItem && (
           <>
             <Form concertItem={concertItem} ticketOpenType={ticketOpenType} />
             <FormTabManager
               handleOpenModal={handleOpenModal}
               concertItem={concertItem}
+              formItem={formItem}
               ticketOpenType={ticketOpenType}
               concertId={id}
               onError={handleErrorToast}

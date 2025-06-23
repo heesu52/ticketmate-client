@@ -130,7 +130,9 @@ const ChatDetailPage = () => {
     <>
       <AppBarSetter title="의뢰인" />
       <div className={styles.container}>
-        <ChatHeader />
+        <div className={styles.header_container}>
+          <ChatHeader />
+        </div>
 
         <div className={styles.messages_container}>
           {messages.map((message, index) => (
@@ -144,7 +146,9 @@ const ChatDetailPage = () => {
           ))}
         </div>
 
-        <ChatInput />
+        <div className={styles.input_container}>
+          <ChatInput />
+        </div>
       </div>
     </>
   );

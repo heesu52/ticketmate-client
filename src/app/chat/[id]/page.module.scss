@@ -5,6 +5,12 @@
   flex-direction: column;
   background: var(--white, #fff);
 
+  .header_container {
+    position: sticky;
+    top: 54px;
+    z-index: 10;
+  }
+
   .messages_container {
     flex: 1;
     padding: 20px;
@@ -13,5 +19,11 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+  }
+
+  .input_container {
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
   }
 }

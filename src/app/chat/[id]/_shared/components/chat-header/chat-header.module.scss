@@ -1,9 +1,6 @@
 @use '@/styles/index' as *;
 
 .container {
-  position: sticky;
-  top: 54px;
-  z-index: 10;
   background: var(--white);
   border-bottom: 1px solid var(--lineColor-sub, #ccc);
   padding: 24px;

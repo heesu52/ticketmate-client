@@ -23,11 +23,11 @@ const ChatHeader = () => {
       <button type="button" className={styles.chat_header} onClick={toggleOpen}>
         <div className={styles.profile_info}>
           <Image
+            className={styles.profile_image}
             src="https://picsum.photos/200/300"
             alt="profile"
             width={48}
             height={48}
-            className={styles.profile_image}
           />
 
           <span className={styles.concert_name}>

@@ -23,10 +23,15 @@
       display: flex;
       align-items: flex-start;
       gap: 16px;
+      flex: 1;
+      min-width: 0;
 
       .profile_image {
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         border: 1px solid var(--lineColor-sub, #ccc);
+        flex-shrink: 0;
       }
 
       .concert_name {
@@ -38,6 +43,7 @@
     .arrow_icon {
       transition: transform 0.3s ease;
       transform: rotate(180deg);
+      flex-shrink: 0;
 
       &.open {
         transform: rotate(0deg);

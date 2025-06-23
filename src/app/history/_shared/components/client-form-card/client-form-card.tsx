@@ -120,9 +120,9 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           <>
             {statusKey === 'APPROVED' && (
               <>
-                <a className={styles.link} href="/chat">
+                <Link className={styles.link} href="/chat">
                   채팅하기
-                </a>
+                </Link>
                 <span className={styles.approved}>{statusLabel}</span>
               </>
             )}

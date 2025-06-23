@@ -84,7 +84,7 @@ export default function FormTabManager({
               location: area.location,
               price: area.price.toString(),
             })),
-            requirement: item.requirement,
+            requirement: item.requirement || '',
           };
           return acc;
         },

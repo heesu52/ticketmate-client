@@ -1,4 +1,4 @@
-import { TicketOpenType } from '@/shared/types/concert';
+import { TicketOpenType } from '@/shared/types';
 
 interface CheckDuplicateFormRequest {
   agentId: string; // 대리인 PK (UUID)

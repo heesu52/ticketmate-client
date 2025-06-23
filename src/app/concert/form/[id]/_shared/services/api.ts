@@ -22,8 +22,8 @@ const createConcertForm = async (request: CreateConcertFormRequest) => {
 /**
  * @description 공연 신청폼 개별 조회
  */
-const getFormDetail = async (request?: GetFormDetailRequest) => {
-  const { applicationFormId } = request || {};
+const getFormDetail = async (request: GetFormDetailRequest) => {
+  const { applicationFormId } = request;
 
   const data = await instance<GetFormDetailResponse>(
     `${BASE_URL}/${applicationFormId}`,

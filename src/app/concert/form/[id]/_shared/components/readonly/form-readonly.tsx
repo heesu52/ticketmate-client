@@ -22,10 +22,10 @@ export default function FormReadOnly({
 }: FormReadOnlyProps) {
   const { ticketOpenType, applicationFormDetailResponseList } = formItem;
 
-  const detail = applicationFormDetailResponseList[currentIndex]; // 1회차 기준
+  const detail = applicationFormDetailResponseList[currentIndex];
   const performanceDate = detail.performanceDate;
   const requestCount = detail.requestCount.toString();
-  const requestDetails = detail.requirement || '';
+  const requirement = detail.requirement || '';
   const hopeAreaList = detail.hopeAreaResponseList || [];
 
   // 공연 날짜 리스트
@@ -98,7 +98,7 @@ export default function FormReadOnly({
         <textarea
           className={styles.textarea}
           placeholder="자유롭게 입력해주세요."
-          value={requestDetails}
+          value={requirement}
           disabled
         />
       </div>

@@ -22,9 +22,6 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
     clientId,
     agentId,
     concertId,
-    requestCount,
-    hopeAreaResponseList,
-    requestDetails,
     applicationFormStatus,
   } = formItem;
 

@@ -22,9 +22,6 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
     clientId,
     agentId,
     concertId,
-    requestCount,
-    hopeAreaResponseList,
-    requestDetails,
     applicationFormStatus,
     ticketOpenType,
   } = formItem;
@@ -120,7 +117,14 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
             <button className={styles.link} onClick={handleOpenCancelModal}>
               신청취소
             </button>
-            <span className={styles.pendding}>{statusLabel}</span>
+            <span className={styles.pending}>{statusLabel}</span>
+          </>
+        ) : statusKey === 'REJECTED' ? (
+          <>
+            <button className={styles.link} onClick={handleOpenCancelModal}>
+              거절사유
+            </button>
+            <span className={styles.canceled}>{statusLabel}</span>
           </>
         ) : (
           <>

@@ -12,7 +12,7 @@ import styles from './concert-list.module.scss';
 
 const ConcertList = () => {
   const [request, setRequest] = useState<GetConcertListRequest>({
-    pageNumber: 0,
+    pageNumber: 1,
     pageSize: 10,
     sortField: 'created_date',
     sortDirection: 'DESC',
@@ -34,7 +34,7 @@ const ConcertList = () => {
     setRequest((prev) => ({
       ...prev,
       sortField: value,
-      pageNumber: 0,
+      pageNumber: 1,
     }));
   };
 

@@ -81,7 +81,7 @@ export default function Page({
       <AppBarSetter title="공연 신청" />
 
       <div className={styles.container}>
-        {concertItem && formItem && (
+        {concertItem && (
           <>
             <Form concertItem={concertItem} ticketOpenType={ticketOpenType} />
             <FormTabManager

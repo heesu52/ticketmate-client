@@ -30,8 +30,8 @@ const ChatMessage = ({
     >
       {!message.isMyMessage && (
         <>
-          <div className={styles.profile_image_wrapper}>
-            {showProfile && (
+          {showProfile && (
+            <div className={styles.profile_image_wrapper}>
               <Image
                 src={profileImage || 'https://picsum.photos/200/300'}
                 alt="profile"
@@ -39,8 +39,8 @@ const ChatMessage = ({
                 height={36}
                 className={styles.profile_image}
               />
-            )}
-          </div>
+            </div>
+          )}
           <div className={styles.message_bubble}>
             <div className={styles.message_content}>{message.content}</div>
           </div>

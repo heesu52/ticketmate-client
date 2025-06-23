@@ -7,14 +7,12 @@ import { useAppBarStore } from './use-app-bar-store';
 interface AppBarSetterProps {
   title: string;
   hasBackground?: boolean;
-  isDynamicColor?: boolean;
   action?: ReactNode;
 }
 
 export default function AppBarSetter({
   title,
   hasBackground = true,
-  isDynamicColor = false,
   action,
 }: AppBarSetterProps) {
   const { setAppBar } = useAppBarStore();
@@ -23,7 +21,6 @@ export default function AppBarSetter({
     setAppBar({
       title,
       hasBackground,
-      isDynamicColor,
       action,
       hasAppBar: true,
     });
@@ -33,11 +30,10 @@ export default function AppBarSetter({
         hasAppBar: false,
         title: '',
         hasBackground: true,
-        isDynamicColor: false,
         action: null,
       });
     };
-  }, [setAppBar, title, hasBackground, isDynamicColor, action]);
+  }, [setAppBar, title, hasBackground, action]);
 
   return null;
 }

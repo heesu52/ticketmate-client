@@ -1,0 +1,76 @@
+@use '@/styles/index' as *;
+
+.container {
+  padding: 12px 12px 20px 12px;
+  background: var(--white, #fff);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  background: var(--white, #fff);
+
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+  .input_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+
+    .action_button {
+      padding: 12px;
+      cursor: pointer;
+    }
+
+    .message_input {
+      display: flex;
+      padding: 12px 16px;
+      align-items: center;
+      flex: 1 0 0;
+      border-radius: 999px;
+      background: var(--white-less, #f9f9f9);
+
+      &:focus {
+        border-color: var(--brandColor-main, #ff6a6a);
+      }
+
+      &::placeholder {
+        color: var(--textColor-less, #999);
+      }
+    }
+  }
+
+  .action_panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+
+      .icon {
+        display: flex;
+        width: 48px;
+        padding: 12px 0px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 12px;
+        border: 1px solid var(--lineColor-main, #eee);
+      }
+
+      .label {
+        @include text-xs;
+        color: var(--textColor-main, #333);
+        text-align: center;
+      }
+    }
+  }
+}

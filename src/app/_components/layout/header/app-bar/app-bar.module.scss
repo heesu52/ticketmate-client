@@ -1,26 +1,15 @@
 @use '@/styles/index' as *;
 
 .container {
-  position: fixed;
-  z-index: 20;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
+  padding: 0 24px;
 
   width: 100%;
   max-width: var(--max-width);
   background: var(--white);
 
-  border-width: 0 1px 0 1px;
-  border-style: solid;
-  border-color: var(--divider-line);
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  padding: 0 24px;
 
   .left_container {
     display: flex;

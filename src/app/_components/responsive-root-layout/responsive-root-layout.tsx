@@ -20,19 +20,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const { hasAppBar, appBarTitle, hasBackground, isDynamicColor, action } =
-    useAppBarStore();
+  const { hasAppBar, appBarTitle, hasBackground, action } = useAppBarStore();
 
   // BottomNavigation 보여줄 경로
-  const showBottomNavRoutes = ['/', '/history'];
+  const showBottomNavRoutes = ['/', '/history', '/chat'];
 
   const hasBottomNav = showBottomNavRoutes.some((route) => pathname === route);
 
   const hasAppHeader = pathname === '/';
 
+  const hasNoPadding = pathname.includes('/chat/');
+
   return (
     <div className={styles.container}>
-      <header>
+      <header className={styles.header}>
         {hasAppHeader ? (
           <AppHeader />
         ) : hasAppBar ? (
@@ -47,8 +48,7 @@ export default function RootLayout({
         className={cn(
           styles.content,
           hasBottomNav ? styles.with_nav : styles.without_nav,
-          hasAppHeader ? styles.with_app_header : '',
-          hasAppBar ? (isDynamicColor ? '' : styles.with_app_bar) : '',
+          hasNoPadding ? styles.no_padding : '',
         )}
       >
         {children}

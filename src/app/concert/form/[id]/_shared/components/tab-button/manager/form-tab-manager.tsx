@@ -39,7 +39,9 @@ export default function FormTabManager({
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
-  const [mode, setMode] = useState<'input' | 'readonly' | 'readApp'>(() => {
+  const [mode, setMode] = useState<
+    'input' | 'readonly' | 'readApp' | undefined
+  >(() => {
     if (!status) return 'input';
     if (status === 'PENDING') return 'readonly';
     if (
@@ -48,6 +50,8 @@ export default function FormTabManager({
       status === 'REJECTED'
     )
       return 'readApp';
+    // ACCEPTED 혹은 그 외의 상태는 undefined로 둬서 아무 동작 안 하도록
+    return undefined;
   });
 
   // FormData 형태로 초기화

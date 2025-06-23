@@ -25,3 +25,4 @@ export { default as SearchIcon } from './search.svg';
 export { default as ShareIcon } from './share.svg';
 export { default as StarIcon } from './star.svg';
 export { default as VisibilityIcon } from './visibility.svg';
+export { default as SendIcon } from './send.svg';

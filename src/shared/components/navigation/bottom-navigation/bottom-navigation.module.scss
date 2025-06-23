@@ -13,11 +13,6 @@
 
   box-shadow: 0px -15px 12px -12px rgba(0, 0, 0, 0.08);
 
-  @media screen and (min-width: 601px) {
-    border-right: 1px solid var(--divider-line);
-    border-left: 1px solid var(--divider-line);
-  }
-
   ul {
     display: flex;
     justify-content: space-between;

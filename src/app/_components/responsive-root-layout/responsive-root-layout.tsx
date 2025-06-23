@@ -20,8 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const { hasAppBar, appBarTitle, hasBackground, isDynamicColor, action } =
-    useAppBarStore();
+  const { hasAppBar, appBarTitle, hasBackground, action } = useAppBarStore();
 
   // BottomNavigation 보여줄 경로
   const showBottomNavRoutes = ['/', '/history', '/chat'];

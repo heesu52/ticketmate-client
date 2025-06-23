@@ -7,7 +7,7 @@ type ApplicationFormStatus =
   | 'ACCEPTED'
   | 'CANCELED_IN_PROCESS';
 
-interface HopeAreaResponse {
+interface HopeArea {
   priority: number; // 우선순위
   location: string; // 구역명
   price: number; // 가격
@@ -17,7 +17,7 @@ interface ApplicationFormDetailResponse {
   performanceDate: string; // 공연 일자
   session: number;
   requestCount: number; // 요청한 티켓 수
-  hopeAreaResponseList: HopeAreaResponse[]; // 희망 구역 리스트 (선택)
+  hopeAreaResponseList: HopeArea[]; // 희망 구역 리스트 (선택)
   requirement: string; // 요청 사항 (선택)
 }
 
@@ -32,4 +32,4 @@ interface Form {
   ticketOpenType: TicketOpenType; // 선예매 여부
 }
 
-export type { ApplicationFormStatus, Form };
+export type { ApplicationFormStatus, ApplicationFormDetailResponse, Form };

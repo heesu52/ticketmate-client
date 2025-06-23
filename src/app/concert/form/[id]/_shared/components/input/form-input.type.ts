@@ -8,5 +8,5 @@ export type FormData = {
   performanceDate: string; // 기존: date
   requestCount: string; // 기존: count
   hopeAreaList: HopeArea[]; // 기존: inputs
-  requestDetails: string; // 기존: note
+  requirement: string; // 기존: note
 };

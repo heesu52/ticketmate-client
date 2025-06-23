@@ -8,6 +8,7 @@ const useGetFormDetail = (request?: GetFormDetailRequest) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: queryKey.getFormDetail(request),
     queryFn: () => getFormDetail(request),
+    enabled: !!request,
   });
 
   return { data, isLoading, isError };

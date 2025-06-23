@@ -24,7 +24,7 @@ interface FormTabManagerProps {
   concertId: string;
   onError: (message: string) => void;
   concertItem: Concert;
-  formItem: Form;
+  formItem?: Form;
   status?: ApplicationFormStatus;
 }
 export default function FormTabManager({
@@ -42,7 +42,12 @@ export default function FormTabManager({
   const [mode, setMode] = useState<'input' | 'readonly' | 'readApp'>(() => {
     if (!status) return 'input';
     if (status === 'PENDING') return 'readonly';
-    return 'readApp';
+    if (
+      status === 'CANCELED' ||
+      status === 'CANCELED_IN_PROCESS' ||
+      status === 'REJECTED'
+    )
+      return 'readApp';
   });
 
   // FormData 형태로 초기화
@@ -56,7 +61,11 @@ export default function FormTabManager({
   });
 
   useEffect(() => {
-    if (formItem?.applicationFormDetailResponseList?.length > 0) {
+    if (
+      formItem &&
+      Array.isArray(formItem.applicationFormDetailResponseList) &&
+      formItem.applicationFormDetailResponseList.length > 0
+    ) {
       const newTabs = formItem.applicationFormDetailResponseList.map(
         (_, index) => index + 1,
       );
@@ -223,7 +232,7 @@ export default function FormTabManager({
                   formItem={formItem}
                   currentIndex={tabId - 1}
                 />
-              ) : (
+              ) : formItem?.applicationFormDetailResponseList?.[tabId - 1] ? (
                 <FormReadOnly
                   key={tabId}
                   concertDateInfoResponseList={
@@ -235,7 +244,7 @@ export default function FormTabManager({
                   formItem={formItem}
                   currentIndex={tabId - 1}
                 />
-              )
+              ) : null
             ) : null,
           )}
         </div>

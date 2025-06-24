@@ -7,6 +7,11 @@ import { getTicketOpenInfoByType } from '@/shared/utils/tickets';
 
 import styles from './form-readonly.module.scss';
 
+/**
+ * FormReadOnly 컴포넌트
+ * 기존 신청폼의 내용을 읽기 전용(readonly)으로 보여주는 폼 UI
+ */
+
 interface FormReadOnlyProps {
   concertDateInfoResponseList: ConcertDateInfo[];
   ticketOpenDateInfoResponses: TicketOpenDateInfo[];
@@ -22,13 +27,14 @@ export default function FormReadOnly({
 }: FormReadOnlyProps) {
   const { ticketOpenType, applicationFormDetailResponseList } = formItem;
 
+  // 탭(index)에 해당하는 신청폼 상세 데이터 추출
   const detail = applicationFormDetailResponseList[currentIndex];
   const performanceDate = detail.performanceDate;
   const requestCount = detail.requestCount.toString();
   const requirement = detail.requirement || '';
   const hopeAreaList = detail.hopeAreaResponseList || [];
 
-  // 공연 날짜 리스트
+  // 공연 날짜 옵션 리스트로 생성
   const dateList = concertDateInfoResponseList.map((item) => {
     const formatted = formatDate(item.performanceDate);
     return {
@@ -41,6 +47,8 @@ export default function FormReadOnly({
     ticketOpenDateInfoResponses,
     ticketOpenType,
   );
+
+  // 최대 예매 매수 구하기
   const maxCount = matchedOpenInfo?.requestMaxCount ?? 1;
   const countList = Array.from({ length: maxCount }, (_, i) => ({
     value: (i + 1).toString(),
@@ -72,6 +80,7 @@ export default function FormReadOnly({
           </div>
         </div>
 
+        {/* 희망 구역 입력 정보 (순위별로 location, price 비활성화 input 표시) */}
         {hopeAreaList.map((input, index) => (
           <div key={index} className={styles.input_container}>
             <span className={styles.text}>{`${index + 1}순위`}</span>

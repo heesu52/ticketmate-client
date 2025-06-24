@@ -16,9 +16,10 @@ import { useScroll } from '@/shared/hooks/use-scroll';
 
 import styles from './page.module.scss';
 
+//고정된 대리인 ID(추후 삭제 예정)
 const FIXED_AGENT_ID = '194641e9-84da-43fb-a763-6ef41710f714';
 
-// Mock API 호출 함수
+// Mock API 호출 함수 (임시)
 const handleGetCard = async (pageParam: number) => {
   const mockData = Array.from({ length: 10 }, (_, index) => ({
     agentId: FIXED_AGENT_ID,
@@ -45,6 +46,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
   };
 
+  // 특정 유저카드 클릭 시 바텀시트 열기
   const handleUserCardClick = (agentId: string) => {
     setSelectedAgentId(agentId);
     setIsBottomSheetOpen(true);
@@ -52,6 +54,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
 
   const { ref, inView } = useInView();
 
+  // 무한스크롤 데이터 fetch
   const {
     data: userData,
     fetchNextPage,

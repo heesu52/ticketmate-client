@@ -29,7 +29,7 @@ export default function Page({
   const ticketOpenType = resolvedSearchParams.ticketOpenType as TicketOpenType;
   const status = resolvedSearchParams.status as ApplicationFormStatus;
 
-  // status 존재 여부에 따른 분기(새로운 신청폼 / 기존신청폼)
+  // status 쿼리 존재 여부에 따른 분기(새로운 신청폼 / 기존 신청폼)
   const isApplicationFormPage = !!status;
   const applicationFormId = isApplicationFormPage ? id : undefined;
   const { data: formItem } = useGetFormDetail(
@@ -43,11 +43,6 @@ export default function Page({
   const { data: concertItem } = useGetConcertDetail(
     concertId ? { concertId } : undefined,
   );
-
-  const handleErrorToast = (message: string) =>
-    customToast({
-      description: message,
-    });
 
   const handleOpenModal = () => {
     open({
@@ -71,15 +66,21 @@ export default function Page({
 
   //useRef로 중복 확인 후 토스트 알림 한번만 뜨도록 설정
   const hasShownToast = useRef(false);
-  console.log(hasShownToast);
   useEffect(() => {
     if (status === 'PENDING' && !hasShownToast.current) {
       hasShownToast.current = true;
+      //formreadonly 첫 렌더링 때 나오는 수정불가능 토스트 알림
       customToast({
         description: `수정 불가능한 양식입니다.`,
       });
     }
   }, [status]);
+
+  //에러 발생 시 백엔드 에러 내용 필터링하여 토스트 알림
+  const handleErrorToast = (message: string) =>
+    customToast({
+      description: message,
+    });
 
   return (
     <>
@@ -91,12 +92,12 @@ export default function Page({
             <Form concertItem={concertItem} ticketOpenType={ticketOpenType} />
             <FormTabManager
               handleOpenModal={handleOpenModal}
-              concertItem={concertItem}
-              formItem={formItem}
+              concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
+              formItem={formItem} //기존 신청폼 보여줄 시 공연데이터를 불러오기 위해 전달
               ticketOpenType={ticketOpenType}
               concertId={id}
               onError={handleErrorToast}
-              status={status}
+              status={status} //분기처리를 위해 전달
             />
           </>
         )}

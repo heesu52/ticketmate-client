@@ -1,5 +1,5 @@
 'use client';
-import { use, useEffect } from 'react';
+import { use, useEffect, useRef } from 'react';
 
 import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
@@ -29,7 +29,7 @@ export default function Page({
   const ticketOpenType = resolvedSearchParams.ticketOpenType as TicketOpenType;
   const status = resolvedSearchParams.status as ApplicationFormStatus;
 
-  // status 존재 여부에 따른 분기
+  // status 존재 여부에 따른 분기(새로운 신청폼 / 기존신청폼)
   const isApplicationFormPage = !!status;
   const applicationFormId = isApplicationFormPage ? id : undefined;
   const { data: formItem } = useGetFormDetail(
@@ -37,6 +37,7 @@ export default function Page({
   );
 
   // concertId는 분기 처리
+  // 기존신청폼 렌더링 할 때는 params에 concertId가 없으므로, formItem에서 concertId 추출
   const concertId = isApplicationFormPage ? formItem?.concertId : id;
   // concertId가 준비되면 조회
   const { data: concertItem } = useGetConcertDetail(
@@ -68,10 +69,14 @@ export default function Page({
     });
   };
 
+  //useRef로 중복 확인 후 토스트 알림 한번만 뜨도록 설정
+  const hasShownToast = useRef(false);
+  console.log(hasShownToast);
   useEffect(() => {
-    if (status === 'PENDING') {
+    if (status === 'PENDING' && !hasShownToast.current) {
+      hasShownToast.current = true;
       customToast({
-        description: `수정 불가능한 양식입니다.`, // 필요한 메시지로 변경하세요
+        description: `수정 불가능한 양식입니다.`,
       });
     }
   }, [status]);

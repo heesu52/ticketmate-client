@@ -1,5 +1,5 @@
 'use client';
-import { use } from 'react';
+import { use, useEffect, useRef } from 'react';
 
 import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
@@ -7,9 +7,10 @@ import Form from '@/app/concert/form/[id]/_shared/components/form/form';
 import FormModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-modal';
 import { useModal } from '@/shared/components/modal/use-modal';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
-import { TicketOpenType } from '@/shared/types';
+import { TicketOpenType, ApplicationFormStatus } from '@/shared/types';
 
 import FormTabManager from './_shared/components/tab-button/manager/form-tab-manager';
+import { useGetFormDetail } from './_shared/services/query';
 import styles from './page.module.scss';
 
 export default function Page({
@@ -17,17 +18,30 @@ export default function Page({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ ticketOpenType?: string }>;
+  searchParams: Promise<{ ticketOpenType?: string; status?: string }>;
 }) {
   const resolvedParams = use(params);
   const resolvedSearchParams = use(searchParams);
   const { id } = resolvedParams;
   const { open, closeTop } = useModal();
 
+  //현재 직렬처리로 되어있어서 로딩시간이 조금 길게 느껴짐, 추후 병렬처리 훅을 만들어서 개선해놓자
   const ticketOpenType = resolvedSearchParams.ticketOpenType as TicketOpenType;
+  const status = resolvedSearchParams.status as ApplicationFormStatus;
 
+  // status 존재 여부에 따른 분기(새로운 신청폼 / 기존신청폼)
+  const isApplicationFormPage = !!status;
+  const applicationFormId = isApplicationFormPage ? id : undefined;
+  const { data: formItem } = useGetFormDetail(
+    applicationFormId ? { applicationFormId } : undefined,
+  );
+
+  // concertId는 분기 처리
+  // 기존신청폼 렌더링 할 때는 params에 concertId가 없으므로, formItem에서 concertId 추출
+  const concertId = isApplicationFormPage ? formItem?.concertId : id;
+  // concertId가 준비되면 조회
   const { data: concertItem } = useGetConcertDetail(
-    id ? { concertId: id } : undefined,
+    concertId ? { concertId } : undefined,
   );
 
   const handleErrorToast = (message: string) =>
@@ -55,6 +69,18 @@ export default function Page({
     });
   };
 
+  //useRef로 중복 확인 후 토스트 알림 한번만 뜨도록 설정
+  const hasShownToast = useRef(false);
+  console.log(hasShownToast);
+  useEffect(() => {
+    if (status === 'PENDING' && !hasShownToast.current) {
+      hasShownToast.current = true;
+      customToast({
+        description: `수정 불가능한 양식입니다.`,
+      });
+    }
+  }, [status]);
+
   return (
     <>
       <AppBarSetter title="공연 신청" />
@@ -66,9 +92,11 @@ export default function Page({
             <FormTabManager
               handleOpenModal={handleOpenModal}
               concertItem={concertItem}
+              formItem={formItem}
               ticketOpenType={ticketOpenType}
               concertId={id}
               onError={handleErrorToast}
+              status={status}
             />
           </>
         )}

@@ -1,3 +1,5 @@
+import { TicketOpenType } from './ticket';
+
 type ConcertType =
   | 'CONCERT'
   | 'MUSICAL'
@@ -19,8 +21,6 @@ interface ConcertDateInfo {
   performanceDate: string; // 공연 일자
   session: number; // 세션 번호
 }
-
-type TicketOpenType = 'PRE_OPEN' | 'GENERAL_OPEN';
 
 interface TicketOpenDateInfo {
   openDate: string; // 오픈 날짜
@@ -54,7 +54,6 @@ export type {
   ConcertType,
   TicketReservationSite,
   Concert,
-  TicketOpenType,
   TicketOpenDateInfo,
   ConcertDateInfo,
 };

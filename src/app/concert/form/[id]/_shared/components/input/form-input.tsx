@@ -6,6 +6,7 @@ import Input from '@/shared/components/input/input';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
 import {
   ConcertDateInfo,
+  Form,
   TicketOpenDateInfo,
   TicketOpenType,
 } from '@/shared/types';
@@ -21,6 +22,8 @@ interface FormInputProps {
   concertDateInfoResponseList: ConcertDateInfo[];
   ticketOpenDateInfoResponses: TicketOpenDateInfo[];
   ticketOpenType: TicketOpenType;
+  formItem?: Form;
+  currentIndex: number;
 }
 
 export default function FormInput({
@@ -29,18 +32,28 @@ export default function FormInput({
   concertDateInfoResponseList,
   ticketOpenDateInfoResponses,
   ticketOpenType,
+  formItem,
+  currentIndex,
 }: FormInputProps) {
+  const firstDetail =
+    formItem?.applicationFormDetailResponseList?.[currentIndex];
+
   const [hopeAreaList, setHopeAreaList] = useState<HopeArea[]>(
-    value?.hopeAreaList || [{ id: 1, location: '', price: '' }],
+    firstDetail?.hopeAreaResponseList?.map((area, idx) => ({
+      id: idx + 1,
+      location: area.location,
+      price: area.price.toString(),
+    })) ??
+      value?.hopeAreaList ?? [{ id: 1, location: '', price: '' }],
   );
   const [performanceDate, setPerformanceDate] = useState<string>(
-    value?.performanceDate || '',
+    firstDetail?.performanceDate ?? value?.performanceDate ?? '',
   );
   const [requestCount, setRequestCount] = useState<string>(
-    value?.requestCount || '',
+    firstDetail?.requestCount.toString() ?? value?.requestCount ?? '',
   );
-  const [requestDetails, setRequestDetails] = useState<string>(
-    value?.requestDetails || '',
+  const [requirement, setRequirement] = useState<string>(
+    firstDetail?.requirement ?? value?.requirement ?? '',
   );
 
   const isFirstRender = useRef(true);
@@ -49,8 +62,8 @@ export default function FormInput({
       isFirstRender.current = false;
       return;
     }
-    onChange({ performanceDate, requestCount, hopeAreaList, requestDetails });
-  }, [performanceDate, requestCount, hopeAreaList, requestDetails]);
+    onChange({ performanceDate, requestCount, hopeAreaList, requirement });
+  }, [performanceDate, requestCount, hopeAreaList, requirement]);
 
   const addInput = () => {
     setHopeAreaList((prev) => {
@@ -184,8 +197,8 @@ export default function FormInput({
         <textarea
           className={styles.textarea}
           placeholder="자유롭게 입력해주세요."
-          value={requestDetails}
-          onChange={(e) => setRequestDetails(e.target.value)}
+          value={requirement}
+          onChange={(e) => setRequirement(e.target.value)}
         />
       </div>
     </div>

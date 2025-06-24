@@ -22,10 +22,8 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
     clientId,
     agentId,
     concertId,
-    requestCount,
-    hopeAreaResponseList,
-    requestDetails,
     applicationFormStatus,
+    ticketOpenType,
   } = formItem;
 
   const { data: concertItem } = useGetConcertDetail({ concertId });
@@ -39,8 +37,6 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
   //type별 status 이름 변환
   const statusKey = applicationFormStatus as ApplicationFormStatus;
   const statusLabel = APPLICATION_STATUS_LABEL_MAP[statusKey] ?? '';
-
-  const isCurrent = applicationFormStatus === 'PENDING';
 
   const handleOpenCancelModal = () => {
     open({
@@ -82,7 +78,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
     <div className={styles.container}>
       <Link
         className={styles.upper_container}
-        href={`concert/form/${applicationFormId}`}
+        href={`/concert/form/${applicationFormId}?ticketOpenType=${ticketOpenType}&status=${applicationFormStatus}`}
       >
         <div className={styles.title_container}>
           <div className={styles.title}>{concertName}</div>
@@ -109,29 +105,31 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
         </div>
       </Link>
       <div className={styles.footer_container}>
-        {isCurrent ? (
+        {statusKey === 'ACCEPTED' ? (
+          <>
+            <Link className={styles.link} href="/chat">
+              채팅하기
+            </Link>
+            <span className={styles.accepted}>{statusLabel}</span>
+          </>
+        ) : statusKey === 'PENDING' ? (
           <>
             <button className={styles.link} onClick={handleOpenCancelModal}>
               신청취소
             </button>
-            <span className={styles.default}>{statusLabel}</span>
+            <span className={styles.pending}>{statusLabel}</span>
+          </>
+        ) : statusKey === 'REJECTED' ? (
+          <>
+            <button className={styles.link} onClick={handleOpenCancelModal}>
+              거절사유
+            </button>
+            <span className={styles.canceled}>{statusLabel}</span>
           </>
         ) : (
           <>
-            {statusKey === 'APPROVED' && (
-              <>
-                <Link className={styles.link} href="/chat">
-                  채팅하기
-                </Link>
-                <span className={styles.approved}>{statusLabel}</span>
-              </>
-            )}
-            {statusKey === 'REJECTED' && (
-              <>
-                <button onClick={handleOpenReasonModal} />
-                <span className={styles.rejected}>{statusLabel}</span>
-              </>
-            )}
+            <button onClick={handleOpenReasonModal} />
+            <span className={styles.canceled}>{statusLabel}</span>
           </>
         )}
       </div>

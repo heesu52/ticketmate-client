@@ -1,16 +1,22 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
 import FormTabButton from '@/app/concert/form/[id]/_shared/components/tab-button/button/form-tab-button';
 import { useCreateConcertForm } from '@/app/concert/form/[id]/_shared/services/mutation';
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
-import { TicketOpenType, Concert } from '@/shared/types';
+import {
+  TicketOpenType,
+  Concert,
+  ApplicationFormStatus,
+  Form,
+} from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
+import FormInput from '../../input/form-input';
+import FormReadOnly from '../../readonly/form-readonly';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;
@@ -18,6 +24,8 @@ interface FormTabManagerProps {
   concertId: string;
   onError: (message: string) => void;
   concertItem: Concert;
+  formItem?: Form;
+  status?: ApplicationFormStatus;
 }
 export default function FormTabManager({
   handleOpenModal,
@@ -25,10 +33,26 @@ export default function FormTabManager({
   concertId,
   onError,
   concertItem,
+  formItem,
+  status,
 }: FormTabManagerProps) {
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
+  const [mode, setMode] = useState<
+    'input' | 'readonly' | 'readApp' | undefined
+  >(() => {
+    if (!status) return 'input';
+    if (status === 'PENDING') return 'readonly';
+    if (
+      status === 'CANCELED' ||
+      status === 'CANCELED_IN_PROCESS' ||
+      status === 'REJECTED'
+    )
+      return 'readApp';
+    // ACCEPTED 혹은 그 외의 상태는 undefined로 둬서 아무 동작 안 하도록
+    return undefined;
+  });
 
   // FormData 형태로 초기화
   const [formData, setFormData] = useState<Record<number, FormData>>({
@@ -36,22 +60,59 @@ export default function FormTabManager({
       performanceDate: '',
       requestCount: '',
       hopeAreaList: [{ id: 1, location: '', price: '' }],
-      requestDetails: '',
+      requirement: '',
     },
   });
 
+  useEffect(() => {
+    if (
+      formItem &&
+      Array.isArray(formItem.applicationFormDetailResponseList) &&
+      formItem.applicationFormDetailResponseList.length > 0
+    ) {
+      const newTabs = formItem.applicationFormDetailResponseList.map(
+        (_, index) => index + 1,
+      );
+
+      const newFormData = formItem.applicationFormDetailResponseList.reduce(
+        (acc, item, index) => {
+          acc[index + 1] = {
+            performanceDate: item.performanceDate,
+            requestCount: item.requestCount.toString(),
+            hopeAreaList: item.hopeAreaResponseList.map((area, i) => ({
+              id: i + 1,
+              location: area.location,
+              price: area.price.toString(),
+            })),
+            requirement: item.requirement || '',
+          };
+          return acc;
+        },
+        {} as Record<number, FormData>,
+      );
+
+      setTabs(newTabs);
+      setFormData(newFormData);
+      setActiveTab(newTabs[0]);
+      setNextId(newTabs.length + 1);
+    }
+  }, [formItem]);
+
   const getTabLabel = (tabId: number) => {
-    const tabData = formData[tabId];
-    if (!tabData?.performanceDate) return '회차를 선택해주세요';
+    const formItemDate =
+      formItem?.applicationFormDetailResponseList?.[tabId - 1]?.performanceDate;
+
+    const date = formItemDate || formData[tabId - 1]?.performanceDate;
+
+    if (!date) return '회차를 선택해주세요';
 
     const selectedDateInfo = concertItem.concertDateInfoResponseList.find(
-      (item) => item.performanceDate === tabData.performanceDate,
+      (item) => item.performanceDate === date,
     );
 
     if (!selectedDateInfo) return '회차를 선택해주세요';
 
     const formatted = formatDate(selectedDateInfo.performanceDate);
-
     return `${formatted} (${selectedDateInfo.session}회차)`;
   };
 
@@ -64,7 +125,7 @@ export default function FormTabManager({
         performanceDate: '',
         requestCount: '',
         hopeAreaList: [{ id: 1, location: '', price: '' }],
-        requestDetails: '',
+        requirement: '',
       },
     }));
     setNextId((id) => id + 1);
@@ -98,7 +159,7 @@ export default function FormTabManager({
           location: item.location,
           price: Number(item.price),
         })),
-        requestDetails: currentFormData.requestDetails,
+        requestDetails: currentFormData.requirement,
       }),
     );
 
@@ -133,54 +194,85 @@ export default function FormTabManager({
             isActive={activeTab === tabId}
             onClick={() => setActiveTab(tabId)}
             rightIcon={
-              <div
-                className={styles.icon}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeTab(tabId);
-                }}
-              >
-                <CloseIcon width={16} height={16} />
-              </div>
+              mode === 'input' ? (
+                <div
+                  className={styles.icon}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeTab(tabId);
+                  }}
+                >
+                  <CloseIcon width={16} height={16} />
+                </div>
+              ) : undefined
             }
           />
         ))}
-        <FormTabButton
-          label="추가하기"
-          isActive={false}
-          onClick={addNewTab}
-          rightIcon={<PlusIcon width={16} height={16} />}
-        />
-      </div>
-
-      <div>
-        {tabs.map((tabId) =>
-          activeTab === tabId ? (
-            <FormInput
-              key={tabId}
-              value={formData[tabId]}
-              onChange={(data) => updateFormData(tabId, data)}
-              concertDateInfoResponseList={
-                concertItem.concertDateInfoResponseList
-              }
-              ticketOpenDateInfoResponses={
-                concertItem.ticketOpenDateInfoResponses
-              }
-              ticketOpenType={ticketOpenType}
-            />
-          ) : null,
+        {mode === 'input' && (
+          <FormTabButton
+            label="추가하기"
+            isActive={false}
+            onClick={addNewTab}
+            rightIcon={<PlusIcon width={16} height={16} />}
+          />
         )}
       </div>
-      <Button
-        type="button"
-        size="large"
-        variant="fill"
-        onClick={() => {
-          handleSubmit(); // 제출 처리
-        }}
-      >
-        신청하기
-      </Button>
+      <div className={styles.input_container}>
+        <div>
+          {tabs.map((tabId) =>
+            activeTab === tabId ? (
+              mode === 'input' ? (
+                <FormInput
+                  key={tabId}
+                  value={formData[tabId]}
+                  onChange={(data) => updateFormData(tabId, data)}
+                  concertDateInfoResponseList={
+                    concertItem.concertDateInfoResponseList
+                  }
+                  ticketOpenDateInfoResponses={
+                    concertItem.ticketOpenDateInfoResponses
+                  }
+                  ticketOpenType={ticketOpenType}
+                  formItem={formItem}
+                  currentIndex={tabId - 1}
+                />
+              ) : formItem?.applicationFormDetailResponseList?.[tabId - 1] ? (
+                <FormReadOnly
+                  key={tabId}
+                  concertDateInfoResponseList={
+                    concertItem.concertDateInfoResponseList
+                  }
+                  ticketOpenDateInfoResponses={
+                    concertItem.ticketOpenDateInfoResponses
+                  }
+                  formItem={formItem}
+                  currentIndex={tabId - 1}
+                />
+              ) : null
+            ) : null,
+          )}
+        </div>
+        {mode === 'input' && (
+          <Button
+            type="button"
+            size="large"
+            variant="fill"
+            onClick={handleSubmit}
+          >
+            신청하기
+          </Button>
+        )}
+        {mode === 'readApp' && (
+          <Button
+            type="button"
+            size="large"
+            variant="fill"
+            onClick={() => setMode('input')}
+          >
+            재신청하기
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,9 +1,9 @@
 'use client';
 
-import AgentFormCard from '@/app/history/_shared/components/agent-form-card/agent-form-card';
 import { useGetFormList } from '@/app/history/_shared/services/query';
 
 import styles from './history-list.module.scss';
+import ClientFormCard from '../client-form-card/client-form-card';
 
 interface HistoryListProps {
   tab: 'current' | 'past';
@@ -28,7 +28,7 @@ const HistoryList = ({ tab }: HistoryListProps) => {
           <span>개</span>
         </span>
         {filteredList.map((formItem, index) => (
-          <AgentFormCard formItem={formItem} key={index} />
+          <ClientFormCard formItem={formItem} key={index} />
         ))}
       </div>
     </>

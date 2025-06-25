@@ -1,6 +1,7 @@
 import {
   GetFormListRequest,
   GetFormListResponse,
+  PutFormRequest,
 } from '@/app/history/_shared/services/type';
 import instance from '@/shared/services/instance';
 import { createQueryParams } from '@/shared/utils/services/query-string';
@@ -21,4 +22,36 @@ const getFormList = async (request?: GetFormListRequest) => {
   return data;
 };
 
-export { getFormList };
+/**
+ * @description 공연 신청폼 수락
+ */
+const putFormApprove = async (request: PutFormRequest) => {
+  const { applicationFormId } = request;
+
+  const data = await instance(
+    `${BASE_URL}/expressions/${applicationFormId}/approve`,
+    {
+      method: 'PUT',
+    },
+  );
+
+  return data;
+};
+
+/**
+ * @description 공연 신청폼 거절
+ */
+const putFormReject = async (request: PutFormRequest) => {
+  const { applicationFormId } = request;
+
+  const data = await instance(
+    `${BASE_URL}/expressions/${applicationFormId}/reject`,
+    {
+      method: 'PUT',
+    },
+  );
+
+  return data;
+};
+
+export { getFormList, putFormApprove, putFormReject };

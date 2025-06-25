@@ -114,10 +114,11 @@ export default function FormTabManager({
   // 기존 신청폼이 있을 경우 공연 날짜 및 회차로 라벨 지정
   // 없으면 기본 문구('회차를 선택해주세요') 표시
   const getTabLabel = (tabId: number) => {
-    const formItemDate =
+    const currentFormDate = formData[tabId]?.performanceDate;
+    const fallbackDate =
       formItem?.applicationFormDetailResponseList?.[tabId - 1]?.performanceDate;
 
-    const date = formItemDate || formData[tabId - 1]?.performanceDate;
+    const date = currentFormDate || fallbackDate;
     if (!date) return '회차를 선택해주세요';
 
     const selectedDateInfo = concertItem.concertDateInfoResponseList.find(
@@ -209,7 +210,9 @@ export default function FormTabManager({
 
       const requestBody: PatchConcertFormRequest = {
         applicationFormId: formItem.applicationFormId,
-        applicationFormDetailRequestList,
+        applicationFormEditRequest: {
+          applicationFormDetailRequestList,
+        },
       };
 
       patchMutate(requestBody, {
@@ -218,7 +221,6 @@ export default function FormTabManager({
       });
     }
   };
-  console.log(mode);
 
   return (
     <div className={styles.container}>

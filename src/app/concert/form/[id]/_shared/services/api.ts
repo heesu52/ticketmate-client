@@ -24,11 +24,11 @@ const createConcertForm = async (request: CreateConcertFormRequest) => {
  * @description 공연 신청폼 수정
  */
 const patchConcertForm = async (request: PatchConcertFormRequest) => {
-  const { applicationFormId, applicationFormDetailRequestList } = request;
+  const { applicationFormId, applicationFormEditRequest } = request;
 
   const data = await instance(`${BASE_URL}/${applicationFormId}`, {
     method: 'PATCH',
-    body: JSON.stringify(applicationFormDetailRequestList),
+    body: JSON.stringify(applicationFormEditRequest),
   });
 
   return data;

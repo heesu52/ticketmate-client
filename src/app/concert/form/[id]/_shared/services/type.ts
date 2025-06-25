@@ -23,6 +23,11 @@ interface CreateConcertFormRequest {
   ticketOpenType: TicketOpenType; // 선예매 여부
 }
 
+interface PatchConcertFormRequest {
+  applicationFormId: string;
+  applicationFormDetailRequestList: ApplicationFormDetailRequest[]; // 신청 공연 회차 목록 [최소 1개 이상 필수]
+}
+
 interface GetFormDetailRequest {
   applicationFormId: string; // 폼ID [필수]
 }
@@ -31,6 +36,7 @@ type GetFormDetailResponse = Form;
 
 export type {
   CreateConcertFormRequest,
+  PatchConcertFormRequest,
   GetFormDetailRequest,
   GetFormDetailResponse,
 };

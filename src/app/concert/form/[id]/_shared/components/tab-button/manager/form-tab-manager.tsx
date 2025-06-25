@@ -1,8 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
+import FormReadOnly from '@/app/concert/form/[id]/_shared/components/readonly/form-readonly';
 import FormTabButton from '@/app/concert/form/[id]/_shared/components/tab-button/button/form-tab-button';
-import { useCreateConcertForm } from '@/app/concert/form/[id]/_shared/services/mutation';
+import {
+  useCreateConcertForm,
+  usePatchConcertForm,
+} from '@/app/concert/form/[id]/_shared/services/mutation';
+import {
+  CreateConcertFormRequest,
+  PatchConcertFormRequest,
+} from '@/app/concert/form/[id]/_shared/services/type';
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
@@ -15,8 +24,6 @@ import {
 import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
-import FormInput from '../../input/form-input';
-import FormReadOnly from '../../readonly/form-readonly';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;
@@ -40,9 +47,7 @@ export default function FormTabManager({
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
   //status 별로 mode를 지정해서 렌더링 하는 form을 구분
-  const [mode, setMode] = useState<
-    'input' | 'readonly' | 'readApp' | undefined
-  >(() => {
+  const [mode] = useState<'input' | 'readonly' | 'readApp' | undefined>(() => {
     if (!status) return 'input';
     if (status === 'PENDING') return 'readonly';
     if (
@@ -54,6 +59,9 @@ export default function FormTabManager({
     // ACCEPTED 혹은 그 외의 상태는 undefined로 둬서 아무 동작 안 하도록
     return undefined;
   });
+  //input과 readapp을 구분해서 제출을 하기 위해 state로 관리
+  const [isEdit, setIsEdit] = useState(false);
+  const isEditing = mode === 'input' || (mode === 'readApp' && isEdit);
 
   // FormData 형태로 초기화
   const [formData, setFormData] = useState<Record<number, FormData>>({
@@ -156,7 +164,15 @@ export default function FormTabManager({
     setFormData((prev) => ({ ...prev, [id]: data }));
   }, []);
 
-  const { mutate } = useCreateConcertForm();
+  const { mutate: createMutate } = useCreateConcertForm();
+  const { mutate: patchMutate } = usePatchConcertForm();
+
+  const handleError = (error: unknown) => {
+    const code = error instanceof Error ? error.message : undefined;
+    const message =
+      (code && ERROR_MESSAGES[code]) || '알 수 없는 오류가 발생했습니다.';
+    onError(message);
+  };
 
   // 현재 모든 탭의 formData를 수집하여 신청 요청 API(mutate) 호출
   const handleSubmit = () => {
@@ -174,26 +190,35 @@ export default function FormTabManager({
       }),
     );
 
-    const requestBody = {
-      agentId: '194641e9-84da-43fb-a763-6ef41710f714',
-      concertId,
-      ticketOpenType,
-      applicationFormDetailRequestList,
-    };
+    if (mode === 'input') {
+      const requestBody: CreateConcertFormRequest = {
+        agentId: '11d4486d-4524-4e21-8ec1-bffc764bc7bb',
+        concertId,
+        ticketOpenType,
+        applicationFormDetailRequestList,
+      };
 
-    // mutate 함수 실행
-    mutate(requestBody, {
-      onSuccess: () => {
-        handleOpenModal();
-      },
-      onError: (error: unknown) => {
-        const code = error instanceof Error ? error.message : undefined;
-        const message =
-          (code && ERROR_MESSAGES[code]) || '알 수 없는 오류가 발생했습니다.';
-        onError(message);
-      },
-    });
+      createMutate(requestBody, {
+        onSuccess: () => handleOpenModal(),
+        onError: handleError,
+      });
+    } else if (mode === 'readApp') {
+      if (!formItem?.applicationFormId) {
+        return;
+      }
+
+      const requestBody: PatchConcertFormRequest = {
+        applicationFormId: formItem.applicationFormId,
+        applicationFormDetailRequestList,
+      };
+
+      patchMutate(requestBody, {
+        onSuccess: () => handleOpenModal(),
+        onError: handleError,
+      });
+    }
   };
+  console.log(mode);
 
   return (
     <div className={styles.container}>
@@ -205,7 +230,7 @@ export default function FormTabManager({
             isActive={activeTab === tabId}
             onClick={() => setActiveTab(tabId)}
             rightIcon={
-              mode === 'input' ? (
+              isEditing ? (
                 <div
                   className={styles.icon}
                   onClick={(e) => {
@@ -219,7 +244,7 @@ export default function FormTabManager({
             }
           />
         ))}
-        {mode === 'input' && (
+        {isEditing && (
           <FormTabButton
             label="추가하기"
             isActive={false}
@@ -232,7 +257,7 @@ export default function FormTabManager({
         <div>
           {tabs.map((tabId) =>
             activeTab === tabId ? (
-              mode === 'input' ? (
+              isEditing ? (
                 <FormInput
                   key={tabId}
                   value={formData[tabId]}
@@ -278,7 +303,13 @@ export default function FormTabManager({
             type="button"
             size="large"
             variant="fill"
-            onClick={() => setMode('input')}
+            onClick={() => {
+              if (isEditing) {
+                handleSubmit();
+              } else {
+                setIsEdit(true);
+              }
+            }}
           >
             재신청하기
           </Button>

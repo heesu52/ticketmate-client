@@ -5,13 +5,16 @@ import Link from 'next/link';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import AcceptModal from '@/app/history/_shared/components/modal/common-modal';
 import RejectedModal from '@/app/history/_shared/components/modal/rejected-modal/rejected-modal';
+import {
+  usePutFormApprove,
+  usePutFormReject,
+} from '@/app/history/_shared/services/mutation';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
 import { Form } from '@/shared/types';
 
 import styles from './agent-form-card.module.scss';
-import { usePutFormApprove, usePutFormReject } from '../../services/mutation';
 
 interface FormCardProps {
   formItem: Form;

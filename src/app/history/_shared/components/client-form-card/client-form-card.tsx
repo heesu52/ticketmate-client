@@ -3,14 +3,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
+import CancelModal from '@/app/history/_shared/components/modal/common-modal';
+import ReasonModal from '@/app/history/_shared/components/modal/reason-modal/reason-modal';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
 import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { Form, ApplicationFormStatus } from '@/shared/types';
 
 import styles from './client-form-card.module.scss';
-import CancelModal from '../modal/common-modal';
-import ReasonModal from '../modal/reason-modal/reason-modal';
 // import { formatDate } from '@/shared/utils/dates';
 interface FormCardProps {
   formItem: Form;

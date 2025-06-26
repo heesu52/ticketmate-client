@@ -2,6 +2,7 @@
 import type {
   TicketReservationSite,
   ApplicationFormStatus,
+  TicketOpenType,
 } from '@/shared/types';
 
 export const TICKET_SITE_URL_MAP: Record<TicketReservationSite, string> = {
@@ -30,4 +31,9 @@ export const APPLICATION_STATUS_LABEL_MAP: Record<
   APPROVED: '수락 완료',
   REJECTED: '거절됨',
   EXPIRED: '만료',
+};
+
+export const TICKET_OPEN_TYPE_LABEL_MAP: Record<TicketOpenType, string> = {
+  PRE_OPEN: '선예매',
+  GENERAL_OPEN: '일반예매',
 };

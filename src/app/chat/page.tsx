@@ -4,40 +4,51 @@ import { useState } from 'react';
 
 import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import ChatCard from '@/app/chat/_shared/components/chat-card/chat-card';
+import { useGetChatList } from '@/app/chat/_shared/services/query';
 import TabButton from '@/shared/components/button/tab-button/tab-button';
+import { TICKET_OPEN_TYPE_LABEL_MAP } from '@/shared/constants/type-mapping';
+import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
+import type { TicketOpenType } from '@/shared/types';
 
 import styles from './page.module.scss';
+
+type Tab = TicketOpenType | '';
 
 const tabs: { label: string; value: Tab }[] = [
   {
     label: '전체',
-    value: 'ALL',
+    value: '',
   },
   {
-    label: '선예매',
+    label: TICKET_OPEN_TYPE_LABEL_MAP.PRE_OPEN,
     value: 'PRE_OPEN',
   },
   {
-    label: '일반예매',
-    value: 'NORMAL',
+    label: TICKET_OPEN_TYPE_LABEL_MAP.GENERAL_OPEN,
+    value: 'GENERAL_OPEN',
   },
 ];
 
-type Tab = 'ALL' | 'PRE_OPEN' | 'NORMAL';
-
-const chatList = Array.from({ length: 10 }, (_, index) => ({
-  chatRoomId: index + 1,
-  chatRoomName: `의뢰인 ${index + 1}`,
-  lastChatMessage: `안녕하세요~~!! 의뢰인 ${index + 1}이에요 안녕하세요~~!! 의뢰인 ${index + 1}이에요안녕하세요~~!! 의뢰인 ${index + 1}이에요안녕하세요~~!! 의뢰인 ${index + 1}이에요 안녕하세요~~!! 의뢰인 ${index + 1}이에요`,
-  lastChatSendTime: '12:00',
-  concertThumbnailUrl: 'https://picsum.photos/200/300',
-  concertImg: 'https://picsum.photos/200/300',
-  ticketOpenType: '선예매',
-  unRead: index + 1,
-}));
-
 export default function ChatPage() {
-  const [selectedTab, setSelectedTab] = useState<Tab>('ALL');
+  const [selectedTab, setSelectedTab] = useState<Tab>('');
+
+  const {
+    data: chatList,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetChatList({
+    ticketOpenType: selectedTab as TicketOpenType,
+  });
+
+  const { lastElementRef } = useIntersectionObserver<HTMLButtonElement>({
+    onIntersect: () => {
+      if (hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+    enabled: hasNextPage && !isFetchingNextPage,
+  });
 
   return (
     <>
@@ -56,8 +67,16 @@ export default function ChatPage() {
         </div>
 
         <div className={styles.chat_list}>
-          {chatList.map((chat) => (
-            <ChatCard key={chat.chatRoomId} chat={chat} />
+          {chatList?.content.map((chat, index) => (
+            <ChatCard
+              key={chat.chatRoomId}
+              chat={chat}
+              ref={
+                index === chatList?.content.length - 1
+                  ? lastElementRef
+                  : undefined
+              }
+            />
           ))}
         </div>
       </div>

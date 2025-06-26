@@ -25,7 +25,6 @@ export default function Page({
   const { id } = resolvedParams;
   const { open, closeTop } = useModal();
 
-  //현재 직렬처리로 되어있어서 로딩시간이 조금 길게 느껴짐, 추후 병렬처리 훅을 만들어서 개선해놓자
   const ticketOpenType = resolvedSearchParams.ticketOpenType as TicketOpenType;
   const status = resolvedSearchParams.status as ApplicationFormStatus;
 

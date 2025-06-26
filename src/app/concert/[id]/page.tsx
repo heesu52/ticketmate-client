@@ -17,7 +17,7 @@ import { useScroll } from '@/shared/hooks/use-scroll';
 import styles from './page.module.scss';
 
 //고정된 대리인 ID(추후 삭제 예정)
-const FIXED_AGENT_ID = '194641e9-84da-43fb-a763-6ef41710f714';
+const FIXED_AGENT_ID = '11d4486d-4524-4e21-8ec1-bffc764bc7bb';
 
 // Mock API 호출 함수 (임시)
 const handleGetCard = async (pageParam: number) => {

@@ -1,22 +1,22 @@
 import { useRef, useCallback } from 'react';
 
-interface UseIntersectionObserverProps {
+interface UseIntersectionObserverProps<T extends HTMLElement> {
   /** 교차 발생 시, 실행할 콜백 함수 */
   onIntersect: () => void;
   /** 옵저버 활성화 여부 */
   enabled?: boolean;
 }
 
-export const useIntersectionObserver = ({
+export const useIntersectionObserver = <T extends HTMLElement>({
   onIntersect,
   enabled = true,
-}: UseIntersectionObserverProps) => {
+}: UseIntersectionObserverProps<T>) => {
   // IntersectionObserver 인스턴스 저장할 ref
   const observer = useRef<IntersectionObserver | null>(null);
 
   // 마지막 요소에 대한 ref를 생성하는 콜백 함수
   const lastElementRef = useCallback(
-    (node: HTMLDivElement) => {
+    (node: T | null): void => {
       // enabled가 false면 옵저버를 설정하지 않음
       if (!enabled) return;
 

@@ -12,6 +12,11 @@ import {
 
 import styles from './chat-input.module.scss';
 
+interface ChatInputProps {
+  onSendMessage?: (message: string) => void;
+  disabled?: boolean;
+}
+
 const actionItems = [
   {
     icon: <ListIcon width={20} height={20} stroke={`var(--textColor-main)`} />,
@@ -30,13 +35,15 @@ const actionItems = [
     label: '의뢰 성공',
   },
 ];
-const ChatInput = () => {
+
+const ChatInput = ({ onSendMessage, disabled = false }: ChatInputProps) => {
   // 추가 버튼 클릭 시 추가 메뉴 표시
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
 
   const handleSendMessage = () => {
-    if (inputMessage.trim()) {
+    if (inputMessage.trim() && onSendMessage && !disabled) {
+      onSendMessage(inputMessage.trim());
       setInputMessage('');
     }
   };
@@ -55,6 +62,7 @@ const ChatInput = () => {
           className={styles.action_button}
           type="button"
           onClick={() => setIsOpen(!isOpen)}
+          disabled={disabled}
         >
           <PlusIcon width={20} height={20} fill={`var(--textColor-main)`} />
         </button>
@@ -67,13 +75,14 @@ const ChatInput = () => {
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyDown={handleKeyPress}
           rows={1}
+          disabled={disabled}
         />
 
         <button
           className={styles.action_button}
           type="button"
           onClick={handleSendMessage}
-          disabled={!inputMessage.trim()}
+          disabled={!inputMessage.trim() || disabled}
         >
           <SendIcon width={20} height={20} fill={`var(--textColor-main)`} />
         </button>

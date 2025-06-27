@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
@@ -10,6 +10,7 @@ import styles from './chat-message-list.module.scss';
 
 interface ChatMessageListProps {
   messages: ChatMessageType[];
+  realTimeMessages?: ChatMessageType[];
 }
 
 const cn = classNames.bind(styles);
@@ -28,14 +29,29 @@ const isSameDate = (a: ChatMessageType, b: ChatMessageType) =>
   dayjs(a.sendDate).format('YYYY-MM-DD') ===
   dayjs(b.sendDate).format('YYYY-MM-DD');
 
-const ChatMessageList = ({ messages }: ChatMessageListProps) => {
+const ChatMessageList = ({
+  messages,
+  realTimeMessages = [],
+}: ChatMessageListProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // 모든 메시지 합치기 (기존 + 실시간)
+  const allMessages = [...messages, ...realTimeMessages];
+
+  // 새 메시지가 추가되면 스크롤을 맨 아래로
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [allMessages.length]);
+
   return (
-    <div className={styles.container}>
-      {messages.map((msgItem, idx) => {
+    <div className={styles.container} ref={containerRef}>
+      {allMessages.map((msgItem, idx) => {
         /** 이전 메시지 */
-        const prev = messages[idx - 1];
+        const prev = allMessages[idx - 1];
         /** 다음 메시지 */
-        const next = messages[idx + 1];
+        const next = allMessages[idx + 1];
 
         /** 보낸 사람이 내 혹은 상대방인지 확인 */
         const isMine = msgItem.mine;

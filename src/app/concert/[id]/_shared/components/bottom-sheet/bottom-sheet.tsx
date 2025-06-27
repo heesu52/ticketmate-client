@@ -28,6 +28,7 @@ const BottomSheet = ({
 }: BottomSheetProps) => {
   const { ticketOpenDateInfoResponses } = concertItem ?? {};
 
+  //티켓 오픈 타입 별로 버튼 구분
   const preOpen = ticketOpenDateInfoResponses?.find(
     (info) => info.ticketOpenType === 'PRE_OPEN',
   );

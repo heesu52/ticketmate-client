@@ -1,8 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
+import FormReadOnly from '@/app/concert/form/[id]/_shared/components/readonly/form-readonly';
 import FormTabButton from '@/app/concert/form/[id]/_shared/components/tab-button/button/form-tab-button';
-import { useCreateConcertForm } from '@/app/concert/form/[id]/_shared/services/mutation';
+import {
+  useCreateConcertForm,
+  usePatchConcertForm,
+} from '@/app/concert/form/[id]/_shared/services/mutation';
+import {
+  CreateConcertFormRequest,
+  PatchConcertFormRequest,
+} from '@/app/concert/form/[id]/_shared/services/type';
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
@@ -15,8 +24,6 @@ import {
 import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
-import FormInput from '../../input/form-input';
-import FormReadOnly from '../../readonly/form-readonly';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;
@@ -39,9 +46,8 @@ export default function FormTabManager({
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
-  const [mode, setMode] = useState<
-    'input' | 'readonly' | 'readApp' | undefined
-  >(() => {
+  //status 별로 mode를 지정해서 렌더링 하는 form을 구분
+  const [mode] = useState<'input' | 'readonly' | 'readApp' | undefined>(() => {
     if (!status) return 'input';
     if (status === 'PENDING') return 'readonly';
     if (
@@ -53,6 +59,9 @@ export default function FormTabManager({
     // ACCEPTED 혹은 그 외의 상태는 undefined로 둬서 아무 동작 안 하도록
     return undefined;
   });
+  //input과 readapp을 구분해서 제출을 하기 위해 state로 관리
+  const [isEdit, setIsEdit] = useState(false);
+  const isEditing = mode === 'input' || (mode === 'readApp' && isEdit);
 
   // FormData 형태로 초기화
   const [formData, setFormData] = useState<Record<number, FormData>>({
@@ -64,6 +73,9 @@ export default function FormTabManager({
     },
   });
 
+  // 기존 formItem이 존재하면 응답 리스트를 기반으로 탭 및 formData 상태를 초기화
+  // 탭 번호는 1부터 시작
+  // 각 탭의 formData는 performanceDate, requestCount, hopeAreaList 등의 정보를 포함
   useEffect(() => {
     if (
       formItem &&
@@ -98,12 +110,15 @@ export default function FormTabManager({
     }
   }, [formItem]);
 
+  // 탭 라벨 생성 함수
+  // 기존 신청폼이 있을 경우 공연 날짜 및 회차로 라벨 지정
+  // 없으면 기본 문구('회차를 선택해주세요') 표시
   const getTabLabel = (tabId: number) => {
-    const formItemDate =
+    const currentFormDate = formData[tabId]?.performanceDate;
+    const fallbackDate =
       formItem?.applicationFormDetailResponseList?.[tabId - 1]?.performanceDate;
 
-    const date = formItemDate || formData[tabId - 1]?.performanceDate;
-
+    const date = currentFormDate || fallbackDate;
     if (!date) return '회차를 선택해주세요';
 
     const selectedDateInfo = concertItem.concertDateInfoResponseList.find(
@@ -116,6 +131,7 @@ export default function FormTabManager({
     return `${formatted} (${selectedDateInfo.session}회차)`;
   };
 
+  // 새로운 탭 추가 및 해당 탭에 대응되는 초기 formData 생성
   const addNewTab = () => {
     setTabs((prev) => [...prev, nextId]);
     setActiveTab(nextId);
@@ -131,6 +147,8 @@ export default function FormTabManager({
     setNextId((id) => id + 1);
   };
 
+  // 지정된 탭 ID를 제거하고, 해당 formData도 함께 삭제
+  // 삭제된 탭이 활성 탭일 경우, 가장 앞의 탭으로 포커스 이동
   const removeTab = (id: number) => {
     const newTabs = tabs.filter((tabId) => tabId !== id);
     setTabs(newTabs);
@@ -142,12 +160,22 @@ export default function FormTabManager({
     setFormData(newFormData);
   };
 
+  //여러개의 탭이 있을 경우 데이터 업데이트
   const updateFormData = useCallback((id: number, data: FormData) => {
     setFormData((prev) => ({ ...prev, [id]: data }));
   }, []);
 
-  const { mutate } = useCreateConcertForm();
+  const { mutate: createMutate } = useCreateConcertForm();
+  const { mutate: patchMutate } = usePatchConcertForm();
 
+  const handleError = (error: unknown) => {
+    const code = error instanceof Error ? error.message : undefined;
+    const message =
+      (code && ERROR_MESSAGES[code]) || '알 수 없는 오류가 발생했습니다.';
+    onError(message);
+  };
+
+  // 현재 모든 탭의 formData를 수집하여 신청 요청 API(mutate) 호출
   const handleSubmit = () => {
     // formData의 모든 탭 데이터를 배열로 변환
     const applicationFormDetailRequestList = Object.values(formData).map(
@@ -163,25 +191,35 @@ export default function FormTabManager({
       }),
     );
 
-    const requestBody = {
-      agentId: '194641e9-84da-43fb-a763-6ef41710f714',
-      concertId,
-      ticketOpenType,
-      applicationFormDetailRequestList,
-    };
+    if (mode === 'input') {
+      const requestBody: CreateConcertFormRequest = {
+        agentId: '11d4486d-4524-4e21-8ec1-bffc764bc7bb',
+        concertId,
+        ticketOpenType,
+        applicationFormDetailRequestList,
+      };
 
-    // mutate 함수 실행
-    mutate(requestBody, {
-      onSuccess: () => {
-        handleOpenModal();
-      },
-      onError: (error: unknown) => {
-        const code = error instanceof Error ? error.message : undefined;
-        const message =
-          (code && ERROR_MESSAGES[code]) || '알 수 없는 오류가 발생했습니다.';
-        onError(message);
-      },
-    });
+      createMutate(requestBody, {
+        onSuccess: () => handleOpenModal(),
+        onError: handleError,
+      });
+    } else if (mode === 'readApp') {
+      if (!formItem?.applicationFormId) {
+        return;
+      }
+
+      const requestBody: PatchConcertFormRequest = {
+        applicationFormId: formItem.applicationFormId,
+        applicationFormEditRequest: {
+          applicationFormDetailRequestList,
+        },
+      };
+
+      patchMutate(requestBody, {
+        onSuccess: () => handleOpenModal(),
+        onError: handleError,
+      });
+    }
   };
 
   return (
@@ -194,7 +232,7 @@ export default function FormTabManager({
             isActive={activeTab === tabId}
             onClick={() => setActiveTab(tabId)}
             rightIcon={
-              mode === 'input' ? (
+              isEditing ? (
                 <div
                   className={styles.icon}
                   onClick={(e) => {
@@ -208,7 +246,7 @@ export default function FormTabManager({
             }
           />
         ))}
-        {mode === 'input' && (
+        {isEditing && (
           <FormTabButton
             label="추가하기"
             isActive={false}
@@ -221,7 +259,7 @@ export default function FormTabManager({
         <div>
           {tabs.map((tabId) =>
             activeTab === tabId ? (
-              mode === 'input' ? (
+              isEditing ? (
                 <FormInput
                   key={tabId}
                   value={formData[tabId]}
@@ -267,7 +305,13 @@ export default function FormTabManager({
             type="button"
             size="large"
             variant="fill"
-            onClick={() => setMode('input')}
+            onClick={() => {
+              if (isEditing) {
+                handleSubmit();
+              } else {
+                setIsEdit(true);
+              }
+            }}
           >
             재신청하기
           </Button>

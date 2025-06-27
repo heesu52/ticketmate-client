@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import AcceptModal from '@/app/history/_shared/components/modal/common-modal';
 import RejectedModal from '@/app/history/_shared/components/modal/rejected-modal/rejected-modal';
+import {
+  usePutFormApprove,
+  usePutFormReject,
+} from '@/app/history/_shared/services/mutation';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
@@ -24,6 +28,8 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
     concertId,
     applicationFormStatus,
   } = formItem;
+  const { mutate: approveForm } = usePutFormApprove();
+  const { mutate: rejectForm } = usePutFormReject();
 
   const { data: concertItem } = useGetConcertDetail({ concertId });
   const { open, closeTop } = useModal();
@@ -42,7 +48,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
           message={`의뢰인 닉네임의 요청을 수락할 시 의뢰인과 매칭이 성사되어 채팅이 가능해집니다`}
           confirmbtn={`수락`}
           onConfirm={async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await approveForm({ applicationFormId });
             closeTop();
           }}
           onCancel={() => {
@@ -61,7 +67,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
           title="요청을 거절하시겠습니까?"
           description={`의뢰인 닉네임의 요청을 거절할 시 해당 신청내역이 삭제되고 복구할 수 없습니다.\n`}
           onConfirm={async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await rejectForm({ applicationFormId });
             closeTop();
           }}
           onCancel={() => {

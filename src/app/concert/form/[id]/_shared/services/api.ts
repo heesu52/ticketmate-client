@@ -1,5 +1,6 @@
 import {
   CreateConcertFormRequest,
+  PatchConcertFormRequest,
   GetFormDetailRequest,
   GetFormDetailResponse,
 } from '@/app/concert/form/[id]/_shared/services/type';
@@ -20,6 +21,20 @@ const createConcertForm = async (request: CreateConcertFormRequest) => {
 };
 
 /**
+ * @description 공연 신청폼 수정
+ */
+const patchConcertForm = async (request: PatchConcertFormRequest) => {
+  const { applicationFormId, applicationFormEditRequest } = request;
+
+  const data = await instance(`${BASE_URL}/${applicationFormId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(applicationFormEditRequest),
+  });
+
+  return data;
+};
+
+/**
  * @description 공연 신청폼 개별 조회
  */
 const getFormDetail = async (request: GetFormDetailRequest) => {
@@ -34,4 +49,4 @@ const getFormDetail = async (request: GetFormDetailRequest) => {
   return data;
 };
 
-export { createConcertForm, getFormDetail };
+export { createConcertForm, patchConcertForm, getFormDetail };

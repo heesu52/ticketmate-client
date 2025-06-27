@@ -1,6 +1,7 @@
 import {
   GetConcertListRequest,
   GetConcertListResponse,
+  GetMemberResponse,
 } from '@/app/_shared/services/type';
 import instance from '@/shared/services/instance';
 import { createQueryParams } from '@/shared/utils/services/query-string';
@@ -21,4 +22,14 @@ const getConcertList = async (request?: GetConcertListRequest) => {
   return data;
 };
 
-export { getConcertList };
+/**
+ * @description 정보 조회
+ */
+const getMember = async () => {
+  const data = await instance<GetMemberResponse>(`/member`, {
+    method: 'GET',
+  });
+  return data;
+};
+
+export { getConcertList, getMember };

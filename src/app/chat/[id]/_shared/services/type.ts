@@ -1,6 +1,13 @@
+import { Pagination } from '@/shared/types/api';
+
 export interface GetChatDetailRequest {
   /** 채팅방 고유 ID */
   chatRoomId: string;
+
+  parameter?: {
+    pageNumber?: number;
+    pageSize?: number;
+  };
 }
 
 export interface ChatMessage {
@@ -24,4 +31,4 @@ export interface ChatMessage {
   senderNickname: string;
 }
 
-export type GetChatDetailResponse = ChatMessage[];
+export type GetChatDetailResponse = Pagination<ChatMessage>;

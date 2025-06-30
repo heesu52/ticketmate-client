@@ -41,10 +41,12 @@ const ChatMessageList = ({
   // 모든 메시지 합치기 (기존 + 실시간)
   const allMessages = [...messages, ...realTimeMessages].reverse();
 
-  // 새 메시지가 추가되면 스크롤을 맨 아래로
+  // 스크롤 하단으로 내리기
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    if (containerRef.current && allMessages.length > 0) {
+      containerRef.current.scrollIntoView({
+        block: 'end',
+      });
     }
   }, [allMessages.length]);
 

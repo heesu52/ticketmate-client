@@ -1,6 +1,6 @@
 'use client';
 
-import React, { use, useEffect } from 'react';
+import React, { use } from 'react';
 
 import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import ChatHeader from '@/app/chat/[id]/_shared/components/chat-header/chat-header';
@@ -18,38 +18,20 @@ interface ChatDetailPageProps {
 const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
   const { id } = use(params);
 
-  const { data: initialMessages } = useGetChatDetail({ chatRoomId: id });
-
-  const {
-    isConnected,
-    messages: stompMessages,
-    sendMessage,
-    connect,
-    disconnect,
-  } = useStomp({
+  const { data: initialMessages } = useGetChatDetail({
     chatRoomId: id,
-    onMessageReceived: (message) => {
-      console.log('새 메시지 수신:', message);
-    },
-    onReadAck: (data) => {
-      console.log('읽음 확인:', data);
-    },
   });
 
-  // 메시지 전송 핸들러
-  const handleSendMessage = (message: string) => {
-    if (isConnected) {
-      sendMessage(message);
-      console.log('메시지 전송:', message);
-    } else {
-      console.error('WebSocket이 연결되지 않았습니다.');
-    }
-  };
-
-  // 연결 상태 표시
-  useEffect(() => {
-    console.log('WebSocket 연결 상태:', isConnected ? '연결됨' : '연결 안됨');
-  }, [isConnected]);
+  const { isConnected, sendMessage, subscribeRealTime } = useStomp({
+    chatRoomId: id,
+    onConnect: () => {
+      console.log('연결됨!');
+      subscribeRealTime(); // 연결 후 구독
+    },
+    onReceivedMessage: (message) => {
+      console.log('새 메시지:', message);
+    },
+  });
 
   return (
     <>
@@ -61,15 +43,15 @@ const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
 
         <div className={styles.messages_container}>
           <ChatMessageList
-            messages={initialMessages ?? []}
-            realTimeMessages={stompMessages}
+            messages={initialMessages?.content ?? []}
+            // realTimeMessages={stompMessages}
           />
         </div>
 
         <div className={styles.input_container}>
           <ChatInput
-            onSendMessage={handleSendMessage}
-            disabled={!isConnected}
+          // onSendMessage={handleSendMessage}
+          // disabled={!isConnected}
           />
         </div>
       </div>

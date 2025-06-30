@@ -5,6 +5,12 @@ import { useMemo, useCallback, useEffect, useRef, useState } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
+import { ChatMessage } from '@/app/chat/[id]/_shared/services/type';
+import type {
+  ReadAckMessage,
+  UnreadMessage,
+} from '@/shared/hooks/use-chat-stomp/use-chat-stomp.type';
+
 interface UseStompProps {
   /** 채팅방 ID */
   chatRoomId: string;
@@ -14,6 +20,8 @@ interface UseStompProps {
   onUnreadMessage?: (dto: unknown) => void;
   /** 실시간 메시지 구독 시 호출될 함수 */
   onReceivedMessage?: (dto: unknown) => void;
+  /** 읽음 확인 메시지 수신 시 호출될 함수 */
+  onReadAck?: (dto: unknown) => void;
 }
 
 const useStomp = ({
@@ -21,6 +29,7 @@ const useStomp = ({
   onConnect,
   onUnreadMessage,
   onReceivedMessage,
+  onReadAck,
 }: UseStompProps) => {
   const port = typeof window !== 'undefined' ? window.location.port : '';
   const accessToken =
@@ -67,21 +76,14 @@ const useStomp = ({
     stomp.activate();
   }, [accessToken, onConnect]);
 
-  useEffect(() => {
-    connectWebSocket();
-
-    return () => {
-      stompClient.current?.deactivate();
-    };
-  }, [connectWebSocket]);
-
   /** 미읽음 메세지 알림 구독 */
   const subscribeUnread = useCallback(() => {
     if (!stompClient.current?.connected || !userId) return;
 
     stompClient.current.subscribe(`/queue/unread.${userId}`, (msg) => {
-      const dto = JSON.parse(msg.body);
-      onUnreadMessage?.(dto);
+      const unreadMessage: UnreadMessage = JSON.parse(msg.body);
+
+      onUnreadMessage?.(unreadMessage);
     });
   }, [userId, onUnreadMessage]);
 
@@ -92,8 +94,14 @@ const useStomp = ({
     stompClient.current.subscribe(
       `/exchange/chat.exchange/chat.room.${chatRoomId}.user.${userId}`,
       (msg) => {
-        const dto = JSON.parse(msg.body);
-        onReceivedMessage?.(dto);
+        const response: ChatMessage | ReadAckMessage = JSON.parse(msg.body);
+
+        if ('type' in response && response.type === 'READ_ACK') {
+          onReadAck?.(response);
+          return;
+        } else if ('message' in response) {
+          onReceivedMessage?.(response);
+        }
       },
     );
   }, [chatRoomId, userId, onReceivedMessage]);
@@ -111,7 +119,7 @@ const useStomp = ({
     [chatRoomId],
   );
 
-  /** 메세지 읽음 확인 전송 */
+  /** 메세지 읽음 확인 처리 전송 */
   const sendReadAck = useCallback(
     (messageId: string) => {
       if (!stompClient.current?.connected) return;
@@ -126,6 +134,19 @@ const useStomp = ({
     },
     [chatRoomId],
   );
+
+  /** 웹소켓 연결 해제 */
+  const disconnectWebSocket = useCallback(() => {
+    stompClient.current?.deactivate();
+  }, []);
+
+  useEffect(() => {
+    connectWebSocket();
+
+    return () => {
+      disconnectWebSocket();
+    };
+  }, [connectWebSocket, disconnectWebSocket]);
 
   return {
     isConnected,

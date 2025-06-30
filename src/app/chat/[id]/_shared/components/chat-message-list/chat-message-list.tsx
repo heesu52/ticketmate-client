@@ -4,12 +4,15 @@ import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 
-import type { ChatMessage as ChatMessageType } from '@/app/chat/[id]/_shared/services/type';
+import type {
+  ChatMessage as ChatMessageType,
+  GetChatDetailResponse,
+} from '@/app/chat/[id]/_shared/services/type';
 
 import styles from './chat-message-list.module.scss';
 
 interface ChatMessageListProps {
-  messages: ChatMessageType[];
+  messages: GetChatDetailResponse['content'];
   realTimeMessages?: ChatMessageType[];
 }
 
@@ -36,7 +39,7 @@ const ChatMessageList = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   // 모든 메시지 합치기 (기존 + 실시간)
-  const allMessages = [...messages, ...realTimeMessages];
+  const allMessages = [...messages, ...realTimeMessages].reverse();
 
   // 새 메시지가 추가되면 스크롤을 맨 아래로
   useEffect(() => {
@@ -78,7 +81,7 @@ const ChatMessageList = ({
         const groupSpacing = isFirstOfGroup ? { marginTop: '24px' } : {};
 
         return (
-          <React.Fragment key={msgItem.messageId}>
+          <React.Fragment key={`${msgItem.messageId}-${idx}`}>
             {showDateDivider && (
               <div className={styles.date_divider}>{formattedDate}</div>
             )}

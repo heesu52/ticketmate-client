@@ -1,12 +1,13 @@
 'use client';
 
-import React, { use } from 'react';
+import React, { use, useState, useCallback } from 'react';
 
 import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import ChatHeader from '@/app/chat/[id]/_shared/components/chat-header/chat-header';
 import ChatInput from '@/app/chat/[id]/_shared/components/chat-input/chat-input';
-import useStomp from '@/app/chat/[id]/_shared/hooks/useStomp';
 import useGetChatDetail from '@/app/chat/[id]/_shared/services/query';
+import { ChatMessage } from '@/app/chat/[id]/_shared/services/type';
+import useStomp from '@/shared/hooks/use-chat-stomp/use-chat-stomp';
 
 import ChatMessageList from './_shared/components/chat-message-list/chat-message-list';
 import styles from './page.module.scss';
@@ -22,16 +23,27 @@ const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
     chatRoomId: id,
   });
 
+  const [realTimeMessages, setRealTimeMessages] = useState<ChatMessage[]>([]);
+
   const { isConnected, sendMessage, subscribeRealTime } = useStomp({
     chatRoomId: id,
     onConnect: () => {
-      console.log('연결됨!');
       subscribeRealTime(); // 연결 후 구독
     },
     onReceivedMessage: (message) => {
-      console.log('새 메시지:', message);
+      setRealTimeMessages((prev) => [...prev, message as ChatMessage]);
     },
   });
+
+  // 메시지 전송 핸들러
+  const handleSendMessage = useCallback(
+    (message: string) => {
+      if (message.trim() && isConnected) {
+        sendMessage(message);
+      }
+    },
+    [sendMessage, isConnected],
+  );
 
   return (
     <>
@@ -44,14 +56,14 @@ const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
         <div className={styles.messages_container}>
           <ChatMessageList
             messages={initialMessages?.content ?? []}
-            // realTimeMessages={stompMessages}
+            realTimeMessages={realTimeMessages}
           />
         </div>
 
         <div className={styles.input_container}>
           <ChatInput
-          // onSendMessage={handleSendMessage}
-          // disabled={!isConnected}
+            onSendMessage={handleSendMessage}
+            disabled={!isConnected}
           />
         </div>
       </div>

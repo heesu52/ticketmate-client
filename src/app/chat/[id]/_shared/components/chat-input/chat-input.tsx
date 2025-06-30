@@ -44,6 +44,7 @@ const ChatInput = ({ onSendMessage, disabled = false }: ChatInputProps) => {
   const handleSendMessage = () => {
     if (inputMessage.trim() && onSendMessage && !disabled) {
       onSendMessage(inputMessage.trim());
+
       setInputMessage('');
     }
   };

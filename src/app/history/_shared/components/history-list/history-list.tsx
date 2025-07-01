@@ -11,11 +11,10 @@ interface HistoryListProps {
 }
 
 const HistoryList = ({ tab }: HistoryListProps) => {
-  //임시로 memberId 하드코딩
-  // const memberId = 'dd279013-29da-40ea-94af-9721a1abde74';
-  //현재는 모든 신청내역을 불러오고 있음 -> membertype & memberid로 본인의 기록만 가져오도록 수정필요
-
+  //세션에 저장한 membertype
   const MemberType = sessionStorage.getItem('memberType') ?? '';
+
+  //membertype에 따라 신청내역 필터링 값을 clientId와 agentId로 구분
   const clientId =
     MemberType === 'CLIENT'
       ? (sessionStorage.getItem('memberId') ?? '')

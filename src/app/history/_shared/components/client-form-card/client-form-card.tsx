@@ -121,7 +121,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           </>
         ) : statusKey === 'REJECTED' ? (
           <>
-            <button className={styles.link} onClick={handleOpenCancelModal}>
+            <button className={styles.link} onClick={handleOpenReasonModal}>
               거절사유
             </button>
             <span className={styles.canceled}>{statusLabel}</span>

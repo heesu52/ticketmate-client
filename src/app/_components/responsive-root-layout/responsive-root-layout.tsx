@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import classNames from 'classnames/bind';
 import { usePathname } from 'next/navigation';
@@ -22,7 +22,6 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   const { hasAppBar, appBarTitle, hasBackground, action } = useAppBarStore();
-  useGetMember();
 
   // BottomNavigation 보여줄 경로
   const showBottomNavRoutes = ['/', '/history', '/chat'];
@@ -32,6 +31,16 @@ export default function RootLayout({
   const hasAppHeader = pathname === '/';
 
   const hasNoPadding = pathname.includes('/chat/');
+
+  const { data, isSuccess } = useGetMember();
+
+  useEffect(() => {
+    if (isSuccess && data?.memberId) {
+      sessionStorage.setItem('memberId', data.memberId);
+      sessionStorage.setItem('memberId', data.memberType);
+      console.log('멤버 데이터:', data);
+    }
+  }, [isSuccess, data]);
 
   return (
     <div className={styles.container}>

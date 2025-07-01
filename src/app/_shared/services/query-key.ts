@@ -5,7 +5,7 @@ const queryKey = {
     'getConcertList',
     request,
   ],
-  getMember: () => ['getMember'] as const,
+  getMember: () => ['getMember'],
 };
 
 export default queryKey;

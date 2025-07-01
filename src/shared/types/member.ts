@@ -1,5 +1,6 @@
 interface Member {
   memberId: string;
+  memberType: string;
   username: string;
   nickname: string;
   name: string;

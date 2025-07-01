@@ -37,7 +37,7 @@ export default function RootLayout({
   useEffect(() => {
     if (isSuccess && data?.memberId) {
       sessionStorage.setItem('memberId', data.memberId);
-      sessionStorage.setItem('memberId', data.memberType);
+      sessionStorage.setItem('memberType', data.memberType);
       console.log('멤버 데이터:', data);
     }
   }, [isSuccess, data]);

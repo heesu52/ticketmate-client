@@ -36,22 +36,22 @@ const ChatMessageList = ({
   messages,
   realTimeMessages = [],
 }: ChatMessageListProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   // 모든 메시지 합치기 (기존 + 실시간)
   const allMessages = [...messages, ...realTimeMessages].reverse();
 
   // 스크롤 하단으로 내리기
   useEffect(() => {
-    if (containerRef.current && allMessages.length > 0) {
-      containerRef.current.scrollIntoView({
-        block: 'end',
+    if (bottomRef.current && allMessages.length > 0) {
+      bottomRef.current?.scrollIntoView({
+        behavior: 'auto',
       });
     }
   }, [allMessages.length]);
 
   return (
-    <div className={styles.container} ref={containerRef}>
+    <div className={styles.container}>
       {allMessages.map((msgItem, idx) => {
         /** 이전 메시지 */
         const prev = allMessages[idx - 1];
@@ -126,6 +126,8 @@ const ChatMessageList = ({
           </React.Fragment>
         );
       })}
+
+      <div ref={bottomRef} aria-hidden="true" />
     </div>
   );
 };

@@ -29,12 +29,15 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
     seatingChartUrl,
   } = concertItem;
 
+  const preOpenDday = ticketPreOpenDate ? calculateDday(ticketPreOpenDate) : '';
+  const showPreOpenBadge = preOpenDday && !preOpenDday.startsWith('D+');
+
   return (
     <>
       <Link href={`/concert/${concertId}`}>
         <div className={styles.container}>
           <div className={styles.tag}>
-            {ticketPreOpenDate && (
+            {showPreOpenBadge && (
               <Badge type="type-a">
                 선예매까지 {calculateDday(ticketPreOpenDate)}
               </Badge>

@@ -6,9 +6,45 @@ import SockJS from 'sockjs-client';
 let stompClient: Client | null = null;
 /** 웹소켓 연결 상태 */
 let isConnected = false;
+/** 웹소켓 연결 중 상태 */
+let isConnecting = false;
 
 /** 웹소켓 구독 목록 */
 const subscriptions = new Map<string, StompSubscription>();
+
+/** 연결 상태 변경 리스너들 */
+const connectionListeners = new Set<
+  (connected: boolean, connecting: boolean) => void
+>();
+
+/**
+ * 연결 상태 변경 알림
+ */
+const notifyConnectionChange = () => {
+  connectionListeners.forEach((listener) =>
+    listener(isConnected, isConnecting),
+  );
+};
+
+/**
+ * 연결 상태 리스너 등록
+ */
+export const addConnectionListener = (
+  listener: (connected: boolean, connecting: boolean) => void,
+) => {
+  connectionListeners.add(listener);
+  // 즉시 현재 상태 알림
+  listener(isConnected, isConnecting);
+};
+
+/**
+ * 연결 상태 리스너 제거
+ */
+export const removeConnectionListener = (
+  listener: (connected: boolean, connecting: boolean) => void,
+) => {
+  connectionListeners.delete(listener);
+};
 
 /**
  * 웹소켓 클라이언트 연결
@@ -19,6 +55,25 @@ export const connectStomp = (): Promise<Client> => {
   if (stompClient && isConnected) {
     return Promise.resolve(stompClient);
   }
+
+  // 이미 연결 중이면 기존 Promise 반환
+  if (isConnecting) {
+    return new Promise((resolve, reject) => {
+      const checkConnection = () => {
+        if (isConnected && stompClient) {
+          resolve(stompClient);
+        } else if (!isConnecting) {
+          reject(new Error('Connection failed'));
+        } else {
+          setTimeout(checkConnection, 100);
+        }
+      };
+      checkConnection();
+    });
+  }
+
+  isConnecting = true;
+  notifyConnectionChange();
 
   // 임시 토큰 및 유저 아이디
   const port = typeof window !== 'undefined' ? window.location.port : '';
@@ -52,16 +107,22 @@ export const connectStomp = (): Promise<Client> => {
       },
       onConnect: () => {
         isConnected = true;
+        isConnecting = false;
+        notifyConnectionChange();
         resolve(stompClient!);
       },
       onStompError: (frame) => {
         console.error('Broker error:', frame);
+        isConnecting = false;
+        notifyConnectionChange();
         reject(new Error('STOMP connection failed'));
       },
     });
 
     stompClient.onWebSocketClose = () => {
       isConnected = false;
+      isConnecting = false;
+      notifyConnectionChange();
     };
 
     stompClient.activate();
@@ -122,6 +183,7 @@ export const disconnectStomp = () => {
   if (stompClient && isConnected) {
     stompClient.deactivate();
     isConnected = false;
+    isConnecting = false;
     subscriptions.clear();
   }
 };

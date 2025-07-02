@@ -1,19 +1,20 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 
+import useGetChatDetail from '@/app/chat/[id]/_shared/services/query';
 import type {
+  ChatMessage,
   ChatMessage as ChatMessageType,
-  GetChatDetailResponse,
 } from '@/app/chat/[id]/_shared/services/type';
+import useStomp from '@/shared/hooks/use-stomp';
 
 import styles from './chat-message-list.module.scss';
 
 interface ChatMessageListProps {
-  messages: GetChatDetailResponse['content'];
-  realTimeMessages?: ChatMessageType[];
+  roomId: string;
 }
 
 const cn = classNames.bind(styles);
@@ -32,31 +33,101 @@ const isSameDate = (a: ChatMessageType, b: ChatMessageType) =>
   dayjs(a.sendDate).format('YYYY-MM-DD') ===
   dayjs(b.sendDate).format('YYYY-MM-DD');
 
-const ChatMessageList = ({
-  messages,
-  realTimeMessages = [],
-}: ChatMessageListProps) => {
+const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
+  /** 초기 메시지 조회 */
+  const { data: initialMessages } = useGetChatDetail({
+    chatRoomId: roomId,
+  });
+
+  /** 메시지 목록 */
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  /** 초기 메시지 설정 */
+  useEffect(() => {
+    if (initialMessages?.content) {
+      setMessages([...initialMessages.content].reverse());
+    }
+  }, [initialMessages]);
+
+  const port = typeof window !== 'undefined' ? window.location.port : '';
+  const userId =
+    port === '3000'
+      ? process.env.NEXT_PUBLIC_USER_ID_3000
+      : process.env.NEXT_PUBLIC_USER_ID_3001;
+
+  // 메시지 수신 처리 핸들러
+  const handleMessage = useCallback((response: ChatMessage) => {
+    console.log('메시지 수신 처리:', response);
+    if ('message' in response) {
+      setMessages((prev) => [...prev, response]);
+    }
+  }, []);
+
+  /** 메시지 수신 */
+  const { isConnected, isConnecting, send } = useStomp<ChatMessage>(
+    `/exchange/chat.exchange/chat.room.${roomId}.user.${userId}`,
+    handleMessage,
+  );
+
+  /** 메시지 읽음 처리 */
+  const handleReadMessage = useCallback(
+    (messageId: string) => {
+      console.log('메시지 읽음 처리:', messageId);
+
+      send(`/pub/chat.read.${roomId}`, {
+        lastReadMessageId: messageId,
+        readDate: new Date().toISOString(),
+      });
+    },
+    [roomId, send],
+  );
+
+  /** 스크롤 하단 참조 */
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // 모든 메시지 합치기 (기존 + 실시간)
-  const allMessages = [...messages, ...realTimeMessages].reverse();
-
-  // 스크롤 하단으로 내리기
+  /** 스크롤 하단으로 내리기 */
   useEffect(() => {
-    if (bottomRef.current && allMessages.length > 0) {
+    if (bottomRef.current && messages.length > 0) {
       bottomRef.current?.scrollIntoView({
         behavior: 'auto',
       });
     }
-  }, [allMessages.length]);
+  }, [messages.length]);
+
+  /** 스크롤 이벤트 핸들러 */
+  const handleScroll = useCallback(() => {
+    if (!isConnected || messages.length === 0) return;
+
+    const { scrollY, innerHeight } = window;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    // 스크롤이 하단에 도달했는지 확인 (약간의 여유 공간 포함)
+    const isAtBottom = scrollY + innerHeight >= documentHeight - 10;
+
+    if (isAtBottom) {
+      // 마지막 메시지의 ID 가져오기
+      const lastMessage = messages[messages.length - 1];
+
+      if (lastMessage && lastMessage.isRead !== true) {
+        console.log('스크롤 하단 도달, 읽음 처리:', lastMessage.messageId);
+        handleReadMessage(lastMessage.messageId);
+      }
+    }
+  }, [isConnected, messages, handleReadMessage]);
+
+  /** 스크롤 이벤트 리스너 등록 */
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   return (
     <div className={styles.container}>
-      {allMessages.map((msgItem, idx) => {
+      {messages.map((msgItem, idx) => {
         /** 이전 메시지 */
-        const prev = allMessages[idx - 1];
+        const prev = messages[idx - 1];
         /** 다음 메시지 */
-        const next = allMessages[idx + 1];
+        const next = messages[idx + 1];
 
         /** 보낸 사람이 내 혹은 상대방인지 확인 */
         const isMine = msgItem.mine;

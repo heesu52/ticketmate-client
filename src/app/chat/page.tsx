@@ -1,13 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+
+import { useQueryClient } from '@tanstack/react-query';
 
 import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import ChatCard from '@/app/chat/_shared/components/chat-card/chat-card';
 import { useGetChatList } from '@/app/chat/_shared/services/query';
+import queryKey from '@/app/chat/_shared/services/query-key';
+import type {
+  GetChatListResponse,
+  ChatRoom,
+} from '@/app/chat/_shared/services/type';
 import TabButton from '@/shared/components/button/tab-button/tab-button';
 import { TICKET_OPEN_TYPE_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
+import useStomp from '@/shared/hooks/use-stomp';
 import type { TicketOpenType } from '@/shared/types';
 
 import styles from './page.module.scss';
@@ -29,8 +37,16 @@ const tabs: { label: string; value: Tab }[] = [
   },
 ];
 
+interface UnreadMessage {
+  chatRoomId: string;
+  lastMessage: string;
+  sendDate: number[];
+  unReadMessageCount: number;
+}
+
 export default function ChatPage() {
   const [selectedTab, setSelectedTab] = useState<Tab>('');
+  const queryClient = useQueryClient();
 
   const {
     data: chatList,
@@ -49,6 +65,75 @@ export default function ChatPage() {
     },
     enabled: hasNextPage && !isFetchingNextPage,
   });
+
+  const port = typeof window !== 'undefined' ? window.location.port : '';
+  const userId =
+    port === '3000'
+      ? process.env.NEXT_PUBLIC_USER_ID_3000
+      : process.env.NEXT_PUBLIC_USER_ID_3001;
+
+  // 메시지 수신 처리 핸들러
+  const handleMessage = useCallback(
+    (response: UnreadMessage) => {
+      console.log('안읽은 메세지 수신:', response);
+
+      // sendDate를 Date 객체로 변환
+      const sendDate = new Date(
+        response.sendDate[0],
+        response.sendDate[1] - 1,
+        response.sendDate[2],
+        response.sendDate[3],
+        response.sendDate[4],
+        response.sendDate[5],
+      );
+
+      // API 호출 없이, React Query 캐시 직접 업데이트
+      queryClient.setQueryData(
+        queryKey.chatList({
+          ticketOpenType: selectedTab as TicketOpenType,
+        }),
+        (oldData: { pages: GetChatListResponse[] } | undefined) => {
+          if (!oldData?.pages) return oldData;
+
+          // 변경된 채팅방이 있는지 확인
+          let hasChanges = false;
+
+          const updatedPages = oldData.pages.map(
+            (page: GetChatListResponse) => {
+              const updatedContent = page.content.map((chat: ChatRoom) => {
+                if (chat.chatRoomId === response.chatRoomId) {
+                  hasChanges = true;
+
+                  return {
+                    ...chat,
+                    lastChatMessage: response.lastMessage,
+                    lastChatSendTime: sendDate.toISOString(),
+                    unReadMessageCount: response.unReadMessageCount,
+                  };
+                }
+                return chat;
+              });
+
+              return {
+                ...page,
+                content: updatedContent,
+              };
+            },
+          );
+
+          // 변경사항이 없으면 원본 데이터 반환 (불필요한 리렌더링 방지)
+          return hasChanges ? { ...oldData, pages: updatedPages } : oldData;
+        },
+      );
+    },
+    [queryClient, selectedTab],
+  );
+
+  /** 메시지 수신 */
+  const { isConnected, isConnecting } = useStomp(
+    `/queue/unread.${userId}`,
+    handleMessage,
+  );
 
   return (
     <>

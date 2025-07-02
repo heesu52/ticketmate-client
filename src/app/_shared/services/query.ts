@@ -1,6 +1,6 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import { getConcertList } from '@/app/_shared/services/api';
+import { getConcertList, getMember } from '@/app/_shared/services/api';
 import queryKey from '@/app/_shared/services/query-key';
 import { GetConcertListRequest } from '@/app/_shared/services/type';
 
@@ -21,5 +21,13 @@ export const useGetConcertList = (request?: GetConcertListRequest) => {
       pageParams: data.pageParams,
     }),
     placeholderData: (data) => data,
+  });
+};
+
+export const useGetMember = () => {
+  return useQuery({
+    queryKey: queryKey.getMember(),
+    queryFn: getMember,
+    staleTime: 1000 * 60 * 5, // optional: 5분 동안 fresh
   });
 };

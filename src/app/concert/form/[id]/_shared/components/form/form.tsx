@@ -79,8 +79,6 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
               height={186}
               unoptimized
             />
-            {/* 좌석배치도의 디자인이 결정되면 반영예정 */}
-            <span className={styles.link}>좌석배치도</span>
           </div>
           <div className={styles.detail_container}>
             <div className={styles.detail}>

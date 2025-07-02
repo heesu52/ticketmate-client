@@ -1,6 +1,7 @@
 export { default as AlertCircleIcon } from './alert-circle.svg';
 export { default as ArrowBottomIcon } from './arrow-bottom.svg';
 export { default as ArrowLeftIcon } from './arrow-left.svg';
+export { default as ArrowTopIcon } from './arrow-top.svg';
 export { default as CameraIcon } from './camera.svg';
 export { default as ChatIcon } from './chat.svg';
 export { default as CloseIcon } from './close.svg';

@@ -273,6 +273,7 @@ export default function FormTabManager({
                   ticketOpenType={ticketOpenType}
                   formItem={formItem}
                   currentIndex={tabId - 1}
+                  seatingChartUrl={concertItem.seatingChartUrl}
                 />
               ) : formItem?.applicationFormDetailResponseList?.[tabId - 1] ? (
                 <FormReadOnly

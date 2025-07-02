@@ -81,11 +81,29 @@
           @include text-sm;
           color: var(--textColor-less);
           text-decoration-line: underline;
-          text-decoration-style: solid;
-          text-decoration-skip-ink: auto;
-          text-decoration-thickness: auto;
-          text-underline-offset: auto;
+          // text-decoration-style: solid;
+          // text-decoration-skip-ink: auto;
+          // text-decoration-thickness: auto;
+          // text-underline-offset: auto;
           text-underline-position: from-font;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .seat_container {
+      display: flex;
+      flex-direction: column;
+
+      .seat {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: flex-end;
+
+        span {
+          @include text-sm;
+          color: var(--textColor-less);
           cursor: pointer;
         }
       }

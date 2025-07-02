@@ -63,7 +63,7 @@ const useStomp = <T = unknown>(topic: string, onMessage: (msg: T) => void) => {
       removeConnectionListener(connectionListener);
       unsubscribeFromTopic(topic);
     };
-  }, [topic]);
+  }, [topic, onMessage]);
 
   return {
     send: sendMessage,

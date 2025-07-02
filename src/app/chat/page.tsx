@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -14,8 +14,8 @@ import type {
 } from '@/app/chat/_shared/services/type';
 import TabButton from '@/shared/components/button/tab-button/tab-button';
 import { TICKET_OPEN_TYPE_LABEL_MAP } from '@/shared/constants/type-mapping';
+import { useWebSocket } from '@/shared/context/websocket-context';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
-import useStomp from '@/shared/hooks/use-stomp';
 import type { TicketOpenType } from '@/shared/types';
 
 import styles from './page.module.scss';
@@ -45,6 +45,8 @@ interface UnreadMessage {
 }
 
 export default function ChatPage() {
+  const memberId = sessionStorage.getItem('memberId') ?? '';
+
   const [selectedTab, setSelectedTab] = useState<Tab>('');
   const queryClient = useQueryClient();
 
@@ -66,17 +68,11 @@ export default function ChatPage() {
     enabled: hasNextPage && !isFetchingNextPage,
   });
 
-  const port = typeof window !== 'undefined' ? window.location.port : '';
-  const userId =
-    port === '3000'
-      ? process.env.NEXT_PUBLIC_USER_ID_3000
-      : process.env.NEXT_PUBLIC_USER_ID_3001;
+  const { connect, disconnect, subscribe, unsubscribe } = useWebSocket();
 
-  // 메시지 수신 처리 핸들러
-  const handleMessage = useCallback(
+  // 안읽은 메시지 수신 처리 핸들러
+  const handleUnreadMessage = useCallback(
     (response: UnreadMessage) => {
-      console.log('안읽은 메세지 수신:', response);
-
       // sendDate를 Date 객체로 변환
       const sendDate = new Date(
         response.sendDate[0],
@@ -129,11 +125,16 @@ export default function ChatPage() {
     [queryClient, selectedTab],
   );
 
-  /** 메시지 수신 */
-  const { isConnected, isConnecting } = useStomp(
-    `/queue/unread.${userId}`,
-    handleMessage,
-  );
+  useEffect(() => {
+    connect().then(() => {
+      subscribe(`/queue/unread.${memberId}`, handleUnreadMessage);
+    });
+
+    return () => {
+      unsubscribe(`/queue/unread.${memberId}`);
+      disconnect();
+    };
+  }, []);
 
   return (
     <>

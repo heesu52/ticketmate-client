@@ -147,8 +147,15 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
       console.log('웹소켓 구독 시작', topic);
 
       const sub = stompClientRef.current.subscribe(topic, (msg: IMessage) => {
-        console.log('웹소켓 메시지 수신', msg);
-        callback(msg as T);
+        try {
+          const response = JSON.parse(msg.body) as T;
+
+          console.log('웹소켓 메시지 수신', response);
+
+          callback(response);
+        } catch (e) {
+          console.error('Parsing error', e);
+        }
       });
       subscriptions.current.set(topic, sub);
     },

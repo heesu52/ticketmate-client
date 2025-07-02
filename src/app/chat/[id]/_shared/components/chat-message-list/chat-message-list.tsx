@@ -9,7 +9,7 @@ import type {
   ChatMessage,
   ChatMessage as ChatMessageType,
 } from '@/app/chat/[id]/_shared/services/type';
-import useStomp from '@/shared/hooks/use-stomp';
+import { useWebSocket } from '@/shared/context/websocket-context';
 
 import styles from './chat-message-list.module.scss';
 
@@ -34,6 +34,8 @@ const isSameDate = (a: ChatMessageType, b: ChatMessageType) =>
   dayjs(b.sendDate).format('YYYY-MM-DD');
 
 const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
+  const memberId = sessionStorage.getItem('memberId') ?? '';
+
   /** 초기 메시지 조회 */
   const { data: initialMessages } = useGetChatDetail({
     chatRoomId: roomId,
@@ -49,43 +51,55 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     }
   }, [initialMessages]);
 
-  const port = typeof window !== 'undefined' ? window.location.port : '';
-  const userId =
-    port === '3000'
-      ? process.env.NEXT_PUBLIC_USER_ID_3000
-      : process.env.NEXT_PUBLIC_USER_ID_3001;
-
   // 메시지 수신 처리 핸들러
   const handleMessage = useCallback((response: ChatMessage) => {
-    console.log('메시지 수신 처리:', response);
     if ('message' in response) {
       setMessages((prev) => [...prev, response]);
     }
   }, []);
 
-  /** 메시지 수신 */
-  const { isConnected, isConnecting, send } = useStomp<ChatMessage>(
-    `/exchange/chat.exchange/chat.room.${roomId}.user.${userId}`,
-    handleMessage,
-  );
+  const {
+    isConnected,
+    connect,
+    disconnect,
+    subscribe,
+    unsubscribe,
+    sendMessage,
+  } = useWebSocket();
+
+  useEffect(() => {
+    connect().then(() => {
+      subscribe(
+        `/exchange/chat.exchange/chat.room.${roomId}.user.${memberId}`,
+        handleMessage,
+      );
+    });
+
+    return () => {
+      disconnect();
+      unsubscribe(
+        `/exchange/chat.exchange/chat.room.${roomId}.user.${memberId}`,
+      );
+    };
+  }, []);
 
   /** 메시지 읽음 처리 */
   const handleReadMessage = useCallback(
     (messageId: string) => {
       console.log('메시지 읽음 처리:', messageId);
 
-      send(`/pub/chat.read.${roomId}`, {
+      sendMessage(`/pub/chat.read.${roomId}`, {
         lastReadMessageId: messageId,
         readDate: new Date().toISOString(),
       });
     },
-    [roomId, send],
+    [roomId, sendMessage],
   );
 
   /** 스크롤 하단 참조 */
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  /** 스크롤 하단으로 내리기 */
+  /** 메세지 추가되는 경우 스크롤 하단으로 내리기 */
   useEffect(() => {
     if (bottomRef.current && messages.length > 0) {
       bottomRef.current?.scrollIntoView({
@@ -102,14 +116,14 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     const documentHeight = document.documentElement.scrollHeight;
 
     // 스크롤이 하단에 도달했는지 확인 (약간의 여유 공간 포함)
-    const isAtBottom = scrollY + innerHeight >= documentHeight - 10;
+    const isAtBottom = scrollY + innerHeight >= documentHeight;
 
     if (isAtBottom) {
       // 마지막 메시지의 ID 가져오기
       const lastMessage = messages[messages.length - 1];
 
       if (lastMessage && lastMessage.isRead !== true) {
-        console.log('스크롤 하단 도달, 읽음 처리:', lastMessage.messageId);
+        // 마지막 메시지 읽음 처리
         handleReadMessage(lastMessage.messageId);
       }
     }

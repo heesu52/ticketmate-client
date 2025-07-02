@@ -1,7 +1,6 @@
 import {
   Concert,
   ConcertType,
-  Member,
   Pagination,
   TicketReservationSite,
 } from '@/shared/types';
@@ -19,10 +18,4 @@ interface GetConcertListRequest {
 
 type GetConcertListResponse = Pagination<Concert>;
 
-type GetMemberResponse = Member;
-
-export type {
-  GetConcertListRequest,
-  GetConcertListResponse,
-  GetMemberResponse,
-};
+export type { GetConcertListRequest, GetConcertListResponse };

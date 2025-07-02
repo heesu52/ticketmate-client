@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 import AppBar from '@/app/_components/layout/header/app-bar/app-bar';
 import { useAppBarStore } from '@/app/_components/layout/header/app-bar/use-app-bar-store';
 import AppHeader from '@/app/_components/layout/header/app-header/app-header';
-import { useGetMember } from '@/app/_shared/services/query';
+import { useGetMember } from '@/app/my/_shared/services/query';
 import BottomNavigation from '@/shared/components/navigation/bottom-navigation/bottom-navigation';
 
 import styles from './responsive-root-layout.module.scss';

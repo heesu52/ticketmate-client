@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import AgentFormCard from '@/app/history/_shared/components//agent-form-card/agent-form-card';
 import ClientFormCard from '@/app/history/_shared/components/client-form-card/client-form-card';
 import { useGetFormList } from '@/app/history/_shared/services/query';
@@ -12,17 +14,23 @@ interface HistoryListProps {
 
 const HistoryList = ({ tab }: HistoryListProps) => {
   //세션에 저장한 membertype
-  const MemberType = sessionStorage.getItem('memberType') ?? '';
+  const [memberType, setMemberType] = useState<string>('');
+  const [memberId, setMemberId] = useState<string>('');
 
   //membertype에 따라 신청내역 필터링 값을 clientId와 agentId로 구분
-  const clientId =
-    MemberType === 'CLIENT'
-      ? (sessionStorage.getItem('memberId') ?? '')
-      : undefined;
-  const agentId =
-    MemberType === 'AGENT'
-      ? (sessionStorage.getItem('memberId') ?? '')
-      : undefined;
+  useEffect(() => {
+    try {
+      const type = sessionStorage.getItem('memberType') ?? '';
+      const id = sessionStorage.getItem('memberId') ?? '';
+      setMemberType(type);
+      setMemberId(id);
+    } catch (error) {
+      console.error('Failed to access sessionStorage:', error);
+    }
+  }, []);
+
+  const clientId = memberType === 'CLIENT' ? memberId : undefined;
+  const agentId = memberType === 'AGENT' ? memberId : undefined;
 
   const { data } = useGetFormList({
     clientId: clientId,
@@ -44,7 +52,7 @@ const HistoryList = ({ tab }: HistoryListProps) => {
           <span>개</span>
         </span>
         {filteredList.map((formItem, index) =>
-          MemberType === 'CLIENT' ? (
+          memberType === 'CLIENT' ? (
             <ClientFormCard formItem={formItem} key={index} />
           ) : (
             <AgentFormCard formItem={formItem} key={index} />

@@ -9,12 +9,12 @@ import {
   PlusIcon,
   SendIcon,
 } from '@/assets/icons';
+import { useWebSocket } from '@/shared/context/websocket-context';
 
 import styles from './chat-input.module.scss';
 
 interface ChatInputProps {
-  onSendMessage?: (message: string) => void;
-  disabled?: boolean;
+  roomId: string;
 }
 
 const actionItems = [
@@ -36,15 +36,22 @@ const actionItems = [
   },
 ];
 
-const ChatInput = ({ onSendMessage, disabled = false }: ChatInputProps) => {
+const ChatInput = ({ roomId }: ChatInputProps) => {
   // 추가 버튼 클릭 시 추가 메뉴 표시
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
 
-  const handleSendMessage = () => {
-    if (inputMessage.trim() && onSendMessage && !disabled) {
-      onSendMessage(inputMessage.trim());
+  const { isConnected, isConnecting, sendMessage } = useWebSocket();
 
+  const disabled = !isConnected || isConnecting;
+
+  const handleSendMessage = () => {
+    // 메시지가 있는 경우
+    if (inputMessage.trim()) {
+      // 메시지 전송
+      sendMessage(`/pub/chat.message.${roomId}`, {
+        message: inputMessage.trim(),
+      });
       setInputMessage('');
     }
   };

@@ -7,6 +7,7 @@ const BASE_URL = '/member';
 /**
  * @description 정보 조회
  */
+
 const getMember = async () => {
   const data = await instance<GetMemberResponse>(`${BASE_URL}`, {
     method: 'GET',

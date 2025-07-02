@@ -8,6 +8,7 @@ import useGetChatDetail from '@/app/chat/[id]/_shared/services/query';
 import type {
   ChatMessage,
   ChatMessage as ChatMessageType,
+  GetChatDetailRequest,
 } from '@/app/chat/[id]/_shared/services/type';
 import { useWebSocket } from '@/shared/context/websocket-context';
 
@@ -36,10 +37,21 @@ const isSameDate = (a: ChatMessageType, b: ChatMessageType) =>
 const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   const memberId = sessionStorage.getItem('memberId') ?? '';
 
-  /** 초기 메시지 조회 */
-  const { data: initialMessages } = useGetChatDetail({
+  const [request] = useState<GetChatDetailRequest>({
     chatRoomId: roomId,
+    parameter: {
+      pageNumber: 1,
+      pageSize: 20,
+    },
   });
+
+  /** 초기 메시지 조회 */
+  const {
+    data: initialMessages,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetChatDetail(request);
 
   /** 메시지 목록 */
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -101,12 +113,12 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
 
   /** 메세지 추가되는 경우 스크롤 하단으로 내리기 */
   useEffect(() => {
-    if (bottomRef.current && messages.length > 0) {
+    if (bottomRef.current && messages.length > 0 && isFetchingNextPage) {
       bottomRef.current?.scrollIntoView({
         behavior: 'auto',
       });
     }
-  }, [messages.length]);
+  }, [messages.length, isFetchingNextPage]);
 
   /** 스크롤 이벤트 핸들러 */
   const handleScroll = useCallback(() => {
@@ -134,6 +146,25 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
+
+  // 역방향 무한스크롤
+  const handleScrollTop = useCallback(async () => {
+    if (!hasNextPage || isFetchingNextPage) return;
+
+    const { scrollY } = window;
+
+    // 스크롤이 상단에 도달했는지 확인 (약간의 여유 공간 포함)
+    const isAtTop = scrollY < 50;
+
+    if (isAtTop) {
+      await fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScrollTop);
+    return () => window.removeEventListener('scroll', handleScrollTop);
+  }, [handleScrollTop]);
 
   return (
     <div className={styles.container}>

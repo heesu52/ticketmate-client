@@ -6,14 +6,16 @@ import { GetChatDetailRequest } from './type';
 
 const useGetChatDetail = (request: GetChatDetailRequest) => {
   return useInfiniteQuery({
-    queryKey: queryKey.chatDetail(request.chatRoomId),
-    queryFn: () => getChatDetail(request),
+    queryKey: queryKey.chatDetail(request),
+    queryFn: ({ pageParam = 1 }) =>
+      getChatDetail({
+        ...request,
+        parameter: { ...request.parameter, pageNumber: pageParam },
+      }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const current = lastPage.number; // 현재 페이지
-      const total = lastPage.totalPages; // 총 페이지
-
-      return current < total - 1 ? allPages.length + 1 : undefined;
+      // last가 true이면 마지막 페이지이므로 다음 페이지가 없음
+      return lastPage.last ? undefined : allPages.length + 1;
     },
     select: (data) => ({
       content: data?.pages.flatMap((page) => page.content),

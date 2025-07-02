@@ -14,4 +14,8 @@ interface GetFormListRequest {
 
 type GetFormListResponse = Pagination<Form>;
 
-export type { GetFormListRequest, GetFormListResponse };
+interface PutFormRequest {
+  applicationFormId: string;
+}
+
+export type { GetFormListRequest, GetFormListResponse, PutFormRequest };

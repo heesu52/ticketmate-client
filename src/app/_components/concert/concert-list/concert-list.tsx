@@ -14,7 +14,7 @@ const ConcertList = () => {
   const [request, setRequest] = useState<GetConcertListRequest>({
     pageSize: 10,
     sortField: 'created_date',
-    sortDirection: 'DESC',
+    sortDirection: 'ASC',
   });
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =

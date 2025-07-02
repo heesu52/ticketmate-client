@@ -44,7 +44,7 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
     concertDateInfoResponseList,
   );
 
-  // 선택된 티켓 오픈 정보
+  // 선택된 티켓 오픈 정보 (선예매 / 일반예매)
   const preOpen = getPreOpenInfo(ticketOpenDateInfoResponses ?? []);
   const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponses ?? []);
   const matchedOpenInfo = getTicketOpenInfoByType(

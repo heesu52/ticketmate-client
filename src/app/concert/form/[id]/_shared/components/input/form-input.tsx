@@ -6,6 +6,7 @@ import Input from '@/shared/components/input/input';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
 import {
   ConcertDateInfo,
+  Form,
   TicketOpenDateInfo,
   TicketOpenType,
 } from '@/shared/types';
@@ -15,12 +16,19 @@ import { getTicketOpenInfoByType } from '@/shared/utils/tickets';
 import styles from './form-input.module.scss';
 import { FormData, HopeArea } from './form-input.type';
 
+/**
+ * FormInput 컴포넌트
+ * 신청폼 작성 탭에서 회차/매수/희망구역/요청사항을 입력할 수 있는 폼 UI
+ */
+
 interface FormInputProps {
   value: FormData;
   onChange: (data: FormData) => void;
   concertDateInfoResponseList: ConcertDateInfo[];
   ticketOpenDateInfoResponses: TicketOpenDateInfo[];
   ticketOpenType: TicketOpenType;
+  formItem?: Form;
+  currentIndex: number;
 }
 
 export default function FormInput({
@@ -29,29 +37,43 @@ export default function FormInput({
   concertDateInfoResponseList,
   ticketOpenDateInfoResponses,
   ticketOpenType,
+  formItem,
+  currentIndex,
 }: FormInputProps) {
+  const firstDetail =
+    formItem?.applicationFormDetailResponseList?.[currentIndex];
+
+  //희망사항 부분 초기세팅
   const [hopeAreaList, setHopeAreaList] = useState<HopeArea[]>(
-    value?.hopeAreaList || [{ id: 1, location: '', price: '' }],
+    firstDetail?.hopeAreaResponseList?.map((area, idx) => ({
+      id: idx + 1,
+      location: area.location,
+      price: area.price.toString(),
+    })) ??
+      value?.hopeAreaList ?? [{ id: 1, location: '', price: '' }],
   );
+  //공연날짜, 매수, 요청사항 초기세팅 (작성된 신청폼이 있다면 데이터 불러오기)
   const [performanceDate, setPerformanceDate] = useState<string>(
-    value?.performanceDate || '',
+    firstDetail?.performanceDate ?? value?.performanceDate ?? '',
   );
   const [requestCount, setRequestCount] = useState<string>(
-    value?.requestCount || '',
+    firstDetail?.requestCount.toString() ?? value?.requestCount ?? '',
   );
-  const [requestDetails, setRequestDetails] = useState<string>(
-    value?.requestDetails || '',
+  const [requirement, setRequirement] = useState<string>(
+    firstDetail?.requirement ?? value?.requirement ?? '',
   );
 
+  //무한로딩 에러 해결을 위해 useRef로 중복확인
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
-    onChange({ performanceDate, requestCount, hopeAreaList, requestDetails });
-  }, [performanceDate, requestCount, hopeAreaList, requestDetails]);
+    onChange({ performanceDate, requestCount, hopeAreaList, requirement });
+  }, [performanceDate, requestCount, hopeAreaList, requirement]);
 
+  //희망사항 추가
   const addInput = () => {
     setHopeAreaList((prev) => {
       if (prev.length >= 10) {
@@ -64,6 +86,7 @@ export default function FormInput({
     });
   };
 
+  //희망사항 삭제
   const removeInput = (id: number) => {
     setHopeAreaList((prev) => {
       if (prev.length <= 1) return prev; // 최소 1개는 유지
@@ -79,7 +102,7 @@ export default function FormInput({
     );
   };
 
-  // 공연 날짜 리스트
+  // 공연 날짜 옵션 리스트로 생성
   const dateList = concertDateInfoResponseList.map((item) => {
     const formatted = formatDate(item.performanceDate);
     return {
@@ -88,6 +111,7 @@ export default function FormInput({
     };
   });
 
+  //티켓 오픈 타입 매칭
   const matchedOpenInfo = getTicketOpenInfoByType(
     ticketOpenDateInfoResponses,
     ticketOpenType,
@@ -95,7 +119,6 @@ export default function FormInput({
 
   // 최대 예매 매수 구하기
   const maxCount = matchedOpenInfo?.requestMaxCount ?? 1;
-
   const countList = Array.from({ length: maxCount }, (_, i) => ({
     value: (i + 1).toString(),
     label: `${i + 1}매`,
@@ -134,6 +157,7 @@ export default function FormInput({
           </div>
         </div>
 
+        {/* 희망 구역 입력 정보 */}
         {hopeAreaList.map((input, index) => (
           <div key={input.id} className={styles.input_container}>
             <span className={styles.text}>{`${index + 1}순위`}</span>
@@ -179,13 +203,14 @@ export default function FormInput({
         ))}
       </div>
 
+      {/* 요청사항 입력 */}
       <div className={styles.form_container}>
         <span className={styles.span}>요청사항</span>
         <textarea
           className={styles.textarea}
           placeholder="자유롭게 입력해주세요."
-          value={requestDetails}
-          onChange={(e) => setRequestDetails(e.target.value)}
+          value={requirement}
+          onChange={(e) => setRequirement(e.target.value)}
         />
       </div>
     </div>

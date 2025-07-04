@@ -3,7 +3,11 @@ import SearchIcon from '@/assets/icons/search.svg';
 
 import styles from './app-header.module.scss';
 
-const AppHeader = () => {
+interface AppHeaderProps {
+  onSearchClick: () => void;
+}
+
+const AppHeader = ({ onSearchClick }: AppHeaderProps) => {
   return (
     <div className={styles.container}>
       <TicketMateLogoIcon
@@ -15,7 +19,11 @@ const AppHeader = () => {
       />
 
       <div className={styles.button_group}>
-        <button className={styles.button} aria-label="검색">
+        <button
+          className={styles.button}
+          aria-label="검색"
+          onClick={onSearchClick}
+        >
           <SearchIcon width={20} height={20} fill="var(--textColor-main)" />
         </button>
       </div>

@@ -1,0 +1,28 @@
+@use '@/styles/index' as *;
+
+.container {
+  width: 100%;
+
+  .tab_container {
+    display: flex;
+    border-bottom: 1px solid var(--lineColor-main);
+    gap: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .icon {
+      display: inline-flex;
+    }
+  }
+  .input_container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+}

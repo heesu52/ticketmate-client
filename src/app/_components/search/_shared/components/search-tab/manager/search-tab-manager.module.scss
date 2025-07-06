@@ -1,13 +1,32 @@
 @use '@/styles/index' as *;
 
 .container {
+  display: flex;
+  flex-direction: column;
   width: 100%;
+
+  .title_container {
+    display: flex;
+    justify-content: flex-start;
+    text-align: center;
+    gap: 8px;
+
+    .span {
+      @include title-md;
+      color: var(--textColor-main);
+    }
+    .asterisk {
+      @include title-md;
+      color: var(--brandColor-main);
+    }
+  }
 
   .tab_container {
     display: flex;
     gap: 20px;
     overflow-x: auto;
     white-space: nowrap;
+    margin-top: 12px;
 
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -24,7 +43,6 @@
     flex-direction: column;
     gap: 40px;
     height: 100vh;
-    overflow-y: auto;
     padding: 24px;
 
     .agent_list_container {
@@ -40,6 +58,7 @@
       span {
         @include text-sm;
         color: var(--textColor-less);
+        text-align: center;
       }
     }
   }

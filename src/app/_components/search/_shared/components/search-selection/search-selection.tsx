@@ -12,7 +12,7 @@ export default function SearchSelection() {
           <span>검색어를 입력해주세요.</span>
           <SearchIcon width={16} height={16} fill="var(--gray-4)" />
         </div>
-        <div className={styles.recent_serarch_container}>
+        <div className={styles.recent_search_container}>
           <div className={styles.span_container}>
             <span className={styles.title}>최근 검색어</span>
             <span className={styles.delete}>전체삭제</span>

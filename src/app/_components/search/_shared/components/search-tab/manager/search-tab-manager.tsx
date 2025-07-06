@@ -87,6 +87,13 @@ export default function SearchTabManager() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.title_container}>
+        <span className={styles.span}>
+          {activeTab === 'concert' ? '공연' : '대리인'} 검색결과
+        </span>
+        <span className={styles.asterisk}>0</span>
+      </div>
+
       <div className={styles.tab_container}>
         <TabButton
           label="공연"
@@ -100,6 +107,7 @@ export default function SearchTabManager() {
         />
       </div>
 
+      {/* 추후 검색 결과 api를 연동하여 리스트를 출력, 현재는 테스트를 위해 공연/대리인 리스트를 출력 중  */}
       <div className={styles.list_container}>
         {activeTab === 'concert' ? (
           concertList?.map((concertItem, index) => (

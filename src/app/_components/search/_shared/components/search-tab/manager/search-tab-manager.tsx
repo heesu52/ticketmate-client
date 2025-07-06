@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useInView } from 'react-intersection-observer';
 
 import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
 import { useGetConcertList } from '@/app/_shared/services/query';
@@ -72,13 +71,14 @@ export default function SearchTabManager() {
       lastPage.length === 10 ? allPages.length * 10 : undefined,
   });
 
-  const { ref, inView } = useInView();
-
-  useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchMoreUsers();
-    }
-  }, [inView, hasNextPage, fetchMoreUsers]);
+  const { lastElementRef: agentLastElementRef } = useIntersectionObserver({
+    onIntersect: () => {
+      if (hasNextPage && !isFetchingNextPage) {
+        fetchMoreUsers();
+      }
+    },
+    enabled: hasNextPage && !isFetchingNextPage,
+  });
 
   // 👉 UserCard 클릭 핸들러
   const handleUserCardClick = (agentId: string) => {
@@ -136,7 +136,7 @@ export default function SearchTabManager() {
             {isLoading && <p>로딩 중...</p>}
             {isFetchingNextPage && <p>더 불러오는 중...</p>}
 
-            <div ref={ref} style={{ height: 10 }} />
+            <div ref={agentLastElementRef} style={{ height: 10 }} />
           </div>
         )}
       </div>

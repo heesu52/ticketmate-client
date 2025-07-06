@@ -1,7 +1,8 @@
+import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
+import SearchSelection from '@/app/_components/search/_shared/components/search-selection/search-selection';
+import SearchTabManager from '@/app/_components/search/_shared/components/search-tab/manager/search-tab-manager';
+
 import styles from './page.module.scss';
-import AppBarSetter from '../layout/header/app-bar/app-bar-setter';
-import SearchSelection from './_shared/components/search-selection/search-selection';
-import SearchTabManager from './_shared/components/search-tab/manager/search-tab-manager';
 
 interface Props {
   isOpen: boolean;

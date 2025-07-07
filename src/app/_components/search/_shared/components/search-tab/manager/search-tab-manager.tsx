@@ -34,7 +34,7 @@ export default function SearchTabManager() {
   // 콘서트 리스트
   const request: GetConcertListRequest = {
     pageSize: 10,
-    sortField: 'created_date',
+    sortField: 'CREATED_DATE',
     sortDirection: 'ASC',
   };
 

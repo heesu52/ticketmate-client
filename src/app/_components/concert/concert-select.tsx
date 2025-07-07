@@ -9,7 +9,7 @@ interface ConcertSelectProps {
 
 const selectList = [
   {
-    value: 'created_date',
+    value: 'CREATED_DATE',
     label: '최신순',
   },
   {
@@ -18,7 +18,7 @@ const selectList = [
   },
 ];
 const ConcertSelect = ({ onSelect }: ConcertSelectProps) => {
-  const [selected, setSelected] = useState<string>('created_date');
+  const [selected, setSelected] = useState<string>('CREATED_DATE');
 
   useEffect(() => {
     onSelect(selected);

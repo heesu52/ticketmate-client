@@ -6,7 +6,7 @@ import {
 } from '@/app/concert/form/[id]/_shared/services/type';
 import instance from '@/shared/services/instance';
 
-const BASE_URL = '/application';
+const BASE_URL = '/application-form';
 
 /**
  * @description 공연 신청폼 작성

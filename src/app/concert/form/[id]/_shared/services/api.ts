@@ -6,7 +6,7 @@ import {
 } from '@/app/concert/form/[id]/_shared/services/type';
 import instance from '@/shared/services/instance';
 
-const BASE_URL = '/application';
+const BASE_URL = '/application-form';
 
 /**
  * @description 공연 신청폼 작성
@@ -26,7 +26,7 @@ const createConcertForm = async (request: CreateConcertFormRequest) => {
 const patchConcertForm = async (request: PatchConcertFormRequest) => {
   const { applicationFormId, applicationFormEditRequest } = request;
 
-  const data = await instance(`${BASE_URL}/${applicationFormId}`, {
+  const data = await instance(`${BASE_URL}/${applicationFormId}/edit`, {
     method: 'PATCH',
     body: JSON.stringify(applicationFormEditRequest),
   });

@@ -15,7 +15,7 @@ export const getChatList = async (request: GetChatListRequest) => {
     ? `?${createQueryParams(request as Record<string, unknown>)}`
     : '';
 
-  const data = await instance<GetChatListResponse>(`${BASE_URL}/list${query}`, {
+  const data = await instance<GetChatListResponse>(`${BASE_URL}${query}`, {
     method: 'GET',
   });
 

@@ -12,14 +12,26 @@
     flex-direction: column;
     margin-top: 41px;
 
-    .subtitle {
-      @include title-md;
-      color: var(--textColor-main);
-    }
+    .title_container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-    span {
-      @include text-sm;
-      color: var(--textColor-less);
+      .select_container {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        .drop {
+          @include text-sm;
+          color: var(--textColor-main);
+        }
+      }
+
+      .subtitle {
+        @include title-md;
+        color: var(--textColor-main);
+      }
     }
   }
 }

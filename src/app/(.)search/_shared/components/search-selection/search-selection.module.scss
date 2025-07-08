@@ -3,24 +3,41 @@
 .container {
   display: flex;
   flex-direction: column;
-  border: 1px solid red;
   margin-top: 24px;
 
   .search {
-    display: flex;
-    width: 100%;
-    padding: 12px 16px;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 12px;
-    background: var(--white-less);
+    position: relative;
 
-    span {
+    .search_input {
+      display: flex;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      justify-content: space-between;
+      align-items: center;
+      border: none;
+
       @include text-sm;
-      color: var(--textColor-less);
+      color: var(--textColor-main);
 
-      // 검색어를 입력햇을 때
-      // color: var(--textColor-main);
+      &::placeholder {
+        color: var(--textColor-less);
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .icon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      fill: var(--gray-4);
+      pointer-events: none;
     }
   }
   .recent_search_container {

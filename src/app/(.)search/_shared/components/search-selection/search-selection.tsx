@@ -25,16 +25,15 @@ export default function SearchSelection() {
   return (
     <div className={styles.container}>
       <div className={styles.search}>
-        <textarea
-          className={styles.message_input}
+        <input
+          className={styles.search_input}
           id="message-input"
           placeholder="검색어를 입력해주세요"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyDown={handleKeyPress}
-          rows={1}
         />
-        <SearchIcon width={16} height={16} fill="var(--gray-4)" />
+        <SearchIcon className={styles.icon} />
       </div>
       <div className={styles.recent_search_container}>
         <div className={styles.span_container}>

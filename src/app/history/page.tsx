@@ -19,13 +19,11 @@ export default function Page() {
         <div className={styles.button_container}>
           <TabButton
             label="현재 신청내역"
-            size="small"
             isActive={selectedTab === 'current'}
             onClick={() => setSelectedTab('current')}
           />
           <TabButton
             label="과거 신청내역"
-            size="small"
             isActive={selectedTab === 'past'}
             onClick={() => setSelectedTab('past')}
           />

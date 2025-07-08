@@ -22,6 +22,11 @@ interface ApplicationFormDetailResponse {
 }
 
 interface Form {
+  clientId: string; // 의뢰인 PK
+  agentId: string; // 대리인 PK
+  concertId: string; // 콘서트 PK
+  openDate: string;
+  applicationFormDetailResponseList: ApplicationFormDetailResponse[]; // 신청 공연 회차 목록 [최소 1개 이상 필수
   applicationFormId: string;
   concertName: string;
   concertThumbnailUrl: string;

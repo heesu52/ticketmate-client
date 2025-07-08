@@ -15,7 +15,7 @@ import styles from './search-tab-manager.module.scss';
 
 const FIXED_AGENT_ID = '11d4486d-4524-4e21-8ec1-bffc764bc7bb';
 
-// 👉 Mock API
+// Mock API
 const handleGetCard = async (pageParam: number) => {
   const mockData = Array.from({ length: 10 }, (_, index) => ({
     agentId: FIXED_AGENT_ID,
@@ -56,7 +56,7 @@ export default function SearchTabManager() {
 
   const concertList = concertData?.content;
 
-  // 👉 대리인 리스트: react-query infinite scroll
+  // 대리인 리스트: react-query infinite scroll
   const {
     data: userData,
     fetchNextPage: fetchMoreUsers,
@@ -80,7 +80,7 @@ export default function SearchTabManager() {
     enabled: hasNextPage && !isFetchingNextPage,
   });
 
-  // 👉 UserCard 클릭 핸들러
+  //  UserCard 클릭 핸들러
   const handleUserCardClick = (agentId: string) => {
     console.log(`[UserCard Clicked] agentId: ${agentId}`);
   };

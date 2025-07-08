@@ -8,9 +8,13 @@ import styles from './search-selection.module.scss';
 
 export default function SearchSelection() {
   const [inputMessage, setInputMessage] = useState('');
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
+      if (!recentSearches.includes(inputMessage.trim())) {
+        setRecentSearches([inputMessage.trim(), ...recentSearches]);
+      }
       setInputMessage('');
     }
   };
@@ -38,13 +42,23 @@ export default function SearchSelection() {
       <div className={styles.recent_search_container}>
         <div className={styles.span_container}>
           <span className={styles.title}>최근 검색어</span>
-          <span className={styles.delete}>전체삭제</span>
+          <button
+            className={styles.delete}
+            onClick={() => setRecentSearches([])}
+          >
+            전체삭제
+          </button>
         </div>
         <div className={styles.tag_container}>
-          <div className={styles.tag}>권진아</div>
-          <div className={styles.tag}>지드래곤</div>
-          <div className={styles.tag}>의문의 티켓터</div>
-          <div className={styles.tag}>티켓터</div>
+          {recentSearches.map((term, index) => (
+            <div
+              key={index}
+              className={styles.tag}
+              onClick={() => setInputMessage(term)}
+            >
+              {term}
+            </div>
+          ))}
         </div>
       </div>
     </div>

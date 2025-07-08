@@ -1,6 +1,6 @@
+import SearchSelection from '@/app/(.)search/_shared/components/search-selection/search-selection';
+import SearchTabManager from '@/app/(.)search/_shared/components/search-tab/search-tab-manager';
 import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
-import SearchSelection from '@/app/_components/search/_shared/components/search-selection/search-selection';
-import SearchTabManager from '@/app/_components/search/_shared/components/search-tab/manager/search-tab-manager';
 
 import styles from './page.module.scss';
 

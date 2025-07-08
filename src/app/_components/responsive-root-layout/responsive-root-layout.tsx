@@ -1,14 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import classNames from 'classnames/bind';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import AppBar from '@/app/_components/layout/header/app-bar/app-bar';
 import { useAppBarStore } from '@/app/_components/layout/header/app-bar/use-app-bar-store';
 import AppHeader from '@/app/_components/layout/header/app-header/app-header';
-import Search from '@/app/_components/search/page';
 import { useGetMember } from '@/app/my/_shared/services/query';
 import BottomNavigation from '@/shared/components/navigation/bottom-navigation/bottom-navigation';
 
@@ -24,7 +23,6 @@ export default function RootLayout({
   const pathname = usePathname();
   const { hasAppBar, appBarTitle, hasBackground, action } = useAppBarStore();
   // 검색 페이지 오버레이 여부
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // BottomNavigation 보여줄 경로
   const showBottomNavRoutes = ['/', '/history', '/chat'];
@@ -32,7 +30,7 @@ export default function RootLayout({
   const hasBottomNav = showBottomNavRoutes.some((route) => pathname === route);
 
   // 검색페이지로 이동했을 때는 AppBar가 출력되어야 하므로 조건 추가
-  const hasAppHeader = pathname === '/' && !isSearchOpen;
+  const hasAppHeader = pathname === '/';
 
   const hasNoPadding = pathname.includes('/chat/');
 
@@ -46,24 +44,30 @@ export default function RootLayout({
     }
   }, [isSuccess, data]);
 
-  // body 스크롤 잠금 효과 추가
-  useEffect(() => {
-    if (isSearchOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+  // // body 스크롤 잠금 효과 추가
+  // useEffect(() => {
+  //   if (isSearchOpen) {
+  //     document.body.style.overflow = 'hidden';
+  //   } else {
+  //     document.body.style.overflow = '';
+  //   }
 
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isSearchOpen]);
+  //   return () => {
+  //     document.body.style.overflow = '';
+  //   };
+  // }, [isSearchOpen]);
+
+  const router = useRouter();
+
+  const handleRoute = () => {
+    router.push('/search');
+  };
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        {!isSearchOpen && hasAppHeader ? (
-          <AppHeader onSearchClick={() => setIsSearchOpen(true)} />
+        {hasAppHeader ? (
+          <AppHeader onSearchClick={handleRoute} />
         ) : hasAppBar ? (
           <AppBar
             title={appBarTitle}
@@ -82,8 +86,6 @@ export default function RootLayout({
         {children}
       </div>
       {hasBottomNav && <BottomNavigation />}
-
-      <Search isOpen={isSearchOpen} />
     </div>
   );
 }

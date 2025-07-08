@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import queryKey from '@/app/_shared/services/query-key';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import CancelModal from '@/app/history/_shared/components/modal/common-modal';
 import ReasonModal from '@/app/history/_shared/components/modal/reason-modal/reason-modal';
@@ -13,7 +14,6 @@ import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { Form, ApplicationFormStatus } from '@/shared/types';
 
 import styles from './client-form-card.module.scss';
-// import { formatDate } from '@/shared/utils/dates';
 interface FormCardProps {
   formItem: Form;
 }
@@ -56,7 +56,9 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
               {
                 onSuccess: () => {
                   // 캐시를 무효화하고 리스트를 다시 요청해 최신 상태로 반영
-                  queryClient.invalidateQueries({ queryKey: ['getFormList'] });
+                  queryClient.invalidateQueries({
+                    queryKey: queryKey.getConcertList(),
+                  });
                 },
               },
             );

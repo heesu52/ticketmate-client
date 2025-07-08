@@ -9,6 +9,7 @@ import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter
 import BottomSheet from '@/app/concert/[id]/_shared/components/bottom-sheet/bottom-sheet';
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
 import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
+import UserSelect from '@/app/concert/[id]/_shared/components/user-select';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import { ShareIcon } from '@/assets/icons';
 import Overlay from '@/shared/components/overlay/overlay';
@@ -74,6 +75,11 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
     if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, fetchNextPage]);
 
+  // 대리인 정렬 기능 구현 전이므로 콘솔 출력으로 대처
+  const handleSelect = (value: string) => {
+    console.log('선택된 정렬 옵션:', value);
+  };
+
   const isScrolled = useScroll({ threshold: 247 - 56 });
   return (
     <>
@@ -101,8 +107,14 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
         {concertItem && <ConcertInfo concertItem={concertItem} />}
 
         <div className={styles.list_container}>
-          <span className={styles.subtitle}>대리인</span>
-          <span>원하는 대리인에게 요청해보세요!</span>
+          <div className={styles.title_container}>
+            <span className={styles.subtitle}>대리인</span>
+
+            <div className={styles.select_container}>
+              <UserSelect onSelect={handleSelect} />
+            </div>
+          </div>
+
           {userData?.pages.map((page) =>
             page.map((user) => (
               // <UserCard key={user.agentId} user={user} onClick={toggleBottomSheet} />

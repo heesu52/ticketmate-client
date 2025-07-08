@@ -14,7 +14,7 @@ import styles from './concert-list.module.scss';
 const ConcertList = () => {
   const [request, setRequest] = useState<GetConcertListRequest>({
     pageSize: 10,
-    sortField: 'created_date',
+    sortField: 'CREATED_DATE',
     sortDirection: 'ASC',
   });
 

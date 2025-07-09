@@ -28,7 +28,7 @@ export default function SearchSelection() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.search}>
+      <div className={styles.search_container}>
         <input
           className={styles.search_input}
           id="message-input"

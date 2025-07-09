@@ -5,7 +5,7 @@
   flex-direction: column;
   margin-top: 24px;
 
-  .search {
+  .search_container {
     position: relative;
 
     .search_input {
@@ -16,6 +16,7 @@
       justify-content: space-between;
       align-items: center;
       border: none;
+      background: var(--white-less);
 
       @include text-sm;
       color: var(--textColor-main);
@@ -37,7 +38,6 @@
       width: 20px;
       height: 20px;
       fill: var(--gray-4);
-      pointer-events: none;
     }
   }
   .recent_search_container {

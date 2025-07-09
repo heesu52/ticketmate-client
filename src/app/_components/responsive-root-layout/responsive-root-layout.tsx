@@ -46,19 +46,6 @@ export default function RootLayout({
     }
   }, [isSuccess, data]);
 
-  // // body 스크롤 잠금 효과 추가
-  // useEffect(() => {
-  //   if (isSearchOpen) {
-  //     document.body.style.overflow = 'hidden';
-  //   } else {
-  //     document.body.style.overflow = '';
-  //   }
-
-  //   return () => {
-  //     document.body.style.overflow = '';
-  //   };
-  // }, [isSearchOpen]);
-
   const router = useRouter();
 
   const handleRoute = () => {

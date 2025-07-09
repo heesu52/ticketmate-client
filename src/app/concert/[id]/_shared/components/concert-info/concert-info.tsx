@@ -49,10 +49,6 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
   const preOpen = getPreOpenInfo(ticketOpenDateInfoResponseList ?? []);
   const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponseList ?? []);
 
-  console.log(concertItem);
-  console.log('ticketOpenDateInfoResponseList', ticketOpenDateInfoResponseList);
-  console.log(preOpen);
-
   return (
     <>
       <div className={styles.container}>

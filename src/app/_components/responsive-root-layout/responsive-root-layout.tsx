@@ -17,8 +17,10 @@ const cn = classNames.bind(styles);
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal?: React.ReactNode;
 }>) {
   const pathname = usePathname();
   const { hasAppBar, appBarTitle, hasBackground, action } = useAppBarStore();
@@ -84,6 +86,7 @@ export default function RootLayout({
         )}
       >
         {children}
+        {modal}
       </div>
       {hasBottomNav && <BottomNavigation />}
     </div>

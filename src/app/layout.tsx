@@ -39,14 +39,19 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: ReactNode;
+  modal?: ReactNode;
 }>) {
   return (
     <html lang="ko">
       <body className={notoSansKR.variable}>
         <Provider>
-          <ResponsiveRootLayout>{children}</ResponsiveRootLayout>
+          <ResponsiveRootLayout>
+            {children}
+            {modal}
+          </ResponsiveRootLayout>
         </Provider>
       </body>
     </html>

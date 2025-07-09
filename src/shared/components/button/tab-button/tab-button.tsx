@@ -18,17 +18,14 @@ export default function TabButton({
 }: TabButtonProps) {
   return (
     <button
-      className={`${styles.button} ${isActive ? styles.active : ''}`}
+      className={styles.button}
+      data-active={isActive}
       onClick={onClick}
       {...props}
     >
       <span>{label}</span>
       {rightIcon && (
-        <div
-          className={`${styles.righticon_container} ${
-            isActive ? styles.active_icon : ''
-          }`}
-        >
+        <div className={styles.righticon_container} data-active={isActive}>
           {rightIcon}
         </div>
       )}

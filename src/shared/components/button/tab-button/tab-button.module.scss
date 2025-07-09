@@ -1,33 +1,30 @@
 @use '@/styles/index' as *;
 
 .button {
+  //기본, 공통
+  @include text-sm;
+  color: var(--textColor-less);
+
   display: inline-flex;
   padding: 12px 0px;
   justify-content: center;
   align-items: center;
   gap: 4px;
-
-  //비활성화
-  span {
-    @include text-sm;
-    color: var(--textColor-less);
-  }
+  border: none;
+  cursor: pointer;
 
   .righticon_container {
     display: inline-flex;
+    color: var(--textColor-less);
   }
 
-  //활성화
-  &:active,
-  &.active {
+  // 클릭했을 때
+  &[data-active='true'] {
+    @include text-md;
+    color: var(--brandColor-main);
     border-bottom: 1px solid var(--brandColor-border);
 
-    span {
-      @include text-md;
-      color: var(--brandColor-main);
-    }
-
-    .active_icon {
+    .righticon_container {
       color: var(--brandColor-main);
     }
   }

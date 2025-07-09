@@ -14,14 +14,14 @@ import styles from './form-readonly.module.scss';
 
 interface FormReadOnlyProps {
   concertDateInfoResponseList: ConcertDateInfo[];
-  ticketOpenDateInfoResponses: TicketOpenDateInfo[];
+  ticketOpenDateInfoResponseList: TicketOpenDateInfo[];
   formItem: Form;
   currentIndex: number;
 }
 
 export default function FormReadOnly({
   concertDateInfoResponseList,
-  ticketOpenDateInfoResponses,
+  ticketOpenDateInfoResponseList,
   formItem,
   currentIndex,
 }: FormReadOnlyProps) {
@@ -44,7 +44,7 @@ export default function FormReadOnly({
   });
 
   const matchedOpenInfo = getTicketOpenInfoByType(
-    ticketOpenDateInfoResponses,
+    ticketOpenDateInfoResponseList,
     ticketOpenType,
   );
 

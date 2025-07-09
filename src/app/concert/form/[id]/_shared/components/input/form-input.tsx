@@ -33,7 +33,7 @@ interface FormInputProps {
   value: FormData;
   onChange: (data: FormData) => void;
   concertDateInfoResponseList: ConcertDateInfo[];
-  ticketOpenDateInfoResponses: TicketOpenDateInfo[];
+  ticketOpenDateInfoResponseList: TicketOpenDateInfo[];
   ticketOpenType: TicketOpenType;
   formItem?: Form;
   currentIndex: number;
@@ -44,7 +44,7 @@ export default function FormInput({
   value,
   onChange,
   concertDateInfoResponseList,
-  ticketOpenDateInfoResponses,
+  ticketOpenDateInfoResponseList,
   ticketOpenType,
   formItem,
   currentIndex,
@@ -125,7 +125,7 @@ export default function FormInput({
 
   //티켓 오픈 타입 매칭
   const matchedOpenInfo = getTicketOpenInfoByType(
-    ticketOpenDateInfoResponses,
+    ticketOpenDateInfoResponseList,
     ticketOpenType,
   );
 

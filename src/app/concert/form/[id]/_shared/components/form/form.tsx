@@ -28,7 +28,7 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
     concertName,
     concertHallName,
     ticketReservationSite,
-    ticketOpenDateInfoResponses,
+    ticketOpenDateInfoResponseList,
     concertThumbnailUrl,
     concertDateInfoResponseList,
     seatingChartUrl,
@@ -45,10 +45,10 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
   );
 
   // 선택된 티켓 오픈 정보 (선예매 / 일반예매)
-  const preOpen = getPreOpenInfo(ticketOpenDateInfoResponses ?? []);
-  const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponses ?? []);
+  const preOpen = getPreOpenInfo(ticketOpenDateInfoResponseList ?? []);
+  const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponseList ?? []);
   const matchedOpenInfo = getTicketOpenInfoByType(
-    ticketOpenDateInfoResponses,
+    ticketOpenDateInfoResponseList,
     ticketOpenType,
   );
 

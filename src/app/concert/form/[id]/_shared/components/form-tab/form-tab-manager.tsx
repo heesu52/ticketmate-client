@@ -267,8 +267,8 @@ export default function FormTabManager({
                   concertDateInfoResponseList={
                     concertItem.concertDateInfoResponseList
                   }
-                  ticketOpenDateInfoResponses={
-                    concertItem.ticketOpenDateInfoResponses
+                  ticketOpenDateInfoResponseList={
+                    concertItem.ticketOpenDateInfoResponseList
                   }
                   ticketOpenType={ticketOpenType}
                   formItem={formItem}
@@ -281,8 +281,8 @@ export default function FormTabManager({
                   concertDateInfoResponseList={
                     concertItem.concertDateInfoResponseList
                   }
-                  ticketOpenDateInfoResponses={
-                    concertItem.ticketOpenDateInfoResponses
+                  ticketOpenDateInfoResponseList={
+                    concertItem.ticketOpenDateInfoResponseList
                   }
                   formItem={formItem}
                   currentIndex={tabId - 1}

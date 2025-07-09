@@ -41,7 +41,7 @@ interface Concert {
   generalOpenBankTransfer: boolean; // 일반 예매 계좌이체 가능 여부
 
   //상세공연 정보 조회 시 선예매, 일반예매에 대한 응답값
-  ticketOpenDateInfoResponses: TicketOpenDateInfo[]; // 예매 관련 정보
+  ticketOpenDateInfoResponseList: TicketOpenDateInfo[]; // 예매 관련 정보
   concertDateInfoResponseList: ConcertDateInfo[]; // 공연 날짜 정보
 
   startDate: string; // 공연 시작일

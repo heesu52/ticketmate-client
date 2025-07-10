@@ -26,13 +26,13 @@ const BottomSheet = ({
   concertId,
   agentId,
 }: BottomSheetProps) => {
-  const { ticketOpenDateInfoResponses } = concertItem ?? {};
+  const { ticketOpenDateInfoResponseList } = concertItem ?? {};
 
   //티켓 오픈 타입 별로 버튼 구분
-  const preOpen = ticketOpenDateInfoResponses?.find(
+  const preOpen = ticketOpenDateInfoResponseList?.find(
     (info) => info.ticketOpenType === 'PRE_OPEN',
   );
-  const generalOpen = ticketOpenDateInfoResponses?.find(
+  const generalOpen = ticketOpenDateInfoResponseList?.find(
     (info) => info.ticketOpenType === 'GENERAL_OPEN',
   );
 

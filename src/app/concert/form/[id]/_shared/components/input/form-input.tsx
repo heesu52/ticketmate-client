@@ -1,7 +1,15 @@
 import { useEffect, useState, useRef } from 'react';
 
+import Image from 'next/image';
+
 import FormSelect from '@/app/concert/form/[id]/_shared/components/select/form-select';
-import { MinusIcon, PlusIcon, HelpCircleIcon } from '@/assets/icons';
+import {
+  MinusIcon,
+  PlusIcon,
+  HelpCircleIcon,
+  ArrowBottomIcon,
+  ArrowTopIcon,
+} from '@/assets/icons';
 import Input from '@/shared/components/input/input';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
 import {
@@ -25,23 +33,27 @@ interface FormInputProps {
   value: FormData;
   onChange: (data: FormData) => void;
   concertDateInfoResponseList: ConcertDateInfo[];
-  ticketOpenDateInfoResponses: TicketOpenDateInfo[];
+  ticketOpenDateInfoResponseList: TicketOpenDateInfo[];
   ticketOpenType: TicketOpenType;
   formItem?: Form;
   currentIndex: number;
+  seatingChartUrl?: string;
 }
 
 export default function FormInput({
   value,
   onChange,
   concertDateInfoResponseList,
-  ticketOpenDateInfoResponses,
+  ticketOpenDateInfoResponseList,
   ticketOpenType,
   formItem,
   currentIndex,
+  seatingChartUrl,
 }: FormInputProps) {
   const firstDetail =
     formItem?.applicationFormDetailResponseList?.[currentIndex];
+
+  const [isOpen, setIsOpen] = useState(false);
 
   //희망사항 부분 초기세팅
   const [hopeAreaList, setHopeAreaList] = useState<HopeArea[]>(
@@ -113,7 +125,7 @@ export default function FormInput({
 
   //티켓 오픈 타입 매칭
   const matchedOpenInfo = getTicketOpenInfoByType(
-    ticketOpenDateInfoResponses,
+    ticketOpenDateInfoResponseList,
     ticketOpenType,
   );
 
@@ -123,6 +135,11 @@ export default function FormInput({
     value: (i + 1).toString(),
     label: `${i + 1}매`,
   }));
+
+  //좌석배치도 아코디언 ui
+  const toggleAccordion = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <div className={styles.container}>
@@ -202,6 +219,31 @@ export default function FormInput({
           </div>
         ))}
       </div>
+
+      {/* 좌석배치도*/}
+      {seatingChartUrl && (
+        <div className={styles.form_container}>
+          <div className={styles.seat_container} onClick={toggleAccordion}>
+            <div className={styles.seat}>
+              <span className={styles.span}>공연장 좌석배치도 보기</span>
+              {isOpen ? (
+                <ArrowTopIcon width={16} height={16} fill="var(--gray-4)" />
+              ) : (
+                <ArrowBottomIcon width={16} height={16} fill="var(--gray-4)" />
+              )}
+            </div>
+            {isOpen && (
+              <Image
+                src={seatingChartUrl}
+                alt="좌석배치도"
+                width={345}
+                height={0} // 또는 생략
+                style={{ height: 'auto', marginTop: '12px' }}
+              />
+            )}
+          </div>
+        </div>
+      )}
 
       {/* 요청사항 입력 */}
       <div className={styles.form_container}>

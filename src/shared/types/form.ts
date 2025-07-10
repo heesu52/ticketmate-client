@@ -22,12 +22,17 @@ interface ApplicationFormDetailResponse {
 }
 
 interface Form {
-  applicationFormId: string;
   clientId: string; // 의뢰인 PK
   agentId: string; // 대리인 PK
   concertId: string; // 콘서트 PK
   openDate: string;
-  applicationFormDetailResponseList: ApplicationFormDetailResponse[]; // 신청 공연 회차 목록 [최소 1개 이상 필수]
+  applicationFormDetailResponseList: ApplicationFormDetailResponse[]; // 신청 공연 회차 목록 [최소 1개 이상 필수
+  applicationFormId: string;
+  concertName: string;
+  concertThumbnailUrl: string;
+  agentNickname: string;
+  clientNickname: string;
+  submittedDate: string;
   applicationFormStatus: ApplicationFormStatus;
   ticketOpenType: TicketOpenType; // 선예매 여부
 }

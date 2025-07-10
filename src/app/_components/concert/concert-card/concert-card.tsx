@@ -17,24 +17,23 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
     concertId,
     concertName,
     concertHallName,
-    concertType,
-    ticketReservationSite,
     ticketPreOpenDate,
-    preOpenBankTransfer,
     ticketGeneralOpenDate,
-    generalOpenBankTransfer,
     startDate,
     endDate,
     concertThumbnailUrl,
-    seatingChartUrl,
   } = concertItem;
+
+  //선예매태그의 날짜가 d+day인지 확인
+  const preOpenDday = ticketPreOpenDate ? calculateDday(ticketPreOpenDate) : '';
+  const showPreOpenBadge = preOpenDday && !preOpenDday.startsWith('D+');
 
   return (
     <>
       <Link href={`/concert/${concertId}`}>
         <div className={styles.container}>
           <div className={styles.tag}>
-            {ticketPreOpenDate && (
+            {showPreOpenBadge && (
               <Badge type="type-a">
                 선예매까지 {calculateDday(ticketPreOpenDate)}
               </Badge>

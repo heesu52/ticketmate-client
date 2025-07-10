@@ -28,7 +28,7 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
     concertName,
     concertHallName,
     ticketReservationSite,
-    ticketOpenDateInfoResponses,
+    ticketOpenDateInfoResponseList,
     concertThumbnailUrl,
     concertDateInfoResponseList,
     seatingChartUrl,
@@ -45,10 +45,10 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
   );
 
   // 선택된 티켓 오픈 정보 (선예매 / 일반예매)
-  const preOpen = getPreOpenInfo(ticketOpenDateInfoResponses ?? []);
-  const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponses ?? []);
+  const preOpen = getPreOpenInfo(ticketOpenDateInfoResponseList ?? []);
+  const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponseList ?? []);
   const matchedOpenInfo = getTicketOpenInfoByType(
-    ticketOpenDateInfoResponses,
+    ticketOpenDateInfoResponseList,
     ticketOpenType,
   );
 
@@ -79,8 +79,6 @@ const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
               height={186}
               unoptimized
             />
-            {/* 좌석배치도의 디자인이 결정되면 반영예정 */}
-            <span className={styles.link}>좌석배치도</span>
           </div>
           <div className={styles.detail_container}>
             <div className={styles.detail}>

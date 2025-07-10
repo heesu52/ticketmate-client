@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 
 import classNames from 'classnames/bind';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import AppBar from '@/app/_components/layout/header/app-bar/app-bar';
 import { useAppBarStore } from '@/app/_components/layout/header/app-bar/use-app-bar-store';
@@ -17,17 +17,21 @@ const cn = classNames.bind(styles);
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal?: React.ReactNode;
 }>) {
   const pathname = usePathname();
   const { hasAppBar, appBarTitle, hasBackground, action } = useAppBarStore();
+  // 검색 페이지 오버레이 여부
 
   // BottomNavigation 보여줄 경로
   const showBottomNavRoutes = ['/', '/history', '/chat'];
 
   const hasBottomNav = showBottomNavRoutes.some((route) => pathname === route);
 
+  // 검색페이지로 이동했을 때는 AppBar가 출력되어야 하므로 조건 추가
   const hasAppHeader = pathname === '/';
 
   const hasNoPadding = pathname.includes('/chat/');
@@ -42,11 +46,17 @@ export default function RootLayout({
     }
   }, [isSuccess, data]);
 
+  const router = useRouter();
+
+  const handleRoute = () => {
+    router.push('/search');
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
         {hasAppHeader ? (
-          <AppHeader />
+          <AppHeader onSearchClick={handleRoute} />
         ) : hasAppBar ? (
           <AppBar
             title={appBarTitle}
@@ -63,6 +73,7 @@ export default function RootLayout({
         )}
       >
         {children}
+        {modal}
       </div>
       {hasBottomNav && <BottomNavigation />}
     </div>

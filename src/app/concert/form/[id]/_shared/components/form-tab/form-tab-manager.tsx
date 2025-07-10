@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from 'react';
 import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
 import FormReadOnly from '@/app/concert/form/[id]/_shared/components/readonly/form-readonly';
-import FormTabButton from '@/app/concert/form/[id]/_shared/components/tab-button/button/form-tab-button';
 import {
   useCreateConcertForm,
   usePatchConcertForm,
@@ -14,6 +13,7 @@ import {
 } from '@/app/concert/form/[id]/_shared/services/type';
 import { PlusIcon, CloseIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
+import TabButton from '@/shared/components/button/tab-button/tab-button';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
 import {
   TicketOpenType,
@@ -226,7 +226,7 @@ export default function FormTabManager({
     <div className={styles.container}>
       <div className={styles.tab_container}>
         {tabs.map((tabId) => (
-          <FormTabButton
+          <TabButton
             key={tabId}
             label={getTabLabel(tabId)}
             isActive={activeTab === tabId}
@@ -247,7 +247,7 @@ export default function FormTabManager({
           />
         ))}
         {isEditing && (
-          <FormTabButton
+          <TabButton
             label="추가하기"
             isActive={false}
             onClick={addNewTab}
@@ -267,12 +267,13 @@ export default function FormTabManager({
                   concertDateInfoResponseList={
                     concertItem.concertDateInfoResponseList
                   }
-                  ticketOpenDateInfoResponses={
-                    concertItem.ticketOpenDateInfoResponses
+                  ticketOpenDateInfoResponseList={
+                    concertItem.ticketOpenDateInfoResponseList
                   }
                   ticketOpenType={ticketOpenType}
                   formItem={formItem}
                   currentIndex={tabId - 1}
+                  seatingChartUrl={concertItem.seatingChartUrl}
                 />
               ) : formItem?.applicationFormDetailResponseList?.[tabId - 1] ? (
                 <FormReadOnly
@@ -280,8 +281,8 @@ export default function FormTabManager({
                   concertDateInfoResponseList={
                     concertItem.concertDateInfoResponseList
                   }
-                  ticketOpenDateInfoResponses={
-                    concertItem.ticketOpenDateInfoResponses
+                  ticketOpenDateInfoResponseList={
+                    concertItem.ticketOpenDateInfoResponseList
                   }
                   formItem={formItem}
                   currentIndex={tabId - 1}

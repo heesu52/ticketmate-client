@@ -1,17 +1,19 @@
 'use client';
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import queryKey from '@/app/_shared/services/query-key';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import CancelModal from '@/app/history/_shared/components/modal/common-modal';
 import ReasonModal from '@/app/history/_shared/components/modal/reason-modal/reason-modal';
+import { usePutFormCancel } from '@/app/history/_shared/services/mutation';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
 import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { Form, ApplicationFormStatus } from '@/shared/types';
 
 import styles from './client-form-card.module.scss';
-// import { formatDate } from '@/shared/utils/dates';
 interface FormCardProps {
   formItem: Form;
 }
@@ -27,6 +29,8 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
   } = formItem;
 
   const { data: concertItem } = useGetConcertDetail({ concertId });
+  const { mutate: cancelForm } = usePutFormCancel();
+  const queryClient = useQueryClient();
   const { open, closeTop } = useModal();
 
   if (!concertItem) {
@@ -47,7 +51,17 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           message={`취소 시 신청했던 내역은 \n과거신청내역에서 확인가능합니다.`}
           confirmbtn={`취소하기`}
           onConfirm={async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await cancelForm(
+              { applicationFormId },
+              {
+                onSuccess: () => {
+                  // 캐시를 무효화하고 리스트를 다시 요청해 최신 상태로 반영
+                  queryClient.invalidateQueries({
+                    queryKey: queryKey.getConcertList(),
+                  });
+                },
+              },
+            );
             closeTop();
           }}
           onCancel={() => {

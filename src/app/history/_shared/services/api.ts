@@ -6,7 +6,7 @@ import {
 import instance from '@/shared/services/instance';
 import { createQueryParams } from '@/shared/utils/services/query-string';
 
-const BASE_URL = '/application';
+const BASE_URL = '/application-form';
 
 /**
  * @description 공연 신청폼 목록 조회
@@ -28,12 +28,9 @@ const getFormList = async (request?: GetFormListRequest) => {
 const putFormApprove = async (request: PutFormRequest) => {
   const { applicationFormId } = request;
 
-  const data = await instance(
-    `${BASE_URL}/expressions/${applicationFormId}/approve`,
-    {
-      method: 'PUT',
-    },
-  );
+  const data = await instance(`${BASE_URL}/${applicationFormId}/accept`, {
+    method: 'PATCH',
+  });
 
   return data;
 };
@@ -44,14 +41,24 @@ const putFormApprove = async (request: PutFormRequest) => {
 const putFormReject = async (request: PutFormRequest) => {
   const { applicationFormId } = request;
 
-  const data = await instance(
-    `${BASE_URL}/expressions/${applicationFormId}/reject`,
-    {
-      method: 'PUT',
-    },
-  );
+  const data = await instance(`${BASE_URL}/${applicationFormId}/reject`, {
+    method: 'PATCH',
+  });
 
   return data;
 };
 
-export { getFormList, putFormApprove, putFormReject };
+/**
+ * @description 공연 신청폼 신청취소(의뢰인)
+ */
+const putFormCancel = async (request: PutFormRequest) => {
+  const { applicationFormId } = request;
+
+  const data = await instance(`${BASE_URL}/${applicationFormId}/cancel`, {
+    method: 'PATCH',
+  });
+
+  return data;
+};
+
+export { getFormList, putFormApprove, putFormReject, putFormCancel };

@@ -31,7 +31,7 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
     concertHallName,
     ticketReservationSite,
     concertThumbnailUrl,
-    ticketOpenDateInfoResponses,
+    ticketOpenDateInfoResponseList,
     concertDateInfoResponseList,
   } = concertItem;
 
@@ -46,8 +46,8 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
   );
 
   //선예매, 일반예매 계산
-  const preOpen = getPreOpenInfo(ticketOpenDateInfoResponses ?? []);
-  const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponses ?? []);
+  const preOpen = getPreOpenInfo(ticketOpenDateInfoResponseList ?? []);
+  const generalOpen = getGeneralOpenInfo(ticketOpenDateInfoResponseList ?? []);
 
   return (
     <>

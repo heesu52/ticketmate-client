@@ -5,7 +5,7 @@ import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import Form from '@/app/concert/form/[id]/_shared/components/form/form';
 import FormModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-modal';
-import FormTabManager from '@/app/concert/form/[id]/_shared/components/tab-button/manager/form-tab-manager';
+import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import { useModal } from '@/shared/components/modal/use-modal';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';

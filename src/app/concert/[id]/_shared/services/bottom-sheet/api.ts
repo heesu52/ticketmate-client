@@ -2,7 +2,7 @@ import instance from '@/shared/services/instance';
 
 import { CheckDuplicateFormRequest } from './type';
 
-const BASE_URL = '/application/duplicate';
+const BASE_URL = '/application-form/duplicate';
 
 /**
  * @description 공연 신청폼 중복 확인

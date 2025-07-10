@@ -2,6 +2,7 @@
 import type {
   TicketReservationSite,
   ApplicationFormStatus,
+  ApplicationRejectedType,
 } from '@/shared/types';
 
 export const TICKET_SITE_URL_MAP: Record<TicketReservationSite, string> = {
@@ -31,4 +32,14 @@ export const APPLICATION_STATUS_LABEL_MAP: Record<
   CANCELED: '취소됨',
   ACCEPTED: '수락완료',
   CANCELED_IN_PROCESS: '진행취소',
+};
+
+export const APPLICATION_REJECETED_LABEL_MAP: Record<
+  ApplicationRejectedType,
+  string
+> = {
+  FEE_NOT_MATCHING_MARKET_PRICE: '수고비가 시세에 맞지 않음',
+  RESERVATION_CLOSED: '예약 마감',
+  SCHEDULE_UNAVAILABLE: '티켓팅 일정이 안됨',
+  OTHER: '기타',
 };

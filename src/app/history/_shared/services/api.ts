@@ -2,6 +2,7 @@ import {
   GetFormListRequest,
   GetFormListResponse,
   PutFormRequest,
+  getRejectionReasonResponse,
 } from '@/app/history/_shared/services/type';
 import instance from '@/shared/services/instance';
 import { createQueryParams } from '@/shared/utils/services/query-string';
@@ -61,4 +62,25 @@ const putFormCancel = async (request: PutFormRequest) => {
   return data;
 };
 
-export { getFormList, putFormApprove, putFormReject, putFormCancel };
+/**
+ * @description 신청서 거절 사유 조회
+ */
+const getRejectionReason = async (request: PutFormRequest) => {
+  const { applicationFormId } = request;
+
+  const data = await instance<getRejectionReasonResponse>(
+    `${BASE_URL}/${applicationFormId}/rejection-reason`,
+    {
+      method: 'GET',
+    },
+  );
+  return data;
+};
+
+export {
+  getFormList,
+  putFormApprove,
+  putFormReject,
+  putFormCancel,
+  getRejectionReason,
+};

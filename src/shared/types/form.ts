@@ -7,6 +7,12 @@ type ApplicationFormStatus =
   | 'ACCEPTED'
   | 'CANCELED_IN_PROCESS';
 
+type ApplicationRejectedType =
+  | 'FEE_NOT_MATCHING_MARKET_PRICE'
+  | 'RESERVATION_CLOSED'
+  | 'SCHEDULE_UNAVAILABLE'
+  | 'OTHER';
+
 interface HopeArea {
   priority: number; // 우선순위
   location: string; // 구역명
@@ -37,4 +43,9 @@ interface Form {
   ticketOpenType: TicketOpenType; // 선예매 여부
 }
 
-export type { ApplicationFormStatus, ApplicationFormDetailResponse, Form };
+export type {
+  ApplicationFormStatus,
+  ApplicationRejectedType,
+  ApplicationFormDetailResponse,
+  Form,
+};

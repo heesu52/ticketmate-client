@@ -9,7 +9,7 @@ import instance from '@/shared/services/instance';
 const BASE_URL = '/application-form';
 
 /**
- * @description 공연 신청폼 작성
+ * @description 신청서 작성
  */
 const createConcertForm = async (request: CreateConcertFormRequest) => {
   const data = await instance(`${BASE_URL}`, {
@@ -21,7 +21,7 @@ const createConcertForm = async (request: CreateConcertFormRequest) => {
 };
 
 /**
- * @description 공연 신청폼 수정
+ * @description 신청서 수정
  */
 const patchConcertForm = async (request: PatchConcertFormRequest) => {
   const { applicationFormId, applicationFormEditRequest } = request;
@@ -35,7 +35,7 @@ const patchConcertForm = async (request: PatchConcertFormRequest) => {
 };
 
 /**
- * @description 공연 신청폼 개별 조회
+ * @description 대리 티켓팅 신청서 상세 조회
  */
 const getFormDetail = async (request: GetFormDetailRequest) => {
   const { applicationFormId } = request;

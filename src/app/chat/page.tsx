@@ -17,6 +17,7 @@ import { TICKET_OPEN_TYPE_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { useWebSocket } from '@/shared/context/websocket-context';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
 import type { TicketOpenType } from '@/shared/types';
+import { formatDateToLocale, formatTime, isToday } from '@/shared/utils/dates';
 
 import styles from './page.module.scss';
 
@@ -40,9 +41,15 @@ const tabs: { label: string; value: Tab }[] = [
 interface UnreadMessage {
   chatRoomId: string;
   lastMessage: string;
-  sendDate: number[];
+  sendDate: string;
   unReadMessageCount: number;
 }
+
+const formatDateTime = (time: string) => {
+  return isToday(time)
+    ? formatTime(time)
+    : formatDateToLocale({ datetime: time });
+};
 
 export default function ChatPage() {
   const memberId = sessionStorage.getItem('memberId') ?? '';
@@ -73,16 +80,6 @@ export default function ChatPage() {
   // 안읽은 메시지 수신 처리 핸들러
   const handleUnreadMessage = useCallback(
     (response: UnreadMessage) => {
-      // sendDate를 Date 객체로 변환
-      const sendDate = new Date(
-        response.sendDate[0],
-        response.sendDate[1] - 1,
-        response.sendDate[2],
-        response.sendDate[3],
-        response.sendDate[4],
-        response.sendDate[5],
-      );
-
       // API 호출 없이, React Query 캐시 직접 업데이트
       queryClient.setQueryData(
         queryKey.chatList({
@@ -103,7 +100,7 @@ export default function ChatPage() {
                   return {
                     ...chat,
                     lastChatMessage: response.lastMessage,
-                    lastChatSendTime: sendDate.toISOString(),
+                    lastChatSendTime: formatDateTime(response.sendDate),
                     unReadMessageCount: response.unReadMessageCount,
                   };
                 }

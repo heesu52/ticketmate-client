@@ -4,10 +4,13 @@ import React, { useState } from 'react';
 
 import {
   CameraIcon,
+  CheckIcon,
   CloseIcon,
+  ContentCopyIcon,
   ListIcon,
   PlusIcon,
   SendIcon,
+  UnlockIcon,
 } from '@/assets/icons';
 import { useWebSocket } from '@/shared/context/websocket-context';
 
@@ -19,19 +22,29 @@ interface ChatInputProps {
 
 const actionItems = [
   {
-    icon: <ListIcon width={20} height={20} stroke={`var(--textColor-main)`} />,
+    icon: <ListIcon width={24} height={24} stroke={`var(--textColor-main)`} />,
     label: '신청양식',
   },
   {
-    icon: <CameraIcon width={20} height={20} fill={`var(--textColor-main)`} />,
-    label: '사진',
+    icon: <UnlockIcon width={24} height={24} fill={`var(--textColor-main)`} />,
+    label: '개인정보양식',
   },
   {
-    icon: <CloseIcon width={20} height={20} fill={`var(--textColor-main)`} />,
+    icon: <CameraIcon width={24} height={24} fill={`var(--textColor-main)`} />,
+    label: '카메라',
+  },
+  {
+    icon: (
+      <ContentCopyIcon width={24} height={24} fill={`var(--textColor-main)`} />
+    ),
+    label: '양식복사',
+  },
+  {
+    icon: <CloseIcon width={24} height={24} fill={`var(--textColor-main)`} />,
     label: '진행 취소',
   },
   {
-    icon: <CloseIcon width={20} height={20} fill={`var(--textColor-main)`} />,
+    icon: <CheckIcon width={24} height={24} fill={`var(--textColor-main)`} />,
     label: '의뢰 성공',
   },
 ];
@@ -72,7 +85,11 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
           onClick={() => setIsOpen(!isOpen)}
           disabled={disabled}
         >
-          <PlusIcon width={20} height={20} fill={`var(--textColor-main)`} />
+          {isOpen ? (
+            <CloseIcon width={20} height={20} fill={`var(--textColor-main)`} />
+          ) : (
+            <PlusIcon width={20} height={20} fill={`var(--textColor-main)`} />
+          )}
         </button>
 
         <textarea

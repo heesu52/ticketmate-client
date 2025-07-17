@@ -56,10 +56,21 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   /** 메시지 목록 */
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
+  /** 초기 로딩 완료 여부 */
+  const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
+
+  /** 이전 메시지 로딩 중 스크롤 위치 정보 */
+  const scrollPositionRef = useRef<{
+    scrollY: number;
+    scrollHeight: number;
+    firstMessageOffsetTop: number;
+  } | null>(null);
+
   /** 초기 메시지 설정 */
   useEffect(() => {
     if (initialMessages?.content) {
       setMessages([...initialMessages.content].reverse());
+      setIsInitialLoadComplete(true);
     }
   }, [initialMessages]);
 
@@ -110,15 +121,40 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
 
   /** 스크롤 하단 참조 */
   const bottomRef = useRef<HTMLDivElement>(null);
+  /** 컨테이너 참조 */
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  /** 메세지 추가되는 경우 스크롤 하단으로 내리기 */
+  /** 초기 로딩 완료 후 스크롤을 하단으로 이동 */
   useEffect(() => {
-    if (bottomRef.current && messages.length > 0 && isFetchingNextPage) {
-      bottomRef.current?.scrollIntoView({
-        behavior: 'auto',
-      });
+    if (isInitialLoadComplete && bottomRef.current) {
+      // 약간의 지연을 두어 DOM이 완전히 렌더링된 후 스크롤 실행
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({
+          behavior: 'auto',
+        });
+      }, 100);
     }
-  }, [messages.length, isFetchingNextPage]);
+  }, [isInitialLoadComplete]);
+
+  /** 새 메시지가 추가될 때 스크롤 하단으로 이동 */
+  useEffect(() => {
+    if (bottomRef.current && messages.length > 0 && isInitialLoadComplete) {
+      // 현재 스크롤 위치가 하단에 가까운지 확인
+      const { scrollY, innerHeight } = window;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // 하단에서 150px 이내에 있을 때만 자동 스크롤 (더 관대한 기준)
+      const isNearBottom = scrollY + innerHeight >= documentHeight - 150;
+
+      // 하단에 가까우면 자동으로 스크롤
+      if (isNearBottom) {
+        bottomRef.current?.scrollIntoView({
+          behavior: 'auto',
+        });
+      }
+      // 사용자가 위쪽을 보고 있다면 자동 스크롤하지 않음 (사용자 경험 개선)
+    }
+  }, [messages.length, isInitialLoadComplete]);
 
   /** 스크롤 이벤트 핸들러 */
   const handleScroll = useCallback(() => {
@@ -128,7 +164,7 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     const documentHeight = document.documentElement.scrollHeight;
 
     // 스크롤이 하단에 도달했는지 확인 (약간의 여유 공간 포함)
-    const isAtBottom = scrollY + innerHeight >= documentHeight;
+    const isAtBottom = scrollY + innerHeight >= documentHeight - 150;
 
     if (isAtBottom) {
       // 마지막 메시지의 ID 가져오기
@@ -154,12 +190,61 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     const { scrollY } = window;
 
     // 스크롤이 상단에 도달했는지 확인 (약간의 여유 공간 포함)
-    const isAtTop = scrollY < 50;
+    const isAtTop = scrollY < 100;
 
     if (isAtTop) {
+      // 현재 스크롤 위치와 문서 높이 저장
+      const currentScrollY = window.scrollY;
+      const currentScrollHeight = document.documentElement.scrollHeight;
+
+      // 현재 첫 번째 메시지 요소의 위치 저장 (스크롤 기준점)
+      const firstMessageElement = containerRef.current?.firstElementChild;
+      const firstMessageOffsetTop =
+        firstMessageElement?.getBoundingClientRect().top || 0;
+
+      // 스크롤 위치 정보 저장
+      scrollPositionRef.current = {
+        scrollY: currentScrollY,
+        scrollHeight: currentScrollHeight,
+        firstMessageOffsetTop: firstMessageOffsetTop,
+      };
+
       await fetchNextPage();
     }
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  // 새 메시지가 로드된 후 스크롤 위치 조정
+  useEffect(() => {
+    if (scrollPositionRef.current && !isFetchingNextPage) {
+      const { scrollY, scrollHeight, firstMessageOffsetTop } =
+        scrollPositionRef.current;
+
+      // requestAnimationFrame을 사용하여 DOM 업데이트 완료 후 실행
+      requestAnimationFrame(() => {
+        const newScrollHeight = document.documentElement.scrollHeight;
+        const scrollDifference = newScrollHeight - scrollHeight;
+
+        // 새로운 첫 번째 메시지 요소의 위치 확인
+        const newFirstMessageElement = containerRef.current?.firstElementChild;
+        const newFirstMessageOffsetTop =
+          newFirstMessageElement?.getBoundingClientRect().top || 0;
+
+        // 스크롤 위치를 정확하게 조정하여 사용자가 보고 있던 위치 유지
+        const adjustedScrollY =
+          scrollY +
+          scrollDifference +
+          (newFirstMessageOffsetTop - firstMessageOffsetTop);
+
+        window.scrollTo({
+          top: adjustedScrollY,
+          behavior: 'auto', // 부드러운 애니메이션 없이 즉시 이동
+        });
+
+        // 스크롤 위치 정보 초기화
+        scrollPositionRef.current = null;
+      });
+    }
+  }, [messages.length, isFetchingNextPage]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScrollTop);
@@ -167,7 +252,7 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   }, [handleScrollTop]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={containerRef}>
       {messages.map((msgItem, idx) => {
         /** 이전 메시지 */
         const prev = messages[idx - 1];

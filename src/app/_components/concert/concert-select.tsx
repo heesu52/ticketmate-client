@@ -13,7 +13,7 @@ const selectList = [
     label: '최신순',
   },
   {
-    value: 'ticket_open_date',
+    value: 'TICKET_OPEN_DATE',
     label: '오픈일순',
   },
 ];

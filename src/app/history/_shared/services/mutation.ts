@@ -1,22 +1,22 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { putFormApprove, putFormCancel, putFormReject } from './api';
+import { patchFormApprove, patchFormCancel, patchFormReject } from './api';
 import { PutFormRequest } from './type';
 
 export const usePutFormApprove = () => {
   return useMutation({
-    mutationFn: (request: PutFormRequest) => putFormApprove(request),
+    mutationFn: (request: PutFormRequest) => patchFormApprove(request),
   });
 };
 
 export const usePutFormReject = () => {
   return useMutation({
-    mutationFn: (request: PutFormRequest) => putFormReject(request),
+    mutationFn: (request: PutFormRequest) => patchFormReject(request),
   });
 };
 
 export const usePutFormCancel = () => {
   return useMutation({
-    mutationFn: (request: PutFormRequest) => putFormCancel(request),
+    mutationFn: (request: PutFormRequest) => patchFormCancel(request),
   });
 };

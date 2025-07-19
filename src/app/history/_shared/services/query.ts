@@ -13,7 +13,7 @@ const useGetFormList = (request?: GetFormListRequest) => {
   return { data, isLoading, isError };
 };
 
-const useGetRejectedReasom = (request: PutFormRequest) => {
+const useGetRejectedReason = (request: PutFormRequest) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: queryKey.getRejectionReason(request),
     queryFn: () => getRejectionReason(request),
@@ -22,4 +22,4 @@ const useGetRejectedReasom = (request: PutFormRequest) => {
   return { data, isLoading, isError };
 };
 
-export { useGetFormList, useGetRejectedReasom };
+export { useGetFormList, useGetRejectedReason };

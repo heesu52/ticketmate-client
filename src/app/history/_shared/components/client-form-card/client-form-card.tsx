@@ -10,10 +10,18 @@ import ReasonModal from '@/app/history/_shared/components/modal/reason-modal/rea
 import { usePutFormCancel } from '@/app/history/_shared/services/mutation';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
-import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
-import { Form, ApplicationFormStatus } from '@/shared/types';
+import {
+  APPLICATION_STATUS_LABEL_MAP,
+  APPLICATION_REJECTED_LABEL_MAP,
+} from '@/shared/constants/type-mapping';
+import {
+  Form,
+  ApplicationFormStatus,
+  ApplicationRejectedType,
+} from '@/shared/types';
 
 import styles from './client-form-card.module.scss';
+import { useGetRejectedReason } from '../../services/query';
 interface FormCardProps {
   formItem: Form;
 }
@@ -30,6 +38,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
 
   const { data: concertItem } = useGetConcertDetail({ concertId });
   const { mutate: cancelForm } = usePutFormCancel();
+  const { data: rejectReason } = useGetRejectedReason({ applicationFormId });
   const queryClient = useQueryClient();
   const { open, closeTop } = useModal();
 
@@ -37,10 +46,18 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
     return null;
   }
   const { concertName, concertHallName, concertThumbnailUrl } = concertItem;
+  const { applicationFormRejectedType, otherMemo } = rejectReason ?? {};
 
   //type별 status 이름 변환
   const statusKey = applicationFormStatus as ApplicationFormStatus;
   const statusLabel = APPLICATION_STATUS_LABEL_MAP[statusKey] ?? '';
+
+  //type별 reject 이유 변환
+  const reasonKey = applicationFormRejectedType as ApplicationRejectedType;
+  const rejectLabel =
+    reasonKey === 'OTHER'
+      ? (otherMemo ?? '')
+      : (APPLICATION_REJECTED_LABEL_MAP[reasonKey] ?? '');
 
   const handleOpenCancelModal = () => {
     open({
@@ -79,7 +96,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
         <ReasonModal
           title="대리인 닉네임님의 거절 사유"
           description={`작성한 신청양식을 통해 동일한 대리인에게 다시 티켓팅을 의뢰할 수 있습니다.\n`}
-          reason={`수고비가 단가랑 맞지않음`}
+          reason={rejectLabel}
           onConfirm={async () => {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             closeTop();

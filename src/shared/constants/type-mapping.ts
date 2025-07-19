@@ -34,7 +34,7 @@ export const APPLICATION_STATUS_LABEL_MAP: Record<
   CANCELED_IN_PROCESS: '진행취소',
 };
 
-export const APPLICATION_REJECETED_LABEL_MAP: Record<
+export const APPLICATION_REJECTED_LABEL_MAP: Record<
   ApplicationRejectedType,
   string
 > = {

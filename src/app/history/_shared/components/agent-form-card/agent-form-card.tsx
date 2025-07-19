@@ -2,7 +2,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import AcceptModal from '@/app/history/_shared/components/modal/common-modal';
 import RejectedModal from '@/app/history/_shared/components/modal/rejected-modal/rejected-modal';
 import {
@@ -23,21 +22,16 @@ interface FormCardProps {
 const AgentFormCard = ({ formItem }: FormCardProps) => {
   const {
     applicationFormId,
-    clientId,
-    agentId,
-    concertId,
+    concertName,
+    concertThumbnailUrl,
+    clientNickname,
+    submittedDate,
     applicationFormStatus,
   } = formItem;
   const { mutate: approveForm } = usePutFormApprove();
   const { mutate: rejectForm } = usePutFormReject();
 
-  const { data: concertItem } = useGetConcertDetail({ concertId });
   const { open, closeTop } = useModal();
-
-  if (!concertItem) {
-    return null;
-  }
-  const { concertName, concertHallName, concertThumbnailUrl } = concertItem;
 
   const handleOpenAcceptModal = () => {
     open({
@@ -85,7 +79,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
           <Image
             className={styles.image}
             src={concertThumbnailUrl}
-            alt={concertHallName}
+            alt={'공연썸네일이미지'}
             width={48}
             height={48}
           />
@@ -95,12 +89,12 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
           <div className={styles.detail}>
             <span className={styles.category}>의뢰 일자</span>
             {/* 현재 신청일자에 대한 data가 없음 */}
-            <span className={styles.info}>의뢰 일자</span>
+            <span className={styles.info}>{submittedDate}</span>
           </div>
           <div className={styles.detail}>
             <span className={styles.category}>의뢰인</span>
             {/* 추후 대리인 닉네임을 변경 */}
-            <span className={styles.info}>{agentId}</span>
+            <span className={styles.info}>{clientNickname}</span>
           </div>
         </div>
       </Link>

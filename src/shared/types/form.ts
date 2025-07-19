@@ -34,6 +34,8 @@ interface Form {
   openDate: string;
   applicationFormDetailResponseList: ApplicationFormDetailResponse[]; // 신청 공연 회차 목록 [최소 1개 이상 필수
   applicationFormId: string;
+
+  //신청내역 정보 조회에 대한 응답값(그냥 신청폼 응답값 타입확인해보고 개별/리스트 타입을 분리할지 고민)
   concertName: string;
   concertThumbnailUrl: string;
   agentNickname: string;

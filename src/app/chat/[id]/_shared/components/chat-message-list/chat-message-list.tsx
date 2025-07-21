@@ -113,7 +113,7 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
 
       sendMessage(`/pub/chat.read.${roomId}`, {
         lastReadMessageId: messageId,
-        readDate: new Date().toISOString(),
+        readDate: dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss'),
       });
     },
     [roomId, sendMessage],

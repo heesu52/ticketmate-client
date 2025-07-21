@@ -2,7 +2,7 @@ import {
   GetFormListRequest,
   GetFormListResponse,
   PutFormRequest,
-  getRejectionReasonResponse,
+  GetRejectionReasonResponse,
 } from '@/app/history/_shared/services/type';
 import instance from '@/shared/services/instance';
 import { createQueryParams } from '@/shared/utils/services/query-string';
@@ -68,7 +68,7 @@ const patchFormCancel = async (request: PutFormRequest) => {
 const getRejectionReason = async (request: PutFormRequest) => {
   const { applicationFormId } = request;
 
-  const data = await instance<getRejectionReasonResponse>(
+  const data = await instance<GetRejectionReasonResponse>(
     `${BASE_URL}/${applicationFormId}/rejection-reason`,
     {
       method: 'GET',

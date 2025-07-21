@@ -22,7 +22,7 @@ interface PutFormRequest {
   applicationFormId: string;
 }
 
-interface getRejectionReasonResponse {
+interface GetRejectionReasonResponse {
   applicationFormRejectedType: ApplicationRejectedType;
   otherMemo: string;
 }
@@ -31,5 +31,5 @@ export type {
   GetFormListRequest,
   GetFormListResponse,
   PutFormRequest,
-  getRejectionReasonResponse,
+  GetRejectionReasonResponse,
 };

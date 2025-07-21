@@ -1,3 +1,4 @@
+import { Concert } from './concert';
 import { TicketOpenType } from './ticket';
 
 type ApplicationFormStatus =
@@ -28,14 +29,12 @@ interface ApplicationFormDetailResponse {
 }
 
 interface Form {
-  clientId: string; // 의뢰인 PK
-  agentId: string; // 대리인 PK
-  concertId: string; // 콘서트 PK
-  openDate: string;
+  //신청서 상세조회에 대한 응답값
+  concertInfoResponse: Concert;
   applicationFormDetailResponseList: ApplicationFormDetailResponse[]; // 신청 공연 회차 목록 [최소 1개 이상 필수
-  applicationFormId: string;
 
-  //신청내역 정보 조회에 대한 응답값(그냥 신청폼 응답값 타입확인해보고 개별/리스트 타입을 분리할지 고민)
+  //신청내역 정보 조회에 대한 응답값
+  applicationFormId: string; //신청서 PK
   concertName: string;
   concertThumbnailUrl: string;
   agentNickname: string;

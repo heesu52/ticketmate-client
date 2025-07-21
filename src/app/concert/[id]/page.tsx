@@ -2,7 +2,6 @@
 
 import { use, useEffect, useState } from 'react';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
 import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
@@ -11,27 +10,12 @@ import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/conc
 import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
 import UserSelect from '@/app/concert/[id]/_shared/components/user-select';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
+import { useGetUserListInfinite } from '@/app/concert/[id]/_shared/services/user-card/query';
 import { ShareIcon } from '@/assets/icons';
 import Overlay from '@/shared/components/overlay/overlay';
 import { useScroll } from '@/shared/hooks/use-scroll';
 
 import styles from './page.module.scss';
-
-//고정된 대리인 ID(추후 삭제 예정)
-const FIXED_AGENT_ID = '11d4486d-4524-4e21-8ec1-bffc764bc7bb';
-
-// Mock API 호출 함수 (임시)
-const handleGetCard = async (pageParam: number) => {
-  const mockData = Array.from({ length: 10 }, (_, index) => ({
-    agentId: FIXED_AGENT_ID,
-    name: `대리인 닉네임 ${pageParam * 10 + index + 1}`,
-    profileImage:
-      'https://fastly.picsum.photos/id/515/320/200.jpg?hmac=d24pyllgU-WPlvGiChI8O4t8Wc2P3I67c3hVWDCLA-4',
-    introduction: '한 줄 소개를 작성해주세요.',
-    transactionCount: Math.floor(Math.random() * 100),
-  }));
-  return mockData;
-};
 
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
@@ -42,7 +26,14 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
 
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+  const [userListRequest, setUserListRequest] = useState({
+    concertId: id,
+    pageSize: 10,
+    sortField: 'TOTAL_SCORE',
+    sortDirection: 'DESC',
+  });
 
+  // 바텀 시트 토글
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
   };
@@ -55,31 +46,22 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
 
   const { ref, inView } = useInView();
 
-  // 무한스크롤 데이터 fetch
-  const {
-    data: userData,
-    fetchNextPage,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['cards'],
-    queryFn: ({ pageParam = 0 }) => handleGetCard(pageParam),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length === 10 ? allPages.length * 10 : undefined;
-    },
-  });
+  // 유저 리스트 무한 조회 (정렬 변경 시 자동으로 재요청됨)
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
+    useGetUserListInfinite(userListRequest);
 
+  // 스크롤 하단에 도달 시 다음 페이지 요청
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, fetchNextPage]);
 
-  // 대리인 정렬 기능 구현 전이므로 콘솔 출력으로 대처
+  // 정렬 옵션 선택 시 userListRequest 갱신 및 페이지 초기화
   const handleSelect = (value: string) => {
-    console.log('선택된 정렬 옵션:', value);
+    setUserListRequest((prev) => ({
+      ...prev,
+      sortField: value,
+    }));
   };
-
   const isScrolled = useScroll({ threshold: 247 - 56 });
   return (
     <>
@@ -115,12 +97,10 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           </div>
 
-          {userData?.pages.map((page) =>
-            page.map((user) => (
-              // <UserCard key={user.agentId} user={user} onClick={toggleBottomSheet} />
-              //agentId를 고정해놔서 수정한 코드, 추후에 위의 코드로 바꿔놓을 예정
+          {data?.pages.map((page) =>
+            page.content.map((user) => (
               <UserCard
-                key={`${user.agentId}-${user.name}`}
+                key={user.agentId}
                 user={user}
                 onClick={() => handleUserCardClick(user.agentId)}
               />
@@ -128,8 +108,9 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           )}
 
           {/* 로딩 상태 처리 */}
-          {isLoading && <p>로딩 중...</p>}
-          {isFetchingNextPage && <p>더 불러오는 중...</p>}
+          {(isLoading || isFetchingNextPage) && (
+            <p>{isLoading ? '로딩 중...' : '더 불러오는 중...'}</p>
+          )}
 
           {/* 무한 스크롤 트리거 */}
           <div ref={ref} style={{ height: 10 }} />

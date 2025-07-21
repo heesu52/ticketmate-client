@@ -11,11 +11,10 @@ interface AgentInfo {
   nickname: string;
   profileUrl: string;
   introduction: string; // 없으면 빈 문자열
-  averageRating: number; // double
-  reviewCount: number; // int
+  averageRating: number;
+  reviewCount: number;
 }
 
-// 전체 응답 타입 (Slice 구조)
 interface GetUserListResponse {
   content: AgentInfo[];
   first: boolean;

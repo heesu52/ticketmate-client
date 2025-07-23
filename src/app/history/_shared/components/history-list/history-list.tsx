@@ -33,8 +33,8 @@ const HistoryList = ({ tab }: HistoryListProps) => {
   const agentId = memberType === 'AGENT' ? memberId : undefined;
 
   const { data } = useGetFormList({
-    // clientId: clientId,
-    // agentId: agentId,
+    clientId: clientId,
+    agentId: agentId,
   });
   const formList = data?.content ?? [];
 
@@ -51,10 +51,13 @@ const HistoryList = ({ tab }: HistoryListProps) => {
           총<span className={styles.asterisk}>{filteredList.length}</span>
           <span>개</span>
         </span>
-        {filteredList.map((formItem, index) => (
-          <div key={index}>
-            <ClientFormCard formItem={formItem} />
-            <AgentFormCard formItem={formItem} />
+        {filteredList.map((formItem) => (
+          <div key={formItem.applicationFormId}>
+            {memberType === 'client' ? (
+              <ClientFormCard formItem={formItem} />
+            ) : (
+              <AgentFormCard formItem={formItem} />
+            )}
           </div>
         ))}
       </div>

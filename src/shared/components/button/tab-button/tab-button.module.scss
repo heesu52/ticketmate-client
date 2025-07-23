@@ -22,7 +22,7 @@
   &[data-active='true'] {
     @include text-md;
     color: var(--brandColor-main);
-    border-bottom: 1px solid var(--brandColor-border);
+    border-bottom: 3px solid var(--brandColor-border);
 
     .righticon_container {
       color: var(--brandColor-main);

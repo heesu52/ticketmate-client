@@ -39,21 +39,14 @@ export default function SearchTabManager() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.title_container}>
-        <span className={styles.span}>
-          {activeTab === 'concert' ? '공연' : '대리인'} 검색결과
-        </span>
-        <span className={styles.asterisk}>0</span>
-      </div>
-
       <div className={styles.tab_container}>
         <TabButton
-          label="공연"
+          label="공연 7" //검색결과 Length로 변경 필요
           isActive={activeTab === 'concert'}
           onClick={() => setActiveTab('concert')}
         />
         <TabButton
-          label="대리인"
+          label="대리인 14" //검색결과 Length로 변경 필요
           isActive={activeTab === 'agent'}
           onClick={() => setActiveTab('agent')}
         />

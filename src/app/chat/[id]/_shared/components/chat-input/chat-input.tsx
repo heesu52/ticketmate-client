@@ -2,15 +2,14 @@
 
 import React, { useState } from 'react';
 
+import { useSendChatMessageImage } from '@/app/chat/[id]/_shared/services/mutation';
 import {
   CameraIcon,
   CheckIcon,
   CloseIcon,
-  ContentCopyIcon,
   ListIcon,
   PlusIcon,
   SendIcon,
-  UnlockIcon,
 } from '@/assets/icons';
 import { useWebSocket } from '@/shared/context/websocket-context';
 
@@ -26,18 +25,8 @@ const actionItems = [
     label: '신청양식',
   },
   {
-    icon: <UnlockIcon width={24} height={24} fill={`var(--textColor-main)`} />,
-    label: '개인정보양식',
-  },
-  {
     icon: <CameraIcon width={24} height={24} fill={`var(--textColor-main)`} />,
     label: '카메라',
-  },
-  {
-    icon: (
-      <ContentCopyIcon width={24} height={24} fill={`var(--textColor-main)`} />
-    ),
-    label: '양식복사',
   },
   {
     icon: <CloseIcon width={24} height={24} fill={`var(--textColor-main)`} />,
@@ -56,7 +45,58 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
 
   const { isConnected, isConnecting, sendMessage } = useWebSocket();
 
-  const disabled = !isConnected || isConnecting;
+  const { mutateAsync: sendChatMessageImage, isPending: isImageUploading } =
+    useSendChatMessageImage();
+
+  // 버튼 비활성화 여부
+  const disabled = !isConnected || isConnecting || isImageUploading;
+
+  // 이미지 파일 선택 및 업로드 처리
+  const handleImageSelect = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    const selectedFiles = Array.from(files);
+
+    // 이미지 파일만 필터링 (최대 10장)
+    const imageFiles = selectedFiles
+      .filter((file) => file.type.startsWith('image/'))
+      .slice(0, 10);
+
+    if (imageFiles.length === 0) {
+      alert('이미지 파일만 선택할 수 있습니다.');
+      return;
+    }
+
+    if (imageFiles.length > 10) {
+      alert('최대 10장까지만 선택할 수 있습니다.');
+      return;
+    }
+
+    sendChatMessageImage({
+      chatRoomId: roomId,
+      chatMessagePictureList: imageFiles,
+      type: 'PICTURE',
+    })
+      .then(() => {
+        setIsOpen(false);
+      })
+      .catch((error) => {
+        console.error('이미지 업로드 실패:', error);
+      });
+  };
+
+  // 카메라 버튼 클릭 핸들러
+  const handleCameraClick = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.multiple = true; // 여러 이미지 선택 가능
+    fileInput.onchange = (e) => {
+      const files = (e.target as HTMLInputElement).files;
+      handleImageSelect(files);
+    };
+    fileInput.click();
+  };
 
   const handleSendMessage = () => {
     // 메시지가 있는 경우
@@ -116,9 +156,25 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
       {isOpen && (
         <div className={styles.action_panel}>
           {actionItems.map((item) => (
-            <button key={item.label} className={styles.item} type="button">
-              <span className={styles.icon}>{item.icon}</span>
-              <span className={styles.label}>{item.label}</span>
+            <button
+              key={item.label}
+              className={styles.item}
+              type="button"
+              onClick={item.label === '카메라' ? handleCameraClick : undefined}
+              disabled={item.label === '카메라' ? isImageUploading : false}
+            >
+              <span className={styles.icon}>
+                {item.label === '카메라' && isImageUploading ? (
+                  <div className={styles.loading_spinner} />
+                ) : (
+                  item.icon
+                )}
+              </span>
+              <span className={styles.label}>
+                {item.label === '카메라' && isImageUploading
+                  ? '업로드 중...'
+                  : item.label}
+              </span>
             </button>
           ))}
         </div>

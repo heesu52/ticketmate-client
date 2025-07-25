@@ -59,6 +59,9 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   /** 초기 로딩 완료 여부 */
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
 
+  /** 이미지 모달 상태 */
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   /** 이전 메시지 로딩 중 스크롤 위치 정보 */
   const scrollPositionRef = useRef<{
     scrollY: number;
@@ -251,85 +254,154 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     return () => window.removeEventListener('scroll', handleScrollTop);
   }, [handleScrollTop]);
 
+  // 이미지 클릭 핸들러
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+  };
+
+  // 모달 닫기 핸들러
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+  };
+
+  // 모달 외부 클릭 핸들러
+  const handleModalOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      handleCloseModal();
+    }
+  };
+
+  // 메시지 내용 렌더링 함수 TODO: 디자인 따라 수정 필요
+  const renderMessageContent = (msgItem: ChatMessage) => {
+    if (msgItem.chatMessageType === 'PICTURE') {
+      // 이미지 메시지인 경우
+      return (
+        <div className={styles.image_message}>
+          {msgItem.pictureMessageList?.map((picture) => (
+            <Image
+              key={picture}
+              src={picture}
+              alt={`채팅 이미지`}
+              width={100}
+              height={100}
+              className={styles.chat_image}
+              style={{ objectFit: 'cover' }}
+              onClick={() => handleImageClick(picture)}
+            />
+          ))}
+        </div>
+      );
+    } else {
+      // 텍스트 메시지인 경우
+      return <div className={styles.message_content}>{msgItem.message}</div>;
+    }
+  };
+
   return (
-    <div className={styles.container} ref={containerRef}>
-      {messages.map((msgItem, idx) => {
-        /** 이전 메시지 */
-        const prev = messages[idx - 1];
-        /** 다음 메시지 */
-        const next = messages[idx + 1];
+    <>
+      <div className={styles.container} ref={containerRef}>
+        {messages.map((msgItem, idx) => {
+          /** 이전 메시지 */
+          const prev = messages[idx - 1];
+          /** 다음 메시지 */
+          const next = messages[idx + 1];
 
-        /** 보낸 사람이 내 혹은 상대방인지 확인 */
-        const isMine = msgItem.mine;
-        /** 이전 메시지와 같은 사람이 보낸 메시지인지 확인 */
-        const isSameGroupWithPrev =
-          prev && isSameSender(msgItem, prev) && isSameMinute(msgItem, prev);
-        /** 다음 메시지와 같은 사람이 보낸 메시지인지 확인 */
-        const isSameGroupWithNext =
-          next && isSameSender(msgItem, next) && isSameMinute(msgItem, next);
+          /** 보낸 사람이 내 혹은 상대방인지 확인 */
+          const isMine = msgItem.mine;
+          /** 이전 메시지와 같은 사람이 보낸 메시지인지 확인 */
+          const isSameGroupWithPrev =
+            prev && isSameSender(msgItem, prev) && isSameMinute(msgItem, prev);
+          /** 다음 메시지와 같은 사람이 보낸 메시지인지 확인 */
+          const isSameGroupWithNext =
+            next && isSameSender(msgItem, next) && isSameMinute(msgItem, next);
 
-        /** 그룹핑된 메세지의 첫 번째 메시지인지 확인 */
-        const isFirstOfGroup = !isSameGroupWithPrev;
-        /** 그룹핑된 메세지의 마지막 메시지인지 확인 */
-        const isLastOfGroup = !isSameGroupWithNext;
+          /** 그룹핑된 메세지의 첫 번째 메시지인지 확인 */
+          const isFirstOfGroup = !isSameGroupWithPrev;
+          /** 그룹핑된 메세지의 마지막 메시지인지 확인 */
+          const isLastOfGroup = !isSameGroupWithNext;
 
-        /** 시간 구분 선 표시 여부 */
-        const showDateDivider = !prev || !isSameDate(msgItem, prev);
-        /** 시간 구분 선 표시 날짜 */
-        const formattedDate = dayjs(msgItem.sendDate).format(
-          'YYYY년 MM월 DD일',
-        );
+          /** 시간 구분 선 표시 여부 */
+          const showDateDivider = !prev || !isSameDate(msgItem, prev);
+          /** 시간 구분 선 표시 날짜 */
+          const formattedDate = dayjs(msgItem.sendDate).format(
+            'YYYY년 MM월 DD일',
+          );
 
-        /** 그룹 간격 */
-        const groupSpacing = isFirstOfGroup ? { marginTop: '24px' } : {};
+          /** 그룹 간격 */
+          const groupSpacing = isFirstOfGroup ? { marginTop: '24px' } : {};
 
-        return (
-          <React.Fragment key={`${msgItem.messageId}-${idx}`}>
-            {showDateDivider && (
-              <div className={styles.date_divider}>{formattedDate}</div>
-            )}
-            <div
-              className={cn(
-                'list_container',
-                isMine ? 'my_message' : 'other_message',
+          return (
+            <React.Fragment key={`${msgItem.messageId}-${idx}`}>
+              {showDateDivider && (
+                <div className={styles.date_divider}>{formattedDate}</div>
               )}
-              style={groupSpacing}
-            >
-              {!isMine && (
-                <div className={styles.profile_image_wrapper}>
-                  <Image
-                    src={msgItem.profileUrl}
-                    alt="profile"
-                    width={36}
-                    height={36}
-                    className={cn(
-                      styles.profile_image,
-                      isFirstOfGroup ? '' : styles.hidden,
-                    )}
-                  />
-                </div>
-              )}
-
-              <div className={styles.message_container}>
-                <div className={styles.message_bubble}>
-                  <div className={styles.message_content}>
-                    {msgItem.message}
-                  </div>
-                </div>
-
-                {isLastOfGroup && (
-                  <div className={styles.message_time}>
-                    {dayjs(msgItem.sendDate).format('A h:mm')}
+              <div
+                className={cn(
+                  'list_container',
+                  isMine ? 'my_message' : 'other_message',
+                )}
+                style={groupSpacing}
+              >
+                {!isMine && (
+                  <div className={styles.profile_image_wrapper}>
+                    <Image
+                      src={msgItem.profileUrl}
+                      alt="profile"
+                      width={36}
+                      height={36}
+                      className={cn(
+                        styles.profile_image,
+                        isFirstOfGroup ? '' : styles.hidden,
+                      )}
+                    />
                   </div>
                 )}
-              </div>
-            </div>
-          </React.Fragment>
-        );
-      })}
 
-      <div ref={bottomRef} aria-hidden="true" />
-    </div>
+                <div className={styles.message_container}>
+                  <div className={styles.message_bubble}>
+                    {renderMessageContent(msgItem)}
+                  </div>
+
+                  {isLastOfGroup && (
+                    <div className={styles.message_time}>
+                      {dayjs(msgItem.sendDate).format('A h:mm')}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </React.Fragment>
+          );
+        })}
+
+        <div ref={bottomRef} aria-hidden="true" />
+      </div>
+
+      {/* TODO: 이미지 모달 컴포넌트 분리 및 교체*/}
+      {selectedImage && (
+        <div
+          className={styles.image_modal_overlay}
+          onClick={handleModalOverlayClick}
+        >
+          <div className={styles.image_modal_content}>
+            <button
+              className={styles.image_modal_close}
+              onClick={handleCloseModal}
+              aria-label="이미지 모달 닫기"
+            >
+              ×
+            </button>
+            <Image
+              src={selectedImage}
+              alt="확대된 이미지"
+              width={800}
+              height={600}
+              className={styles.image_modal_image}
+              style={{ objectFit: 'contain' }}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

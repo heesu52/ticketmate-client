@@ -19,7 +19,7 @@ const UserCard = ({ user, onClick }: UserCardProps) => {
         <div className={styles.review}>
           <StarIcon width={20} height={20} />
           <span className={styles.star}>{user.averageRating}</span>
-          <span className={styles.info}>{user.reviewCount}</span>
+          <span className={styles.info}>({user.reviewCount})</span>
         </div>
       </div>
     </div>

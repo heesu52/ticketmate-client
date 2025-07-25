@@ -94,49 +94,58 @@ const BottomSheet = ({
   ]);
 
   return (
+    //bottom-sheet 전체 컨테이너
     <div className={`${styles.container} ${isOpen ? styles.open : ''}`}>
-      <div className={styles.icon} onClick={onClose} />
-      <div className={styles.upper_container}>
-        <span className={styles.info}>프로필 보기</span>
+      {/* bottom-sheet의 내부 콘텐츠 컨테이너 */}
+      <div className={styles.content_container}>
+        <div className={styles.icon} onClick={onClose} />
 
-        <div className={styles.title_container}>
-          <span className={styles.title}>의문의 티켓터</span>
-          <StarIcon width={20} height={20} />
-          <span className={styles.star}>4.6</span>
-          <span className={styles.info}>(12)</span>
+        {/* 상단 컨테이너 */}
+        <div className={styles.upper_container}>
+          <span>프로필 보기</span>
+          {/* 대리인 정보 컨테이너 */}
+          <div className={styles.title_container}>
+            <span className={styles.title}>의문의 티켓터</span>
+            {/* 리뷰 컨테이너 */}
+            <div className={styles.review_container}>
+              <StarIcon width={20} height={20} />
+              <span className={styles.star}>4.6</span>
+              <span>(12)</span>
+            </div>
+          </div>
+          <span className={styles.info}>한 줄 소개를 작성해주세요.</span>
         </div>
 
-        <span className={styles.info}>한 줄 소개를 작성해주세요.</span>
-      </div>
-
-      <div className={styles.button_container}>
-        {preOpen &&
-          (isDuplicateMap.PRE_OPEN ? (
-            <Button size="large" variant="fill-disabled" onClick={onClose}>
-              신청된 요청입니다
-            </Button>
-          ) : (
-            <Link href={`/concert/form/${concertId}?ticketOpenType=PRE_OPEN`}>
-              <Button size="large" variant="fill" onClick={onClose}>
-                선예매 요청하기
+        {/* 버튼 컨테이너 */}
+        <div className={styles.button_container}>
+          {preOpen &&
+            (isDuplicateMap.PRE_OPEN ? (
+              <Button size="large" variant="fill-disabled" onClick={onClose}>
+                신청된 요청입니다
               </Button>
-            </Link>
-          ))}
+            ) : (
+              <Link href={`/concert/form/${concertId}?ticketOpenType=PRE_OPEN`}>
+                <Button size="large" variant="fill" onClick={onClose}>
+                  선예매 요청하기
+                </Button>
+              </Link>
+            ))}
 
-        {generalOpen &&
-          (isDuplicateMap.GENERAL_OPEN ? (
-            <Button size="large" variant="fill-disabled" onClick={onClose}>
-              신청된 요청입니다
-            </Button>
-          ) : (
-            <Link
-              href={`/concert/form/${concertId}?ticketOpenType=GENERAL_OPEN`}
-            >
-              <Button size="large" variant="border" onClick={onClose}>
-                일반예매 요청하기
+          {generalOpen &&
+            (isDuplicateMap.GENERAL_OPEN ? (
+              <Button size="large" variant="fill-disabled" onClick={onClose}>
+                신청된 요청입니다
               </Button>
-            </Link>
-          ))}
+            ) : (
+              <Link
+                href={`/concert/form/${concertId}?ticketOpenType=GENERAL_OPEN`}
+              >
+                <Button size="large" variant="border" onClick={onClose}>
+                  일반예매 요청하기
+                </Button>
+              </Link>
+            ))}
+        </div>
       </div>
     </div>
   );

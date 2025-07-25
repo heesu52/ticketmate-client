@@ -9,14 +9,14 @@ interface UserSelectProps {
 
 const selectList = [
   //임의로 value 값 지정
-  { value: 'AI_RECOMMEND', label: 'AI 추천 순' },
-  { value: 'RATING_DESC', label: '별점 순' },
-  { value: 'REVIEW_COUNT_DESC', label: '후기 많은 순' },
-  { value: 'FOLLOWER_DESC', label: '팔로워 순' },
-  { value: 'SUCCESS_30DAYS_DESC', label: '최근 30일 성공 순' },
+  { value: 'TOTAL_SCORE', label: 'AI 추천순' },
+  { value: 'AVERAGE_RATING', label: '별점순' },
+  { value: 'REVIEW_COUNT', label: '후기 많은순' },
+  { value: 'FOLLOWER_COUNT', label: '팔로워 순' },
+  { value: 'RECENT_SUCCESS_COUNT', label: '최근 30일 성공 순' },
 ];
 const UserSelect = ({ onSelect }: UserSelectProps) => {
-  const [selected, setSelected] = useState<string>('AI_RECOMMEND');
+  const [selected, setSelected] = useState<string>('TOTAL_SCORE');
 
   useEffect(() => {
     onSelect(selected);

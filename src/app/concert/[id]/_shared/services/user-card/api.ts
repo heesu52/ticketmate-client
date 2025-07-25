@@ -20,7 +20,7 @@ const getUserList = async (request?: GetUserListRequest) => {
     : '';
 
   const data = await instance<GetUserListResponse>(
-    `${BASE_URL}/${concertId}/agent${query}`,
+    `${BASE_URL}/${concertId}/agents${query}`,
     {
       method: 'GET',
     },

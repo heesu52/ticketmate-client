@@ -4,19 +4,17 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   position: fixed;
+  bottom: 0;
 
   width: 100%;
   max-width: var(--max-width);
-  height: 220px;
-  bottom: 0;
+  padding: 12px 24px 40px 24px;
 
   border-radius: 24px 24px 0 0;
   background: var(--white);
   z-index: 50;
-  padding: 0 24px;
 
   transform: translateY(100%);
   transition: transform 0.5s ease-in-out;
@@ -29,53 +27,71 @@
     width: 57px;
     height: 4px;
     border-radius: 7px;
-    background: var(--gray-4);
-    flex-shrink: 0;
-
+    background: var(--textColor-less);
     &:active {
       cursor: grabbing;
     }
   }
 
-  .upper_container {
+  .content_container {
     display: flex;
+    width: 100%;
     flex-direction: column;
-    width: 100%;
+    align-items: center;
+    gap: 20px;
 
-    .info {
-      @include text-sm;
-      color: var(--textColor-less);
-      margin-top: 8px;
-    }
-
-    .title_container {
+    .upper_container {
       display: flex;
-      align-items: flex-end;
-      width: 100%;
-      margin-top: 4px;
+      flex-direction: column;
+      gap: 4px;
+      align-self: stretch;
+      align-items: flex-start;
 
-      .title {
-        @include title-md;
-        color: var(--textColor-main);
+      span {
+        @include text-sm;
+        color: var(--textColor-less);
+
       }
 
-      .star {
-        @include text-md;
-        color: var(--textColor-main);
-        margin-right: 4px;
+      .info {
+        @include text-sm;
+        color: var(--textColor-less);
+        margin-top: 4px;
+      }
+
+      .title_container {
+        display: flex;
+        align-items: flex-end;
+        width: 100%;
+        gap: 4px;
+        
+        .title {
+          @include title-md;
+          color: var(--textColor-main);
+        }
+
+        .review_container {
+          display: flex;
+          align-items: center;
+
+          .star {
+            @include text-md;
+            color: var(--textColor-main);
+            margin-right: 4px;
+          }
+        }
       }
     }
-  }
 
-  .button_container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: 20px;
-    gap: 16px;
-
-    a {
+    .button_container {
+      display: flex;
+      justify-content: space-between;
       width: 100%;
+      gap: 16px;
+
+      a {
+        width: 100%;
+      }
     }
   }
 }

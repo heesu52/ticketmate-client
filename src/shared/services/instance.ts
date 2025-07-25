@@ -18,7 +18,6 @@ const instance = httpClient({
 
       if (accessToken) {
         init.headers = {
-          'Content-Type': 'application/json;charset=UTF-8',
           ...init.headers,
           Authorization: `Bearer ${accessToken}`,
         };

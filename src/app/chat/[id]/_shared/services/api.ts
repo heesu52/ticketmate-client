@@ -1,7 +1,11 @@
 import instance from '@/shared/services/instance';
 import { createQueryParams } from '@/shared/utils/services/query-string';
 
-import { GetChatDetailRequest, GetChatDetailResponse } from './type';
+import {
+  GetChatDetailRequest,
+  GetChatDetailResponse,
+  SendChatImageMessageRequest,
+} from './type';
 
 const BASE_URL = '/chat-room';
 
@@ -21,6 +25,27 @@ export const getChatDetail = async (request: GetChatDetailRequest) => {
     `${BASE_URL}/${chatRoomId}${query}`,
     {
       method: 'GET',
+    },
+  );
+
+  return data;
+};
+
+export const sendChatMessageImage = async (
+  request: SendChatImageMessageRequest,
+) => {
+  const formData = new FormData();
+
+  request.chatMessagePictureList.forEach((picture) => {
+    formData.append('chatMessagePictureList', picture);
+  });
+  formData.append('type', request.type);
+
+  const data = await instance(
+    `/chat-message/${request.chatRoomId}/send/pictures`,
+    {
+      method: 'POST',
+      body: formData,
     },
   );
 

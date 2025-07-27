@@ -36,7 +36,17 @@ const isSameDate = (a: ChatMessageType, b: ChatMessageType) =>
 
 /** 채팅 메시지 목록 컴포넌트 */
 const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
-  const memberId = sessionStorage.getItem('memberId') ?? '';
+  // 세션에 저장한 memberId
+  const [memberId, setMemberId] = useState<string>('');
+
+  useEffect(() => {
+    try {
+      const id = sessionStorage.getItem('memberId') ?? '';
+      setMemberId(id);
+    } catch (error) {
+      console.error('Failed to access sessionStorage:', error);
+    }
+  }, []);
 
   /** 채팅 메시지 조회 요청 Request */
   const [request] = useState<GetChatDetailRequest>({

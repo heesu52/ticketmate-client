@@ -52,7 +52,17 @@ const formatDateTime = (time: string) => {
 };
 
 export default function ChatPage() {
-  const memberId = sessionStorage.getItem('memberId') ?? '';
+  // 세션에 저장한 memberId
+  const [memberId, setMemberId] = useState<string>('');
+
+  useEffect(() => {
+    try {
+      const id = sessionStorage.getItem('memberId') ?? '';
+      setMemberId(id);
+    } catch (error) {
+      console.error('Failed to access sessionStorage:', error);
+    }
+  }, []);
 
   const [selectedTab, setSelectedTab] = useState<Tab>('');
   const queryClient = useQueryClient();

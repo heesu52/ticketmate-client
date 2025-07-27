@@ -55,7 +55,15 @@ export const getPerformancePeriod = (
  * @returns HH:mm 형식의 시간 문자열
  */
 export const formatTime = (time: string): string => {
+  if (!time || !time.includes('T')) {
+    throw new Error('시간 형식이 올바르지 않습니다.');
+  }
+
   const timePart = time.split('T')[1];
+
+  if (!timePart || timePart.length < 5) {
+    throw new Error('시간 형식이 올바르지 않습니다.');
+  }
 
   return timePart.substring(0, 5); // HH:mm 형식으로 반환
 };

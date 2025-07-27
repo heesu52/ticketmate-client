@@ -185,5 +185,6 @@ export const disconnectStomp = () => {
     isConnected = false;
     isConnecting = false;
     subscriptions.clear();
+    notifyConnectionChange();
   }
 };

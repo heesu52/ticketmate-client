@@ -73,7 +73,7 @@ export default function ChatPage() {
     hasNextPage,
     isFetchingNextPage,
   } = useGetChatList({
-    ticketOpenType: selectedTab as TicketOpenType,
+    ticketOpenType: selectedTab === '' ? undefined : selectedTab,
   });
 
   const { lastElementRef } = useIntersectionObserver<HTMLButtonElement>({

@@ -11,6 +11,10 @@ import styles from './chat-header.module.scss';
 
 const cn = classNames.bind(styles);
 
+/**
+ * 채팅 헤더 컴포넌트
+ * TODO: 채팅방 정보 조회 API 연동
+ */
 const ChatHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
 

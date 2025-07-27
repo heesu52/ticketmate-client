@@ -2,6 +2,7 @@
 import type {
   TicketReservationSite,
   ApplicationFormStatus,
+  TicketOpenType,
   ApplicationRejectedType,
 } from '@/shared/types';
 
@@ -32,6 +33,11 @@ export const APPLICATION_STATUS_LABEL_MAP: Record<
   CANCELED: '취소됨',
   ACCEPTED: '수락완료',
   CANCELED_IN_PROCESS: '진행취소',
+};
+
+export const TICKET_OPEN_TYPE_LABEL_MAP: Record<TicketOpenType, string> = {
+  PRE_OPEN: '선예매',
+  GENERAL_OPEN: '일반예매',
 };
 
 export const APPLICATION_REJECTED_LABEL_MAP: Record<

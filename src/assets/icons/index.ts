@@ -27,3 +27,6 @@ export { default as ShareIcon } from './share.svg';
 export { default as StarIcon } from './star.svg';
 export { default as VisibilityIcon } from './visibility.svg';
 export { default as SendIcon } from './send.svg';
+export { default as CheckIcon } from './check.svg';
+export { default as ContentCopyIcon } from './content-copy.svg';
+export { default as UnlockIcon } from './unlock.svg';

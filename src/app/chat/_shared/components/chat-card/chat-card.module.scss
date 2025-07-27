@@ -30,33 +30,21 @@
 
   .chat_info {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
     flex: 1;
 
-    .top_row {
+    .left_column {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      gap: 8px;
+      align-items: flex-start;
+      gap: 4px;
       width: 100%;
+      flex: 0.75;
 
       .name {
         @include title-sm;
         color: var(--textColor-main);
       }
-
-      .time {
-        @include text-sm;
-        color: var(--textColor-less);
-      }
-    }
-
-    .bottom_row {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      width: 100%;
 
       .message {
         @include text-sm;
@@ -68,6 +56,21 @@
         text-overflow: ellipsis;
         word-break: break-word;
         text-align: left;
+      }
+    }
+
+    .right_column {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 4px;
+      width: 100%;
+      flex: 0.25;
+
+      .time {
+        @include text-sm;
+        color: var(--textColor-less);
       }
 
       .unread {

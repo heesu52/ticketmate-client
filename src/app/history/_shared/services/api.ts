@@ -2,6 +2,7 @@ import {
   GetFormListRequest,
   GetFormListResponse,
   PutFormRequest,
+  GetRejectionReasonResponse,
 } from '@/app/history/_shared/services/type';
 import instance from '@/shared/services/instance';
 import { createQueryParams } from '@/shared/utils/services/query-string';
@@ -25,7 +26,7 @@ const getFormList = async (request?: GetFormListRequest) => {
 /**
  * @description 공연 신청폼 수락
  */
-const putFormApprove = async (request: PutFormRequest) => {
+const patchFormApprove = async (request: PutFormRequest) => {
   const { applicationFormId } = request;
 
   const data = await instance(`${BASE_URL}/${applicationFormId}/accept`, {
@@ -38,7 +39,7 @@ const putFormApprove = async (request: PutFormRequest) => {
 /**
  * @description 공연 신청폼 거절
  */
-const putFormReject = async (request: PutFormRequest) => {
+const patchFormReject = async (request: PutFormRequest) => {
   const { applicationFormId } = request;
 
   const data = await instance(`${BASE_URL}/${applicationFormId}/reject`, {
@@ -51,7 +52,7 @@ const putFormReject = async (request: PutFormRequest) => {
 /**
  * @description 공연 신청폼 신청취소(의뢰인)
  */
-const putFormCancel = async (request: PutFormRequest) => {
+const patchFormCancel = async (request: PutFormRequest) => {
   const { applicationFormId } = request;
 
   const data = await instance(`${BASE_URL}/${applicationFormId}/cancel`, {
@@ -61,4 +62,25 @@ const putFormCancel = async (request: PutFormRequest) => {
   return data;
 };
 
-export { getFormList, putFormApprove, putFormReject, putFormCancel };
+/**
+ * @description 신청서 거절 사유 조회
+ */
+const getRejectionReason = async (request: PutFormRequest) => {
+  const { applicationFormId } = request;
+
+  const data = await instance<GetRejectionReasonResponse>(
+    `${BASE_URL}/${applicationFormId}/rejection-reason`,
+    {
+      method: 'GET',
+    },
+  );
+  return data;
+};
+
+export {
+  getFormList,
+  patchFormApprove,
+  patchFormReject,
+  patchFormCancel,
+  getRejectionReason,
+};

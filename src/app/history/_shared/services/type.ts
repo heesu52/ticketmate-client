@@ -1,4 +1,9 @@
-import { Form, ApplicationFormStatus, Pagination } from '@/shared/types';
+import {
+  Form,
+  ApplicationFormStatus,
+  ApplicationRejectedType,
+  Pagination,
+} from '@/shared/types';
 
 interface GetFormListRequest {
   clientId?: string; // 의뢰인  [선택]
@@ -17,4 +22,14 @@ interface PutFormRequest {
   applicationFormId: string;
 }
 
-export type { GetFormListRequest, GetFormListResponse, PutFormRequest };
+interface GetRejectionReasonResponse {
+  applicationFormRejectedType: ApplicationRejectedType;
+  otherMemo: string;
+}
+
+export type {
+  GetFormListRequest,
+  GetFormListResponse,
+  PutFormRequest,
+  GetRejectionReasonResponse,
+};

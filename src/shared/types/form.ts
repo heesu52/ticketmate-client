@@ -1,3 +1,4 @@
+import { Concert } from './concert';
 import { TicketOpenType } from './ticket';
 
 type ApplicationFormStatus =
@@ -6,6 +7,12 @@ type ApplicationFormStatus =
   | 'CANCELED'
   | 'ACCEPTED'
   | 'CANCELED_IN_PROCESS';
+
+type ApplicationRejectedType =
+  | 'FEE_NOT_MATCHING_MARKET_PRICE'
+  | 'RESERVATION_CLOSED'
+  | 'SCHEDULE_UNAVAILABLE'
+  | 'OTHER';
 
 interface HopeArea {
   priority: number; // 우선순위
@@ -22,12 +29,12 @@ interface ApplicationFormDetailResponse {
 }
 
 interface Form {
-  clientId: string; // 의뢰인 PK
-  agentId: string; // 대리인 PK
-  concertId: string; // 콘서트 PK
-  openDate: string;
+  //신청서 상세조회에 대한 응답값
+  concertInfoResponse: Concert;
   applicationFormDetailResponseList: ApplicationFormDetailResponse[]; // 신청 공연 회차 목록 [최소 1개 이상 필수
-  applicationFormId: string;
+
+  //신청내역 정보 조회에 대한 응답값
+  applicationFormId: string; //신청서 PK
   concertName: string;
   concertThumbnailUrl: string;
   agentNickname: string;
@@ -37,4 +44,9 @@ interface Form {
   ticketOpenType: TicketOpenType; // 선예매 여부
 }
 
-export type { ApplicationFormStatus, ApplicationFormDetailResponse, Form };
+export type {
+  ApplicationFormStatus,
+  ApplicationRejectedType,
+  ApplicationFormDetailResponse,
+  Form,
+};

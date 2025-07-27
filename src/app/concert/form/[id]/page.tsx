@@ -1,5 +1,5 @@
 'use client';
-import { use, useEffect, useRef } from 'react';
+import { use, useEffect, useMemo, useRef } from 'react';
 
 import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
@@ -28,20 +28,27 @@ export default function Page({
   const ticketOpenType = resolvedSearchParams.ticketOpenType as TicketOpenType;
   const status = resolvedSearchParams.status as ApplicationFormStatus;
 
-  // status 쿼리 존재 여부에 따른 분기(새로운 신청폼 / 기존 신청폼)
+  // status 유무로 기존 신청폼 여부 판단
   const isApplicationFormPage = !!status;
   const applicationFormId = isApplicationFormPage ? id : undefined;
+
+  // 기존 신청폼일 경우 formItem 요청
   const { data: formItem } = useGetFormDetail(
     applicationFormId ? { applicationFormId } : undefined,
   );
 
-  // concertId는 분기 처리
-  // 기존신청폼 렌더링 할 때는 params에 concertId가 없으므로, formItem에서 concertId 추출
-  const concertId = isApplicationFormPage ? formItem?.concertId : id;
-  // concertId가 준비되면 조회
-  const { data: concertItem } = useGetConcertDetail(
-    concertId ? { concertId } : undefined,
+  // 새 신청폼일 경우 concertId로 concertItem 요청
+  const { data: fetchedConcertItem } = useGetConcertDetail(
+    !isApplicationFormPage && id ? { concertId: id } : undefined,
   );
+
+  // 기존 신청폼이면 formItem.concertInfoResponse, 아니면 API 결과 사용
+  const concertItem = useMemo(() => {
+    if (isApplicationFormPage) {
+      return formItem?.concertInfoResponse ?? null;
+    }
+    return fetchedConcertItem ?? null;
+  }, [isApplicationFormPage, formItem, fetchedConcertItem]);
 
   const handleOpenModal = () => {
     open({

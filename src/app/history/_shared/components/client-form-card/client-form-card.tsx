@@ -4,14 +4,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import queryKey from '@/app/_shared/services/query-key';
-import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import CancelModal from '@/app/history/_shared/components/modal/common-modal';
 import ReasonModal from '@/app/history/_shared/components/modal/reason-modal/reason-modal';
 import { usePutFormCancel } from '@/app/history/_shared/services/mutation';
+import { useGetRejectedReason } from '@/app/history/_shared/services/query';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
-import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
-import { Form, ApplicationFormStatus } from '@/shared/types';
+import {
+  APPLICATION_STATUS_LABEL_MAP,
+  APPLICATION_REJECTED_LABEL_MAP,
+} from '@/shared/constants/type-mapping';
+import {
+  Form,
+  ApplicationFormStatus,
+  ApplicationRejectedType,
+} from '@/shared/types';
 
 import styles from './client-form-card.module.scss';
 interface FormCardProps {
@@ -21,26 +28,31 @@ interface FormCardProps {
 const ClientFormCard = ({ formItem }: FormCardProps) => {
   const {
     applicationFormId,
-    clientId,
-    agentId,
-    concertId,
+    concertName,
+    concertThumbnailUrl,
+    agentNickname,
+    submittedDate,
     applicationFormStatus,
     ticketOpenType,
   } = formItem;
 
-  const { data: concertItem } = useGetConcertDetail({ concertId });
   const { mutate: cancelForm } = usePutFormCancel();
+  const { data: rejectReason } = useGetRejectedReason({ applicationFormId });
   const queryClient = useQueryClient();
   const { open, closeTop } = useModal();
 
-  if (!concertItem) {
-    return null;
-  }
-  const { concertName, concertHallName, concertThumbnailUrl } = concertItem;
+  const { applicationFormRejectedType, otherMemo } = rejectReason ?? {};
 
   //type별 status 이름 변환
   const statusKey = applicationFormStatus as ApplicationFormStatus;
   const statusLabel = APPLICATION_STATUS_LABEL_MAP[statusKey] ?? '';
+
+  //type별 reject 이유 변환
+  const reasonKey = applicationFormRejectedType as ApplicationRejectedType;
+  const rejectLabel =
+    reasonKey === 'OTHER'
+      ? (otherMemo ?? '')
+      : (APPLICATION_REJECTED_LABEL_MAP[reasonKey] ?? '');
 
   const handleOpenCancelModal = () => {
     open({
@@ -79,7 +91,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
         <ReasonModal
           title="대리인 닉네임님의 거절 사유"
           description={`작성한 신청양식을 통해 동일한 대리인에게 다시 티켓팅을 의뢰할 수 있습니다.\n`}
-          reason={`수고비가 단가랑 맞지않음`}
+          reason={rejectLabel}
           onConfirm={async () => {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             closeTop();
@@ -99,7 +111,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           <Image
             className={styles.image}
             src={concertThumbnailUrl}
-            alt={concertHallName}
+            alt={'공연썸네일이미지'}
             width={48}
             height={48}
           />
@@ -109,12 +121,12 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           <div className={styles.detail}>
             <span className={styles.category}>신청 일자</span>
             {/* 현재 신청일자에 대한 data가 없음 */}
-            <span className={styles.info}>신청 일자</span>
+            <span className={styles.info}>{submittedDate}</span>
           </div>
           <div className={styles.detail}>
             <span className={styles.category}>대리인</span>
             {/* 추후 대리인 닉네임을 변경 */}
-            <span className={styles.info}>{agentId}</span>
+            <span className={styles.info}>{agentNickname}</span>
           </div>
         </div>
       </Link>

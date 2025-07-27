@@ -27,7 +27,7 @@ export const calculateDday = (targetDate: string | number | Date): string => {
   } else if (diffInDays === 0) {
     return 'D-Day';
   } else {
-    return `D+${Math.abs(diffInDays)}`;
+    return '';
   }
 };
 

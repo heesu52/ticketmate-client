@@ -3,10 +3,14 @@
 .container {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
   width: 100%;
+  max-width: 600px;
   height: 100vh;
-  gap: 48px;
+
+  gap: 24px;
   display: flex;
   flex-direction: column;
   background-color: var(--white);

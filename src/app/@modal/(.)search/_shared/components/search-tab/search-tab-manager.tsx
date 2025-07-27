@@ -2,31 +2,13 @@
 
 import { useState } from 'react';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
-
 import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
 import { useGetConcertList } from '@/app/_shared/services/query';
 import { GetConcertListRequest } from '@/app/_shared/services/type';
-import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
 import TabButton from '@/shared/components/button/tab-button/tab-button';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
 
 import styles from './search-tab-manager.module.scss';
-
-const FIXED_AGENT_ID = '11d4486d-4524-4e21-8ec1-bffc764bc7bb';
-
-// Mock API
-const handleGetCard = async (pageParam: number) => {
-  const mockData = Array.from({ length: 10 }, (_, index) => ({
-    agentId: FIXED_AGENT_ID,
-    name: `대리인 닉네임 ${pageParam + index + 1}`,
-    profileImage:
-      'https://fastly.picsum.photos/id/515/320/200.jpg?hmac=d24pyllgU-WPlvGiChI8O4t8Wc2P3I67c3hVWDCLA-4',
-    introduction: '한 줄 소개를 작성해주세요.',
-    transactionCount: Math.floor(Math.random() * 100),
-  }));
-  return mockData;
-};
 
 export default function SearchTabManager() {
   const [activeTab, setActiveTab] = useState<'concert' | 'agent'>('concert');
@@ -53,55 +35,18 @@ export default function SearchTabManager() {
     },
     enabled: hasMoreConcerts && !isFetchingConcerts,
   });
-
   const concertList = concertData?.content;
-
-  // 대리인 리스트: react-query infinite scroll
-  const {
-    data: userData,
-    fetchNextPage: fetchMoreUsers,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['cards'],
-    queryFn: ({ pageParam = 0 }) => handleGetCard(pageParam),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === 10 ? allPages.length * 10 : undefined,
-  });
-
-  const { lastElementRef: agentLastElementRef } = useIntersectionObserver({
-    onIntersect: () => {
-      if (hasNextPage && !isFetchingNextPage) {
-        fetchMoreUsers();
-      }
-    },
-    enabled: hasNextPage && !isFetchingNextPage,
-  });
-
-  //  UserCard 클릭 핸들러
-  const handleUserCardClick = (agentId: string) => {
-    console.log(`[UserCard Clicked] agentId: ${agentId}`);
-  };
 
   return (
     <div className={styles.container}>
-      <div className={styles.title_container}>
-        <span className={styles.span}>
-          {activeTab === 'concert' ? '공연' : '대리인'} 검색결과
-        </span>
-        <span className={styles.asterisk}>0</span>
-      </div>
-
       <div className={styles.tab_container}>
         <TabButton
-          label="공연"
+          label="공연 7" //검색결과 Length로 변경 필요
           isActive={activeTab === 'concert'}
           onClick={() => setActiveTab('concert')}
         />
         <TabButton
-          label="대리인"
+          label="대리인 14" //검색결과 Length로 변경 필요
           isActive={activeTab === 'agent'}
           onClick={() => setActiveTab('agent')}
         />
@@ -123,20 +68,23 @@ export default function SearchTabManager() {
           ))
         ) : (
           <div className={styles.agent_list_container}>
-            {userData?.pages.map((page) =>
-              page.map((user) => (
+            {/* 공연id가 없어서 수정된 대리인 호출 api를 사용할 수 없어 주석처리, 추후 검색 api로 연동 */}
+            {/* {data?.pages.map((page) =>
+              page.content.map((user) => (
                 <UserCard
-                  key={`${user.agentId}-${user.name}`}
+                  key={user.agentId}
                   user={user}
                   onClick={() => handleUserCardClick(user.agentId)}
                 />
               )),
             )}
+            {/* 로딩 상태 처리 */}
+            {/* {(isLoading || isFetchingNextPage) && (
+              <p>{isLoading ? '로딩 중...' : '더 불러오는 중...'}</p>
+            )} */}
 
-            {isLoading && <p>로딩 중...</p>}
-            {isFetchingNextPage && <p>더 불러오는 중...</p>}
-
-            <div ref={agentLastElementRef} style={{ height: 10 }} />
+            {/* 무한 스크롤 트리거 */}
+            {/* <div ref={ref} style={{ height: 10 }} /> */}
           </div>
         )}
       </div>

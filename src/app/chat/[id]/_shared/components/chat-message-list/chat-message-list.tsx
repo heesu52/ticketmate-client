@@ -34,9 +34,11 @@ const isSameDate = (a: ChatMessageType, b: ChatMessageType) =>
   dayjs(a.sendDate).format('YYYY-MM-DD') ===
   dayjs(b.sendDate).format('YYYY-MM-DD');
 
+/** 채팅 메시지 목록 컴포넌트 */
 const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   const memberId = sessionStorage.getItem('memberId') ?? '';
 
+  /** 채팅 메시지 조회 요청 Request */
   const [request] = useState<GetChatDetailRequest>({
     chatRoomId: roomId,
     parameter: {
@@ -45,7 +47,7 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     },
   });
 
-  /** 초기 메시지 조회 */
+  /** 채팅 메시지 조회 API */
   const {
     data: initialMessages,
     fetchNextPage,
@@ -77,13 +79,14 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     }
   }, [initialMessages]);
 
-  // 메시지 수신 처리 핸들러
+  /** 메시지 수신 처리 핸들러 */
   const handleMessage = useCallback((response: ChatMessage) => {
     if ('message' in response) {
       setMessages((prev) => [...prev, response]);
     }
   }, []);
 
+  /** 웹소켓 훅 */
   const {
     isConnected,
     connect,
@@ -93,6 +96,7 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     sendMessage,
   } = useWebSocket();
 
+  /** 웹소켓 연결 및 구독 */
   useEffect(() => {
     connect().then(() => {
       subscribe(
@@ -271,29 +275,70 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     }
   };
 
-  // 메시지 내용 렌더링 함수 TODO: 디자인 따라 수정 필요
+  // 이미지 크기 계산 함수
+  const getImageSize = (index: number, total: number) => {
+    if (total === 1) return { width: 285, height: 285 };
+    if (total === 2) return { width: 140.5, height: 140.5 };
+    if (total === 3) return { width: 92.3, height: 92.3 };
+
+    // 4개
+    if (total === 4)
+      return index === 4
+        ? { width: 285, height: 285 }
+        : { width: 92.3, height: 92.3 };
+
+    // 5~6개: 4~5번째는 크기 다름
+    if (total === 5 && index >= 4) return { width: 140.5, height: 140.5 };
+    if (total === 6) return { width: 92.3, height: 92.3 };
+
+    // 7개
+    if (total === 7) {
+      if (index >= 4 && index <= 6) return { width: 140.5, height: 140.5 };
+      if (index === 7) return { width: 285, height: 285 };
+    }
+
+    // 8개
+    if (total === 8 && index >= 7) return { width: 140.5, height: 140.5 };
+
+    // 9개는 전부 92.3
+    if (total === 9) return { width: 92.3, height: 92.3 };
+
+    // 10개
+    if (total === 10) {
+      if (index >= 7 && index <= 9) return { width: 140.5, height: 140.5 };
+      if (index === 10) return { width: 285, height: 285 };
+    }
+
+    return { width: 92.3, height: 92.3 }; // fallback
+  };
+
+  // 메시지 내용 렌더링 함수
   const renderMessageContent = (msgItem: ChatMessage) => {
     if (msgItem.chatMessageType === 'PICTURE') {
       // 이미지 메시지인 경우
+      const imageCount = msgItem.pictureMessageList?.length || 0;
+
       return (
         <div className={styles.image_message}>
-          {msgItem.pictureMessageList?.map((picture) => (
-            <Image
-              key={picture}
-              src={picture}
-              alt={`채팅 이미지`}
-              width={100}
-              height={100}
-              className={styles.chat_image}
-              style={{ objectFit: 'cover' }}
-              onClick={() => handleImageClick(picture)}
-            />
-          ))}
+          {msgItem.pictureMessageList?.map((picture, index) => {
+            const size = getImageSize(index + 1, imageCount);
+            return (
+              <Image
+                key={picture}
+                src={picture}
+                alt={`채팅 이미지`}
+                width={size.width}
+                height={size.height}
+                className={styles.chat_image}
+                onClick={() => handleImageClick(picture)}
+              />
+            );
+          })}
         </div>
       );
     } else {
       // 텍스트 메시지인 경우
-      return <div className={styles.message_content}>{msgItem.message}</div>;
+      return <div className={styles.text_message}>{msgItem.message}</div>;
     }
   };
 
@@ -358,7 +403,13 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
                 )}
 
                 <div className={styles.message_container}>
-                  <div className={styles.message_bubble}>
+                  <div
+                    className={cn(
+                      msgItem.chatMessageType === 'PICTURE'
+                        ? styles.image_bubble
+                        : styles.message_bubble,
+                    )}
+                  >
                     {renderMessageContent(msgItem)}
                   </div>
 

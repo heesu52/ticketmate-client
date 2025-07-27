@@ -227,9 +227,9 @@ export default function FormInput({
             <div className={styles.seat}>
               <span className={styles.span}>공연장 좌석배치도 보기</span>
               {isOpen ? (
-                <ArrowTopIcon width={16} height={16} fill="var(--gray-4)" />
-              ) : (
                 <ArrowBottomIcon width={16} height={16} fill="var(--gray-4)" />
+              ) : (
+                <ArrowTopIcon width={16} height={16} fill="var(--gray-4)" />
               )}
             </div>
             {isOpen && (
@@ -238,7 +238,7 @@ export default function FormInput({
                 alt="좌석배치도"
                 width={345}
                 height={0} // 또는 생략
-                style={{ height: 'auto', marginTop: '12px' }}
+                style={{ width: '100%', height: 'auto', marginTop: '12px' }}
               />
             )}
           </div>

@@ -16,9 +16,27 @@ const instance = httpClient({
           ? process.env.NEXT_PUBLIC_ACCESS_TOKEN
           : getCookie('accessToken');
 
+      // 채팅용 테스트 (테스트 시, 해당 부분 주석 해제)
+      // let accessToken: string | undefined;
+
+      // if (process.env.NODE_ENV === 'development') {
+      //   // 포트별로 다른 access token 사용
+      //   const port = window.location.port;
+
+      //   if (port === '3000') {
+      //     accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN_3000;
+      //   } else if (port === '3001') {
+      //     accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN_3001;
+      //   } else {
+      //     // 기본값
+      //     accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
+      //   }
+      // } else {
+      //   accessToken = getCookie('accessToken') as string | undefined;
+      // }
+
       if (accessToken) {
         init.headers = {
-          'Content-Type': 'application/json;charset=UTF-8',
           ...init.headers,
           Authorization: `Bearer ${accessToken}`,
         };

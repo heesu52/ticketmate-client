@@ -40,7 +40,9 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
     if (newState !== undefined) setState(newState);
 
     const searchParams = new URLSearchParams(search);
-    const fullPath = `${pathname}?${searchParams.toString()}`;
+    const queryString = searchParams.toString();
+    const fullPath = queryString ? `${pathname}?${queryString}` : pathname;
+
     router.push(fullPath);
   };
 

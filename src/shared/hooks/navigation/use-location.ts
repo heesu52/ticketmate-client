@@ -34,13 +34,15 @@ export const useLocation = <T>() => {
     throw new Error('useLocation must be used within NavigationProvider');
 
   /** 상태 */
-  const [state, setState] = useState<T | null>(() => ctx.consume() as T | null);
+  const [state, setState] = useState<T | null>(null);
   /** 검색 쿼리 */
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (state == null) {
-      setState(ctx.consume() as T | null);
+    const consumedState = ctx.consume() as T | null;
+
+    if (consumedState !== null) {
+      setState(consumedState);
     }
   }, []);
 

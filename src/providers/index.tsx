@@ -1,5 +1,6 @@
-import { type ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
+import ContextProvider from '@/providers/context-provider';
 import HeadProvider from '@/providers/head-provider';
 import ReactQueryProviders from '@/providers/react-query-provider';
 import ReactToastProvider from '@/providers/react-toast-provider';
@@ -9,7 +10,9 @@ const Provider = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <HeadProvider />
-      <ReactQueryProviders>{children}</ReactQueryProviders>
+      <ReactQueryProviders>
+        <ContextProvider>{children}</ContextProvider>
+      </ReactQueryProviders>
       <StackModalProvider />
       <ReactToastProvider />
     </>

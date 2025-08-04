@@ -12,6 +12,7 @@ import Button from '@/shared/components/button/functional-button/functional-butt
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
 import { Form } from '@/shared/types';
+import { formatDate } from '@/shared/utils/dates';
 
 import styles from './agent-form-card.module.scss';
 
@@ -88,12 +89,12 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
         <div className={styles.info_container}>
           <div className={styles.detail}>
             <span className={styles.category}>의뢰 일자</span>
-            {/* 현재 신청일자에 대한 data가 없음 */}
-            <span className={styles.info}>{submittedDate}</span>
+            <span
+              className={styles.info}
+            >{`${formatDate(submittedDate)}`}</span>
           </div>
           <div className={styles.detail}>
             <span className={styles.category}>의뢰인</span>
-            {/* 추후 대리인 닉네임을 변경 */}
             <span className={styles.info}>{clientNickname}</span>
           </div>
         </div>

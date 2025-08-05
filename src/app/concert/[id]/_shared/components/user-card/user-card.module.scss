@@ -6,6 +6,7 @@
   align-items: flex-start;
   gap: 16px;
   align-self: stretch;
+  border-bottom: 1px solid var(--lineColor-main);
 
   .profile {
     width: 48px;
@@ -36,7 +37,6 @@
     .review {
       display: flex;
       align-items: center;
-      gap: 4px;
 
       .star {
         @include text-md;

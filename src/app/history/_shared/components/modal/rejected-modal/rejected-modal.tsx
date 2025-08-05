@@ -39,8 +39,8 @@ const RejectedModal = ({
     setSelected(value);
 
     if (!value.startsWith('option')) {
-      if (value.length < 10) {
-        setError('최소 10자 이상 입력해야 합니다.');
+      if (value.length < 5) {
+        setError('최소 5자 이상 입력해야 합니다.');
       } else if (value.length > 50) {
         setError('최대 50자 이내여야 합니다.');
       } else {

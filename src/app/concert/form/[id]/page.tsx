@@ -90,7 +90,7 @@ export default function Page({
 
   return (
     <>
-      <AppBarSetter title="공연 신청" />
+      <AppBarSetter title="신청양식" />
 
       <div className={styles.container}>
         {concertItem && (

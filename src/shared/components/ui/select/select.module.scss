@@ -1,0 +1,82 @@
+.select_trigger {
+  display: flex;
+  padding: 8px 12px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 8px;
+  background: var(--white-less);
+  color: var(--textColor-main, #333);
+
+  // TODO: 폰트 변경 예정
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%; /* 18.2px */
+  letter-spacing: -0.325px;
+
+  .select_icon {
+    display: flex;
+  }
+}
+.select_viewport {
+  width: 100px;
+}
+
+.select_content {
+  display: flex;
+  padding: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  border-radius: 8px;
+  background: var(--white, #fff);
+
+  /* DropSD_FloatingItem */
+  box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.12);
+
+  .select_item {
+    display: flex;
+    padding: 12px 8px;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 4px;
+    background: var(--white, #fff);
+
+    color: var(--textColor-main, #333);
+
+    /* 마지막 아이템은 구분선 제거 */
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.active {
+      background: var(--brandColor-main);
+      color: var(--white);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .select_separator {
+    margin: 8px 0;
+    background-color: var(--divider-line);
+
+    &:last-child {
+      display: none;
+    }
+
+    &[data-orientation='horizontal'] {
+      height: 1px;
+      width: 100%;
+    }
+    &[data-orientation='vertical'] {
+      height: 100%;
+      width: 1px;
+    }
+  }
+}

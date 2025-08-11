@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getFormList, getRejectionReason } from './api';
 import queryKey from './query-key';
-import { GetFormListRequest, PutFormRequest } from './type';
+import { GetFormListRequest } from './type';
 
 const useGetFormList = (request?: GetFormListRequest) => {
   const { data, isLoading, isError } = useQuery({
@@ -13,10 +13,10 @@ const useGetFormList = (request?: GetFormListRequest) => {
   return { data, isLoading, isError };
 };
 
-const useGetRejectedReason = (request: PutFormRequest) => {
+const useGetRejectedReason = (applicationFormId: string) => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: queryKey.getRejectionReason(request),
-    queryFn: () => getRejectionReason(request),
+    queryKey: queryKey.getRejectionReason(applicationFormId),
+    queryFn: () => getRejectionReason(applicationFormId),
   });
 
   return { data, isLoading, isError };

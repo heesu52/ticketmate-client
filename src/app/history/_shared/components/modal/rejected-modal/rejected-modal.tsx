@@ -8,11 +8,16 @@ import styles from '@/app/history/_shared/components/modal/rejected-modal/reject
 import Button from '@/shared/components/button/functional-button/functional-button';
 import CustomModal from '@/shared/components/modal/custom-modal';
 import RadioGroup from '@/shared/components/radio/radio';
+import { APPLICATION_REJECTED_LABEL_MAP } from '@/shared/constants/type-mapping';
+import { ApplicationRejectedType } from '@/shared/types';
 
 interface RejectedModalProps {
   title: string;
   description?: string;
-  onConfirm?: () => Promise<void> | void;
+  onConfirm?: (params: {
+    applicationFormRejectedType: ApplicationRejectedType | 'OTHER';
+    otherMemo: string;
+  }) => Promise<void> | void;
   onCancel?: () => Promise<void> | void;
 }
 
@@ -22,12 +27,32 @@ const RejectedModal = ({
   onConfirm,
   onCancel,
 }: RejectedModalProps) => {
-  const router = useRouter(); // useRouter 훅을 사용하여 라우팅 처리
+  const router = useRouter();
   const [selected, setSelected] = useState<string | null>(null);
+  const [customText, setCustomText] = useState('');
   const [error, setError] = useState('');
 
   const handleConfirm = async () => {
-    if (onConfirm) await onConfirm();
+    if (!selected) {
+      setError('거절 사유를 선택하거나 입력해주세요.');
+      return;
+    }
+    if (
+      selected === 'OTHER' &&
+      (customText.length < 5 || customText.length > 50)
+    ) {
+      setError('기타 사유는 5자 이상 50자 이내여야 합니다.');
+      return;
+    }
+
+    const applicationFormRejectedType = selected as
+      | ApplicationRejectedType
+      | 'OTHER';
+    const otherMemo = selected === 'OTHER' ? customText : '';
+
+    if (onConfirm) {
+      await onConfirm({ applicationFormRejectedType, otherMemo });
+    }
     router.push(`/history`);
   };
 
@@ -37,15 +62,18 @@ const RejectedModal = ({
 
   const handleRadioChange = (value: string) => {
     setSelected(value);
+    setError('');
+    if (value !== 'OTHER') {
+      setCustomText('');
+    }
+  };
 
-    if (!value.startsWith('option')) {
-      if (value.length < 5) {
-        setError('최소 5자 이상 입력해야 합니다.');
-      } else if (value.length > 50) {
-        setError('최대 50자 이내여야 합니다.');
-      } else {
-        setError('');
-      }
+  const handleCustomTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomText(e.target.value);
+    if (e.target.value.length < 5) {
+      setError('최소 5자 이상 입력해야 합니다.');
+    } else if (e.target.value.length > 50) {
+      setError('최대 50자 이내여야 합니다.');
     } else {
       setError('');
     }
@@ -59,18 +87,40 @@ const RejectedModal = ({
         <span className={styles.reason}>거절 사유를 선택해주세요.</span>
         <CustomModal.Action>
           <RadioGroup
-            name="example"
+            name="rejectReason"
             value={selected}
             onChange={handleRadioChange}
           >
             <RadioGroup.Radio
-              value="option1"
-              label="수고비가 시세와 맞지않음"
+              value="FEE_NOT_MATCHING_MARKET_PRICE"
+              label={
+                APPLICATION_REJECTED_LABEL_MAP.FEE_NOT_MATCHING_MARKET_PRICE
+              }
             />
-            <RadioGroup.Radio value="option2" label="예약이 마감됨" />
-            <RadioGroup.Radio value="option3" label="티켓팅 일정이 안됨" />
-            <RadioGroup.RadioInput placeholder="기타" error={error} />
+            <RadioGroup.Radio
+              value="RESERVATION_CLOSED"
+              label={APPLICATION_REJECTED_LABEL_MAP.RESERVATION_CLOSED}
+            />
+            <RadioGroup.Radio
+              value="SCHEDULE_UNAVAILABLE"
+              label={APPLICATION_REJECTED_LABEL_MAP.SCHEDULE_UNAVAILABLE}
+            />
+            <RadioGroup.Radio
+              value="OTHER"
+              label={APPLICATION_REJECTED_LABEL_MAP.OTHER}
+            />
           </RadioGroup>
+          {selected === 'OTHER' && (
+            <input
+              type="text"
+              placeholder="기타 사유를 입력하세요"
+              value={customText}
+              onChange={handleCustomTextChange}
+              className={styles.customInput}
+              maxLength={50}
+            />
+          )}
+          {error && <p className={styles.error}>{error}</p>}
         </CustomModal.Action>
       </CustomModal.Description>
       <CustomModal.Action>

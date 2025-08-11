@@ -26,13 +26,10 @@ const getFormList = async (request?: GetFormListRequest) => {
 /**
  * @description 공연 신청폼 수락
  */
-const patchFormApprove = async (request: PutFormRequest) => {
-  const { applicationFormId } = request;
-
+const patchFormApprove = async (applicationFormId: string) => {
   const data = await instance(`${BASE_URL}/${applicationFormId}/accept`, {
     method: 'PATCH',
   });
-
   return data;
 };
 
@@ -40,10 +37,14 @@ const patchFormApprove = async (request: PutFormRequest) => {
  * @description 공연 신청폼 거절
  */
 const patchFormReject = async (request: PutFormRequest) => {
-  const { applicationFormId } = request;
+  const { applicationFormId, applicationFormRejectedType, otherMemo } = request;
 
   const data = await instance(`${BASE_URL}/${applicationFormId}/reject`, {
     method: 'PATCH',
+    body: JSON.stringify({
+      applicationFormRejectedType,
+      otherMemo,
+    }),
   });
 
   return data;
@@ -52,9 +53,7 @@ const patchFormReject = async (request: PutFormRequest) => {
 /**
  * @description 공연 신청폼 신청취소(의뢰인)
  */
-const patchFormCancel = async (request: PutFormRequest) => {
-  const { applicationFormId } = request;
-
+const patchFormCancel = async (applicationFormId: string) => {
   const data = await instance(`${BASE_URL}/${applicationFormId}/cancel`, {
     method: 'PATCH',
   });
@@ -65,9 +64,7 @@ const patchFormCancel = async (request: PutFormRequest) => {
 /**
  * @description 신청서 거절 사유 조회
  */
-const getRejectionReason = async (request: PutFormRequest) => {
-  const { applicationFormId } = request;
-
+const getRejectionReason = async (applicationFormId: string) => {
   const data = await instance<GetRejectionReasonResponse>(
     `${BASE_URL}/${applicationFormId}/rejection-reason`,
     {

@@ -38,7 +38,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
   } = formItem;
 
   const { mutate: cancelForm } = usePutFormCancel();
-  const { data: rejectReason } = useGetRejectedReason({ applicationFormId });
+  const { data: rejectReason } = useGetRejectedReason(applicationFormId);
   const queryClient = useQueryClient();
   const { open, closeTop } = useModal();
 
@@ -64,17 +64,14 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           message={`취소 시 신청했던 내역은 \n과거신청내역에서 확인가능합니다.`}
           confirmbtn={`취소하기`}
           onConfirm={async () => {
-            await cancelForm(
-              { applicationFormId },
-              {
-                onSuccess: () => {
-                  // 캐시를 무효화하고 리스트를 다시 요청해 최신 상태로 반영
-                  queryClient.invalidateQueries({
-                    queryKey: queryKey.getConcertList(),
-                  });
-                },
+            await cancelForm(applicationFormId, {
+              onSuccess: () => {
+                // 캐시를 무효화하고 리스트를 다시 요청해 최신 상태로 반영
+                queryClient.invalidateQueries({
+                  queryKey: queryKey.getConcertList(),
+                });
               },
-            );
+            });
             closeTop();
           }}
           onCancel={() => {

@@ -20,6 +20,8 @@ type GetFormListResponse = Pagination<Form>;
 
 interface PutFormRequest {
   applicationFormId: string;
+  applicationFormRejectedType: ApplicationRejectedType;
+  otherMemo: string;
 }
 
 interface GetRejectionReasonResponse {

@@ -43,7 +43,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
           message={`의뢰인 닉네임의 요청을 수락할 시 의뢰인과 매칭이 성사되어 채팅이 가능해집니다`}
           confirmbtn={`수락`}
           onConfirm={async () => {
-            await approveForm({ applicationFormId });
+            await approveForm(applicationFormId);
             closeTop();
           }}
           onCancel={() => {
@@ -54,15 +54,19 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
     });
   };
 
-  const handleOpenRejectModal = () => {
+  const handleOpenRejectModal = (applicationFormId: string) => {
     open({
       id: MODAL_ID.REJECTED_MODAL,
       content: (
         <RejectedModal
           title="요청을 거절하시겠습니까?"
           description={`의뢰인 닉네임의 요청을 거절할 시 해당 신청내역이 삭제되고 복구할 수 없습니다.\n`}
-          onConfirm={async () => {
-            await rejectForm({ applicationFormId });
+          onConfirm={async ({ applicationFormRejectedType, otherMemo }) => {
+            await rejectForm({
+              applicationFormId,
+              applicationFormRejectedType,
+              otherMemo,
+            });
             closeTop();
           }}
           onCancel={() => {
@@ -72,6 +76,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
       ),
     });
   };
+
   return (
     <div className={styles.container}>
       <Link className={styles.upper_container} href={`concert/form/}`}>
@@ -102,7 +107,11 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
       <div className={styles.footer_container}>
         <button className={styles.link}>자세히 보기</button>
         <div className={styles.footer_button}>
-          <Button size="large" variant="border" onClick={handleOpenRejectModal}>
+          <Button
+            size="large"
+            variant="border"
+            onClick={() => handleOpenRejectModal(applicationFormId)}
+          >
             거절
           </Button>
           <Button size="large" variant="fill" onClick={handleOpenAcceptModal}>

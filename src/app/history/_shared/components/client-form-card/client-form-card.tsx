@@ -1,4 +1,6 @@
 'use client';
+import { useState } from 'react';
+
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -36,9 +38,13 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
     applicationFormStatus,
     ticketOpenType,
   } = formItem;
+  const [isReasonModalOpen, setIsReasonModalOpen] = useState(false);
 
   const { mutate: cancelForm } = usePutFormCancel();
-  const { data: rejectReason } = useGetRejectedReason(applicationFormId);
+  const { data: rejectReason } = useGetRejectedReason(
+    applicationFormId,
+    isReasonModalOpen,
+  );
   const queryClient = useQueryClient();
   const { open, closeTop } = useModal();
 
@@ -83,6 +89,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
   };
 
   const handleOpenReasonModal = () => {
+    setIsReasonModalOpen(true);
     open({
       id: MODAL_ID.REASON_MODAL,
       content: (
@@ -92,12 +99,14 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           reason={rejectLabel}
           onConfirm={async () => {
             await new Promise((resolve) => setTimeout(resolve, 1000));
+            setIsReasonModalOpen(false);
             closeTop();
           }}
         />
       ),
     });
   };
+
   return (
     <div className={styles.container}>
       <Link

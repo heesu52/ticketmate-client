@@ -13,10 +13,11 @@ const useGetFormList = (request?: GetFormListRequest) => {
   return { data, isLoading, isError };
 };
 
-const useGetRejectedReason = (applicationFormId: string) => {
+const useGetRejectedReason = (applicationFormId: string, enabled: boolean) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: queryKey.getRejectionReason(applicationFormId),
     queryFn: () => getRejectionReason(applicationFormId),
+    enabled,
   });
 
   return { data, isLoading, isError };

@@ -12,7 +12,6 @@ RUN corepack enable \
 
 # 소스 복사 및(필요시) env 주입
 COPY . .
-COPY env/.env.deploy ./.env.deploy
 
 RUN pnpm build
 RUN pnpm prune --prod

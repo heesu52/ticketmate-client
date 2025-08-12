@@ -11,6 +11,7 @@ import {
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
+import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
 import { Form } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 
@@ -45,6 +46,9 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
           onConfirm={async () => {
             await approveForm(applicationFormId);
             closeTop();
+            customToast({
+              description: `수락요청이 완료되었습니다.`,
+            });
           }}
           onCancel={() => {
             closeTop();

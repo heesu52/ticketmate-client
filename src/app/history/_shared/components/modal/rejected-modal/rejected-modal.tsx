@@ -39,7 +39,7 @@ const RejectedModal = ({
     }
     if (
       selected === 'OTHER' &&
-      (customText.length < 5 || customText.length > 50)
+      (customText.trim().length < 5 || customText.trim().length > 50)
     ) {
       setError('기타 사유는 5자 이상 50자 이내여야 합니다.');
       return;
@@ -48,7 +48,7 @@ const RejectedModal = ({
     const applicationFormRejectedType = selected as
       | ApplicationRejectedType
       | 'OTHER';
-    const otherMemo = selected === 'OTHER' ? customText : '';
+    const otherMemo = selected === 'OTHER' ? customText.trim() : '';
 
     if (onConfirm) {
       await onConfirm({ applicationFormRejectedType, otherMemo });

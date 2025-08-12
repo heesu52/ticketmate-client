@@ -5,11 +5,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import queryKey from '@/app/_shared/services/query-key';
 import CancelModal from '@/app/history/_shared/components/modal/common-modal';
 import ReasonModal from '@/app/history/_shared/components/modal/reason-modal/reason-modal';
 import { usePutFormCancel } from '@/app/history/_shared/services/mutation';
 import { useGetRejectedReason } from '@/app/history/_shared/services/query';
+import queryKey from '@/app/history/_shared/services/query-key';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
 import {
@@ -40,7 +40,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
   } = formItem;
   const [isReasonModalOpen, setIsReasonModalOpen] = useState(false);
 
-  const { mutate: cancelForm } = usePutFormCancel();
+  const { mutateAsync: cancelFormAsync } = usePutFormCancel();
   const { data: rejectReason } = useGetRejectedReason(
     applicationFormId,
     isReasonModalOpen,
@@ -70,15 +70,15 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           message={`취소 시 신청했던 내역은 \n과거신청내역에서 확인가능합니다.`}
           confirmbtn={`취소하기`}
           onConfirm={async () => {
-            await cancelForm(applicationFormId, {
-              onSuccess: () => {
-                // 캐시를 무효화하고 리스트를 다시 요청해 최신 상태로 반영
-                queryClient.invalidateQueries({
-                  queryKey: queryKey.getConcertList(),
-                });
-              },
-            });
-            closeTop();
+            try {
+              await cancelFormAsync(applicationFormId);
+              queryClient.invalidateQueries({
+                queryKey: queryKey.getFormList(),
+              });
+              closeTop();
+            } catch {
+              // 에러 토스트는 훅에서 처리 중
+            }
           }}
           onCancel={() => {
             closeTop();

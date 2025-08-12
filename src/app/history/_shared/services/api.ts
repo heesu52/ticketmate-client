@@ -41,6 +41,9 @@ const patchFormReject = async (request: PutFormRequest) => {
 
   const data = await instance(`${BASE_URL}/${applicationFormId}/reject`, {
     method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({
       applicationFormRejectedType,
       otherMemo,

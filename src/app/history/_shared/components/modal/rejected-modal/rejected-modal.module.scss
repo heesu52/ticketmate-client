@@ -4,3 +4,14 @@
   @include text-sm;
   color: var(--textColor-main);
 }
+
+.error_container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  .error_message {
+    @include text-xs;
+    color: var(--brandColor-main);
+  }
+}

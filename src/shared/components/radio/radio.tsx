@@ -4,8 +4,6 @@ import React, { ReactNode, useContext, ChangeEvent } from 'react';
 
 import classNames from 'classnames/bind';
 
-import { AlertCircleIcon } from '@/assets/icons';
-
 import styles from './radio.module.scss';
 
 const cn = classNames.bind(styles);
@@ -57,13 +55,11 @@ const Radio = ({ value, label, disabled = false }: RadioProps) => {
 interface RadioInputProps {
   placeholder?: string;
   disabled?: boolean;
-  error?: string;
 }
 
 const RadioInput = ({
   placeholder = '직접 입력',
   disabled = false,
-  error = '',
 }: RadioInputProps) => {
   const context = useContext(RadioGroupContext);
   if (!context)
@@ -78,8 +74,7 @@ const RadioInput = ({
     if (!disabled) onChange('');
   };
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    onChange(e.target.value);
+    if (!disabled) onChange(e.target.value);
   };
 
   return (
@@ -107,16 +102,6 @@ const RadioInput = ({
           maxLength={50}
         />
       </label>
-      {isChecked && error && (
-        <div className={cn('error_container')}>
-          <AlertCircleIcon
-            width={16}
-            height={16}
-            fill="var(--brandColor-main)"
-          />
-          <span className={cn('error_message')}>{error}</span>
-        </div>
-      )}
     </>
   );
 };

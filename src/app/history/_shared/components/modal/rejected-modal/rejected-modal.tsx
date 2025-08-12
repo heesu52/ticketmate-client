@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import styles from '@/app/history/_shared/components/modal/rejected-modal/rejected-modal.module.scss';
+import { AlertCircleIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import CustomModal from '@/shared/components/modal/custom-modal';
 import RadioGroup from '@/shared/components/radio/radio';
@@ -32,6 +33,7 @@ const RejectedModal = ({
   const [customText, setCustomText] = useState('');
   const [error, setError] = useState('');
 
+  // 제출 시 조건 확인하는 핸들러
   const handleConfirm = async () => {
     if (!selected) {
       setError('거절 사유를 선택하거나 입력해주세요.');
@@ -56,10 +58,12 @@ const RejectedModal = ({
     router.push(`/history`);
   };
 
+  // 취소하는 핸들러
   const handleCancel = () => {
     if (onCancel) onCancel();
   };
 
+  // 라디오 버튼 변경할 때 초기화하는 핸들러
   const handleRadioChange = (value: string) => {
     setSelected(value);
     setError('');
@@ -67,7 +71,7 @@ const RejectedModal = ({
       setCustomText('');
     }
   };
-
+  // '기타' 사유 작성 시 조건 확인하는 핸들러
   const handleCustomTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomText(e.target.value);
     if (e.target.value.length < 5) {
@@ -120,7 +124,16 @@ const RejectedModal = ({
               maxLength={50}
             />
           )}
-          {error && <p className={styles.error}>{error}</p>}
+          {error && (
+            <div className={styles.error_container}>
+              <AlertCircleIcon
+                width={16}
+                height={16}
+                fill="var(--brandColor-main)"
+              />
+              <span className={styles.error_message}>{error}</span>
+            </div>
+          )}
         </CustomModal.Action>
       </CustomModal.Description>
       <CustomModal.Action>

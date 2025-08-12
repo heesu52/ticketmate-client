@@ -98,7 +98,8 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           description={`작성한 신청양식을 통해 동일한 대리인에게 다시 티켓팅을 의뢰할 수 있습니다.\n`}
           reason={rejectLabel}
           onConfirm={async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            //없이 테스트 한번 진행해보고 깜빡이는 현상 없으면 제거 있으면 추가하는 방향으로
+            // await new Promise((resolve) => setTimeout(resolve, 1000));
             setIsReasonModalOpen(false);
             closeTop();
           }}

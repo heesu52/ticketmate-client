@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -38,13 +37,9 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
     applicationFormStatus,
     ticketOpenType,
   } = formItem;
-  const [isReasonModalOpen, setIsReasonModalOpen] = useState(false);
 
   const { mutateAsync: cancelFormAsync } = usePutFormCancel();
-  const { data: rejectReason } = useGetRejectedReason(
-    applicationFormId,
-    isReasonModalOpen,
-  );
+  const { data: rejectReason } = useGetRejectedReason(applicationFormId);
   const queryClient = useQueryClient();
   const { open, closeTop } = useModal();
 
@@ -89,7 +84,6 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
   };
 
   const handleOpenReasonModal = () => {
-    setIsReasonModalOpen(true);
     open({
       id: MODAL_ID.REASON_MODAL,
       content: (
@@ -97,10 +91,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           title="대리인 닉네임님의 거절 사유"
           description={`작성한 신청양식을 통해 동일한 대리인에게 다시 티켓팅을 의뢰할 수 있습니다.\n`}
           reason={rejectLabel}
-          onConfirm={async () => {
-            //없이 테스트 한번 진행해보고 깜빡이는 현상 없으면 제거 있으면 추가하는 방향으로
-            // await new Promise((resolve) => setTimeout(resolve, 1000));
-            setIsReasonModalOpen(false);
+          onConfirm={() => {
             closeTop();
           }}
         />

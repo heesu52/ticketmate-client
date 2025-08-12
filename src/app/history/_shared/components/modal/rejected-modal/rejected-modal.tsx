@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import styles from '@/app/history/_shared/components/modal/rejected-modal/rejected-modal.module.scss';
-import { AlertCircleIcon } from '@/assets/icons';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import CustomModal from '@/shared/components/modal/custom-modal';
 import RadioGroup from '@/shared/components/radio/radio';
@@ -71,17 +70,18 @@ const RejectedModal = ({
       setCustomText('');
     }
   };
-  // '기타' 사유 작성 시 조건 확인하는 핸들러
-  const handleCustomTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCustomText(e.target.value);
-    if (e.target.value.length < 5) {
-      setError('최소 5자 이상 입력해야 합니다.');
-    } else if (e.target.value.length > 50) {
-      setError('최대 50자 이내여야 합니다.');
-    } else {
-      setError('');
-    }
-  };
+
+  // 추후 추가할 얘정
+  // const handleCustomTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCustomText(e.target.value);
+  //   if (e.target.value.length < 5) {
+  //     setError('최소 5자 이상 입력해야 합니다.');
+  //   } else if (e.target.value.length > 50) {
+  //     setError('최대 50자 이내여야 합니다.');
+  //   } else {
+  //     setError('');
+  //   }
+  // };
 
   return (
     <CustomModal>
@@ -109,31 +109,8 @@ const RejectedModal = ({
               value="SCHEDULE_UNAVAILABLE"
               label={APPLICATION_REJECTED_LABEL_MAP.SCHEDULE_UNAVAILABLE}
             />
-            <RadioGroup.Radio
-              value="OTHER"
-              label={APPLICATION_REJECTED_LABEL_MAP.OTHER}
-            />
+            <RadioGroup.RadioInput placeholder="기타" error={error} />
           </RadioGroup>
-          {selected === 'OTHER' && (
-            <input
-              type="text"
-              placeholder="기타 사유를 입력하세요"
-              value={customText}
-              onChange={handleCustomTextChange}
-              className={styles.customInput}
-              maxLength={50}
-            />
-          )}
-          {error && (
-            <div className={styles.error_container}>
-              <AlertCircleIcon
-                width={16}
-                height={16}
-                fill="var(--brandColor-main)"
-              />
-              <span className={styles.error_message}>{error}</span>
-            </div>
-          )}
         </CustomModal.Action>
       </CustomModal.Description>
       <CustomModal.Action>

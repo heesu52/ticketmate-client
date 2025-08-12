@@ -8,6 +8,10 @@ import instance from '@/shared/services/instance';
 
 const BASE_URL = '/application-form';
 
+/**
+ * @description 신청서 작성
+ */
+
 const createConcertForm = async (request: CreateConcertFormRequest) => {
   const data = await instance(`${BASE_URL}`, {
     method: 'POST',
@@ -17,7 +21,7 @@ const createConcertForm = async (request: CreateConcertFormRequest) => {
     body: JSON.stringify(request),
   });
 
-  return data; // 이미 instance 인터셉터에서 JSON 파싱된 데이터 반환한다고 가정
+  return data;
 };
 
 /**

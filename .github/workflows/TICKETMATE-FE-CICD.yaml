@@ -61,7 +61,7 @@ jobs:
             CONTAINER_NAME="ticket-mate-front"
             IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/ticket-mate-front:${BRANCH}
             
-            if [ "$BRANCH" == "deploy" ]; then
+            if [ "$BRANCH" = "deploy" ]; then
               PORT=3003
               CONTAINER_NAME="ticket-mate-front-deploy"
             fi

@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
+    additionalData: `@use "@/styles/index" as *;`,
   },
   webpack: (config) => {
     config.module.rules.push({

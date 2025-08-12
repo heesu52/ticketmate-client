@@ -17,7 +17,7 @@ jobs:
       - name: Create .env file
         run: |
           if [ "${{ github.ref_name }}" == "deploy" ]; then
-            echo -e "${{ secrets.ENV_DEPLOY }}" > env/.env.deploy
+            echo -e "${{ secrets.ENV_DEPLOY }}" > .env.deploy
           fi
 
       - name: Setup Node.js

@@ -1,7 +1,7 @@
 # 빌드 단계
 FROM node:22-slim AS builder
 WORKDIR /app
-COPY package.json pnpm-lock.json ./
+COPY package.json pnpm-lock.yaml ./
 COPY . .
 RUN pnpm build
 

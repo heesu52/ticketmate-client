@@ -29,8 +29,8 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
     submittedDate,
     applicationFormStatus,
   } = formItem;
-  const { mutate: approveForm } = usePutFormApprove();
-  const { mutate: rejectForm } = usePutFormReject();
+  const { mutateAsync: approveFormAsync } = usePutFormApprove();
+  const { mutateAsync: rejectFormAsync } = usePutFormReject();
 
   const { open, closeTop } = useModal();
 
@@ -43,7 +43,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
           message={`의뢰인 닉네임의 요청을 수락할 시 의뢰인과 매칭이 성사되어 채팅이 가능해집니다`}
           confirmbtn={`수락`}
           onConfirm={async () => {
-            await approveForm(applicationFormId);
+            await approveFormAsync(applicationFormId);
             closeTop();
           }}
           onCancel={() => {
@@ -54,7 +54,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
     });
   };
 
-  const handleOpenRejectModal = (applicationFormId: string) => {
+  const handleOpenRejectModal = () => {
     open({
       id: MODAL_ID.REJECTED_MODAL,
       content: (
@@ -62,7 +62,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
           title="요청을 거절하시겠습니까?"
           description={`의뢰인 닉네임의 요청을 거절할 시 해당 신청내역이 삭제되고 복구할 수 없습니다.\n`}
           onConfirm={async ({ applicationFormRejectedType, otherMemo }) => {
-            await rejectForm({
+            await rejectFormAsync({
               applicationFormId,
               applicationFormRejectedType,
               otherMemo,
@@ -107,11 +107,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
       <div className={styles.footer_container}>
         <button className={styles.link}>자세히 보기</button>
         <div className={styles.footer_button}>
-          <Button
-            size="large"
-            variant="border"
-            onClick={() => handleOpenRejectModal(applicationFormId)}
-          >
+          <Button size="large" variant="border" onClick={handleOpenRejectModal}>
             거절
           </Button>
           <Button size="large" variant="fill" onClick={handleOpenAcceptModal}>

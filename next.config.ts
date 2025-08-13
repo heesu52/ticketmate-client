@@ -20,16 +20,6 @@ const nextConfig: NextConfig = {
       'ticketmate-storage.s3.ap-northeast-2.amazonaws.com',
     ],
   },
-  async rewrites() {
-    return [
-      {
-        // 프론트에서 /api로 시작하는 요청을
-        source: '/api/:path*',
-        // 실제 API 서버로 프록시
-        destination: 'https://api.ticketmate.site/api/:path*',
-      },
-    ];
-  },
 };
 
 export default nextConfig;

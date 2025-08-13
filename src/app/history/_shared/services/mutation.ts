@@ -1,6 +1,7 @@
+import { usePatchForm } from '@/app/history/_shared/hooks/usePatchForm';
+
 import { patchFormApprove, patchFormCancel, patchFormReject } from './api';
-import { PutFormRequest } from './type';
-import { usePatchForm } from '../hooks/usePatchForm';
+import { PatchFormRequest } from './type';
 
 export const usePatchFormApprove = () =>
   usePatchForm<string>({
@@ -10,7 +11,7 @@ export const usePatchFormApprove = () =>
   });
 
 export const usePatchFormReject = () =>
-  usePatchForm<PutFormRequest>({
+  usePatchForm<PatchFormRequest>({
     mutationFn: (request) => patchFormReject(request),
     successMessage: '요청거절이 완료되었습니다.',
     errorMessage: '요청거절 중 오류가 발생했습니다.',

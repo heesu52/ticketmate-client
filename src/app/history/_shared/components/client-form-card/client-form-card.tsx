@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import CancelModal from '@/app/history/_shared/components/modal/common-modal';
 import ReasonModal from '@/app/history/_shared/components/modal/reason-modal/reason-modal';
-import { usePutFormCancel } from '@/app/history/_shared/services/mutation';
+import { usePatchFormCancel } from '@/app/history/_shared/services/mutation';
 import { useGetRejectedReason } from '@/app/history/_shared/services/query';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
@@ -36,7 +36,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
     ticketOpenType,
   } = formItem;
 
-  const { mutateAsync: cancelFormAsync } = usePutFormCancel();
+  const { mutateAsync: cancelFormAsync } = usePatchFormCancel();
   const { data: rejectReason } = useGetRejectedReason(applicationFormId);
   const { open, closeTop } = useModal();
   const { applicationFormRejectedType, otherMemo } = rejectReason ?? {};

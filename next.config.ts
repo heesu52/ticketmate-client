@@ -3,7 +3,6 @@ import path from 'path';
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
     additionalData: `@use "@/styles/index" as *;`,
@@ -13,7 +12,6 @@ const nextConfig: NextConfig = {
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     });
-
     return config;
   },
   images: {

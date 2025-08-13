@@ -1,10 +1,10 @@
-import { GetFormListRequest, PutFormRequest } from './type';
+import { GetFormListRequest } from './type';
 
 const queryKey = {
   getFormList: (request?: GetFormListRequest) => ['getFormList', request],
-  getRejectionReason: (request?: PutFormRequest) => [
+  getRejectionReason: (applicationFormId: string) => [
     'getRejectReason',
-    request,
+    applicationFormId,
   ],
 };
 

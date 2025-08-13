@@ -29,8 +29,8 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
     submittedDate,
     applicationFormStatus,
   } = formItem;
-  const { mutate: approveForm } = usePutFormApprove();
-  const { mutate: rejectForm } = usePutFormReject();
+  const { mutateAsync: approveFormAsync } = usePutFormApprove();
+  const { mutateAsync: rejectFormAsync } = usePutFormReject();
 
   const { open, closeTop } = useModal();
 
@@ -43,7 +43,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
           message={`의뢰인 닉네임의 요청을 수락할 시 의뢰인과 매칭이 성사되어 채팅이 가능해집니다`}
           confirmbtn={`수락`}
           onConfirm={async () => {
-            await approveForm({ applicationFormId });
+            await approveFormAsync(applicationFormId);
             closeTop();
           }}
           onCancel={() => {
@@ -61,8 +61,12 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
         <RejectedModal
           title="요청을 거절하시겠습니까?"
           description={`의뢰인 닉네임의 요청을 거절할 시 해당 신청내역이 삭제되고 복구할 수 없습니다.\n`}
-          onConfirm={async () => {
-            await rejectForm({ applicationFormId });
+          onConfirm={async ({ applicationFormRejectedType, otherMemo }) => {
+            await rejectFormAsync({
+              applicationFormId,
+              applicationFormRejectedType,
+              otherMemo,
+            });
             closeTop();
           }}
           onCancel={() => {
@@ -72,6 +76,7 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
       ),
     });
   };
+
   return (
     <div className={styles.container}>
       <Link className={styles.upper_container} href={`concert/form/}`}>

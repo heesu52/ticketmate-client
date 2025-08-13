@@ -11,9 +11,13 @@ const BASE_URL = '/application-form';
 /**
  * @description 신청서 작성
  */
+
 const createConcertForm = async (request: CreateConcertFormRequest) => {
   const data = await instance(`${BASE_URL}`, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(request),
   });
 
@@ -28,6 +32,9 @@ const patchConcertForm = async (request: PatchConcertFormRequest) => {
 
   const data = await instance(`${BASE_URL}/${applicationFormId}/edit`, {
     method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(applicationFormEditRequest),
   });
 

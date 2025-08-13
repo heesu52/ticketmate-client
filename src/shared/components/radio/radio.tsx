@@ -78,8 +78,7 @@ const RadioInput = ({
     if (!disabled) onChange('');
   };
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    onChange(e.target.value);
+    if (!disabled) onChange(e.target.value);
   };
 
   return (

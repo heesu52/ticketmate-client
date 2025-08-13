@@ -53,7 +53,7 @@ const HistoryList = ({ tab }: HistoryListProps) => {
         </span>
         {filteredList.map((formItem) => (
           <div key={formItem.applicationFormId}>
-            {memberType === 'client' ? (
+            {memberType === 'CLIENT' ? (
               <ClientFormCard formItem={formItem} />
             ) : (
               <AgentFormCard formItem={formItem} />

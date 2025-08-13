@@ -1,6 +1,5 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -8,7 +7,6 @@ import CancelModal from '@/app/history/_shared/components/modal/common-modal';
 import ReasonModal from '@/app/history/_shared/components/modal/reason-modal/reason-modal';
 import { usePutFormCancel } from '@/app/history/_shared/services/mutation';
 import { useGetRejectedReason } from '@/app/history/_shared/services/query';
-import queryKey from '@/app/history/_shared/services/query-key';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
 import { useModal } from '@/shared/components/modal/use-modal';
 import {
@@ -40,9 +38,7 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
 
   const { mutateAsync: cancelFormAsync } = usePutFormCancel();
   const { data: rejectReason } = useGetRejectedReason(applicationFormId);
-  const queryClient = useQueryClient();
   const { open, closeTop } = useModal();
-
   const { applicationFormRejectedType, otherMemo } = rejectReason ?? {};
 
   //type별 status 이름 변환
@@ -67,9 +63,6 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
           onConfirm={async () => {
             try {
               await cancelFormAsync(applicationFormId);
-              queryClient.invalidateQueries({
-                queryKey: queryKey.getFormList(),
-              });
               closeTop();
             } catch {
               // 에러 토스트는 훅에서 처리 중

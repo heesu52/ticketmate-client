@@ -3,7 +3,7 @@ name: TICKETMATE-FE-CICD.yaml
 on:
   push:
     branches:
-      - deploy
+      - develop
 
 jobs:
   build:
@@ -16,9 +16,7 @@ jobs:
       # .env 생성
       - name: Create .env file
         run: |
-          if [ "${{ github.ref_name }}" == "deploy" ]; then
-            echo -e "${{ secrets.ENV_DEPLOY }}" > .env
-          fi
+          echo -e "${{ secrets.ENV_DEPLOY }}" > .env
 
       - name: Docker setup
         uses: docker/setup-buildx-action@v3
@@ -61,9 +59,8 @@ jobs:
             CONTAINER_NAME="ticket-mate-front"
             IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/ticket-mate-front:${BRANCH}
             
-            if [ "$BRANCH" = "deploy" ]; then
+            if [ "$BRANCH" = "develop" ]; then
               PORT=3003
-              CONTAINER_NAME="ticket-mate-front-deploy"
             fi
             
             echo "브랜치: $BRANCH"

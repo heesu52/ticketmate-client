@@ -56,7 +56,7 @@ export default function FormTabManager({
       status === 'REJECTED'
     )
       return 'readApp';
-    // ACCEPTED 혹은 그 외의 상태는 undefined로 둬서 아무 동작 안 하도록
+    // APPROVED 혹은 그 외의 상태는 undefined로 둬서 아무 동작 안 하도록
     return undefined;
   });
   //input과 readapp을 구분해서 제출을 하기 위해 state로 관리

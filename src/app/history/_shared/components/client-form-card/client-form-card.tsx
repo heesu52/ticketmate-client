@@ -123,12 +123,12 @@ const ClientFormCard = ({ formItem }: FormCardProps) => {
         </div>
       </Link>
       <div className={styles.footer_container}>
-        {statusKey === 'ACCEPTED' ? (
+        {statusKey === 'APPROVED' ? (
           <>
             <Link className={styles.link} href="/chat">
               채팅하기
             </Link>
-            <span className={styles.accepted}>{statusLabel}</span>
+            <span className={styles.approved}>{statusLabel}</span>
           </>
         ) : statusKey === 'PENDING' ? (
           <>

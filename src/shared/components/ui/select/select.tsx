@@ -7,13 +7,9 @@ import { ArrowBottomIcon } from '@/assets/icons';
 
 import styles from './select.module.scss';
 
-const cn = classNames.bind(styles);
+import type { Option, SelectVariant } from './select.type';
 
-export interface Option {
-  label: string;
-  value: string;
-  disabled?: boolean;
-}
+const cn = classNames.bind(styles);
 
 interface SelectProps {
   options: Option[];
@@ -21,6 +17,7 @@ interface SelectProps {
   onValueChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  variant?: SelectVariant;
 }
 
 /**
@@ -30,14 +27,25 @@ interface SelectProps {
  * @param onValueChange 값 변경 핸들러
  * @param placeholder 빈 값 표시 문구
  * @param className 컴포넌트 추가 클래스명
+ * @param variant 디자인 변형 ('form' | 'filter')
  * @example
  * ```tsx
  * const [value, setValue] = useState('CREATED_DATE');
  *
+ * // Form 스타일 (폼 입력용, 전체 너비)
  * <Select
  *  options={[{ label: '최신순', value: 'CREATED_DATE' }, { label: '오픈일순', value: 'TICKET_OPEN_DATE' }]}
- *  value="value"
+ *  value={value}
  *  onValueChange={setValue}
+ *  variant="form"
+ * />
+ *
+ * // Filter 스타일 (필터링용, 컴팩트)
+ * <Select
+ *  options={[{ label: '최신순', value: 'CREATED_DATE' }, { label: '오픈일순', value: 'TICKET_OPEN_DATE' }]}
+ *  value={value}
+ *  onValueChange={setValue}
+ *  variant="filter"
  * />
  * ```
  */
@@ -47,13 +55,21 @@ const Select = ({
   onValueChange,
   placeholder = '선택하세요',
   className,
+  variant = 'form',
 }: SelectProps) => {
   return (
     <RadixSelect.Root value={value} onValueChange={onValueChange}>
-      <RadixSelect.Trigger className={cn('select_trigger', className)}>
+      <RadixSelect.Trigger
+        className={cn('select_trigger', className)}
+        data-variant={variant}
+      >
         <RadixSelect.Value placeholder={placeholder} />
         <RadixSelect.Icon className={cn('select_icon')}>
-          <ArrowBottomIcon width={12} height={12} />
+          {variant === 'form' ? (
+            <ArrowBottomIcon width={20} height={20} />
+          ) : (
+            <ArrowBottomIcon width={12} height={12} />
+          )}
         </RadixSelect.Icon>
       </RadixSelect.Trigger>
 
@@ -64,6 +80,7 @@ const Select = ({
           sideOffset={8}
           align="end"
           avoidCollisions={true}
+          data-variant={variant}
         >
           <RadixSelect.Viewport className={cn('select_viewport')}>
             {options.map((option) => (

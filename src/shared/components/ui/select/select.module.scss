@@ -15,15 +15,25 @@
 
 /* variant: form */
 .select_trigger[data-variant='form'] {
+  @include text-md;
+
   --sel-trigger-padding: 16px;
   --sel-trigger-bg: var(--white, #fff);
   --sel-trigger-border: 1px solid var(--lineColor-main, #eee);
 
   --sel-icon-size: 20px;
+
+  &[data-placeholder] {
+    overflow: hidden;
+    color: var(--textColor-less, #767676);
+    text-overflow: ellipsis;
+  }
 }
 
 /* variant: filter */
 .select_trigger[data-variant='filter'] {
+  @include text-sm;
+
   --sel-trigger-padding: 8px 12px;
   --sel-trigger-bg: var(--white-less);
   --sel-trigger-border: none;
@@ -57,6 +67,13 @@
 
   border: var(--sel-trigger-border);
   border-radius: var(--sel-trigger-border-radius);
+
+  &:disabled {
+    cursor: not-allowed;
+    border-radius: 8px;
+    border: 1px solid var(--lineColor-main, #eee);
+    background: var(--white-less, #f9f9f9);
+  }
 
   .select_icon {
     display: flex;
@@ -97,6 +114,10 @@
       padding: 12px 8px;
       width: 100%;
 
+      &:focus {
+        outline: solid var(--gray-2);
+      }
+
       &:last-child {
         border-bottom: none;
       }
@@ -104,11 +125,6 @@
       &.active {
         background: var(--brandColor-main);
         color: var(--white);
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
       }
     }
 

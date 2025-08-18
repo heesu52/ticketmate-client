@@ -18,6 +18,7 @@ interface SelectProps {
   placeholder?: string;
   className?: string;
   variant?: SelectVariant;
+  disabled?: boolean;
 }
 
 /**
@@ -53,12 +54,17 @@ const Select = ({
   options,
   value,
   onValueChange,
-  placeholder = '선택하세요',
+  placeholder = '선택해주세요.',
   className,
   variant = 'form',
+  disabled = false,
 }: SelectProps) => {
   return (
-    <RadixSelect.Root value={value} onValueChange={onValueChange}>
+    <RadixSelect.Root
+      value={value}
+      onValueChange={onValueChange}
+      disabled={disabled}
+    >
       <RadixSelect.Trigger
         className={cn('select_trigger', className)}
         data-variant={variant}

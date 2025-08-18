@@ -1,7 +1,7 @@
 import {
   GetFormListRequest,
   GetFormListResponse,
-  PutFormRequest,
+  PatchFormRequest,
   GetRejectionReasonResponse,
 } from '@/app/history/_shared/services/type';
 import instance from '@/shared/services/instance';
@@ -36,7 +36,7 @@ const patchFormApprove = async (applicationFormId: string) => {
 /**
  * @description 공연 신청폼 거절
  */
-const patchFormReject = async (request: PutFormRequest) => {
+const patchFormReject = async (request: PatchFormRequest) => {
   const { applicationFormId, applicationFormRejectedType, otherMemo } = request;
 
   const data = await instance(`${BASE_URL}/${applicationFormId}/reject`, {

@@ -1,0 +1,48 @@
+@use '@/styles/index' as *;
+
+/* 공통 레이어: 변수 기본값 */
+.badge[data-variant] {
+  @include text-xs;
+
+  /* layout */
+  --badge-padding: 4px 8px;
+  --badge-border-radius: 4px;
+
+  /* colors */
+  --badge-bg: var(--white, #fff);
+  --badge-text: var(--textColor-main, #333);
+}
+
+/* variant: type-a */
+.badge[data-variant='type-a'] {
+  // TODO: 색상 변경 필요
+  --badge-text: var(--subColor-main);
+  --badge-bg: var(--subColor-border);
+}
+
+/* variant: type-b */
+.badge[data-variant='type-b'] {
+  --badge-text: var(--brandColor-fillHover, #e05555);
+  --badge-bg: var(--borderColor-borderHover, #fff0f0);
+}
+
+/* variant: type-c */
+.badge[data-variant='type-c'] {
+  --badge-text: var(--textColor-main, #333);
+  --badge-bg: var(--lineColor-main, #eee);
+}
+
+/* 공통 렌더링 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--badge-gap);
+
+  padding: var(--badge-padding);
+  border-radius: var(--badge-border-radius);
+
+  background: var(--badge-bg);
+  border: var(--badge-border);
+  opacity: var(--badge-opacity);
+}

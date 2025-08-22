@@ -14,6 +14,12 @@
     &::-webkit-scrollbar {
       display: none;
     }
+
+    .tab_item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
   }
 
   .tab_trigger {
@@ -31,30 +37,29 @@
       color: var(--brandColor-main, #ff6a6a);
       border-bottom: 3px solid var(--brandColor-border, #ff9c9c);
       background: var(--white, #fff);
+    }
 
-      .tab_delete_button {
+    .tab_delete_button {
+      display: flex;
+
+      &[data-state='active'] {
         svg {
           fill: var(--brandColor-main, #ff6a6a);
         }
       }
     }
-
-    .tab_delete_button {
-      display: flex;
-    }
   }
 
   .tab_add_button {
-    @include text-md;
-
     .tab_add_button_content {
-      display: flex;
+      @include text-md;
+      display: inline-flex;
+      justify-content: center;
       align-items: center;
       gap: 4px;
-    }
-
-    svg {
-      fill: currentColor;
+      padding: 12px 0;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
     }
   }
 }

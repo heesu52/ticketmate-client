@@ -4,75 +4,98 @@ import classNames from 'classnames/bind';
 import { Tabs as RadixTabs } from 'radix-ui';
 
 import { CloseIcon, PlusIcon } from '@/assets/icons';
+import { TabItem } from '@/shared/components/ui/tab/tab.type';
 
 import styles from './tab.module.scss';
 
 interface TabProps {
-  tabType?: 'text' | 'icon';
-  items: {
-    value: string;
-    label: string;
-    content: ReactNode;
-    deletable?: boolean;
-    disabled?: boolean;
-  }[];
-  defaultValue?: string;
+  items: TabItem[];
   value?: string;
   onValueChange?: (value: string) => void;
-  enableAddTab?: boolean;
   onAddTab?: () => void;
   onDeleteTab?: (value: string) => void;
-  addTabButtonText?: string;
+  addTabButtonText?: ReactNode;
 }
 
 const cn = classNames.bind(styles);
 
+/**
+ * Tab 컴포넌트
+ *
+ * Radix UI Tabs 기반으로 구현된 탭 UI.
+ * - 기본 탭 렌더링
+ * - 동적 추가/삭제 기능 지원
+ *
+ * @component
+ * @example
+ * ```tsx
+ * const [tabs, setTabs] = useState<TabItem[]>([
+ *   { value: 'tab1', label: '탭 1', content: <div>내용 1</div> },
+ *   { value: 'tab2', label: '탭 2', content: <div>내용 2</div> },
+ * ]);
+ * const [active, setActive] = useState('tab1');
+ *
+ * <Tab
+ *   items={tabs}
+ *   value={active}
+ *   onValueChange={setActive}
+ *   onAddTab={() => { ... }}
+ *   onDeleteTab={(val) => { ... }}
+ * />
+ * ```
+ */
 const Tab = ({
   items,
-  defaultValue,
   value,
   onValueChange,
-  enableAddTab = false,
   onAddTab,
   onDeleteTab,
   addTabButtonText = '추가하기',
 }: TabProps) => {
+  /** 편집 모드 핸들러가 하나라도 있으면 동적 탭 모드로 간주 */
+  const isEditable = Boolean(onAddTab || onDeleteTab);
+
   return (
     <RadixTabs.Root
       className={cn('tab_root')}
-      defaultValue={defaultValue}
       value={value}
       onValueChange={onValueChange}
     >
       <RadixTabs.List className={cn('tab_list')}>
-        {items.map((item) => (
-          <RadixTabs.Trigger
-            key={item.value}
-            className={cn('tab_trigger')}
-            value={item.value}
-            disabled={item.disabled}
-          >
-            {item.label}
+        {items.map((item) => {
+          return (
+            <RadixTabs.Trigger
+              key={item.value}
+              className={cn('tab_trigger')}
+              value={item.value}
+              disabled={item.disabled}
+            >
+              {item.label}
 
-            {/* 삭제 가능한 탭인 경우 삭제 버튼 표시 */}
-            {item.deletable && onDeleteTab && (
-              <button
-                type="button"
-                className={cn('tab_delete_button')}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeleteTab(item.value);
-                }}
-                aria-label={`${item.label} 탭 삭제`}
-              >
-                <CloseIcon width={16} height={16} />
-              </button>
-            )}
-          </RadixTabs.Trigger>
-        ))}
+              {isEditable && onDeleteTab && (
+                <span
+                  role="button"
+                  className={cn('tab_delete_button')}
+                  tabIndex={-1}
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteTab(item.value);
+                  }}
+                  aria-label={`${item.label} 탭 삭제`}
+                >
+                  <CloseIcon width={16} height={16} />
+                </span>
+              )}
+            </RadixTabs.Trigger>
+          );
+        })}
 
         {/* 탭 추가 버튼 (동적 탭 모드일 때만 표시) */}
-        {enableAddTab && onAddTab && (
+        {isEditable && onAddTab && (
           <button
             type="button"
             className={cn('tab_add_button')}

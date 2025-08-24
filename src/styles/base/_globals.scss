@@ -1,4 +1,53 @@
 :root {
+  /* primary */
+  --primary-100: #ffeaea;
+  --primary-200: #ffcaca;
+  --primary-300: #ffa9a9;
+  --primary-400: #ff8989;
+  --primary-500: #ff6a6a;
+  --primary-600: #e55656;
+  --primary-700: #cc4a4a;
+
+  /* secondary */
+  --secondary-100: #e6f6fb;
+  --secondary-200: #bae4f1;
+  --secondary-300: #7ecce3;
+  --secondary-400: #46b4d4;
+  --secondary-500: #2097bd;
+  --secondary-600: #177391;
+  --secondary-700: #0e4f65;
+
+  /* grayscale */
+  --grayscale-100: #ffffff;
+  --grayscale-200: #fafafa;
+  --grayscale-300: #ededed;
+  --grayscale-400: #cccccc;
+  --grayscale-500: #767676;
+  --grayscale-600: #555555;
+  --grayscale-700: #222222;
+
+  /* semantic - warning */
+  --semantic-warning-100: #fff8e1;
+  --semantic-warning-200: #ffecb3;
+  --semantic-warning-300: #ffe082;
+  --semantic-warning-400: #ffd54f;
+  --semantic-warning-500: #ffc107;
+  --semantic-warning-600: #ffa000;
+  --semantic-warning-700: #f99502;
+
+  /* semantic - info */
+  --semantic-info-500: #2196f3;
+
+  /* semantic - success */
+  --semantic-success-100: #e8f5e9;
+  --semantic-success-200: #c8e6c9;
+  --semantic-success-300: #a5d6a7;
+  --semantic-success-400: #81c784;
+  --semantic-success-500: #4caf50;
+  --semantic-success-600: #388e3c;
+  --semantic-success-700: #2e7d32;
+
+  // old
   --overlayColor: rgba(0, 0, 0, 0.5);
 
   --textColor-main: #333333;

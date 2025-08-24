@@ -1,0 +1,43 @@
+@use '@/styles/index' as *;
+
+.container {
+  --app-bar-height: 54px;
+  --bottom-nav-height: 69px;
+  min-height: 100dvh;
+
+  .app_bar {
+    position: fixed;
+    top: 0;
+    z-index: 20;
+    width: 100%;
+  }
+
+  .content {
+    overflow-y: auto;
+    /* 전체는 고정 높이 */
+    height: 100dvh;
+  }
+
+  .bottom_nav {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+  }
+}
+
+/* 안전 영역 */
+.container[data-safe-area] {
+  .app_bar {
+    padding-top: env(safe-area-inset-top);
+  }
+  .bottom_nav {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* 투명하지 않을 때만 padding-top 보정 */
+.container:not([data-app-bar-transparent]) {
+  .content {
+    margin-top: var(--app-bar-height);
+  }
+}

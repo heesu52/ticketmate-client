@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 
-import ResponsiveRootLayout from '@/app/_components/responsive-root-layout/responsive-root-layout';
 import Provider from '@/providers';
 
 import type { Metadata, Viewport } from 'next';
@@ -48,10 +47,8 @@ export default function RootLayout({
     <html lang="ko">
       <body className={pretendard.variable}>
         <Provider>
-          <ResponsiveRootLayout>
-            {children}
-            {modal}
-          </ResponsiveRootLayout>
+          {children}
+          {modal}
         </Provider>
       </body>
     </html>

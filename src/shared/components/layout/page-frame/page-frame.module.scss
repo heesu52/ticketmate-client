@@ -3,7 +3,12 @@
 .container {
   --app-bar-height: 54px;
   --bottom-nav-height: 69px;
+
+  max-width: var(--max-width);
   min-height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
 
   .app_bar {
     position: fixed;
@@ -13,31 +18,32 @@
   }
 
   .content {
-    overflow-y: auto;
-    /* 전체는 고정 높이 */
-    height: 100dvh;
+    flex: 1;
+    background: var(--grayscale-100, #fff);
   }
 
   .bottom_nav {
-    position: sticky;
+    position: fixed;
     bottom: 0;
     z-index: 20;
+    margin: 0 auto;
+
+    width: 100%;
+    max-width: var(--max-width);
   }
 }
 
-/* 안전 영역 */
-.container[data-safe-area] {
-  .app_bar {
-    padding-top: env(safe-area-inset-top);
-  }
-  .bottom_nav {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
+/* AppBar가 보일 때만 상단 여백 부여 */
+.container[data-app-bar-visible] .content {
+  padding-top: var(--app-bar-height);
 }
 
-/* 투명하지 않을 때만 padding-top 보정 */
-.container:not([data-app-bar-transparent]) {
-  .content {
-    margin-top: var(--app-bar-height);
-  }
+/* AppBar가 투명일 때는 상단 여백 제거 (우선순위로 덮어씀) */
+.container[data-app-bar-transparent] .content {
+  padding-top: 0;
+}
+
+/* BottomNav가 보일 때만 하단 여백 부여 */
+.container[data-bottom-nav-visible] .content {
+  padding-bottom: var(--bottom-nav-height);
 }

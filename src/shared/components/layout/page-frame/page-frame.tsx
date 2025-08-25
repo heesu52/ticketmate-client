@@ -19,20 +19,25 @@ interface PageFrameProps {
         render?: (props: Partial<AppBarProps>) => ReactNode;
       });
   /** 하단 네비를 숨기려면 false, 보이려면 ReactNode (기본 BottomNavigation) */
-  bottomNav?: false | ReactNode;
+  bottomNav?: false;
   /** 본문 컨텐츠 */
   children: ReactNode;
 }
 
 const PageFrame = ({ appBar, bottomNav, children }: PageFrameProps) => {
-  const isTransparent =
-    appBar && 'variant' in appBar && appBar.variant === 'transparent';
-
   return (
-    <div className={cn('container')} data-app-bar-transparent={isTransparent}>
+    <div
+      className={cn('container')}
+      data-app-bar-visible={!!appBar || undefined}
+      data-app-bar-transparent={
+        (appBar && 'variant' in appBar && appBar.variant === 'transparent') ||
+        undefined
+      }
+      data-bottom-nav-visible={bottomNav !== false || undefined}
+    >
       {/* 상단 앱바 */}
       {appBar && (
-        <div className={cn('app_bar')}>
+        <header className={cn('app_bar')}>
           <AppBar
             variant={appBar.variant}
             title={appBar.title}
@@ -40,7 +45,7 @@ const PageFrame = ({ appBar, bottomNav, children }: PageFrameProps) => {
             onBack={appBar.onBack}
             right={appBar.right}
           />
-        </div>
+        </header>
       )}
 
       {/* 본문 컨텐츠 */}
@@ -48,9 +53,9 @@ const PageFrame = ({ appBar, bottomNav, children }: PageFrameProps) => {
 
       {/* 하단 네비게이션 */}
       {bottomNav !== false && (
-        <div className={cn('bottom_nav')}>
+        <nav className={cn('bottom_nav')}>
           <BottomNavigation />
-        </div>
+        </nav>
       )}
     </div>
   );

@@ -34,6 +34,15 @@
 
   background-color: var(--app-bar-bg);
 
+  // 스크롤 시 그림자 효과
+  transition: box-shadow 0.1s ease;
+
+  // 스크롤 상태일 때 그림자 추가
+  &[data-scrolled='true'] {
+    /* DropSD_Header Scroll */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08);
+  }
+
   .left_container {
     display: flex;
     padding: 16px 0;

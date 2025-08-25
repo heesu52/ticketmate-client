@@ -1,6 +1,9 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import classNames from 'classnames/bind';
+import { useRouter } from 'next/navigation';
 
 import { LeftArrowIcon } from '@/assets/icons';
 
@@ -13,15 +16,45 @@ const AppBar = ({
   variant = 'default',
   title,
   showBack,
-  onBack,
+  backHref,
   right,
 }: AppBarProps) => {
+  const router = useRouter();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const handleBack = () => {
+    if (backHref) {
+      router.push(backHref);
+    } else {
+      router.back();
+    }
+  };
+
+  // 스크롤 상태 감지
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // 초기 스크롤 상태 확인
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className={cn('container')} data-variant={variant}>
+    <div
+      className={cn('container')}
+      data-variant={variant}
+      data-scrolled={isScrolled}
+    >
       <div
         className={cn('left_container')}
         role={showBack ? 'button' : undefined}
-        onClick={showBack ? onBack : undefined}
+        onClick={showBack ? handleBack : undefined}
       >
         {showBack && (
           <div className={cn('back_icon')} aria-hidden="true">
@@ -31,20 +64,7 @@ const AppBar = ({
         {title && <div className={cn('title')}>{title}</div>}
       </div>
 
-      {right && (
-        <div className={cn('right_container')}>
-          {right.map((item, index) => (
-            <button
-              key={index}
-              className={cn('right_button')}
-              onClick={item.onClick}
-              aria-label={item.ariaLabel}
-            >
-              {item.icon}
-            </button>
-          ))}
-        </div>
-      )}
+      {right && <div className={cn('right_container')}>{right}</div>}
     </div>
   );
 };

@@ -42,7 +42,7 @@ const PageFrame = ({ appBar, bottomNav, children }: PageFrameProps) => {
             variant={appBar.variant}
             title={appBar.title}
             showBack={appBar.showBack}
-            onBack={appBar.onBack}
+            backHref={appBar.backHref}
             right={appBar.right}
           />
         </header>

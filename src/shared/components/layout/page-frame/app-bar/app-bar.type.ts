@@ -1,17 +1,11 @@
-import { ReactElement, ReactNode } from 'react';
-
-export interface RightProps {
-  icon: ReactElement;
-  onClick?: () => void;
-  ariaLabel?: string;
-}
+import { ReactNode } from 'react';
 
 export interface AppBarProps {
   variant?: 'default' | 'transparent';
 
   title: ReactNode;
   showBack?: boolean;
-  onBack?: () => void;
+  backHref?: string;
 
-  right?: RightProps[];
+  right?: ReactNode;
 }

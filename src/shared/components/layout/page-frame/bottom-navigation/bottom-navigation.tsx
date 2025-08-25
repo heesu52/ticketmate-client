@@ -1,11 +1,14 @@
 'use client';
 
+import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { ChatIcon, HomeIcon, ListIcon, MyIcon } from '@/assets/icons';
 
 import styles from './bottom-navigation.module.scss';
+
+const cn = classNames.bind(styles);
 
 function BottomNavigation() {
   const pathname = usePathname();
@@ -18,31 +21,26 @@ function BottomNavigation() {
   ];
 
   return (
-    <nav className={styles.container}>
-      <ul className={styles.nav_list}>
-        {navItems.map(({ href, label, Icon }) => (
-          <li key={href} className={styles.nav_item}>
-            <Link
-              href={href}
-              className={`${styles.nav_link} ${
-                pathname === href ? styles.active : ''
-              }`}
-            >
-              <Icon
-                stroke={
-                  pathname === href
-                    ? 'var(--brandColor-main)'
-                    : 'var(--textColor-less)'
-                }
-                width={24}
-                height={24}
-              />
-              <span className={styles.label}>{label}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div className={styles.container}>
+      {navItems.map(({ href, label, Icon }) => (
+        <Link
+          key={href}
+          href={href}
+          className={cn('item', { active: pathname === href })}
+        >
+          <Icon
+            stroke={
+              pathname === href
+                ? 'var(--brandColor-main)'
+                : 'var(--textColor-less)'
+            }
+            width={24}
+            height={24}
+          />
+          <span className={styles.label}>{label}</span>
+        </Link>
+      ))}
+    </div>
   );
 }
 

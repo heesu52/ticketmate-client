@@ -23,7 +23,7 @@ export default function Search() {
   }, []);
 
   return (
-    <PageFrame appBar={{ title: '검색', showBack: true }}>
+    <PageFrame appBar={{ title: '검색', showBack: true }} bottomNav={false}>
       <div className={styles.container}>
         <SearchSelection />
         <SearchTabManager />

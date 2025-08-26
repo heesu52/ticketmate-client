@@ -13,7 +13,6 @@ export default function Home() {
           <TicketMateLogoIcon
             width={102}
             height={22}
-            role="img"
             aria-hidden="true"
             aria-label="티켓메이트 로고"
           />

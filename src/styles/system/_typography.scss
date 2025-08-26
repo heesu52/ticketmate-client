@@ -5,27 +5,31 @@
 }
 
 @mixin title-lg {
-  @include text-style(24px, 500);
+  @include text-style(24px, 600);
 }
 
 @mixin title-md {
-  @include text-style(20px, 500);
+  @include text-style(20px, 600);
 }
 
 @mixin title-sm {
-  @include text-style(16px, 500);
+  @include text-style(16px, 600);
 }
 
-@mixin text-lg {
+@mixin text-xl {
   @include text-style(16px, 400);
 }
 
+@mixin text-lg {
+  @include text-style(14px, 600);
+}
+
 @mixin text-md {
-  @include text-style(14px, 500);
+  @include text-style(14px, 400);
 }
 
 @mixin text-sm {
-  @include text-style(14px, 400);
+  @include text-style(13px, 400);
 }
 
 @mixin text-xs {

@@ -11,6 +11,7 @@ import Dropdown from '@/shared/components/dropdown/dropdown';
 import { useModal } from '@/shared/components/modal/use-modal';
 import RadioGroup from '@/shared/components/radio/radio';
 import { customToast } from '@/shared/components/toast/custom-toast/custom-toast';
+import Select from '@/shared/components/ui/select/select';
 
 import styles from './page.module.scss';
 
@@ -98,6 +99,20 @@ function Page() {
         </Dropdown>
       </div>
       <p>선택된 값: {selectedValue || '없음'}</p>
+
+      <Select
+        options={selectList}
+        value={selectedValue || ''}
+        onValueChange={handleChange}
+        variant="filter"
+      />
+
+      <Select
+        options={selectList}
+        value={selectedValue || ''}
+        onValueChange={handleChange}
+        variant="form"
+      />
     </>
   );
 }

@@ -2,16 +2,15 @@ import { ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 
-import ResponsiveRootLayout from '@/app/_components/responsive-root-layout/responsive-root-layout';
 import Provider from '@/providers';
 
 import type { Metadata, Viewport } from 'next';
 
 import '@/styles/base/_index.scss';
 
-const notoSansKR = localFont({
-  src: '../assets/fonts/NotoSansKR-VariableFont.ttf',
-  variable: '--font-noto-sans-kr',
+const pretendard = localFont({
+  src: '../assets/fonts/PretendardVariable.woff2',
+  variable: '--font-pretendard',
   weight: '100 900',
 });
 
@@ -46,12 +45,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={notoSansKR.variable}>
+      <body className={pretendard.variable}>
         <Provider>
-          <ResponsiveRootLayout>
-            {children}
-            {modal}
-          </ResponsiveRootLayout>
+          {children}
+          {modal}
         </Provider>
       </body>
     </html>

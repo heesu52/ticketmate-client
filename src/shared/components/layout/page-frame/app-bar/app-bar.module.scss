@@ -1,0 +1,83 @@
+@use '@/styles/index' as *;
+
+/* 공통 레이어: 변수 기본값 */
+.container[data-variant] {
+  // 배경
+  --app-bar-bg: var(--white, #fff);
+
+  // 아이콘 색상
+  --app-bar-icon-color: var(--textColor-main, #111);
+}
+
+.container[data-variant='default'] {
+  // 배경
+  --app-bar-bg: var(--white, #fff);
+
+  // 아이콘 색상
+  --app-bar-icon-color: var(--grayscale-700, #222);
+}
+
+.container[data-variant='transparent'] {
+  // 배경
+  --app-bar-bg: transparent;
+
+  // 아이콘 색상
+  --app-bar-icon-color: var(--grayscale-100, #fff);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 54px;
+
+  background-color: var(--app-bar-bg);
+
+  // 스크롤 시 그림자 효과
+  transition: box-shadow 0.1s ease;
+
+  // 스크롤 상태일 때 그림자 추가
+  &[data-scrolled='true'] {
+    /* DropSD_Header Scroll */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .left_container {
+    display: flex;
+    padding: 16px 0;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+      fill: var(--app-bar-icon-color);
+    }
+
+    .back_icon {
+      display: flex;
+      align-items: center;
+    }
+
+    .title {
+      @include text-xl;
+    }
+  }
+
+  .right_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    .right_button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      svg {
+        fill: var(--app-bar-icon-color);
+      }
+    }
+  }
+}

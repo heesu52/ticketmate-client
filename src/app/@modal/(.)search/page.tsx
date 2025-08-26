@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import SearchSelection from '@/app/@modal/(.)search/_shared/components/search-selection/search-selection';
 import SearchTabManager from '@/app/@modal/(.)search/_shared/components/search-tab/search-tab-manager';
-import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
+import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 
 import styles from './page.module.scss';
 
@@ -23,12 +23,11 @@ export default function Search() {
   }, []);
 
   return (
-    <>
-      <AppBarSetter title="검색" />
+    <PageFrame appBar={{ title: '검색', showBack: true }}>
       <div className={styles.container}>
         <SearchSelection />
         <SearchTabManager />
       </div>
-    </>
+    </PageFrame>
   );
 }

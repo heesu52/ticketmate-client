@@ -19,7 +19,7 @@ interface PageFrameProps {
         render?: (props: Partial<AppBarProps>) => ReactNode;
       });
   /** 하단 네비를 숨기려면 false, 보이려면 ReactNode (기본 BottomNavigation) */
-  bottomNav?: false;
+  bottomNav?: boolean;
   /** 본문 컨텐츠 */
   children: ReactNode;
 }

@@ -1,0 +1,44 @@
+@use '@/styles/index' as *;
+
+.container {
+  position: sticky;
+  top: 0;
+  background-color: var(--white);
+  padding: 20px 0;
+
+  .search_container {
+    position: relative;
+
+    .search_input {
+      display: flex;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      justify-content: space-between;
+      align-items: center;
+      border: none;
+      background: var(--grayscale-200);
+
+      @include text-sm;
+      color: var(--grayscale-700);
+
+      &::placeholder {
+        color: var(--grayscale-500);
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .icon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      fill: var(--grayscale-500);
+    }
+  }
+}

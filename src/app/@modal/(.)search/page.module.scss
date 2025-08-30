@@ -6,12 +6,12 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 30;
+  overflow-y: auto;
 
   width: 100%;
   max-width: 600px;
   height: 100vh;
 
-  gap: 24px;
   display: flex;
   flex-direction: column;
   background-color: var(--white);

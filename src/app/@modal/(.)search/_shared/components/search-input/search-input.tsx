@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 
 import { SearchIcon } from '@/assets/icons';
 
-import styles from './search-selection.module.scss';
+import styles from './search-input.module.scss';
 
-export default function SearchSelection() {
+export default function SearchInput() {
   const [inputMessage, setInputMessage] = useState('');
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
@@ -38,28 +38,6 @@ export default function SearchSelection() {
           onKeyDown={handleKeyPress}
         />
         <SearchIcon className={styles.icon} />
-      </div>
-      <div className={styles.recent_search_container}>
-        <div className={styles.span_container}>
-          <span className={styles.title}>최근 검색어</span>
-          <button
-            className={styles.delete}
-            onClick={() => setRecentSearches([])}
-          >
-            전체삭제
-          </button>
-        </div>
-        <div className={styles.tag_container}>
-          {recentSearches.map((term, index) => (
-            <div
-              key={index}
-              className={styles.tag}
-              onClick={() => setInputMessage(term)}
-            >
-              {term}
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );

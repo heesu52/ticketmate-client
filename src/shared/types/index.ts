@@ -3,3 +3,4 @@ export * from './form';
 export * from './api';
 export * from './ticket';
 export * from './member';
+export * from './agent';

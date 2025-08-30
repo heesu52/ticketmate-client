@@ -16,14 +16,14 @@
 /* variant: type-a */
 .badge[data-variant='type-a'] {
   // TODO: 색상 변경 필요
-  --badge-text: var(--subColor-main);
-  --badge-bg: var(--subColor-border);
+  --badge-text: var(--secondary-700);
+  --badge-bg: var(--secondary-100);
 }
 
 /* variant: type-b */
 .badge[data-variant='type-b'] {
-  --badge-text: var(--brandColor-fillHover, #e05555);
-  --badge-bg: var(--borderColor-borderHover, #fff0f0);
+  --badge-text: var(--grayscale-700);
+  --badge-bg: var(--grayscale-200);
 }
 
 /* variant: type-c */
@@ -42,6 +42,7 @@
   padding: var(--badge-padding);
   border-radius: var(--badge-border-radius);
 
+  color: var(--badge-text);
   background: var(--badge-bg);
   border: var(--badge-border);
   opacity: var(--badge-opacity);

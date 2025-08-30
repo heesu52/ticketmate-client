@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { LocationOnIcon } from '@/assets/icons';
-import Badge from '@/shared/components/badge/badge';
+import Badge from '@/shared/components/ui/badge/badge';
 import { Concert } from '@/shared/types';
 import { calculateDday, formatDate } from '@/shared/utils/dates';
 
@@ -30,12 +30,12 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
         <div className={styles.container}>
           <div className={styles.tag}>
             {ticketPreOpenDate && (
-              <Badge type="type-a">
+              <Badge variant="type-a">
                 선예매까지 {calculateDday(ticketPreOpenDate)}
               </Badge>
             )}
             {ticketGeneralOpenDate && (
-              <Badge type="type-a">
+              <Badge variant="type-b">
                 일반예매까지 {calculateDday(ticketGeneralOpenDate)}
               </Badge>
             )}

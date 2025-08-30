@@ -70,13 +70,11 @@ const Select = ({
         data-variant={variant}
       >
         <RadixSelect.Value placeholder={placeholder} />
-        <RadixSelect.Icon className={cn('select_icon')}>
-          {variant === 'form' ? (
-            <ArrowBottomIcon width={20} height={20} />
-          ) : (
-            <ArrowBottomIcon width={12} height={12} />
-          )}
-        </RadixSelect.Icon>
+        {variant === 'form' ? (
+          <ArrowBottomIcon width={16} height={16} />
+        ) : (
+          <ArrowBottomIcon width={12} height={12} />
+        )}
       </RadixSelect.Trigger>
 
       <RadixSelect.Portal>

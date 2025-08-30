@@ -18,7 +18,7 @@ interface GetFormListRequest {
 
 type GetFormListResponse = Pagination<Form>;
 
-interface PutFormRequest {
+interface PatchFormRequest {
   applicationFormId: string;
   applicationFormRejectedType: ApplicationRejectedType;
   otherMemo: string;
@@ -32,6 +32,6 @@ interface GetRejectionReasonResponse {
 export type {
   GetFormListRequest,
   GetFormListResponse,
-  PutFormRequest,
+  PatchFormRequest,
   GetRejectionReasonResponse,
 };

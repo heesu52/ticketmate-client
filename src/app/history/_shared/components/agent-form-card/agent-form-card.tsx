@@ -5,8 +5,8 @@ import Link from 'next/link';
 import AcceptModal from '@/app/history/_shared/components/modal/common-modal';
 import RejectedModal from '@/app/history/_shared/components/modal/rejected-modal/rejected-modal';
 import {
-  usePutFormApprove,
-  usePutFormReject,
+  usePatchFormApprove,
+  usePatchFormReject,
 } from '@/app/history/_shared/services/mutation';
 import Button from '@/shared/components/button/functional-button/functional-button';
 import { MODAL_ID } from '@/shared/components/modal/modal-constants';
@@ -29,8 +29,8 @@ const AgentFormCard = ({ formItem }: FormCardProps) => {
     submittedDate,
     applicationFormStatus,
   } = formItem;
-  const { mutateAsync: approveFormAsync } = usePutFormApprove();
-  const { mutateAsync: rejectFormAsync } = usePutFormReject();
+  const { mutateAsync: approveFormAsync } = usePatchFormApprove();
+  const { mutateAsync: rejectFormAsync } = usePatchFormReject();
 
   const { open, closeTop } = useModal();
 

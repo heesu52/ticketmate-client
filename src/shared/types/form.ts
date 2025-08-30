@@ -5,7 +5,7 @@ type ApplicationFormStatus =
   | 'PENDING'
   | 'REJECTED'
   | 'CANCELED'
-  | 'ACCEPTED'
+  | 'APPROVED'
   | 'CANCELED_IN_PROCESS';
 
 type ApplicationRejectedType =

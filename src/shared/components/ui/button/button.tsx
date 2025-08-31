@@ -42,6 +42,7 @@ const Button = ({
   variant = 'fill',
   color = 'default',
   children,
+  type = 'button',
   ...props
 }: ButtonProps) => {
   return (
@@ -49,6 +50,7 @@ const Button = ({
       className={styles.button}
       data-variant={variant}
       data-color={color}
+      type={type}
       {...props}
     >
       {children}

@@ -1,0 +1,90 @@
+@use '@/styles/index' as *;
+
+.button {
+  @include text-md;
+
+  display: inline-flex;
+  padding: 12px 20px;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 8px;
+}
+
+.button[data-variant='fill'] {
+  &[data-color='default'] {
+    color: var(--grayscale-100, #fff);
+
+    border: 1px solid var(--primary-500, #ff6a6a);
+    background: var(--primary-500, #ff6a6a);
+
+    @media (hover: hover) {
+      &:hover {
+        border: 1px solid var(--primary-600, #e55656);
+        background: var(--primary-600, #e55656);
+      }
+    }
+  }
+
+  &[data-color='gray'] {
+    color: var(--grayscale-700, #222);
+
+    border: 1px solid var(--grayscale-200, #fafafa);
+    background: var(--grayscale-200, #fafafa);
+
+    @media (hover: hover) {
+      &:hover {
+        border: 1px solid var(--grayscale-300, #ededed);
+        background: var(--grayscale-300, #ededed);
+      }
+    }
+  }
+
+  &:disabled {
+    color: var(--grayscale-500, #767676);
+
+    border: 1px solid var(--grayscale-300, #ededed);
+    background: var(--grayscale-300, #ededed);
+  }
+}
+
+.button[data-variant='outline'] {
+  &[data-color='default'] {
+    color: var(--primary-500, #ff6a6a);
+
+    border: 1px solid var(--primary-400, #ff8989);
+    background: var(--grayscale-100, #fff);
+
+    @media (hover: hover) {
+      &:hover {
+        color: var(--primary-500, #ff6a6a);
+
+        border: 1px solid var(--primary-400, #ff8989);
+        background: var(--primary-100, #ffeaea);
+      }
+    }
+  }
+
+  &[data-color='gray'] {
+    color: var(--grayscale-700, #222);
+
+    border: 1px solid var(--grayscale-400, #ccc);
+    background: var(--grayscale-100, #fff);
+
+    @media (hover: hover) {
+      &:hover {
+        color: var(--grayscale-700, #222);
+
+        border: 1px solid var(--grayscale-400, #ccc);
+        background: var(--grayscale-300, #ededed);
+      }
+    }
+  }
+
+  &:disabled {
+    color: var(--grayscale-500, #767676);
+
+    border: 1px solid var(--grayscale-300, #ededed);
+    background: var(--grayscale-100, #fff);
+  }
+}

@@ -1,49 +1,35 @@
 @use '@/styles/index' as *;
 
-/* 공통 레이어: 변수 기본값 */
-.badge[data-variant] {
-  @include text-xs;
-
-  /* layout */
-  --badge-padding: 4px 8px;
-  --badge-border-radius: 4px;
-
-  /* colors */
-  --badge-bg: var(--white, #fff);
-  --badge-text: var(--textColor-main, #333);
-}
-
-/* variant: type-a */
-.badge[data-variant='type-a'] {
-  // TODO: 색상 변경 필요
-  --badge-text: var(--secondary-700);
-  --badge-bg: var(--secondary-100);
-}
-
-/* variant: type-b */
-.badge[data-variant='type-b'] {
-  --badge-text: var(--grayscale-700);
-  --badge-bg: var(--grayscale-200);
-}
-
-/* variant: type-c */
-.badge[data-variant='type-c'] {
-  --badge-text: var(--textColor-main, #333);
-  --badge-bg: var(--lineColor-main, #eee);
-}
-
 /* 공통 렌더링 */
 .badge {
+  @include text-xs;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--badge-gap);
+  gap: 10px;
 
-  padding: var(--badge-padding);
-  border-radius: var(--badge-border-radius);
+  padding: 4px 8px;
+  border-radius: 4px;
 
-  color: var(--badge-text);
-  background: var(--badge-bg);
-  border: var(--badge-border);
-  opacity: var(--badge-opacity);
+  /* variant: type-a */
+  &[data-variant='type-a'] {
+    color: var(--secondary-700, #0e4f65);
+
+    background: var(--secondary-100, #e6f6fb);
+  }
+
+  /* variant: type-b */
+  &[data-variant='type-b'] {
+    color: var(--primary-700, #cc4a4a);
+
+    background: var(--primary-100, #ffeaea);
+  }
+
+  /* variant: type-c */
+  &[data-variant='type-c'] {
+    color: var(--grayscale-700, #222);
+
+    background: var(--grayscale-200, #fafafa);
+  }
 }

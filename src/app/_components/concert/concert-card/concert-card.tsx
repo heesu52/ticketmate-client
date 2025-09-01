@@ -35,7 +35,7 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
               </Badge>
             )}
             {ticketGeneralOpenDate && (
-              <Badge variant="type-b">
+              <Badge variant="type-c">
                 일반예매까지 {calculateDday(ticketGeneralOpenDate)}
               </Badge>
             )}

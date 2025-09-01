@@ -11,8 +11,8 @@
     overflow-x: auto;
     white-space: nowrap;
     margin-top: 12px;
-    border-bottom: 1px solid var(--lineColor-main);
-    
+    position: sticky;
+    top: 0;
 
     &::-webkit-scrollbar {
       display: none;

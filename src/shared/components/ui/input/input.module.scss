@@ -1,0 +1,40 @@
+@use '@/styles/index' as *;
+
+.input_wrapper {
+  @include text-md;
+
+  label {
+    @include a11y-hidden;
+  }
+
+  input {
+    display: flex;
+    padding: 16px;
+    align-items: center;
+    color: var(--grayscale-700, #222);
+
+    border-radius: 8px;
+    border: 1px solid var(--grayscale-300, #ededed);
+    background: var(--grayscale-100, #fff);
+
+    &:focus {
+      border: 1px solid var(--primary-400, #ff8989);
+      background: var(--grayscale-100, #fff);
+    }
+
+    &:disabled {
+      overflow: hidden;
+      color: var(--grayscale-500, #767676);
+      text-overflow: ellipsis;
+
+      border: 1px solid var(--grayscale-300, #ededed);
+      background: var(--grayscale-200, #fafafa);
+    }
+
+    &::placeholder {
+      overflow: hidden;
+      color: var(--grayscale-500, #767676);
+      text-overflow: ellipsis;
+    }
+  }
+}

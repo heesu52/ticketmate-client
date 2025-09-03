@@ -1,10 +1,8 @@
 @use '@/styles/index' as *;
 
 .container {
-  position: sticky;
-  top: 0;
-  background-color: var(--white);
   padding: 20px 0;
+  background-color: var(--white);
 
   .search_container {
     position: relative;

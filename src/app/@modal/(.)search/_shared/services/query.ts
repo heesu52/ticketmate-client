@@ -1,4 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  useInfiniteQuery,
+} from '@tanstack/react-query';
 
 import {
   GetSearchRequest,
@@ -6,37 +11,70 @@ import {
   GetAgentSearchResponse,
 } from '@/app/@modal/(.)search/_shared/services/type';
 
-import { getSearch, getRecentSearch, deleteRecentSearch } from './api'; // 작성하신 경로에 맞춰 import
+import { getSearch, getRecentSearch, deleteRecentSearch } from './api';
+import queryKey from './query-key';
 
-export const useSearchQuery = <
-  T extends GetConcertSearchResponse | GetAgentSearchResponse,
->(
-  request?: GetSearchRequest,
-  enabled = true, // 필요할 때만 실행
-) => {
-  return useQuery({
-    queryKey: ['search', request],
-    queryFn: () => getSearch<T>(request),
-    enabled,
+const useGetConcertSearchQuery = (request: GetSearchRequest) => {
+  return useInfiniteQuery({
+    queryKey: queryKey.getConcertSearchResult(request),
+    initialPageParam: 1,
+    queryFn: ({ pageParam = 1 }) =>
+      getSearch<GetConcertSearchResponse>({
+        ...request,
+        pageNumber: pageParam,
+      }),
+    getNextPageParam: (lastPage) => {
+      const current = lastPage.searchResults.number;
+      const total = lastPage.searchResults.totalPages;
+      return current < total - 1 ? current + 1 : undefined;
+    },
+    select: (data) => ({
+      content: data.pages.flatMap((page) => page.searchResults.content),
+      pageParams: data.pageParams,
+    }),
   });
 };
 
-export const useRecentSearchQuery = () => {
+const useGetAgentSearchQuery = (request: GetSearchRequest) => {
+  return useInfiniteQuery({
+    queryKey: queryKey.getAgentSearchResult(request),
+    initialPageParam: 1,
+    queryFn: ({ pageParam = 1 }) =>
+      getSearch<GetAgentSearchResponse>({ ...request, pageNumber: pageParam }),
+    getNextPageParam: (lastPage) => {
+      const current = lastPage.searchResults.number;
+      const total = lastPage.searchResults.totalPages;
+      return current < total - 1 ? current + 1 : undefined;
+    },
+    select: (data) => ({
+      content: data.pages.flatMap((page) => page.searchResults.content),
+      pageParams: data.pageParams,
+    }),
+  });
+};
+
+const useRecentSearchQuery = () => {
+  const queryClient = useQueryClient();
   return useQuery({
     queryKey: ['recentSearches'],
     queryFn: getRecentSearch,
-    staleTime: 1000 * 60 * 5, // 5분 캐시
   });
 };
 
-export const useDeleteRecentSearchMutation = () => {
+const useDeleteRecentSearchMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: deleteRecentSearch,
     onSuccess: () => {
-      // 삭제 후 최근 검색어 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ['recentSearches'] });
     },
   });
+};
+
+export {
+  useGetConcertSearchQuery,
+  useGetAgentSearchQuery,
+  useRecentSearchQuery,
+  useDeleteRecentSearchMutation,
 };

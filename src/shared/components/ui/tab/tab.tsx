@@ -110,15 +110,18 @@ const Tab = ({
         )}
       </RadixTabs.List>
 
-      {items.map((item) => (
-        <RadixTabs.Content
-          key={item.value}
-          className={cn('tab_content')}
-          value={item.value}
-        >
-          {item.content}
-        </RadixTabs.Content>
-      ))}
+      {items.map(
+        (item) =>
+          item.content && (
+            <RadixTabs.Content
+              key={item.value}
+              className={cn('tab_content')}
+              value={item.value}
+            >
+              {item.content}
+            </RadixTabs.Content>
+          ),
+      )}
     </RadixTabs.Root>
   );
 };

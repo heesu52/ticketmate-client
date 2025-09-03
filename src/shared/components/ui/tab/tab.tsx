@@ -109,19 +109,6 @@ const Tab = ({
           </button>
         )}
       </RadixTabs.List>
-
-      {items.map(
-        (item) =>
-          item.content && (
-            <RadixTabs.Content
-              key={item.value}
-              className={cn('tab_content')}
-              value={item.value}
-            >
-              {item.content}
-            </RadixTabs.Content>
-          ),
-      )}
     </RadixTabs.Root>
   );
 };

@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import SearchBar from '@/app/@modal/(.)search/_shared/components/search-input/search-bar';
+import RecentSearch from '@/app/@modal/(.)search/_shared/components/recent-search/recent-search';
+import SearchBar from '@/app/@modal/(.)search/_shared/components/search-bar/search-bar';
+import SearchTabManager from '@/app/@modal/(.)search/_shared/components/search-tab/search-tab-manager';
+import { GetSearchRequest } from '@/app/@modal/(.)search/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 
-import RecentSearch from './_shared/components/recent-search/recent-search';
-import SearchTabManager from './_shared/components/search-tab/search-tab-manager';
-import { GetSearchRequest } from './_shared/services/type';
 import styles from './page.module.scss';
 
 export default function Search() {
@@ -22,7 +22,7 @@ export default function Search() {
   // 로그인 여부에 따라 최근검색어 저장 및 조회(지금은 ENV로 로그인을 하기 때문에 테스트용으로 작성)
   const isLoggedIn = !!process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
-  // 최초 검색용 api 호출
+  // 최초 검색 시 searchBar와 searchTab에 요청값 전달
   const handleSearch = (input: string) => {
     if (!input.trim()) return;
 

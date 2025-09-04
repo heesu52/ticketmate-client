@@ -18,7 +18,6 @@ const useGetConcertSearchQuery = (
   request: GetSearchRequest,
   options?: { enabled?: boolean },
 ) => {
-  const queryClient = useQueryClient();
   return useInfiniteQuery({
     queryKey: queryKey.getConcertSearchResult(request),
     initialPageParam: 1,
@@ -35,6 +34,8 @@ const useGetConcertSearchQuery = (
     select: (data) => ({
       content: data.pages.flatMap((page) => page.searchResults.content),
       pageParams: data.pageParams,
+      concertCount: data.pages[0].concertCount,
+      agentCount: data.pages[0].agentCount,
     }),
     enabled: options?.enabled ?? true,
   });
@@ -57,6 +58,8 @@ const useGetAgentSearchQuery = (
     select: (data) => ({
       content: data.pages.flatMap((page) => page.searchResults.content),
       pageParams: data.pageParams,
+      concertCount: data.pages[0].concertCount,
+      agentCount: data.pages[0].agentCount,
     }),
     enabled: options?.enabled ?? true,
   });

@@ -43,13 +43,13 @@ export default function SearchTabManager({
   const enabledConcert = !!keyword && active === 'CONCERT';
   const enabledAgent = !!keyword && active === 'AGENT';
 
-  // 공연 검색 조회(처음 검색을 제외하고 재검색 시 사용)
+  // 공연 검색 조회 (처음 검색을 제외하고 사용)
   const { data: concertRes, isFetching: isFetchingConcert } =
     useGetConcertSearchQuery(request, {
       enabled: enabledConcert,
     });
 
-  // 대리인 검색 조회
+  // 대리인 검색 조회 (현재 서버 500 에러 발생 -> 백엔드에서 수정 중)
   const { data: agentRes, isFetching: isFetchingAgent } =
     useGetAgentSearchQuery(request, {
       enabled: enabledAgent,
@@ -60,9 +60,6 @@ export default function SearchTabManager({
   const agentList: AgentInfo[] = agentRes?.content ?? [];
 
   const isFetching = active === 'CONCERT' ? isFetchingConcert : isFetchingAgent;
-
-  console.log('keyword', keyword);
-  console.log('searchRequest', searchRequest);
 
   return (
     <div className={styles.container}>

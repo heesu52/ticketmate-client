@@ -9,15 +9,33 @@ import {
 
 import styles from './recent-search.module.scss';
 
-export default function RecentSearch() {
-  const { data: recentSearch } = useRecentSearchQuery();
+interface RecentSearchProps {
+  isLoggedIn: boolean;
+  localRecent: string[];
+  setLocalRecent: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export default function RecentSearch({
+  isLoggedIn,
+  localRecent,
+  setLocalRecent,
+}: RecentSearchProps) {
+  const { data: recentSearch } = useRecentSearchQuery(isLoggedIn);
   const { mutate } = useDeleteRecentSearchMutation();
 
+  // 로그인 여부에 따른 최근검색어 삭제
   const handleDeleteAll = () => {
-    mutate();
+    if (isLoggedIn) {
+      mutate();
+    } else {
+      localStorage.removeItem('recentSearches');
+      setLocalRecent([]);
+    }
   };
 
-  console.log(recentSearch);
+  // 로그인 여부에 따라 데이터를 응답값 or localstorage
+  const recentList = isLoggedIn ? recentSearch : localRecent;
+
   return (
     <div className={styles.container}>
       <div className={styles.span_container}>
@@ -27,7 +45,7 @@ export default function RecentSearch() {
         </button>
       </div>
       <div className={styles.tag_container}>
-        {recentSearch?.map((tag, index) => (
+        {recentList?.map((tag, index) => (
           <div key={index} className={styles.tag}>
             {tag}
           </div>

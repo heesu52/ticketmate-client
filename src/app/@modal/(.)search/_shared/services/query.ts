@@ -62,10 +62,11 @@ const useGetAgentSearchQuery = (
   });
 };
 
-const useRecentSearchQuery = () => {
+const useRecentSearchQuery = (isLoggedIn: boolean) => {
   return useQuery({
     queryKey: ['recentSearches'],
     queryFn: getRecentSearch,
+    enabled: isLoggedIn, //로그인을 안했을 경우 호출x
   });
 };
 

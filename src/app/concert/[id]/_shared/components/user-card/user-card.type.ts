@@ -9,6 +9,6 @@ interface UserProps {
 
 interface UserCardProps {
   user: UserProps;
-  onClick: () => void;
+  onClick?: () => void;
 }
 export type { UserProps, UserCardProps };

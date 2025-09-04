@@ -18,7 +18,7 @@ const getSearch = async <
   request?: GetSearchRequest,
 ): Promise<T> => {
   const query = request
-    ? `?${createQueryParams(request as Record<string, unknown>)}`
+    ? `?${createQueryParams(request as unknown as Record<string, unknown>)}`
     : '';
 
   const data = await instance<T>(`${BASE_URL}${query}`, {

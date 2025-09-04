@@ -26,13 +26,16 @@ const useGetConcertSearchQuery = (
         ...request,
         pageNumber: pageParam,
       }),
-    getNextPageParam: (lastPage) => {
-      const current = lastPage.searchResults.number;
-      const total = lastPage.searchResults.totalPages;
-      return current < total - 1 ? current + 1 : undefined;
+    getNextPageParam: (lastPage, allPages) => {
+      const current = lastPage.searchResults.number; // 현재 페이지
+      const pageSize = lastPage.searchResults.size;
+      const totalElements = lastPage.concertCount;
+      const totalPages = Math.ceil(totalElements / pageSize); // 총 페이지
+
+      return current < totalPages - 1 ? allPages.length + 1 : undefined;
     },
     select: (data) => ({
-      content: data.pages.flatMap((page) => page.searchResults.content),
+      content: data?.pages.flatMap((page) => page.searchResults.content),
       pageParams: data.pageParams,
       concertCount: data.pages[0].concertCount,
       agentCount: data.pages[0].agentCount,
@@ -50,13 +53,16 @@ const useGetAgentSearchQuery = (
     initialPageParam: 1,
     queryFn: ({ pageParam = 1 }) =>
       getSearch<GetAgentSearchResponse>({ ...request, pageNumber: pageParam }),
-    getNextPageParam: (lastPage) => {
-      const current = lastPage.searchResults.number;
-      const total = lastPage.searchResults.totalPages;
-      return current < total - 1 ? current + 1 : undefined;
+    getNextPageParam: (lastPage, allPages) => {
+      const current = lastPage.searchResults.number; // 현재 페이지
+      const pageSize = lastPage.searchResults.size;
+      const totalElements = lastPage.concertCount;
+      const totalPages = Math.ceil(totalElements / pageSize); // 총 페이지
+
+      return current < totalPages - 1 ? allPages.length + 1 : undefined;
     },
     select: (data) => ({
-      content: data.pages.flatMap((page) => page.searchResults.content),
+      content: data?.pages.flatMap((page) => page.searchResults.content),
       pageParams: data.pageParams,
       concertCount: data.pages[0].concertCount,
       agentCount: data.pages[0].agentCount,

@@ -11,6 +11,7 @@ import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
 import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
 import TabButton from '@/shared/components/ui/tab/tab';
 import { TabItem } from '@/shared/components/ui/tab/tab.type';
+import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
 import { AgentInfo, Concert } from '@/shared/types';
 
 import styles from './search-tab-manager.module.scss';
@@ -41,16 +42,19 @@ export default function SearchTabManager({
   const enabledAgent = !!keyword && active === 'AGENT';
 
   // 공연 검색 조회 (처음 검색을 제외하고 사용)
-  const { data: concertRes, isFetching: isFetchingConcert } =
-    useGetConcertSearchQuery(request, {
-      enabled: enabledConcert,
-    });
+  const {
+    data: concertRes,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetConcertSearchQuery(request, {
+    enabled: enabledConcert,
+  });
 
   // 대리인 검색 조회 (현재 서버 500 에러 발생 -> 백엔드에서 수정 중)
-  const { data: agentRes, isFetching: isFetchingAgent } =
-    useGetAgentSearchQuery(request, {
-      enabled: enabledAgent,
-    });
+  const { data: agentRes } = useGetAgentSearchQuery(request, {
+    enabled: enabledAgent,
+  });
 
   // 공연/대리인 정보 (타입이 달라서 별도로 지정)
   const concertList: Concert[] = concertRes?.content ?? [];
@@ -74,6 +78,15 @@ export default function SearchTabManager({
     ],
     [concertCount, agentCount],
   );
+
+  const { lastElementRef } = useIntersectionObserver({
+    onIntersect: () => {
+      if (hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+    enabled: hasNextPage && !isFetchingNextPage,
+  });
 
   return (
     <div className={styles.container}>
@@ -101,10 +114,15 @@ export default function SearchTabManager({
               )}
               {concertList.length > 0 && (
                 <div className={styles.list_container}>
-                  {concertList.map((concertItem) => (
+                  {concertList.map((concertItem, index) => (
                     <div
                       key={concertItem.concertId}
                       className={styles.card_wrapper}
+                      ref={
+                        index === concertList.length - 1
+                          ? lastElementRef
+                          : undefined
+                      }
                     >
                       <ConcertCard concertItem={concertItem} />
                     </div>

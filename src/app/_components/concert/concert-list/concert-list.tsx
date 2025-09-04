@@ -26,7 +26,7 @@ const ConcertList = () => {
     pageNumber: 1,
     pageSize: 10,
     sortField: 'CREATED_DATE',
-    sortDirection: 'ASC',
+    sortDirection: 'DESC',
   });
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =

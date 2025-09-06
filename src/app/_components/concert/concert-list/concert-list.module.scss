@@ -13,27 +13,24 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       .title {
-        @include title-md;
-        color: var(--textColor-main);
+        @include title-lg;
+        color: var(--grayscale-700, #222);
       }
 
       .select_container {
         display: flex;
         align-items: center;
         gap: 4px;
-
-        .drop {
-          @include text-sm;
-          color: var(--textColor-main);
-        }
       }
     }
   }
 
   .card_wrapper {
+    margin-top: 4px;
     width: 100%;
-    border-bottom: 1px solid var(--lineColor-main);
+    border-bottom: 1px solid var(--grayscale-300, #ededed);
 
     &:last-child {
       border-bottom: none;

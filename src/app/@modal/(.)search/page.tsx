@@ -71,12 +71,17 @@ export default function Search() {
     <PageFrame appBar={{ title: '검색', showBack: true }} bottomNav={false}>
       <div className={styles.container}>
         <SearchBar onSearch={(value) => handleSearch(value)} />
-        <RecentSearch
-          isLoggedIn={isLoggedIn}
-          localRecent={localRecent}
-          setLocalRecent={setLocalRecent}
-        />
-        <SearchTabManager searchRequest={searchRequest} />
+
+        <div className={styles.scroll_area}>
+          <RecentSearch
+            isLoggedIn={isLoggedIn}
+            localRecent={localRecent}
+            setLocalRecent={setLocalRecent}
+          />
+          <div className={styles.sticky_component}>
+            <SearchTabManager searchRequest={searchRequest} />
+          </div>
+        </div>
       </div>
     </PageFrame>
   );

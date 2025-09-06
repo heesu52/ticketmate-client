@@ -5,16 +5,28 @@ import React, { useState } from 'react';
 import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
 import { useGetConcertList } from '@/app/_shared/services/query';
 import { GetConcertListRequest } from '@/app/_shared/services/type';
+import Select from '@/shared/components/ui/select/select';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
 
-import ConcertSelect from '../concert-select';
 import styles from './concert-list.module.scss';
+
+const options = [
+  {
+    value: 'CREATED_DATE',
+    label: '최신순',
+  },
+  {
+    value: 'TICKET_OPEN_DATE',
+    label: '오픈일순',
+  },
+];
 
 const ConcertList = () => {
   const [request, setRequest] = useState<GetConcertListRequest>({
+    pageNumber: 1,
     pageSize: 10,
     sortField: 'CREATED_DATE',
-    sortDirection: 'ASC',
+    sortDirection: 'DESC',
   });
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -39,30 +51,32 @@ const ConcertList = () => {
   const concertList = data?.content;
 
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.concert_container}>
-          <div className={styles.title_container}>
-            <span className={styles.title}>신청가능 공연</span>
+    <div className={styles.container}>
+      <div className={styles.concert_container}>
+        <div className={styles.title_container}>
+          <span className={styles.title}>신청가능 공연</span>
 
-            <div className={styles.select_container}>
-              <ConcertSelect onSelect={handleSelect} />
-            </div>
+          <div className={styles.select_container}>
+            <Select
+              options={options}
+              value={request.sortField || ''}
+              onValueChange={(value: string) => handleSelect(value)}
+              variant="filter"
+            />
           </div>
-          {concertList?.map((concertItem, index) => (
-            <div
-              key={concertItem.concertId}
-              ref={
-                index === concertList.length - 1 ? lastElementRef : undefined
-              }
-              className={styles.card_wrapper}
-            >
-              <ConcertCard concertItem={concertItem} />
-            </div>
-          ))}
         </div>
+
+        {concertList?.map((concertItem, index) => (
+          <div
+            key={concertItem.concertId}
+            ref={index === concertList.length - 1 ? lastElementRef : undefined}
+            className={styles.card_wrapper}
+          >
+            <ConcertCard concertItem={concertItem} />
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 

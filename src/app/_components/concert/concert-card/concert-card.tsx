@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { LocationOnIcon } from '@/assets/icons';
+import { DateRangeIcon, LocationOnIcon } from '@/assets/icons';
+
 import Badge from '@/shared/components/ui/badge/badge';
 import { Concert } from '@/shared/types';
 import { calculateDday, formatDate } from '@/shared/utils/dates';
@@ -28,7 +29,7 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
     <>
       <Link href={`/concert/${concertId}`}>
         <div className={styles.container}>
-          <div className={styles.tag}>
+          <div className={styles.badge_container}>
             {ticketPreOpenDate && (
               <Badge variant="type-a">
                 선예매까지 {calculateDday(ticketPreOpenDate)}
@@ -55,15 +56,27 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
             </div>
 
             <div className={styles.concert_info}>
-              <div className={styles.description}>
-                <span className={styles.date}>
-                  {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
-                </span>
-                <span className={styles.title}>{concertName}</span>
-              </div>
-              <div className={styles.place}>
-                <LocationOnIcon width={16} height={16} />
-                <span className={styles.location}>{concertHallName}</span>
+              <span className={styles.title}>{concertName}</span>
+
+              <div className={styles.info_container}>
+                <div className={styles.info_item}>
+                  <LocationOnIcon
+                    width={16}
+                    height={16}
+                    fill="var(--grayscale-600)"
+                  />
+                  <span>{concertHallName}</span>
+                </div>
+                <div className={styles.info_item}>
+                  <DateRangeIcon
+                    width={16}
+                    height={16}
+                    fill="var(--grayscale-600)"
+                  />
+                  <span>
+                    {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

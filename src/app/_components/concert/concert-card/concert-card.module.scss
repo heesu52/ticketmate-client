@@ -9,9 +9,9 @@
   width: 100%;
   padding: 20px 0;
 
-  .tag {
+  .badge_container {
     display: flex;
-    gap: 10px;
+    gap: 8px;
   }
 
   .card_container {
@@ -32,31 +32,26 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: flex-start;
+      flex: 1 0 0;
       align-self: stretch;
 
-      .description {
-        display: flex;
-        flex-direction: column;
-        .title {
-          @include title-sm;
-          color: var(--textColor-main);
-          word-break: break-all;
-        }
-
-        .date {
-          @include text-sm;
-          color: var(--textColor-sub);
-        }
+      .title {
+        @include title-sm;
+        color: var(--grayscale-700, #222);
       }
 
-      .place {
+      .info_container {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         gap: 4px;
 
-        .location {
-          @include text-sm;
-          color: var(--textColor-sub);
+        .info_item {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          color: var(--grayscale-600, #555);
+          @include text-md;
         }
       }
     }

@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { DateRangeIcon, LocationOnIcon } from '@/assets/icons';
-
 import Badge from '@/shared/components/ui/badge/badge';
 import { Concert } from '@/shared/types';
 import { calculateDday, formatDate } from '@/shared/utils/dates';

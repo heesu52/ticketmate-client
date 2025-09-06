@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import RecentSearch from '@/app/@modal/(.)search/_shared/components/recent-search/recent-search';
 import SearchBar from '@/app/@modal/(.)search/_shared/components/search-bar/search-bar';
 import SearchTabManager from '@/app/@modal/(.)search/_shared/components/search-tab/search-tab-manager';
+import queryKey from '@/app/@modal/(.)search/_shared/services/query-key';
 import { GetSearchRequest } from '@/app/@modal/(.)search/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 
@@ -35,10 +36,13 @@ export default function Search() {
 
     if (isLoggedIn) {
       // 캐시를 업데이트 해서 캐시에 저장된 데이터를 불러옴
-      queryClient.setQueryData<string[]>(['recentSearches'], (old = []) => {
-        const updated = [input, ...old.filter((item) => item !== input)];
-        return updated;
-      });
+      queryClient.setQueryData<string[]>(
+        queryKey.getRecentSearches(),
+        (old = []) => {
+          const updated = [input, ...old.filter((item) => item !== input)];
+          return updated;
+        },
+      );
     } else {
       // 비로그인 상태면 localStorage에 저장
       const recent: string[] = JSON.parse(
@@ -52,7 +56,7 @@ export default function Search() {
 
   const handleRecentClick = (keyword: string) => {
     setInputMessage(keyword);
-    setSearchRequest({ keyword, searchType: 'CONCERT' });
+    handleSearch(keyword);
   };
 
   // 최근검색어 업데이트해서 UI에 반영
@@ -64,14 +68,7 @@ export default function Search() {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    // 모달이 열릴 때 스크롤 상단 고정
     window.scrollTo(0, 0);
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      // 모달이 닫힐 때 원래대로 복원
-      document.body.style.overflow = '';
-    };
   }, []);
 
   return (

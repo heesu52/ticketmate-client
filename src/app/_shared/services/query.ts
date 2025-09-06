@@ -7,8 +7,8 @@ import { GetConcertListRequest } from '@/app/_shared/services/type';
 export const useGetConcertList = (request?: GetConcertListRequest) => {
   return useInfiniteQuery({
     queryKey: queryKey.getConcertList(request),
-    initialPageParam: 1,
-    queryFn: ({ pageParam = 1 }) =>
+    initialPageParam: request?.pageNumber,
+    queryFn: ({ pageParam = request?.pageNumber }) =>
       getConcertList({ ...request, pageNumber: pageParam }),
     getNextPageParam: (lastPage, allPages) => {
       const current = lastPage.number; // 현재 페이지

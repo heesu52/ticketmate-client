@@ -73,7 +73,7 @@ const useGetAgentSearchQuery = (
 
 const useRecentSearchQuery = (isLoggedIn: boolean) => {
   return useQuery({
-    queryKey: ['recentSearches'],
+    queryKey: queryKey.getRecentSearches(),
     queryFn: getRecentSearch,
     enabled: isLoggedIn, //로그인을 안했을 경우 호출x
   });
@@ -85,7 +85,7 @@ const useDeleteRecentSearchMutation = () => {
   return useMutation({
     mutationFn: deleteRecentSearch,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['recentSearches'] });
+      queryClient.invalidateQueries({ queryKey: queryKey.getRecentSearches() });
     },
   });
 };

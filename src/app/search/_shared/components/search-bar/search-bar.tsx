@@ -18,11 +18,13 @@ export default function SearchBar({
   setInputMessage,
   onSearch,
 }: SearchBarProps) {
-  const handleSendMessage = () => {
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
     const trimmed = inputMessage.trim();
     if (!trimmed) return;
     onSearch(trimmed);
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.search_container}>
@@ -32,9 +34,9 @@ export default function SearchBar({
           placeholder="검색어를 입력해주세요"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
         />
-        <SearchIcon className={styles.icon} onClick={handleSendMessage} />
+        <SearchIcon className={styles.icon} onClick={handleSubmit} />
       </div>
     </div>
   );

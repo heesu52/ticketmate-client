@@ -6,6 +6,8 @@ const queryKey = {
 
   getAgentSearchResult: (request?: GetSearchRequest) =>
     request ? ['agentSearch', request] : ['agentSearch'],
+
+  getRecentSearches: () => ['recentSearches'],
 };
 
 export default queryKey;

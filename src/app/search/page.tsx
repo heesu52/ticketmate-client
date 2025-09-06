@@ -14,6 +14,7 @@ import styles from './page.module.scss';
 
 export default function Search() {
   const queryClient = useQueryClient();
+  const [inputMessage, setInputMessage] = useState('');
   const [localRecent, setLocalRecent] = useState<string[]>([]);
   const [searchRequest, setSearchRequest] = useState<GetSearchRequest | null>(
     null,
@@ -45,7 +46,13 @@ export default function Search() {
       );
       const updatedRecent = [input, ...recent.filter((item) => item !== input)];
       setLocalRecent(updatedRecent);
+      localStorage.setItem('recentSearches', JSON.stringify(updatedRecent));
     }
+  };
+
+  const handleRecentClick = (keyword: string) => {
+    setInputMessage(keyword);
+    setSearchRequest({ keyword, searchType: 'CONCERT' });
   };
 
   // 최근검색어 업데이트해서 UI에 반영
@@ -70,13 +77,24 @@ export default function Search() {
   return (
     <PageFrame appBar={{ title: '검색', showBack: true }} bottomNav={false}>
       <div className={styles.container}>
-        <SearchBar onSearch={(value) => handleSearch(value)} />
-        <RecentSearch
-          isLoggedIn={isLoggedIn}
-          localRecent={localRecent}
-          setLocalRecent={setLocalRecent}
+        <SearchBar
+          inputMessage={inputMessage}
+          setInputMessage={setInputMessage}
+          onSearch={(value) => handleSearch(value)}
         />
-        <SearchTabManager searchRequest={searchRequest} />
+
+        <div className={styles.scroll_area}>
+          <RecentSearch
+            isLoggedIn={isLoggedIn}
+            localRecent={localRecent}
+            setLocalRecent={setLocalRecent}
+            onClickRecent={handleRecentClick}
+          />
+
+          <div className={styles.sticky_component}>
+            <SearchTabManager searchRequest={searchRequest} />
+          </div>
+        </div>
       </div>
     </PageFrame>
   );

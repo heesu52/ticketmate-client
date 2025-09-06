@@ -1,19 +1,23 @@
 // SearchInput.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { SearchIcon } from '@/assets/icons';
 
 import styles from './search-bar.module.scss';
 
 type SearchBarProps = {
+  inputMessage: string;
+  setInputMessage: React.Dispatch<React.SetStateAction<string>>;
   onSearch: (value: string) => void;
 };
 
-export default function SearchBar({ onSearch }: SearchBarProps) {
-  const [inputMessage, setInputMessage] = useState('');
-
+export default function SearchBar({
+  inputMessage,
+  setInputMessage,
+  onSearch,
+}: SearchBarProps) {
   const handleSendMessage = () => {
     const trimmed = inputMessage.trim();
     if (!trimmed) return;

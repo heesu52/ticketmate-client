@@ -13,12 +13,14 @@ interface RecentSearchProps {
   isLoggedIn: boolean;
   localRecent: string[];
   setLocalRecent: React.Dispatch<React.SetStateAction<string[]>>;
+  onClickRecent?: (keyword: string) => void;
 }
 
 export default function RecentSearch({
   isLoggedIn,
   localRecent,
   setLocalRecent,
+  onClickRecent,
 }: RecentSearchProps) {
   const { data: recentSearch } = useRecentSearchQuery(isLoggedIn);
   const { mutate } = useDeleteRecentSearchMutation();
@@ -46,7 +48,11 @@ export default function RecentSearch({
       </div>
       <div className={styles.tag_container}>
         {recentList?.map((tag, index) => (
-          <div key={index} className={styles.tag}>
+          <div
+            key={index}
+            className={styles.tag}
+            onClick={() => onClickRecent?.(tag)}
+          >
             {tag}
           </div>
         ))}

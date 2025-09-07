@@ -68,7 +68,14 @@ export default function Search() {
   }, [isLoggedIn]);
 
   useEffect(() => {
+    // 모달이 열릴 때 스크롤 상단 고정
     window.scrollTo(0, 0);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      // 모달이 닫힐 때 원래대로 복원
+      document.body.style.overflow = '';
+    };
   }, []);
 
   return (

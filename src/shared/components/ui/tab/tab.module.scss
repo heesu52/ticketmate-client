@@ -5,6 +5,7 @@
   flex-direction: column;
   border-bottom: 1px solid var(--grayscale-300);
   background: var(--grayscale-100, #fff);
+  padding: 0 20px;
 
   .tab_list {
     display: flex;
@@ -39,9 +40,9 @@
     &[data-state='active'] {
       @include text-lg;
       height: 44px;
-      color: var(--brandColor-main, #ff6a6a);
-      border-bottom: 3px solid var(--brandColor-border, #ff9c9c);
-      background: var(--white, #fff);
+      color: var(--primary-500, #ff6a6a);
+      border-bottom: 3px solid var(--primary-400, #ff8989);
+      background: var(--grayscale-100, #fff);
     }
 
     .tab_delete_button {
@@ -50,7 +51,7 @@
 
       &[data-state='active'] {
         svg {
-          fill: var(--brandColor-main, #ff6a6a);
+          fill: var(--primary-500, #ff6a6a);
         }
       }
     }

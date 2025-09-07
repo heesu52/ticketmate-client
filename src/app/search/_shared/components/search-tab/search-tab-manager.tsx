@@ -97,63 +97,64 @@ export default function SearchTabManager({
         onValueChange={(v) => setActive(v as 'CONCERT' | 'AGENT')}
       />
 
-      {/* 검색결과 리스트 */}
-      {/* 검색을 안했다면 컴포넌트 노출x */}
-      {searchRequest && (
-        <>
-          {active === 'CONCERT' ? (
-            <>
-              {/* 로딩을 확인하기 위해 넣었는데 추후 icon으로 수정필요
+      <div className={styles.tab_content_container}>
+        {/* 검색결과 리스트 */}
+        {/* 검색을 안했다면 컴포넌트 노출x */}
+        {searchRequest && (
+          <>
+            {active === 'CONCERT' ? (
+              <>
+                {/* 로딩을 확인하기 위해 넣었는데 추후 icon으로 수정필요
               {isFetching && (
                 <div className={styles.skeleton}>로딩중/div>
               )} */}
-              {concertList.length === 0 && (
-                <div className={styles.empty_container}>
-                  <span>검색결과 없음</span>
-                </div>
-              )}
-              {concertList.length > 0 && (
-                <div className={styles.list_container}>
-                  {concertList.map((concertItem, index) => (
-                    <div
-                      key={concertItem.concertId}
-                      className={styles.card_wrapper}
-                      ref={
-                        index === concertList.length - 1
-                          ? lastElementRef
-                          : undefined
-                      }
-                    >
-                      <ConcertCard concertItem={concertItem} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              {/* 로딩을 확인하기 위해 넣었는데 추후 icon으로 수정필요
+                {concertList.length === 0 && (
+                  <div className={styles.empty_container}>
+                    <span>검색결과 없음</span>
+                  </div>
+                )}
+                {concertList.length > 0 && (
+                  <div className={styles.list_container}>
+                    {concertList.map((concertItem, index) => (
+                      <div
+                        key={concertItem.concertId}
+                        ref={
+                          index === concertList.length - 1
+                            ? lastElementRef
+                            : undefined
+                        }
+                      >
+                        <ConcertCard concertItem={concertItem} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                {/* 로딩을 확인하기 위해 넣었는데 추후 icon으로 수정필요
               {isFetching && (
                 <div className={styles.skeleton}>로딩중/div>
               )} */}
-              {agentList.length === 0 && (
-                <div className={styles.empty_container}>
-                  <span>검색결과 없음</span>
-                </div>
-              )}
-              {agentList.length > 0 && (
-                <div className={styles.list_container}>
-                  {agentList.map((agent) => (
-                    <div key={agent.agentId} className={styles.card_wrapper}>
-                      <UserCard user={agent} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-        </>
-      )}
+                {agentList.length === 0 && (
+                  <div className={styles.empty_container}>
+                    <span>검색결과 없음</span>
+                  </div>
+                )}
+                {agentList.length > 0 && (
+                  <div className={styles.list_container}>
+                    {agentList.map((agent) => (
+                      <div key={agent.agentId}>
+                        <UserCard user={agent} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

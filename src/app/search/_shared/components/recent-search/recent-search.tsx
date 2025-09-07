@@ -46,6 +46,7 @@ export default function RecentSearch({
           전체삭제
         </button>
       </div>
+
       <div className={styles.tag_container}>
         {recentList?.map((tag, index) => (
           <div

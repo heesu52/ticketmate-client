@@ -102,10 +102,8 @@ const Tab = ({
             onClick={onAddTab}
             aria-label="새 탭 추가"
           >
-            <div className={cn('tab_add_button_content')}>
-              <span>{addTabButtonText}</span>
-              <PlusIcon width={16} height={16} />
-            </div>
+            <span>{addTabButtonText}</span>
+            <PlusIcon width={16} height={16} />
           </button>
         )}
       </RadixTabs.List>

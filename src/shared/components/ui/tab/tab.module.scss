@@ -3,10 +3,12 @@
 .tab_root {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  border-bottom: 1px solid var(--grayscale-300);
+  background: var(--grayscale-100, #fff);
 
   .tab_list {
     display: flex;
+    align-items: center;
     gap: 16px;
     overflow-x: auto;
     scrollbar-width: none;
@@ -24,6 +26,7 @@
 
   .tab_trigger {
     @include text-md;
+    height: 44px;
     display: inline-flex;
     padding: 12px 0;
     justify-content: center;
@@ -31,9 +34,11 @@
     gap: 4px;
     border-bottom: 3px solid transparent;
     white-space: nowrap;
+    color: var(--grayscale-500, #767676);
 
     &[data-state='active'] {
       @include text-lg;
+      height: 44px;
       color: var(--brandColor-main, #ff6a6a);
       border-bottom: 3px solid var(--brandColor-border, #ff9c9c);
       background: var(--white, #fff);
@@ -41,6 +46,7 @@
 
     .tab_delete_button {
       display: flex;
+      fill: var(--grayscale-500, #767676);
 
       &[data-state='active'] {
         svg {
@@ -51,15 +57,21 @@
   }
 
   .tab_add_button {
-    .tab_add_button_content {
-      @include text-md;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 4px;
-      padding: 12px 0;
-      border-bottom: 3px solid transparent;
-      white-space: nowrap;
+    @include text-md;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 0;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+
+    color: var(--grayscale-500, #767676);
+
+    height: 44px;
+
+    svg {
+      fill: var(--grayscale-500, #767676);
     }
   }
 }

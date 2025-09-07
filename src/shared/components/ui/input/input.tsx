@@ -1,38 +1,36 @@
-import React, { useId } from 'react';
+import React, { ReactNode } from 'react';
 
 import classNames from 'classnames/bind';
 
 import styles from './input.module.scss';
 
+interface IconProps {
+  icon: ReactNode;
+  onIconClick?: () => void;
+  iconAriaLabel?: string;
+}
+
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  id: string;
   /** 라벨 */
   label: string;
   /** 에러 상태 */
   isError?: boolean;
   /** ref 참조 */
   ref?: React.RefObject<HTMLInputElement | null>;
-  /** 오른쪽 아이콘 */
-  icon?: React.ReactNode;
-  /** 아이콘 클릭 동작 */
-  onIconClick?: () => void;
-  /** 아이콘 버튼 aria-label */
-  iconAriaLabel?: string;
+  iconProps?: IconProps;
 }
 
 const cn = classNames.bind(styles);
 
 const Input = ({
+  id,
   label,
   isError,
   ref,
-  icon,
-  onIconClick,
-  iconAriaLabel = '아이콘 버튼',
+  iconProps,
   ...props
 }: InputProps) => {
-  const generatedId = useId();
-
-  const inputId = props.id ?? generatedId;
   const inputType = props.type || 'text';
   const inputPlaceholder = props.placeholder || '';
 
@@ -41,19 +39,19 @@ const Input = ({
   };
 
   const handleIconClick = () => {
-    if (onIconClick) {
-      onIconClick();
+    if (iconProps?.onIconClick) {
+      iconProps.onIconClick();
     } else {
-      (document.getElementById(inputId) as HTMLInputElement | null)?.focus();
+      (document.getElementById(id) as HTMLInputElement | null)?.focus();
     }
   };
 
   return (
     <div className={cn('container')}>
-      <label htmlFor={inputId}>{label}</label>
+      <label htmlFor={id}>{label}</label>
       <div className={cn('input_wrapper')}>
         <input
-          id={inputId}
+          id={id}
           ref={ref}
           type={inputType}
           placeholder={inputPlaceholder}
@@ -61,17 +59,17 @@ const Input = ({
           data-error={!!isError}
           {...props}
         />
-        {icon && (
+        {iconProps?.icon && (
           <button
             type="button"
             className={cn('input_icon')}
             onMouseDown={handleIconMouseDown}
             onClick={handleIconClick}
             tabIndex={-1}
-            aria-label={iconAriaLabel}
+            aria-label={iconProps?.iconAriaLabel}
             disabled={props.disabled}
           >
-            {icon}
+            {iconProps?.icon}
           </button>
         )}
       </div>

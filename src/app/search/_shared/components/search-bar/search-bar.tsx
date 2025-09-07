@@ -28,12 +28,12 @@ export default function SearchBar({
   return (
     <div className={styles.container}>
       <Input
+        id="message-input"
         label="검색"
         placeholder="검색어를 입력해주세요"
         value={inputMessage}
         onChange={(e) => setInputMessage(e.target.value)}
-        icon={<SearchIcon />}
-        onIconClick={handleSubmit}
+        iconProps={{ icon: <SearchIcon />, onIconClick: handleSubmit }}
       />
     </div>
   );

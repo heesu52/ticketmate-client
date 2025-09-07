@@ -73,8 +73,8 @@ export default function SearchTabManager({
 
   const tabs: TabItem[] = useMemo(
     () => [
-      { value: 'CONCERT', label: `공연 ${concertCount}`, content: <div /> },
-      { value: 'AGENT', label: `대리인 ${agentCount}`, content: <div /> },
+      { value: 'CONCERT', label: `공연 ${concertCount}` },
+      { value: 'AGENT', label: `대리인 ${agentCount}` },
     ],
     [concertCount, agentCount],
   );
@@ -117,6 +117,7 @@ export default function SearchTabManager({
                   <div className={styles.list_container}>
                     {concertList.map((concertItem, index) => (
                       <div
+                        className={styles.card_wrapper}
                         key={concertItem.concertId}
                         ref={
                           index === concertList.length - 1
@@ -143,8 +144,16 @@ export default function SearchTabManager({
                 )}
                 {agentList.length > 0 && (
                   <div className={styles.list_container}>
-                    {agentList.map((agent) => (
-                      <div key={agent.agentId}>
+                    {agentList.map((agent, index) => (
+                      <div
+                        className={styles.card_wrapper}
+                        key={agent.agentId}
+                        ref={
+                          index === agentList.length - 1
+                            ? lastElementRef
+                            : undefined
+                        }
+                      >
                         <UserCard user={agent} />
                       </div>
                     ))}

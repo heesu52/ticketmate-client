@@ -14,10 +14,13 @@
   .list_container {
     padding: 20px;
     width: 100%;
-    border-bottom: 1px solid var(--grayscale-300, #ededed);
 
-    &:last-child {
-      border-bottom: none;
+    .card_wrapper {
+      border-bottom: 1px solid var(--grayscale-300, #ededed);
+
+      &:last-child {
+        border-bottom: none;
+      }
     }
   }
 

@@ -1,42 +1,45 @@
 @use '@/styles/index' as *;
 
 .container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .title {
+    @include text-lg;
+    color: var(--grayscale-700);
+  }
+
+  .delete {
+    @include text-md;
+    color: var(--grayscale-500);
+  }
+
+  .span_container {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    justify-content: space-between;
+  }
 
-    .title {
-      @include text-lg;
-      color: var(--grayscale-700);
-    }
+  .tag_container {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 
-    .delete {
-      @include text-md;
-      color: var(--grayscale-500);
-    }
+    overflow: hidden;
+    overflow-x: auto;
 
-    .span_container {
+    .tag {
       display: flex;
-      justify-content: space-between;
-    }
-    .tag_container {
-      display: inline-flex;
+      padding: 8px 16px;
+      justify-content: center;
       align-items: center;
-      gap: 8px;
 
-      .tag {
-        display: flex;
-        padding: 8px 16px;
-        justify-content: center;
-        align-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--grayscale-300);
 
-        border-radius: 999px;
-        border: 1px solid var(--grayscale-300);
-
-        @include text-sm;
-        color: var(--grayscale-700);
-        flex-shrink: 0;
-      }
+      @include text-sm;
+      color: var(--grayscale-700);
+      flex-shrink: 0;
     }
-
+  }
 }

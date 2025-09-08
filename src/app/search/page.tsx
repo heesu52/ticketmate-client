@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import RecentSearch from '@/app/@modal/(.)search/_shared/components/recent-search/recent-search';
-import SearchBar from '@/app/@modal/(.)search/_shared/components/search-bar/search-bar';
-import SearchTabManager from '@/app/@modal/(.)search/_shared/components/search-tab/search-tab-manager';
-import queryKey from '@/app/@modal/(.)search/_shared/services/query-key';
-import { GetSearchRequest } from '@/app/@modal/(.)search/_shared/services/type';
+import RecentSearch from '@/app/search/_shared/components/recent-search/recent-search';
+import SearchBar from '@/app/search/_shared/components/search-bar/search-bar';
+import SearchTabManager from '@/app/search/_shared/components/search-tab/search-tab-manager';
+import queryKey from '@/app/search/_shared/services/query-key';
+import { GetSearchRequest } from '@/app/search/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 
 import styles from './page.module.scss';
@@ -81,23 +81,23 @@ export default function Search() {
   return (
     <PageFrame appBar={{ title: '검색', showBack: true }} bottomNav={false}>
       <div className={styles.container}>
-        <SearchBar
-          inputMessage={inputMessage}
-          setInputMessage={setInputMessage}
-          onSearch={(value) => handleSearch(value)}
-        />
+        <div className={styles.search_container}>
+          <SearchBar
+            inputMessage={inputMessage}
+            setInputMessage={setInputMessage}
+            onSearch={(value) => handleSearch(value)}
+          />
 
-        <div className={styles.scroll_area}>
           <RecentSearch
             isLoggedIn={isLoggedIn}
             localRecent={localRecent}
             setLocalRecent={setLocalRecent}
             onClickRecent={handleRecentClick}
           />
+        </div>
 
-          <div className={styles.sticky_component}>
-            <SearchTabManager searchRequest={searchRequest} />
-          </div>
+        <div className={styles.tab_container}>
+          <SearchTabManager searchRequest={searchRequest} />
         </div>
       </div>
     </PageFrame>

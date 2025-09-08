@@ -5,7 +5,7 @@ import React from 'react';
 import {
   useDeleteRecentSearchMutation,
   useRecentSearchQuery,
-} from '@/app/@modal/(.)search/_shared/services/query';
+} from '@/app/search/_shared/services/query';
 
 import styles from './recent-search.module.scss';
 
@@ -46,6 +46,7 @@ export default function RecentSearch({
           전체삭제
         </button>
       </div>
+
       <div className={styles.tag_container}>
         {recentList?.map((tag, index) => (
           <div

@@ -5,10 +5,10 @@ import { useMemo, useState } from 'react';
 import {
   useGetAgentSearchQuery,
   useGetConcertSearchQuery,
-} from '@/app/@modal/(.)search/_shared/services/query';
-import { GetSearchRequest } from '@/app/@modal/(.)search/_shared/services/type';
-import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
-import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
+} from '@/app/search/_shared/services/query';
+import { GetSearchRequest } from '@/app/search/_shared/services/type';
+import AgentCard from '@/shared/components/features/agent/agent-card/agent-card';
+import ConcertCard from '@/shared/components/features/concert/concert-card/concert-card';
 import TabButton from '@/shared/components/ui/tab/tab';
 import { TabItem } from '@/shared/components/ui/tab/tab.type';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
@@ -52,7 +52,12 @@ export default function SearchTabManager({
   });
 
   // 대리인 검색 조회 (현재 서버 500 에러 발생 -> 백엔드에서 수정 중)
-  const { data: agentRes } = useGetAgentSearchQuery(request, {
+  const {
+    data: agentRes,
+    fetchNextPage: fetchNextAgentPage,
+    hasNextPage: hasNextAgentPage,
+    isFetchingNextPage: isFetchingNextAgentPage,
+  } = useGetAgentSearchQuery(request, {
     enabled: enabledAgent,
   });
 
@@ -73,19 +78,27 @@ export default function SearchTabManager({
 
   const tabs: TabItem[] = useMemo(
     () => [
-      { value: 'CONCERT', label: `공연 ${concertCount}`, content: <div /> },
-      { value: 'AGENT', label: `대리인 ${agentCount}`, content: <div /> },
+      { value: 'CONCERT', label: `공연 ${concertCount}` },
+      { value: 'AGENT', label: `대리인 ${agentCount}` },
     ],
     [concertCount, agentCount],
   );
 
   const { lastElementRef } = useIntersectionObserver({
     onIntersect: () => {
-      if (hasNextPage && !isFetchingNextPage) {
+      if (active === 'CONCERT' && hasNextPage && !isFetchingNextPage) {
         fetchNextPage();
+      } else if (
+        active === 'AGENT' &&
+        hasNextAgentPage &&
+        !isFetchingNextAgentPage
+      ) {
+        fetchNextAgentPage();
       }
     },
-    enabled: hasNextPage && !isFetchingNextPage,
+    enabled:
+      (active === 'CONCERT' && hasNextPage && !isFetchingNextPage) ||
+      (active === 'AGENT' && hasNextAgentPage && !isFetchingNextAgentPage),
   });
 
   return (
@@ -97,63 +110,74 @@ export default function SearchTabManager({
         onValueChange={(v) => setActive(v as 'CONCERT' | 'AGENT')}
       />
 
-      {/* 검색결과 리스트 */}
-      {/* 검색을 안했다면 컴포넌트 노출x */}
-      {searchRequest && (
-        <>
-          {active === 'CONCERT' ? (
-            <>
-              {/* 로딩을 확인하기 위해 넣었는데 추후 icon으로 수정필요
+      <div className={styles.tab_content_container}>
+        {/* 검색결과 리스트 */}
+        {/* 검색을 안했다면 컴포넌트 노출x */}
+        {searchRequest && (
+          <>
+            {active === 'CONCERT' ? (
+              <>
+                {/* 로딩을 확인하기 위해 넣었는데 추후 icon으로 수정필요
               {isFetching && (
                 <div className={styles.skeleton}>로딩중/div>
               )} */}
-              {concertList.length === 0 && (
-                <div className={styles.empty_container}>
-                  <span>검색결과 없음</span>
-                </div>
-              )}
-              {concertList.length > 0 && (
-                <div className={styles.list_container}>
-                  {concertList.map((concertItem, index) => (
-                    <div
-                      key={concertItem.concertId}
-                      className={styles.card_wrapper}
-                      ref={
-                        index === concertList.length - 1
-                          ? lastElementRef
-                          : undefined
-                      }
-                    >
-                      <ConcertCard concertItem={concertItem} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              {/* 로딩을 확인하기 위해 넣었는데 추후 icon으로 수정필요
+                {concertList.length === 0 && (
+                  <div className={styles.empty_container}>
+                    <span>검색결과 없음</span>
+                  </div>
+                )}
+                {concertList.length > 0 && (
+                  <div className={styles.list_container}>
+                    {concertList.map((concertItem, index) => (
+                      <div
+                        className={styles.card_wrapper}
+                        key={concertItem.concertId}
+                        ref={
+                          active === 'CONCERT' &&
+                          index === concertList.length - 1
+                            ? lastElementRef
+                            : undefined
+                        }
+                      >
+                        <ConcertCard concertItem={concertItem} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                {/* 로딩을 확인하기 위해 넣었는데 추후 icon으로 수정필요
               {isFetching && (
                 <div className={styles.skeleton}>로딩중/div>
               )} */}
-              {agentList.length === 0 && (
-                <div className={styles.empty_container}>
-                  <span>검색결과 없음</span>
-                </div>
-              )}
-              {agentList.length > 0 && (
-                <div className={styles.list_container}>
-                  {agentList.map((agent) => (
-                    <div key={agent.agentId} className={styles.card_wrapper}>
-                      <UserCard user={agent} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-        </>
-      )}
+                {agentList.length === 0 && (
+                  <div className={styles.empty_container}>
+                    <span>검색결과 없음</span>
+                  </div>
+                )}
+                {agentList.length > 0 && (
+                  <div className={styles.list_container}>
+                    {agentList.map((agent, index) => (
+                      <div
+                        className={styles.card_wrapper}
+                        key={agent.agentId}
+                        ref={
+                          active === 'AGENT' && index === agentList.length - 1
+                            ? lastElementRef
+                            : undefined
+                        }
+                      >
+                        <AgentCard agent={agent} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

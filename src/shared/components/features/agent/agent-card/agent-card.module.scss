@@ -1,0 +1,67 @@
+@use '@/styles/index' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 20px 0;
+
+  .profile_image {
+    width: 48px;
+    height: 48px;
+    border-radius: 100px;
+    border: 1px solid var(--grayscale-400, #ccc);
+  }
+
+  .info_container {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex: 1 0 0;
+    min-width: 0;
+
+    .introduction_container {
+      display: flex;
+      flex-direction: column;
+      flex: 1 0 0;
+      min-width: 0;
+
+      .nickname {
+        @include title-sm;
+        color: var(--grayscale-700, #222);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+      }
+
+      .introduction {
+        @include text-sm;
+        color: var(--grayscale-500, #767676);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+      }
+    }
+
+    .review_container {
+      display: flex;
+      width: 72px;
+      justify-content: flex-end;
+      align-items: center;
+
+      .review_score {
+        @include text-lg;
+        color: var(--grayscale-700, #222);
+      }
+
+      .review_count {
+        @include text-sm;
+        color: var(--grayscale-500, #767676);
+        margin-left: 4px;
+      }
+    }
+  }
+}

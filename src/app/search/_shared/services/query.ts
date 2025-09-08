@@ -9,7 +9,7 @@ import {
   GetSearchRequest,
   GetConcertSearchResponse,
   GetAgentSearchResponse,
-} from '@/app/@modal/(.)search/_shared/services/type';
+} from '@/app/search/_shared/services/type';
 
 import { getSearch, getRecentSearch, deleteRecentSearch } from './api';
 import queryKey from './query-key';

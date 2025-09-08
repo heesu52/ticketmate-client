@@ -56,7 +56,7 @@ const useGetAgentSearchQuery = (
     getNextPageParam: (lastPage, allPages) => {
       const current = lastPage.searchResults.number; // 현재 페이지
       const pageSize = lastPage.searchResults.size;
-      const totalElements = lastPage.concertCount;
+      const totalElements = lastPage.agentCount; // agentCount로 수정
       const totalPages = Math.ceil(totalElements / pageSize); // 총 페이지
 
       return current < totalPages - 1 ? allPages.length + 1 : undefined;

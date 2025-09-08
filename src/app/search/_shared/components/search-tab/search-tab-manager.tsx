@@ -52,7 +52,12 @@ export default function SearchTabManager({
   });
 
   // 대리인 검색 조회 (현재 서버 500 에러 발생 -> 백엔드에서 수정 중)
-  const { data: agentRes } = useGetAgentSearchQuery(request, {
+  const {
+    data: agentRes,
+    fetchNextPage: fetchNextAgentPage,
+    hasNextPage: hasNextAgentPage,
+    isFetchingNextPage: isFetchingNextAgentPage,
+  } = useGetAgentSearchQuery(request, {
     enabled: enabledAgent,
   });
 
@@ -81,11 +86,19 @@ export default function SearchTabManager({
 
   const { lastElementRef } = useIntersectionObserver({
     onIntersect: () => {
-      if (hasNextPage && !isFetchingNextPage) {
+      if (active === 'CONCERT' && hasNextPage && !isFetchingNextPage) {
         fetchNextPage();
+      } else if (
+        active === 'AGENT' &&
+        hasNextAgentPage &&
+        !isFetchingNextAgentPage
+      ) {
+        fetchNextAgentPage();
       }
     },
-    enabled: hasNextPage && !isFetchingNextPage,
+    enabled:
+      (active === 'CONCERT' && hasNextPage && !isFetchingNextPage) ||
+      (active === 'AGENT' && hasNextAgentPage && !isFetchingNextAgentPage),
   });
 
   return (
@@ -120,6 +133,7 @@ export default function SearchTabManager({
                         className={styles.card_wrapper}
                         key={concertItem.concertId}
                         ref={
+                          active === 'CONCERT' &&
                           index === concertList.length - 1
                             ? lastElementRef
                             : undefined
@@ -149,7 +163,7 @@ export default function SearchTabManager({
                         className={styles.card_wrapper}
                         key={agent.agentId}
                         ref={
-                          index === agentList.length - 1
+                          active === 'AGENT' && index === agentList.length - 1
                             ? lastElementRef
                             : undefined
                         }

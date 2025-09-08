@@ -5,7 +5,7 @@ import React from 'react';
 import {
   useDeleteRecentSearchMutation,
   useRecentSearchQuery,
-} from '@/app/@modal/(.)search/_shared/services/query';
+} from '@/app/search/_shared/services/query';
 
 import styles from './recent-search.module.scss';
 

@@ -2,13 +2,13 @@
 
 import { useMemo, useState } from 'react';
 
+import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
+import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
 import {
   useGetAgentSearchQuery,
   useGetConcertSearchQuery,
-} from '@/app/@modal/(.)search/_shared/services/query';
-import { GetSearchRequest } from '@/app/@modal/(.)search/_shared/services/type';
-import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
-import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
+} from '@/app/search/_shared/services/query';
+import { GetSearchRequest } from '@/app/search/_shared/services/type';
 import TabButton from '@/shared/components/ui/tab/tab';
 import { TabItem } from '@/shared/components/ui/tab/tab.type';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';

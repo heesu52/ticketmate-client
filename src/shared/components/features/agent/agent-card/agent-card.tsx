@@ -20,6 +20,11 @@ const AgentCard = ({ agent }: AgentCardProps) => {
     score,
   } = agent;
 
+  const safeAvg = Number.isFinite(averageRating)
+    ? (averageRating as number)
+    : 0;
+  const safeCount = Number.isFinite(reviewCount) ? (reviewCount as number) : 0;
+
   return (
     <div className={styles.container}>
       <Image
@@ -41,11 +46,9 @@ const AgentCard = ({ agent }: AgentCardProps) => {
           <span>
             <StarIcon width={16} height={16} />
           </span>
-          <span className={styles.review_score}>
-            {averageRating.toFixed(1)}
-          </span>
+          <span className={styles.review_score}>{safeAvg.toFixed(1)}</span>
           <span className={styles.review_count}>
-            {`(${reviewCount > 99 ? '99+' : reviewCount})`}
+            {`(${safeCount > 99 ? '99+' : safeCount})`}
           </span>
         </div>
       </div>

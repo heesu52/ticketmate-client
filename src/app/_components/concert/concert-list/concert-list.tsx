@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 
-import ConcertCard from '@/app/_components/concert/concert-card/concert-card';
 import { useGetConcertList } from '@/app/_shared/services/query';
 import { GetConcertListRequest } from '@/app/_shared/services/type';
+import ConcertCard from '@/shared/components/features/concert/concert-card/concert-card';
 import Select from '@/shared/components/ui/select/select';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
 

@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import queryKey from '@/app/@modal/(.)search/_shared/services/query-key';
-import { GetSearchRequest } from '@/app/@modal/(.)search/_shared/services/type';
 import RecentSearch from '@/app/search/_shared/components/recent-search/recent-search';
 import SearchBar from '@/app/search/_shared/components/search-bar/search-bar';
 import SearchTabManager from '@/app/search/_shared/components/search-tab/search-tab-manager';
+import queryKey from '@/app/search/_shared/services/query-key';
+import { GetSearchRequest } from '@/app/search/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 
 import styles from './page.module.scss';

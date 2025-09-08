@@ -3,7 +3,7 @@ import {
   GetConcertSearchResponse,
   GetAgentSearchResponse,
   GetRecentSearchResponse,
-} from '@/app/@modal/(.)search/_shared/services/type';
+} from '@/app/search/_shared/services/type';
 import instance from '@/shared/services/instance';
 import { createQueryParams } from '@/shared/utils/services/query-string';
 

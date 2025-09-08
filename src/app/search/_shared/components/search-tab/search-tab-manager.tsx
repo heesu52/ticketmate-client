@@ -2,12 +2,12 @@
 
 import { useMemo, useState } from 'react';
 
-import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
 import {
   useGetAgentSearchQuery,
   useGetConcertSearchQuery,
 } from '@/app/search/_shared/services/query';
 import { GetSearchRequest } from '@/app/search/_shared/services/type';
+import AgentCard from '@/shared/components/features/agent/agent-card/agent-card';
 import ConcertCard from '@/shared/components/features/concert/concert-card/concert-card';
 import TabButton from '@/shared/components/ui/tab/tab';
 import { TabItem } from '@/shared/components/ui/tab/tab.type';
@@ -154,7 +154,7 @@ export default function SearchTabManager({
                             : undefined
                         }
                       >
-                        <UserCard user={agent} />
+                        <AgentCard agent={agent} />
                       </div>
                     ))}
                   </div>

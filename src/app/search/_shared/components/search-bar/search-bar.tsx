@@ -33,6 +33,7 @@ export default function SearchBar({
         placeholder="검색어를 입력해주세요"
         value={inputMessage}
         onChange={(e) => setInputMessage(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
         iconProps={{ icon: <SearchIcon />, onIconClick: handleSubmit }}
       />
     </div>

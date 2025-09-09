@@ -1,0 +1,61 @@
+.container {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: var(--overlay-alpha);
+    transition: opacity 200ms ease;
+  }
+
+  .bottom_sheet_container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    will-change: transform;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.12);
+
+    border-radius: 24px 24px 0 0;
+
+    display: flex;
+    flex-direction: column;
+
+    &[data-dragging='true'] {
+      transition: none;
+    }
+
+    .tip_area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 24px; /* handleHeight와 매칭 */
+      cursor: grab;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: none; /* 터치 스크롤 끌리지 않게 */
+      padding: 12px 0 4px 0;
+
+      .tip_bar {
+        width: 57px;
+        height: 4px;
+        border-radius: 7px;
+        background: var(--grayscale-500, #767676);
+      }
+    }
+
+    .content {
+      -webkit-overflow-scrolling: touch;
+      padding: 16px 20px 40px 20px;
+    }
+  }
+}

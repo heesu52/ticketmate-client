@@ -12,10 +12,6 @@ export interface RadioOption {
    */
   label: string;
   /**
-   * 옵션이 선택되었는지 여부
-   */
-  checked?: boolean;
-  /**
    * 옵션이 비활성화되었는지 여부
    */
   disabled?: boolean;

@@ -1,9 +1,5 @@
 export interface RadioOption {
   /**
-   * 옵션의 고유 키
-   */
-  key: string;
-  /**
    * 옵션의 값
    */
   value: string;

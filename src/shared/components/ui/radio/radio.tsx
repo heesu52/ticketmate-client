@@ -19,10 +19,15 @@ import styles from './radio.module.scss';
 const cn = classNames.bind(styles);
 
 interface RadioGroupContextType {
+  /** 현재 선택된 라디오의 값 */
   value: string;
+  /** 라디오의 값을 설정하는 함수 */
   setValue: (v: string) => void;
+  /** 현재 선택된 input radio의 값 */
   inputValue: string; // 현재 선택된 input radio의 값
+  /** input radio의 값을 설정하는 함수 */
   setInputValue: (inputValue: string) => void;
+  /** 라디오의 이름(그룹) */
   name: string;
 }
 
@@ -37,11 +42,17 @@ export const useRadioGroup = () => {
 
 interface RadioGroupProps {
   children: ReactNode;
+  /** 라디오의 이름(그룹) */
   name: string;
+  /** 라디오의 라벨 */
   ariaLabel: string;
+  /** 현재 선택된 라디오의 값 */
   value: string;
+  /** 라디오의 값을 설정하는 함수 */
   onValueChange: (value: string) => void;
+  /** 현재 선택된 input radio의 값 */
   inputValue?: string;
+  /** input radio의 값을 설정하는 함수 */
   onInputChange?: (inputValue: string) => void;
 }
 
@@ -113,6 +124,7 @@ interface RadioProps {
   option: RadioOption;
 }
 
+/** 입력 가능한 라디오의 최대 길이 */
 const INPUT_MAX_LENGTH = 20;
 
 export const Radio = ({ option }: RadioProps) => {
@@ -123,7 +135,7 @@ export const Radio = ({ option }: RadioProps) => {
   const isSelected = value === option.value;
   const isInputType = option.type === 'input';
 
-  // ✅ 전 상태 기억해서 "선택 → 비선택" 전이 때만 초기화
+  // 전 상태 기억해서 "선택 → 비선택" 전이 때만 초기화
   const wasSelectedRef = useRef(isSelected);
   useEffect(() => {
     if (isInputType && wasSelectedRef.current && !isSelected) {
@@ -131,19 +143,26 @@ export const Radio = ({ option }: RadioProps) => {
       setInputValue('');
       setIsInputFocused(false);
     }
+
     wasSelectedRef.current = isSelected;
   }, [isSelected, isInputType, setInputValue]);
 
-  // input radio가 선택되었을 때 포커스 처리
-  useEffect(() => {
-    if (isInputType && isSelected) {
-      setTimeout(() => inputRef.current?.focus(), 0);
-    }
-  }, [isInputType, isSelected]);
+  // 입력 반영은 선택된 상태에서만
+  const handleInputChange = (value: string) => {
+    if (isSelected) setInputValue(value);
+  };
 
-  // ✅ 입력 반영은 선택된 상태에서만
-  const handleInputChange = (next: string) => {
-    if (isSelected) setInputValue(next);
+  const handleInputFocus = () => {
+    setIsInputFocused(true);
+    // 포커스 시 선택 보장
+    if (!isSelected) setValue(option.value);
+  };
+
+  // input radio가 선택되었을 때 포커스 처리
+  const handleClickRadio = () => {
+    if (isInputType) {
+      inputRef.current?.focus();
+    }
   };
 
   if (isInputType) {
@@ -152,6 +171,8 @@ export const Radio = ({ option }: RadioProps) => {
         className={cn('radio_item')}
         value={option.value}
         id={`${name}-${option.value}`}
+        onClick={handleClickRadio}
+        disabled={option.disabled}
       >
         <input
           className={cn('radio_input')}
@@ -160,16 +181,11 @@ export const Radio = ({ option }: RadioProps) => {
           type="text"
           value={isSelected ? inputValue : ''} // 비선택이면 화면도 비움
           onChange={(e) => handleInputChange(e.target.value)}
-          onFocus={() => {
-            setIsInputFocused(true);
-            // 포커스 시 선택 보장
-            if (!isSelected) setValue(option.value);
-          }}
+          onFocus={handleInputFocus}
           onBlur={() => setIsInputFocused(false)}
           placeholder={option.label}
           maxLength={INPUT_MAX_LENGTH}
           aria-label={option.label}
-          disabled={false} // 항상 입력 가능
         />
 
         {isInputFocused && isSelected && (

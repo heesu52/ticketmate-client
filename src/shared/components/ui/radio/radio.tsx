@@ -127,6 +127,33 @@ interface RadioProps {
 /** 입력 가능한 라디오의 최대 길이 */
 const INPUT_MAX_LENGTH = 20;
 
+/**
+ * 라디오 컴포넌트
+ * @description 라디오 컴포넌트는 라디오 그룹 내부에서 사용되어야 합니다.
+ *
+ * @example
+ * ```tsx
+ * const options = [
+ *  { value: 'option1', label: '옵션 1' },
+ *  { value: 'option2', label: '옵션 2' },
+ *  { value: 'option3', label: '기타', type: 'input' },
+ *  { value: 'option4', label: '기타', type: 'input', disabled: true },
+ * ];
+ *
+ * <RadioGroup
+ *  name="radioGroup"
+ *  ariaLabel="radioGroup"
+ *  value="option1"
+ *  onValueChange={(value) => console.log(value)}
+ *  inputValue="option1"
+ *  onInputChange={(value) => console.log(value)}
+ * >
+ * {options.map((option) => (
+ *  <Radio key={option.value} option={option} />
+ * ))}
+ * </RadioGroup>
+ * ```
+ */
 export const Radio = ({ option }: RadioProps) => {
   const { value, setValue, inputValue, setInputValue, name } = useRadioGroup();
   const inputRef = useRef<HTMLInputElement | null>(null);

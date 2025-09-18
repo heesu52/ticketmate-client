@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Badge from '@/shared/components/badge/badge';
+import Badge from '@/shared/components/ui/badge/badge';
 import {
   TICKET_SITE_URL_MAP,
   TICKET_SITE_LABEL_MAP,
@@ -52,6 +52,7 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
   return (
     <>
       <div className={styles.container}>
+        {/* 뒷배경 이미지 */}
         <div className={styles.background_container}>
           <Image
             className={styles.background_image}
@@ -61,7 +62,9 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
             unoptimized
           />
         </div>
-        <div className={styles.title_container}>
+
+        {/* 이미지~공연정보 */}
+        <div className={styles.info_container}>
           <Image
             className={styles.image}
             src={concertThumbnailUrl}
@@ -70,40 +73,43 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
             height={186}
             unoptimized
           />
-          <div className={styles.tag}>
+
+          {/* 태그 */}
+          <div className={styles.tag_container}>
             {preOpen && (
-              <Badge type="type-a">
+              <Badge variant="type-a">
                 선예매까지 {calculateDday(preOpen.openDate)}
               </Badge>
             )}
             {generalOpen && (
-              <Badge type="type-a">
+              <Badge variant="type-c">
                 일반예매까지 {calculateDday(generalOpen.openDate)}
               </Badge>
             )}
           </div>
 
+          {/* 제목 */}
           <div className={styles.title}>{concertName}</div>
-          <div className={styles.info_container}>
-            <div className={styles.detail_container}>
-              <div className={styles.detail}>
-                <span className={styles.category}>공연 일자</span>
-                <span className={styles.info}>
-                  {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
-                </span>
-              </div>
 
-              <div className={styles.detail}>
-                <span className={styles.category}>공연장</span>
-                <span className={styles.info}>{concertHallName}</span>
-              </div>
+          {/* 공연 상세정보 */}
+          <div className={styles.detail_container}>
+            <div className={styles.detail}>
+              <span className={styles.category}>공연일자</span>
+              <span className={styles.info}>
+                {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
+              </span>
+            </div>
 
-              <div className={styles.detail}>
-                <span className={styles.category}>예매처</span>
-                <Link className={styles.link} href={siteUrl}>
-                  {siteLabel}
-                </Link>
-              </div>
+            <div className={styles.detail}>
+              <span className={styles.category}>공연장</span>
+              <span className={styles.info}>{concertHallName}</span>
+            </div>
+
+            <div className={styles.detail}>
+              <span className={styles.category}>예매처</span>
+              <Link className={styles.info} href={siteUrl}>
+                {siteLabel}
+              </Link>
             </div>
           </div>
         </div>

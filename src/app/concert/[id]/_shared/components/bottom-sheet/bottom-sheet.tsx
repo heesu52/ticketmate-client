@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { useCheckDuplicateForm } from '@/app/concert/[id]/_shared/services/bottom-sheet/mutation';
 import { StarIcon } from '@/assets/icons';
-import Button from '@/shared/components/button/functional-button/functional-button';
+import Button from '@/shared/components/ui/button/button';
 import { Concert, TicketOpenType } from '@/shared/types';
 
 import styles from './bottom-sheet.module.scss';
@@ -120,28 +120,28 @@ const BottomSheet = ({
         <div className={styles.button_container}>
           {preOpen &&
             (isDuplicateMap.PRE_OPEN ? (
-              <Button size="large" variant="fill-disabled" onClick={onClose}>
-                신청된 요청입니다
+              <Button variant="fill" color="gray" onClick={onClose}>
+                신청된 예매
               </Button>
             ) : (
               <Link href={`/concert/form/${concertId}?ticketOpenType=PRE_OPEN`}>
-                <Button size="large" variant="fill" onClick={onClose}>
-                  선예매 요청하기
+                <Button variant="fill" onClick={onClose}>
+                  선예매 신청하기
                 </Button>
               </Link>
             ))}
 
           {generalOpen &&
             (isDuplicateMap.GENERAL_OPEN ? (
-              <Button size="large" variant="fill-disabled" onClick={onClose}>
-                신청된 요청입니다
+              <Button variant="fill" color="gray" onClick={onClose}>
+                신청된 예매
               </Button>
             ) : (
               <Link
                 href={`/concert/form/${concertId}?ticketOpenType=GENERAL_OPEN`}
               >
-                <Button size="large" variant="border" onClick={onClose}>
-                  일반예매 요청하기
+                <Button variant="outline" color="gray" onClick={onClose}>
+                  일반예매 신청하기
                 </Button>
               </Link>
             ))}

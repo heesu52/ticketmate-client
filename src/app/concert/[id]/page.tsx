@@ -4,18 +4,26 @@ import { use, useEffect, useState } from 'react';
 
 import { useInView } from 'react-intersection-observer';
 
-import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import BottomSheet from '@/app/concert/[id]/_shared/components/bottom-sheet/bottom-sheet';
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
 import UserCard from '@/app/concert/[id]/_shared/components/user-card/user-card';
-import UserSelect from '@/app/concert/[id]/_shared/components/user-select';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import { useGetUserListInfinite } from '@/app/concert/[id]/_shared/services/user-card/query';
 import { ShareIcon } from '@/assets/icons';
+import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Overlay from '@/shared/components/overlay/overlay';
+import Select from '@/shared/components/ui/select/select';
 import { useScroll } from '@/shared/hooks/use-scroll';
 
 import styles from './page.module.scss';
+
+const options = [
+  { value: 'TOTAL_SCORE', label: 'AI 추천순' },
+  { value: 'AVERAGE_RATING', label: '별점순' },
+  { value: 'REVIEW_COUNT', label: '후기 많은순' },
+  { value: 'FOLLOWER_COUNT', label: '팔로워 순' },
+  { value: 'RECENT_SUCCESS_COUNT', label: '최근 30일 성공 순' },
+];
 
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
@@ -26,7 +34,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
 
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
-  const [userListRequest, setUserListRequest] = useState({
+  const [request, setRequest] = useState({
     concertId: id,
     pageSize: 10,
     sortField: 'TOTAL_SCORE',
@@ -48,7 +56,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
 
   // 유저 리스트 무한 조회 (정렬 변경 시 자동으로 재요청됨)
   const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
-    useGetUserListInfinite(userListRequest);
+    useGetUserListInfinite(request);
 
   // 스크롤 하단에 도달 시 다음 페이지 요청
   useEffect(() => {
@@ -57,32 +65,21 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
 
   // 정렬 옵션 선택 시 userListRequest 갱신 및 페이지 초기화
   const handleSelect = (value: string) => {
-    setUserListRequest((prev) => ({
+    setRequest((prev) => ({
       ...prev,
       sortField: value,
     }));
   };
   const isScrolled = useScroll({ threshold: 247 - 56 });
   return (
-    <>
-      <AppBarSetter
-        hasBackground={isScrolled}
-        title="공연 상세 페이지"
-        action={
-          <button
-            onClick={() => {
-              alert('준비중인 기능입니다.');
-            }}
-          >
-            <ShareIcon
-              width={20}
-              height={20}
-              fill={isScrolled ? 'var(--textColor-main)' : 'var(--white)'}
-            />
-          </button>
-        }
-      />
-
+    <PageFrame
+      appBar={{
+        title: '공연 상세페이지',
+        showBack: true,
+        right: <ShareIcon />,
+      }}
+      bottomNav={false}
+    >
       <Overlay isOpen={isBottomSheetOpen} onClose={toggleBottomSheet} />
 
       <div className={styles.container}>
@@ -93,7 +90,12 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             <span className={styles.subtitle}>대리인</span>
 
             <div className={styles.select_container}>
-              <UserSelect onSelect={handleSelect} />
+              <Select
+                options={options}
+                value={request.sortField || ''}
+                onValueChange={(value: string) => handleSelect(value)}
+                variant="filter"
+              />
             </div>
           </div>
 
@@ -124,7 +126,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           agentId={selectedAgentId ?? ''}
         />
       </div>
-    </>
+    </PageFrame>
   );
 };
 

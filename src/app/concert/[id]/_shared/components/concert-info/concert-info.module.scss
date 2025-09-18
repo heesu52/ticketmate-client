@@ -27,13 +27,13 @@
     }
   }
 
-  .title_container {
+  .info_container {
     position: relative;
     width: 100%;
     margin-top: -123.5px;
     z-index: 5;
 
-    .tag {
+    .tag_container {
       display: flex;
       gap: 8px;
       margin-top: 24px;
@@ -41,48 +41,38 @@
 
     .title {
       @include title-md;
-      color: var(--textColor-main);
-      text-align: start;
+      color: var(--grayscale-700);
       margin-top: 8px;
     }
 
-    .info_container {
+    .detail_container {
       display: flex;
-      margin-top: 20px;
-      gap: 16px;
+      margin-top: 16px;
 
       .image {
         border-radius: 12px;
       }
 
-      .detail_container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .detail {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
         width: 100%;
-        gap: 8px;
+        gap: 12px;
+        @include text-md;
 
-        .detail {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-
-          @include title-sm;
-
-          .category {
-            color: var(--textColor-less);
-          }
-
-          .info {
-            color: var(--textColor-main);
-          }
+        .category {
+          flex: 1;
+          color: var(--grayscale-500);
         }
 
-        .link {
+        .info {
           display: flex;
-          color: var(--textColor-main);
-          text-decoration: underline;
+          justify-content: flex-start;
+          flex: 5;
+          color: var(--grayscale-700);
         }
       }
     }

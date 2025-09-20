@@ -43,10 +43,11 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
       bottomNav={false}
     >
       <Overlay isOpen={isBottomSheetOpen} onClose={toggleBottomSheet} />
-
       <div className={styles.container}>
+        {/* 공연정보 */}
         {concertItem && <ConcertInfo concertItem={concertItem} />}
 
+        {/* 대리인 리스트 */}
         <AgentList id={id} onAgentClick={handleAgentCardClick} />
 
         <BottomSheet

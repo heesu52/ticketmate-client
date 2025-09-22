@@ -2,12 +2,18 @@ export interface PerformanceDateInfo {
   performanceDate: string;
 }
 
-// YYYY-MM-DD로 변환
+// YY.MM.DD로 변환
 export const formatDate = (date: string | number | Date): string => {
   const d = new Date(date);
-  const formattedDate = d.toLocaleDateString('en-CA'); // YYYY-MM-DD
+
+  const year = String(d.getFullYear()).slice(2); // 뒤 2자리
+  const month = String(d.getMonth() + 1).padStart(2, '0'); // 01~12
+  const day = String(d.getDate()).padStart(2, '0'); // 01~31
+
+  const formattedDate = `${year}.${month}.${day}`;
   const dayName = ['일', '월', '화', '수', '목', '금', '토'][d.getDay()];
-  return `${formattedDate} (${dayName})`;
+
+  return `${formattedDate}(${dayName})`;
 };
 
 //Open 날짜를 기준으로 디데이 계산

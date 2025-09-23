@@ -26,7 +26,7 @@ const Checkbox = ({
         className={styles.checkbox_input}
         type="checkbox"
         id={id}
-        data-checked={checked}
+        checked={checked}
         disabled={disabled}
         {...props}
       />

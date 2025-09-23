@@ -94,6 +94,7 @@ const Select = ({
                   className={cn('select_item', {
                     active: option.value === value,
                   })}
+                  data-variant={variant}
                   disabled={option.disabled}
                 >
                   <RadixSelect.ItemText>{option.label}</RadixSelect.ItemText>

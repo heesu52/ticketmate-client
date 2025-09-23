@@ -12,9 +12,9 @@
   align-items: center;
 
   padding: 28px 20px;
-  border: none;
-  border-radius: 24px;
-  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--grayscale-300, #ededed);
+  background: var(--grayscale-100, #fff);
 
   &::backdrop {
     background: rgba(0, 0, 0, 0.6);

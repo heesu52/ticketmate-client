@@ -1,6 +1,8 @@
 @use '@/styles/index' as *;
 
 .container {
+  min-width: 353px;
+
   .modal_title {
     @include title-md;
     color: var(--grayscale-700, #222);
@@ -11,6 +13,7 @@
     @include text-sm;
     color: var(--grayscale-500, #767676);
     text-align: center;
+    white-space: pre-wrap;
   }
 
   .modal_actions {
@@ -19,5 +22,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 16px;
+
+    width: 100%;
   }
 }

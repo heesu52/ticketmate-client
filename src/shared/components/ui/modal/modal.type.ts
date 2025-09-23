@@ -1,8 +1,8 @@
 import { ComponentType } from 'react';
 
 export type ModalControl<TResult = unknown> = {
-  onResolve: (value: TResult) => void;
-  onReject: (reason?: unknown) => void;
+  onResolve?: (value: TResult) => void;
+  onReject?: (reason?: unknown) => void;
 };
 
 export type ModalComponent<

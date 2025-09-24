@@ -1,4 +1,4 @@
-import ModalProvider from '@/shared/components/modal/modal-provider';
+import ModalProvider from '@/shared/components/ui/modal/modal-provider';
 
 export default function StackModalProvider() {
   return (

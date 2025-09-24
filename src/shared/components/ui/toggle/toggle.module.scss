@@ -1,0 +1,48 @@
+@use '@/styles/index' as *;
+
+.toggle_root {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  width: 56px;
+  height: 32px;
+  padding: 6px;
+
+  border-radius: 999px;
+  background: var(--grayscale-300, #ededed);
+  transition: background-color 0.2s ease;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .toggle_thumb {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: var(--grayscale-100, #ffffff);
+    transition: transform 0.2s ease;
+  }
+
+  /* on 상태 */
+  &[data-state='on'] {
+    background: var(--primary-500, #ff6a6a);
+
+    .toggle_thumb {
+      transform: translateX(calc(56px - 20px - (6px * 2)));
+    }
+  }
+
+  &:disabled {
+    background: var(--grayscale-300, #ededed);
+
+    .toggle_thumb {
+      background: #fff;
+    }
+  }
+}

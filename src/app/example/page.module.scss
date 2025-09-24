@@ -1,3 +1,89 @@
 .button {
-  background-color: pink;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #2563eb;
+  }
+
+  &:active {
+    background-color: #1d4ed8;
+  }
+}
+
+.modalSection {
+  margin-bottom: 40px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+
+  h2 {
+    margin: 0 0 20px 0;
+    color: #111827;
+    font-size: 24px;
+    font-weight: 600;
+  }
+}
+
+.buttonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.statusSection {
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+
+  h3 {
+    margin: 0 0 12px 0;
+    color: #374151;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 8px 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+}
+
+.modalList {
+  margin-top: 12px;
+}
+
+.modalItem {
+  padding: 8px 12px;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: #374151;
+  font-family: monospace;
+}
+
+.otherSection {
+  margin-bottom: 40px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  h2 {
+    margin: 0 0 20px 0;
+    color: #111827;
+    font-size: 24px;
+    font-weight: 600;
+  }
 }

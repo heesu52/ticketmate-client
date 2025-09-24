@@ -26,7 +26,10 @@ const BottomSheet = ({
   agentId,
 }: BottomSheetProps) => {
   const { ticketOpenDateInfoResponseList } = concertItem ?? {};
-  const navigation = useNavigation<{ ticketOpenType: TicketOpenType }>();
+  const navigation = useNavigation<{
+    ticketOpenType: TicketOpenType;
+    isBankTransfer: boolean;
+  }>();
 
   //티켓 오픈 타입 별로 버튼 구분
   const preOpen = ticketOpenDateInfoResponseList?.find(
@@ -94,11 +97,14 @@ const BottomSheet = ({
   ]);
 
   // 버튼 클릭 시 navigate로 이동
-  const handleNavigate = (ticketOpenType: TicketOpenType) => {
+  const handleNavigate = (
+    ticketOpenType: TicketOpenType,
+    isBankTransfer: boolean,
+  ) => {
     onClose();
     navigation.navigate({
       pathname: `/concert/form/${concertId}`,
-      state: { ticketOpenType },
+      state: { ticketOpenType, isBankTransfer },
     });
   };
 
@@ -133,7 +139,12 @@ const BottomSheet = ({
                 신청된 예매
               </Button>
             ) : (
-              <Button variant="fill" onClick={() => handleNavigate('PRE_OPEN')}>
+              <Button
+                variant="fill"
+                onClick={() =>
+                  handleNavigate('PRE_OPEN', preOpen.isBankTransfer)
+                }
+              >
                 선예매 신청하기
               </Button>
             ))}
@@ -147,7 +158,9 @@ const BottomSheet = ({
               <Button
                 variant="outline"
                 color="gray"
-                onClick={() => handleNavigate('GENERAL_OPEN')}
+                onClick={() =>
+                  handleNavigate('GENERAL_OPEN', generalOpen.isBankTransfer)
+                }
               >
                 일반예매 신청하기
               </Button>

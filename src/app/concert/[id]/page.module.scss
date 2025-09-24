@@ -6,32 +6,6 @@
   justify-content: center;
   align-items: center;
 
-  .list_container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin-top: 41px;
-
-    .title_container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .select_container {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-
-        .drop {
-          @include text-sm;
-          color: var(--textColor-main);
-        }
-      }
-
-      .subtitle {
-        @include title-md;
-        color: var(--textColor-main);
-      }
-    }
-  }
+  width: 100%;
+  gap: 40px;
 }

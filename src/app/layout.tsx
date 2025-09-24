@@ -38,18 +38,13 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
-  modal,
 }: Readonly<{
   children: ReactNode;
-  modal?: ReactNode;
 }>) {
   return (
     <html lang="ko">
       <body className={pretendard.variable}>
-        <Provider>
-          {children}
-          {modal}
-        </Provider>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );

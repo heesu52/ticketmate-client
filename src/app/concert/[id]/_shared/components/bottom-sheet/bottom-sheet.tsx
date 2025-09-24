@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
-import Link from 'next/link';
-
 import { useCheckDuplicateForm } from '@/app/concert/[id]/_shared/services/bottom-sheet/mutation';
 import { StarIcon } from '@/assets/icons';
-import Button from '@/shared/components/button/functional-button/functional-button';
+import Button from '@/shared/components/ui/button/button';
+import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import { Concert, TicketOpenType } from '@/shared/types';
 
 import styles from './bottom-sheet.module.scss';
@@ -27,6 +26,7 @@ const BottomSheet = ({
   agentId,
 }: BottomSheetProps) => {
   const { ticketOpenDateInfoResponseList } = concertItem ?? {};
+  const navigation = useNavigation<{ ticketOpenType: TicketOpenType }>();
 
   //티켓 오픈 타입 별로 버튼 구분
   const preOpen = ticketOpenDateInfoResponseList?.find(
@@ -93,6 +93,15 @@ const BottomSheet = ({
     checkPreOpen,
   ]);
 
+  // 버튼 클릭 시 navigate로 이동
+  const handleNavigate = (ticketOpenType: TicketOpenType) => {
+    onClose();
+    navigation.navigate({
+      pathname: `/concert/form/${concertId}`,
+      state: { ticketOpenType },
+    });
+  };
+
   return (
     //bottom-sheet 전체 컨테이너
     <div className={`${styles.container} ${isOpen ? styles.open : ''}`}>
@@ -120,30 +129,28 @@ const BottomSheet = ({
         <div className={styles.button_container}>
           {preOpen &&
             (isDuplicateMap.PRE_OPEN ? (
-              <Button size="large" variant="fill-disabled" onClick={onClose}>
-                신청된 요청입니다
+              <Button variant="fill" color="gray" onClick={onClose}>
+                신청된 예매
               </Button>
             ) : (
-              <Link href={`/concert/form/${concertId}?ticketOpenType=PRE_OPEN`}>
-                <Button size="large" variant="fill" onClick={onClose}>
-                  선예매 요청하기
-                </Button>
-              </Link>
+              <Button variant="fill" onClick={() => handleNavigate('PRE_OPEN')}>
+                선예매 신청하기
+              </Button>
             ))}
 
           {generalOpen &&
             (isDuplicateMap.GENERAL_OPEN ? (
-              <Button size="large" variant="fill-disabled" onClick={onClose}>
-                신청된 요청입니다
+              <Button variant="fill" color="gray" onClick={onClose}>
+                신청된 예매
               </Button>
             ) : (
-              <Link
-                href={`/concert/form/${concertId}?ticketOpenType=GENERAL_OPEN`}
+              <Button
+                variant="outline"
+                color="gray"
+                onClick={() => handleNavigate('GENERAL_OPEN')}
               >
-                <Button size="large" variant="border" onClick={onClose}>
-                  일반예매 요청하기
-                </Button>
-              </Link>
+                일반예매 신청하기
+              </Button>
             ))}
         </div>
       </div>

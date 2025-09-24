@@ -31,3 +31,5 @@ export { default as CheckIcon } from './check.svg';
 export { default as ContentCopyIcon } from './content-copy.svg';
 export { default as UnlockIcon } from './unlock.svg';
 export { default as DateRangeIcon } from './date-range.svg';
+export { default as SettingIcon } from './setting.svg';
+export { default as ArrowRightIcon } from './arrow-right.svg';

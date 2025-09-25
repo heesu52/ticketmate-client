@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 
 import { useCheckDuplicateForm } from '@/app/concert/[id]/_shared/services/bottom-sheet/mutation';
 import { StarIcon } from '@/assets/icons';
+import CommonBottomSheet from '@/shared/components/ui/bottom-sheet/bottom-sheet';
 import Button from '@/shared/components/ui/button/button';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
-import { Concert, TicketOpenType } from '@/shared/types';
+import { AgentInfo, Concert, TicketOpenType } from '@/shared/types';
 
 import styles from './bottom-sheet.module.scss';
 
@@ -15,21 +16,23 @@ interface BottomSheetProps {
   isOpen: boolean;
   concertItem: Concert | undefined;
   concertId: string;
-  agentId: string;
+  agentInfo: AgentInfo;
 }
 
-const BottomSheet = ({
+const CustomBottomSheet = ({
   isOpen,
   onClose,
   concertItem,
   concertId,
-  agentId,
+  agentInfo,
 }: BottomSheetProps) => {
   const { ticketOpenDateInfoResponseList } = concertItem ?? {};
   const navigation = useNavigation<{
     ticketOpenType: TicketOpenType;
     isBankTransfer: boolean;
   }>();
+  const { agentId, nickname, introduction, averageRating, reviewCount } =
+    agentInfo;
 
   //티켓 오픈 타입 별로 버튼 구분
   const preOpen = ticketOpenDateInfoResponseList?.find(
@@ -60,11 +63,6 @@ const BottomSheet = ({
               ...prev,
               PRE_OPEN: res as boolean,
             })),
-          onError: () =>
-            setIsDuplicateMap((prev) => ({
-              ...prev,
-              PRE_OPEN: false,
-            })),
         },
       );
     }
@@ -77,11 +75,6 @@ const BottomSheet = ({
             setIsDuplicateMap((prev) => ({
               ...prev,
               GENERAL_OPEN: res as boolean,
-            })),
-          onError: () =>
-            setIsDuplicateMap((prev) => ({
-              ...prev,
-              GENERAL_OPEN: false,
             })),
         },
       );
@@ -109,26 +102,25 @@ const BottomSheet = ({
   };
 
   return (
-    //bottom-sheet 전체 컨테이너
-    <div className={`${styles.container} ${isOpen ? styles.open : ''}`}>
+    <CommonBottomSheet open={isOpen} onDismiss={onClose}>
       {/* bottom-sheet의 내부 콘텐츠 컨테이너 */}
       <div className={styles.content_container}>
-        <div className={styles.icon} onClick={onClose} />
-
         {/* 상단 컨테이너 */}
         <div className={styles.upper_container}>
           <span>프로필 보기</span>
           {/* 대리인 정보 컨테이너 */}
           <div className={styles.title_container}>
-            <span className={styles.title}>의문의 티켓터</span>
+            <span className={styles.title}>{nickname}</span>
             {/* 리뷰 컨테이너 */}
             <div className={styles.review_container}>
               <StarIcon width={20} height={20} />
-              <span className={styles.star}>4.6</span>
-              <span>(12)</span>
+              <span className={styles.star}>
+                {averageRating >= 99 ? `${averageRating}+` : averageRating}
+              </span>
+              <span>({reviewCount})</span>
             </div>
           </div>
-          <span className={styles.info}>한 줄 소개를 작성해주세요.</span>
+          <span className={styles.info}>{introduction}</span>
         </div>
 
         {/* 버튼 컨테이너 */}
@@ -167,8 +159,8 @@ const BottomSheet = ({
             ))}
         </div>
       </div>
-    </div>
+    </CommonBottomSheet>
   );
 };
 
-export default BottomSheet;
+export default CustomBottomSheet;

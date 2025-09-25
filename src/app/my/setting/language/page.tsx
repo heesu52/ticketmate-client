@@ -16,6 +16,7 @@ const LanguagePage = () => {
         title: '언어 설정',
         showBack: true,
       }}
+      bottomNav={false}
     >
       <div className={styles.container}>
         <RadioGroup

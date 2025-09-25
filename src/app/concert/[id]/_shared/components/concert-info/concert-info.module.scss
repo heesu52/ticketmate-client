@@ -1,6 +1,7 @@
 @use '@/styles/index' as *;
 
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -12,13 +13,10 @@
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
     width: 100%;
     height: 247px;
+    overflow: hidden;
     z-index: 1;
-    background-size: cover;
-    background-position: center;
-    overflow: hidden; //blur 밖으로 안나오도록 hidden 처리
 
     .background_image {
       width: 100%;
@@ -27,13 +25,20 @@
     }
   }
 
-  .title_container {
+  .info_container {
     position: relative;
     width: 100%;
     margin-top: -123.5px;
     z-index: 5;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
 
-    .tag {
+    .image {
+      border-radius: 12px;
+    }
+
+    .tag_container {
       display: flex;
       gap: 8px;
       margin-top: 24px;
@@ -41,48 +46,32 @@
 
     .title {
       @include title-md;
-      color: var(--textColor-main);
-      text-align: start;
+      color: var(--grayscale-700);
       margin-top: 8px;
     }
 
-    .info_container {
+    .detail_container {
       display: flex;
-      margin-top: 20px;
-      gap: 16px;
+      flex-direction: column;
+      margin-top: 16px;
+      gap: 4px;
 
-      .image {
-        border-radius: 12px;
-      }
-
-      .detail_container {
+      .detail {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
         width: 100%;
-        gap: 8px;
+        gap: 12px;
+        @include text-md;
 
-        .detail {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-
-          @include title-sm;
-
-          .category {
-            color: var(--textColor-less);
-          }
-
-          .info {
-            color: var(--textColor-main);
-          }
+        .category {
+          flex: 1;
+          color: var(--grayscale-500);
         }
 
-        .link {
+        .info {
           display: flex;
-          color: var(--textColor-main);
-          text-decoration: underline;
+          justify-content: flex-start;
+          flex: 5;
+          color: var(--grayscale-700);
         }
       }
     }

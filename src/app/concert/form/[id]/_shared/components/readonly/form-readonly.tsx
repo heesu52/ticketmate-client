@@ -1,6 +1,6 @@
-import FormSelect from '@/app/concert/form/[id]/_shared/components/select/form-select';
 import { HelpCircleIcon } from '@/assets/icons';
 import Input from '@/shared/components/input/input';
+import Select from '@/shared/components/ui/select/select';
 import { ConcertDateInfo, Form, TicketOpenDateInfo } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 import { getTicketOpenInfoByType } from '@/shared/utils/tickets';
@@ -61,14 +61,15 @@ export default function FormReadOnly({
         <span className={styles.span}>
           회차<span className={styles.asterisk}>*</span>
         </span>
-        <FormSelect selectList={dateList} value={performanceDate} disabled />
+
+        <Select options={dateList} value={performanceDate} variant="form" />
       </div>
 
       <div className={styles.form_container}>
         <span className={styles.span}>
           매수<span className={styles.asterisk}>*</span>
         </span>
-        <FormSelect selectList={countList} value={requestCount} disabled />
+        <Select options={countList} value={requestCount} variant="form" />
       </div>
 
       <div className={styles.form_container}>

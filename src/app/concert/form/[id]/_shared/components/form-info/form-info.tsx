@@ -13,8 +13,8 @@ import styles from './form-info.module.scss';
 
 interface ConcertInfoProps {
   concertItem: Concert;
-  ticketOpenType: TicketOpenType;
-  isBankTransfer: boolean;
+  ticketOpenType?: TicketOpenType | null;
+  isBankTransfer?: boolean | null;
 }
 
 const Form = ({
@@ -56,9 +56,11 @@ const Form = ({
             {ticketOpenType === 'GENERAL_OPEN' && (
               <Badge variant="type-c">일반예매</Badge>
             )}
-            <Badge variant="type-b">
-              {isBankTransfer ? '무통장 가능' : '무통장 불가능'}
-            </Badge>
+            {isBankTransfer != null && (
+              <Badge variant="type-b">
+                {isBankTransfer ? '무통장 가능' : '무통장 불가능'}
+              </Badge>
+            )}
           </>
         }
       />

@@ -37,43 +37,5 @@
     .image {
       border-radius: 12px;
     }
-
-    .tag_container {
-      display: flex;
-      gap: 8px;
-      margin-top: 24px;
-    }
-
-    .title {
-      @include title-md;
-      color: var(--grayscale-700);
-      margin-top: 8px;
-    }
-
-    .detail_container {
-      display: flex;
-      flex-direction: column;
-      margin-top: 16px;
-      gap: 4px;
-
-      .detail {
-        display: flex;
-        width: 100%;
-        gap: 12px;
-        @include text-md;
-
-        .category {
-          flex: 1;
-          color: var(--grayscale-500);
-        }
-
-        .info {
-          display: flex;
-          justify-content: flex-start;
-          flex: 5;
-          color: var(--grayscale-700);
-        }
-      }
-    }
   }
 }

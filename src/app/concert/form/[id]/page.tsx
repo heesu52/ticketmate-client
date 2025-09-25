@@ -4,7 +4,7 @@ import { use, useEffect, useMemo, useRef } from 'react';
 import { toast } from 'react-toastify';
 
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
-import Form from '@/app/concert/form/[id]/_shared/components/form/form';
+import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
 import FormModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
@@ -114,7 +114,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       <div className={styles.container}>
         {concertItem && (
           <>
-            <Form concertItem={concertItem} {...state} />
+            <FormInfo concertItem={concertItem} {...state} />
             <FormTabManager
               handleOpenModal={handleOpenModal}
               concertItem={concertItem} //새로운 신청폼 작성 시 공연정보

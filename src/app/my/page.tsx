@@ -1,12 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import {
-  SERVICE_INFO_ITEMS,
-  SETTING_ITEMS,
-} from '@/app/my/_shared/constants/menu-items';
-import { ArrowRightIcon, SettingIcon } from '@/assets/icons';
+import { SettingIcon } from '@/assets/icons';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
+import Button from '@/shared/components/ui/button/button';
 import Spacer from '@/shared/components/ui/spacer/spacer';
 
 import styles from './page.module.scss';
@@ -24,70 +21,42 @@ const MyPage = () => {
       }}
     >
       <div className={styles.container}>
-        <Link className={styles.profile_container} href="">
-          <div className={styles.info}>
+        <div className={styles.profile_container}>
+          <div className={styles.info_container}>
             <Image
-              src="https://picsum.photos/48/48"
+              className={styles.profile_image}
+              src="https://picsum.photos/81/81"
               alt="profile"
-              className={styles.image}
-              width={48}
-              height={48}
-              priority
+              width={81}
+              height={81}
             />
-            <span className={styles.nickname}>의뢰인 닉네임</span>
+
+            <div className={styles.info_content}>
+              <span className={styles.name}>홍길동</span>
+              <Spacer size={4} />
+              <span className={styles.introduction}>잘 부탁드립니다!!</span>
+              <Spacer size={15} />
+              <span className={styles.follow_container}>
+                <span className={styles.text}>팔로잉</span>
+                <span className={styles.count}>100</span>
+              </span>
+            </div>
           </div>
-
-          <ArrowRightIcon width={16} height={16} />
-        </Link>
-
-        <Spacer size={20} />
-
-        <div className={styles.info_container}>
-          <Link className={styles.item} href="">
-            <span className={styles.item_title}>성공 의뢰내역</span>
-            <span className={styles.item_count}>12</span>
-          </Link>
-          <Link className={styles.item} href="">
-            <span className={styles.item_title}>팔로잉</span>
-            <span className={styles.item_count}>34</span>
-          </Link>
+          <Button variant="outline" color="gray">
+            프로필 편집
+          </Button>
         </div>
 
         <Spacer size={40} />
 
-        <div className={styles.setting_container}>
-          <div className={styles.title}>설정</div>
-          <div className={styles.content}>
-            {SETTING_ITEMS.map((item) => (
-              <Link href={item.href} key={item.title} className={styles.item}>
-                <span className={styles.item_title}>{item.title}</span>
-                <ArrowRightIcon
-                  width={16}
-                  height={16}
-                  fill="var(--grayscale-700)"
-                />
-              </Link>
-            ))}
+        {/* <div className={styles.history_container}>
+          <div className={styles.title_container}>
+            <span className={styles.title}>최근 성공 신청내역</span>
+            <Link href="" className={styles.link}>
+              전체보기
+            </Link>
           </div>
-        </div>
-
-        <Spacer size={40} />
-
-        <div className={styles.setting_container}>
-          <div className={styles.title}>서비스 정보</div>
-          <div className={styles.content}>
-            {SERVICE_INFO_ITEMS.map((item) => (
-              <Link href={item.href} key={item.title} className={styles.item}>
-                <span className={styles.item_title}>{item.title}</span>
-                <ArrowRightIcon
-                  width={16}
-                  height={16}
-                  fill="var(--grayscale-700)"
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
+        </div> */}
       </div>
     </PageFrame>
   );

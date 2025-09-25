@@ -3,8 +3,8 @@
 import { use, useState } from 'react';
 
 import AgentList from '@/app/concert/[id]/_shared/components/agent-list/agent-list';
-import CustomBottomSheet from '@/app/concert/[id]/_shared/components/bottom-sheet/bottom-sheet';
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
+import CustomBottomSheet from '@/app/concert/[id]/_shared/components/custom-bottom-sheet/custom-bottom-sheet';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import { ShareIcon } from '@/assets/icons';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';

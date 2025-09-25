@@ -9,7 +9,7 @@ import Button from '@/shared/components/ui/button/button';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import { AgentInfo, Concert, TicketOpenType } from '@/shared/types';
 
-import styles from './bottom-sheet.module.scss';
+import styles from './custom-bottom-sheet.module.scss';
 
 interface BottomSheetProps {
   onClose: () => void;

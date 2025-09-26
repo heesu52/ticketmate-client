@@ -16,6 +16,7 @@ const SettingPage = () => {
         backHref: '/my',
         showBack: true,
       }}
+      bottomNav={false}
     >
       <div className={styles.container}>
         <div className={styles.setting_container}>

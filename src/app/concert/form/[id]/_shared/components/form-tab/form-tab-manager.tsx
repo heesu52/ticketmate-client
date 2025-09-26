@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
-import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
+import FormInput from '@/app/concert/form/[id]/_shared/components/form-input/form-input';
+import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
 import FormReadOnly from '@/app/concert/form/[id]/_shared/components/readonly/form-readonly';
 import {
   useCreateConcertForm,
@@ -11,9 +11,8 @@ import {
   CreateConcertFormRequest,
   PatchConcertFormRequest,
 } from '@/app/concert/form/[id]/_shared/services/type';
-import { PlusIcon, CloseIcon } from '@/assets/icons';
-import Button from '@/shared/components/button/functional-button/functional-button';
-import TabButton from '@/shared/components/button/tab-button/tab-button';
+import Button from '@/shared/components/ui/button/button';
+import Tab from '@/shared/components/ui/tab/tab';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
 import {
   TicketOpenType,
@@ -27,13 +26,14 @@ import styles from './form-tab-manager.module.scss';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;
-  ticketOpenType: TicketOpenType;
+  ticketOpenType?: TicketOpenType | null;
   concertId: string;
   onError: (message: string) => void;
   concertItem: Concert;
   formItem?: Form;
   status?: ApplicationFormStatus;
 }
+
 export default function FormTabManager({
   handleOpenModal,
   ticketOpenType,
@@ -204,9 +204,7 @@ export default function FormTabManager({
         onError: handleError,
       });
     } else if (mode === 'readApp') {
-      if (!formItem?.applicationFormId) {
-        return;
-      }
+      if (!formItem?.applicationFormId) return;
 
       const requestBody: PatchConcertFormRequest = {
         applicationFormId: formItem.applicationFormId,
@@ -222,98 +220,62 @@ export default function FormTabManager({
     }
   };
 
+  const tabItems = tabs.map((tabId) => ({
+    value: tabId.toString(),
+    label: getTabLabel(tabId),
+    content:
+      activeTab === tabId ? (
+        isEditing ? (
+          <FormInput
+            key={tabId}
+            value={formData[tabId]}
+            onChange={(data) => updateFormData(tabId, data)}
+            concertDateInfoResponseList={
+              concertItem.concertDateInfoResponseList
+            }
+            ticketOpenDateInfoResponseList={
+              concertItem.ticketOpenDateInfoResponseList
+            }
+            ticketOpenType={ticketOpenType}
+            formItem={formItem}
+            currentIndex={tabId - 1}
+            seatingChartUrl={concertItem.seatingChartUrl}
+          />
+        ) : formItem?.applicationFormDetailResponseList?.[tabId - 1] ? (
+          <FormReadOnly
+            key={tabId}
+            concertDateInfoResponseList={
+              concertItem.concertDateInfoResponseList
+            }
+            ticketOpenDateInfoResponseList={
+              concertItem.ticketOpenDateInfoResponseList
+            }
+            formItem={formItem}
+            currentIndex={tabId - 1}
+          />
+        ) : null
+      ) : null,
+  }));
+
   return (
     <div className={styles.container}>
-      <div className={styles.tab_container}>
-        {tabs.map((tabId) => (
-          <TabButton
-            key={tabId}
-            label={getTabLabel(tabId)}
-            isActive={activeTab === tabId}
-            onClick={() => setActiveTab(tabId)}
-            rightIcon={
-              isEditing ? (
-                <div
-                  className={styles.icon}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeTab(tabId);
-                  }}
-                >
-                  <CloseIcon width={16} height={16} />
-                </div>
-              ) : undefined
-            }
-          />
-        ))}
-        {isEditing && (
-          <TabButton
-            label="추가하기"
-            isActive={false}
-            onClick={addNewTab}
-            rightIcon={<PlusIcon width={16} height={16} />}
-          />
-        )}
-      </div>
+      <Tab
+        items={tabItems}
+        value={activeTab.toString()}
+        onValueChange={(val) => setActiveTab(Number(val))}
+        onAddTab={isEditing ? addNewTab : undefined}
+        onDeleteTab={isEditing ? (val) => removeTab(Number(val)) : undefined}
+        addTabButtonText="추가하기"
+      />
       <div className={styles.input_container}>
-        <div>
-          {tabs.map((tabId) =>
-            activeTab === tabId ? (
-              isEditing ? (
-                <FormInput
-                  key={tabId}
-                  value={formData[tabId]}
-                  onChange={(data) => updateFormData(tabId, data)}
-                  concertDateInfoResponseList={
-                    concertItem.concertDateInfoResponseList
-                  }
-                  ticketOpenDateInfoResponseList={
-                    concertItem.ticketOpenDateInfoResponseList
-                  }
-                  ticketOpenType={ticketOpenType}
-                  formItem={formItem}
-                  currentIndex={tabId - 1}
-                  seatingChartUrl={concertItem.seatingChartUrl}
-                />
-              ) : formItem?.applicationFormDetailResponseList?.[tabId - 1] ? (
-                <FormReadOnly
-                  key={tabId}
-                  concertDateInfoResponseList={
-                    concertItem.concertDateInfoResponseList
-                  }
-                  ticketOpenDateInfoResponseList={
-                    concertItem.ticketOpenDateInfoResponseList
-                  }
-                  formItem={formItem}
-                  currentIndex={tabId - 1}
-                />
-              ) : null
-            ) : null,
-          )}
-        </div>
-        {mode === 'input' && (
-          <Button
-            type="button"
-            size="large"
-            variant="fill"
-            onClick={handleSubmit}
-          >
-            신청하기
+        {tabItems.map((item) => item.content)}
+        {(mode === 'input' || (mode === 'readApp' && isEditing)) && (
+          <Button variant="fill" onClick={handleSubmit}>
+            {mode === 'input' ? '신청하기' : '재신청하기'}
           </Button>
         )}
-        {mode === 'readApp' && (
-          <Button
-            type="button"
-            size="large"
-            variant="fill"
-            onClick={() => {
-              if (isEditing) {
-                handleSubmit();
-              } else {
-                setIsEdit(true);
-              }
-            }}
-          >
+        {mode === 'readApp' && !isEditing && (
+          <Button variant="fill" onClick={() => setIsEdit(true)}>
             재신청하기
           </Button>
         )}

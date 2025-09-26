@@ -33,10 +33,11 @@ interface FormInputProps {
   onChange: (data: FormData) => void;
   concertDateInfoResponseList: ConcertDateInfo[];
   ticketOpenDateInfoResponseList: TicketOpenDateInfo[];
-  ticketOpenType: TicketOpenType;
+  ticketOpenType?: TicketOpenType | null;
   formItem?: Form;
   currentIndex: number;
   seatingChartUrl?: string;
+  disabled?: boolean;
 }
 
 export default function FormInput({
@@ -48,6 +49,7 @@ export default function FormInput({
   formItem,
   currentIndex,
   seatingChartUrl,
+  disabled,
 }: FormInputProps) {
   const firstDetail =
     formItem?.applicationFormDetailResponseList?.[currentIndex];
@@ -125,7 +127,6 @@ export default function FormInput({
   //티켓 오픈 타입 매칭
   const matchedOpenInfo = getTicketOpenInfoByType(
     ticketOpenDateInfoResponseList,
-    ticketOpenType,
   );
 
   // 최대 예매 매수 구하기
@@ -152,6 +153,7 @@ export default function FormInput({
           value={performanceDate}
           onValueChange={setPerformanceDate}
           variant="form"
+          disabled={disabled}
         />
       </div>
 
@@ -164,6 +166,7 @@ export default function FormInput({
           value={requestCount}
           onValueChange={setRequestCount}
           variant="form"
+          disabled={disabled}
         />
       </div>
 
@@ -186,8 +189,8 @@ export default function FormInput({
               onChange={(e) =>
                 handleInputChange(input.id, 'location', e.target.value)
               }
+              disabled={disabled}
             />
-
             {/* 가격 입력 */}
             <Input
               label="가격"
@@ -197,24 +200,26 @@ export default function FormInput({
               onChange={(e) =>
                 handleInputChange(input.id, 'price', e.target.value)
               }
+              disabled={disabled}
             />
-            {index === hopeAreaList.length - 1 ? (
-              <PlusIcon
-                width={20}
-                height={20}
-                fill="var(--grayscale-500)"
-                onClick={addInput}
-                style={{ cursor: 'pointer' }}
-              />
-            ) : (
-              <MinusIcon
-                width={20}
-                height={20}
-                fill="var(--grayscale-500)"
-                onClick={() => removeInput(input.id)}
-                style={{ cursor: 'pointer' }}
-              />
-            )}
+            {!disabled &&
+              (index === hopeAreaList.length - 1 ? (
+                <PlusIcon
+                  width={20}
+                  height={20}
+                  fill="var(--grayscale-500)"
+                  onClick={addInput}
+                  style={{ cursor: 'pointer' }}
+                />
+              ) : (
+                <MinusIcon
+                  width={20}
+                  height={20}
+                  fill="var(--grayscale-500)"
+                  onClick={() => removeInput(input.id)}
+                  style={{ cursor: 'pointer' }}
+                />
+              ))}
           </div>
         ))}
       </div>
@@ -252,6 +257,7 @@ export default function FormInput({
           placeholder="자유롭게 입력해주세요."
           value={requirement}
           onChange={(e) => setRequirement(e.target.value)}
+          disabled={disabled}
         />
       </div>
     </div>

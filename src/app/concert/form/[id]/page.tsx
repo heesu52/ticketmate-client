@@ -114,11 +114,16 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       <div className={styles.container}>
         {concertItem && (
           <>
-            <FormInfo concertItem={concertItem} {...state} />
+            {/* 공연 정보 */}
+            <div className={styles.forminfo_container}>
+              <FormInfo concertItem={concertItem} {...state} />
+            </div>
+
+            {/* 신청 폼 탭*/}
             <FormTabManager
               handleOpenModal={handleOpenModal}
               concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
-              formItem={formItem} //기존 신청폼 보여줄 시 공연데이터를 불러오기 위해 전달
+              formItem={formItem} //기존 신청폼 보여줄 시 공연데이터
               ticketOpenType={ticketOpenType}
               concertId={id}
               onError={handleError}

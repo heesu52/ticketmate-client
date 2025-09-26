@@ -1,5 +1,9 @@
-import { HelpCircleIcon } from '@/assets/icons';
-import Input from '@/shared/components/input/input';
+import { useState } from 'react';
+
+import classNames from 'classnames';
+
+import { ArrowBottomIcon, ArrowTopIcon } from '@/assets/icons';
+import Input from '@/shared/components/ui/input/input';
 import Select from '@/shared/components/ui/select/select';
 import { ConcertDateInfo, Form, TicketOpenDateInfo } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
@@ -17,6 +21,7 @@ interface FormReadOnlyProps {
   ticketOpenDateInfoResponseList: TicketOpenDateInfo[];
   formItem: Form;
   currentIndex: number;
+  seatingChartUrl?: string;
 }
 
 export default function FormReadOnly({
@@ -24,8 +29,11 @@ export default function FormReadOnly({
   ticketOpenDateInfoResponseList,
   formItem,
   currentIndex,
+  seatingChartUrl,
 }: FormReadOnlyProps) {
   const { ticketOpenType, applicationFormDetailResponseList } = formItem;
+
+  const [isOpen, setIsOpen] = useState(false);
 
   // 탭(index)에 해당하는 신청폼 상세 데이터 추출
   const detail = applicationFormDetailResponseList[currentIndex];
@@ -55,33 +63,47 @@ export default function FormReadOnly({
     label: `${i + 1}매`,
   }));
 
+  //좌석배치도 아코디언 ui
+  const toggleAccordion = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.form_container}>
-        <span className={styles.span}>
+      {/*회차/매수 선택 정보 */}
+      <div className={styles.select_container}>
+        <span className={styles.title}>
           회차<span className={styles.asterisk}>*</span>
         </span>
-
-        <Select options={dateList} value={performanceDate} variant="form" />
+        <Select
+          options={dateList}
+          value={performanceDate}
+          onValueChange={() => {}}
+          variant="form"
+          disabled
+        />
       </div>
 
-      <div className={styles.form_container}>
-        <span className={styles.span}>
+      <div className={styles.select_container}>
+        <span className={styles.title}>
           매수<span className={styles.asterisk}>*</span>
         </span>
-        <Select options={countList} value={requestCount} variant="form" />
+        <Select
+          options={countList}
+          value={requestCount}
+          onValueChange={() => {}}
+          variant="form"
+          disabled
+        />
       </div>
 
+      {/* 희망 구역 입력 정보 */}
       <div className={styles.form_container}>
         <div className={styles.guide_container}>
-          <span className={styles.span}>희망구역</span>
-          <div className={styles.guide}>
-            <HelpCircleIcon width={16} height={16} fill="var(--gray-4)" />
-            <span className={styles.span}>희망구역 작성 가이드</span>
-          </div>
+          <span className={styles.title}>희망구역</span>
+          <span className={styles.span}>작성 가이드</span>
         </div>
 
-        {/* 희망 구역 입력 정보 (순위별로 location, price 비활성화 input 표시) */}
         {hopeAreaList.map((input, index) => (
           <div key={index} className={styles.input_container}>
             <span className={styles.text}>{`${index + 1}순위`}</span>
@@ -103,8 +125,34 @@ export default function FormReadOnly({
         ))}
       </div>
 
+      {/* 좌석배치도*/}
+      {seatingChartUrl && (
+        <div className={styles.seat_container} onClick={toggleAccordion}>
+          <div className={classNames(styles.seat, { [styles.open]: isOpen })}>
+            <span className={styles.span}>공연장 좌석배치도 보기</span>
+            {isOpen ? (
+              <ArrowTopIcon width={16} height={16} fill="var(--primary-500)" />
+            ) : (
+              <ArrowBottomIcon width={16} height={16} fill="var(--gray-4)" />
+            )}
+          </div>
+          {isOpen && (
+            // 열람 확인을 위해 넣은거라 나중에 이미지 제대로 업로드 되면 삭제 예정
+            <div className={styles.example}>예시</div>
+            // <Image
+            //   src={seatingChartUrl}
+            //   alt="좌석배치도"
+            //   width={345}
+            //   height={0} // 또는 생략
+            //   style={{ width: '100%', height: 'auto', marginTop: '12px' }}
+            // />
+          )}
+        </div>
+      )}
+
+      {/* 요청사항 입력 */}
       <div className={styles.form_container}>
-        <span className={styles.span}>요청사항</span>
+        <span className={styles.title}>요청사항</span>
         <textarea
           className={styles.textarea}
           placeholder="자유롭게 입력해주세요."

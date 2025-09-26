@@ -52,7 +52,7 @@ const ConcertInfo = ({
 
         <div className={styles.detail}>
           <span className={styles.category}>예매처</span>
-          <Link className={styles.info} href={siteUrl}>
+          <Link className={styles.link} href={siteUrl}>
             {siteLabel}
           </Link>
         </div>

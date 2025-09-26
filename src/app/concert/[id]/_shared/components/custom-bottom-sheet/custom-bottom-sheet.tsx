@@ -34,6 +34,11 @@ const CustomBottomSheet = ({
   const { agentId, nickname, introduction, averageRating, reviewCount } =
     agentInfo;
 
+  const safeAvg = Number.isFinite(averageRating)
+    ? (averageRating as number)
+    : 0;
+  const safeCount = Number.isFinite(reviewCount) ? (reviewCount as number) : 0;
+
   //티켓 오픈 타입 별로 버튼 구분
   const preOpen = ticketOpenDateInfoResponseList?.find(
     (info) => info.ticketOpenType === 'PRE_OPEN',
@@ -113,14 +118,18 @@ const CustomBottomSheet = ({
             <span className={styles.title}>{nickname}</span>
             {/* 리뷰 컨테이너 */}
             <div className={styles.review_container}>
-              <StarIcon width={20} height={20} />
-              <span className={styles.star}>
-                {averageRating >= 99 ? `${averageRating}+` : averageRating}
+              <span>
+                <StarIcon width={20} height={20} />
               </span>
-              <span>({reviewCount})</span>
+              <span className={styles.review_score}>{safeAvg.toFixed(1)}</span>
+              <span className={styles.review_count}>
+                {`(${safeCount > 99 ? '99+' : safeCount})`}
+              </span>
             </div>
           </div>
-          <span className={styles.info}>{introduction}</span>
+          <span className={styles.info}>
+            {introduction || '한 줄 소개를 작성해주세요'}
+          </span>
         </div>
 
         {/* 버튼 컨테이너 */}

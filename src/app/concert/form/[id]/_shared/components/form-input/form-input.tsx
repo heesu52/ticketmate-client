@@ -200,17 +200,17 @@ export default function FormInput({
             />
             {index === hopeAreaList.length - 1 ? (
               <PlusIcon
-                width={16}
-                height={16}
-                fill="var(--gray-4)"
+                width={20}
+                height={20}
+                fill="var(--grayscale-500)"
                 onClick={addInput}
                 style={{ cursor: 'pointer' }}
               />
             ) : (
               <MinusIcon
-                width={16}
-                height={16}
-                fill="var(--gray-4)"
+                width={20}
+                height={20}
+                fill="var(--grayscale-500)"
                 onClick={() => removeInput(input.id)}
                 style={{ cursor: 'pointer' }}
               />

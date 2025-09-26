@@ -38,12 +38,19 @@
 
       .review_container {
         display: flex;
+        width: 72px;
+        justify-content: flex-end;
         align-items: center;
 
-        .star {
+        .review_score {
           @include text-lg;
-          color: var(--grayscale-700);
-          margin-right: 4px;
+          color: var(--grayscale-700, #222);
+        }
+
+        .review_count {
+          @include text-md;
+          color: var(--grayscale-500, #767676);
+          margin-left: 4px;
         }
       }
     }

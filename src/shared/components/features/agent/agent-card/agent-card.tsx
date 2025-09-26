@@ -17,7 +17,6 @@ const AgentCard = ({ agent }: AgentCardProps) => {
     introduction,
     averageRating,
     reviewCount,
-    score,
   } = agent;
 
   const safeAvg = Number.isFinite(averageRating)

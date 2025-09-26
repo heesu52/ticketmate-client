@@ -36,5 +36,14 @@
       flex: 5;
       color: var(--grayscale-700);
     }
+
+    .link {
+      display: flex;
+      justify-content: flex-start;
+      flex: 5;
+      color: var(--grayscale-700);
+      text-decoration-line: underline;
+      text-decoration-style: solid;
+    }
   }
 }

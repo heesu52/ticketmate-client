@@ -3,7 +3,8 @@
 .container {
   display: flex;
   padding: 16px 0;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
 
   &.align_left {
     gap: 12px;

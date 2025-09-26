@@ -1,21 +1,23 @@
-import Link from 'next/link';
-
-import { ArrowRightIcon } from '@/assets/icons';
+import SettingItem from '@/shared/components/features/my/setting-item/setting-item';
+import { SettingItem as SettingItemType } from '@/shared/components/features/my/setting-item/setting-item.type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 
 import styles from './page.module.scss';
 
 const AccountPage = () => {
-  const menuItems = [
+  const menuItems: SettingItemType[] = [
     {
       title: '로그아웃',
       href: '/my/setting/account',
+      type: 'link',
     },
     {
       title: '탈퇴하기',
-      href: '/my/setting/account/withdrawal',
+      href: '/my/setting/account/delete',
+      type: 'link',
     },
   ];
+
   return (
     <PageFrame
       appBar={{
@@ -25,18 +27,9 @@ const AccountPage = () => {
       bottomNav={false}
     >
       <div className={styles.container}>
-        {menuItems.map((item) => (
-          <Link href={item.href} key={item.title} className={styles.item}>
-            <span className={styles.item_title}>{item.title}</span>
-            <div className={styles.item_trailing_container}>
-              <ArrowRightIcon
-                width={12}
-                height={12}
-                fill="var(--grayscale-500)"
-              />
-            </div>
-          </Link>
-        ))}
+        {menuItems.map((item) => {
+          return <SettingItem key={item.title} {...item} />;
+        })}
       </div>
     </PageFrame>
   );

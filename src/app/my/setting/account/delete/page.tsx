@@ -84,6 +84,8 @@ const AccountDeletePage = () => {
           ))}
         </RadioGroup>
 
+        <Spacer size={40} />
+
         <Checkbox
           id="checkbox"
           label="계정을 탈퇴하면 의뢰내역, 팔로우한 대리인 등 모든 정보가 삭제됩니다. 계정 삭제 후 30일간 다시 가입할 수 없어요."

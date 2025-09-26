@@ -127,6 +127,7 @@ export default function FormInput({
   //티켓 오픈 타입 매칭
   const matchedOpenInfo = getTicketOpenInfoByType(
     ticketOpenDateInfoResponseList,
+    ticketOpenType,
   );
 
   // 최대 예매 매수 구하기

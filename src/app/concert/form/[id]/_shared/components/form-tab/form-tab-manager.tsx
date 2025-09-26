@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 
 import FormInput from '@/app/concert/form/[id]/_shared/components/form-input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
-import FormReadOnly from '@/app/concert/form/[id]/_shared/components/readonly/form-readonly';
 import {
   useCreateConcertForm,
   usePatchConcertForm,
@@ -21,6 +20,7 @@ import {
   Form,
 } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
+import { getErrorMessage } from '@/shared/utils/getErrorMessage';
 
 import styles from './form-tab-manager.module.scss';
 
@@ -170,8 +170,7 @@ export default function FormTabManager({
 
   const handleError = (error: unknown) => {
     const code = error instanceof Error ? error.message : undefined;
-    const message =
-      (code && ERROR_MESSAGES[code]) || '알 수 없는 오류가 발생했습니다.';
+    const message = getErrorMessage(code as keyof typeof ERROR_MESSAGES);
     onError(message);
   };
 
@@ -193,7 +192,7 @@ export default function FormTabManager({
 
     if (mode === 'input') {
       const requestBody: CreateConcertFormRequest = {
-        agentId: '26b4b337-2ce7-448c-89c7-d3ccec43e064',
+        agentId: 'ce942d97-8cda-4306-95f2-f93068cbe3c3',
         concertId,
         ticketOpenType,
         applicationFormDetailRequestList,
@@ -220,12 +219,16 @@ export default function FormTabManager({
     }
   };
 
-  const tabItems = tabs.map((tabId) => ({
-    value: tabId.toString(),
-    label: getTabLabel(tabId),
-    content:
-      activeTab === tabId ? (
-        isEditing ? (
+  const tabItems = tabs.map((tabId) => {
+    const currentData =
+      formData[tabId] ??
+      formItem?.applicationFormDetailResponseList?.[tabId - 1];
+
+    return {
+      value: tabId.toString(),
+      label: getTabLabel(tabId),
+      content:
+        activeTab === tabId && currentData ? (
           <FormInput
             key={tabId}
             value={formData[tabId]}
@@ -240,22 +243,11 @@ export default function FormTabManager({
             formItem={formItem}
             currentIndex={tabId - 1}
             seatingChartUrl={concertItem.seatingChartUrl}
+            disabled={!isEditing} // isEditing이 false면 readonly 모드, true면 input, edit 모드
           />
-        ) : formItem?.applicationFormDetailResponseList?.[tabId - 1] ? (
-          <FormReadOnly
-            key={tabId}
-            concertDateInfoResponseList={
-              concertItem.concertDateInfoResponseList
-            }
-            ticketOpenDateInfoResponseList={
-              concertItem.ticketOpenDateInfoResponseList
-            }
-            formItem={formItem}
-            currentIndex={tabId - 1}
-          />
-        ) : null
-      ) : null,
-  }));
+        ) : null,
+    };
+  });
 
   return (
     <div className={styles.container}>

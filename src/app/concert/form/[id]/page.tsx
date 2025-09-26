@@ -28,9 +28,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   }>();
 
   const ticketOpenType = state?.ticketOpenType;
-  const isBankTransfer = state?.isBankTransfer;
 
-  console.log(state);
   // status는 여전히 쿼리 파라미터 기반으로 사용
   const status = searchParams.get('status') as ApplicationFormStatus | null;
 
@@ -49,19 +47,20 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   );
 
   // 기존 신청폼이면 formItem.concertInfoResponse, 아니면 API 결과 사용
-  const concertItem = useMemo(() => {
-    if (isApplicationFormPage) {
-      return formItem?.concertInfoResponse ?? null;
-    }
-    return fetchedConcertItem ?? null;
-  }, [isApplicationFormPage, formItem, fetchedConcertItem]);
+  const concertItem = useMemo(
+    () =>
+      isApplicationFormPage
+        ? (formItem?.concertInfoResponse ?? null)
+        : (fetchedConcertItem ?? null),
+    [isApplicationFormPage, formItem, fetchedConcertItem],
+  );
 
   const handleOpenModal = () => {
     open({
       id: 'form-modal',
       content: (
         <FormModal
-          title="일반예매 신청이 완료되었습니다."
+          title="티켓팅 의뢰를 신청하시겠어요?"
           message={`대리인이 수락하게 되면 매칭이 완료됩니다.\n매칭이 완료되면 채팅을 통해 이야기를 나눠보세요.`}
           onConfirm={async () => {
             await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -93,13 +92,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   }, [status]);
 
   // 에러 발생 시 백엔드 에러 내용 필터링하여 토스트 알림
-  const handleError = () => {
+  const handleError = (message: string) => {
     toast((props) => (
-      <Toast
-        {...props}
-        variant="error"
-        description="에러가 발생했습니다. 다시 시도해주세요"
-      />
+      <Toast {...props} variant="error" description={message} />
     ));
   };
 

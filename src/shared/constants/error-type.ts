@@ -42,7 +42,7 @@ export const ERROR_MESSAGES: Record<string, string> = {
   APPLICATION_FORM_NOT_FOUND: '해당 신청서를 찾을 수 없습니다.',
   HOPE_AREAS_SIZE_EXCEED: '희망 구역은 최대 10개까지만 등록할 수 있습니다.',
   PRIORITY_ALREADY_EXISTS: '이미 설정된 우선순위입니다.',
-  DUPLICATE_APPLICATION_FROM_REQUEST: '중복된 신청서 요청입니다.',
+  DUPLICATE_APPLICATION_FROM_REQUEST: '이미 작성된 신청서입니다.',
   ALREADY_APPROVED_APPLICATION_FROM: '이미 승인된 신청서입니다.',
   INVALID_APPLICATION_FORM_STATUS: '신청서를 다시 작성해주세요.',
   APPLICATION_FORM_DETAIL_REQUIRED:

@@ -13,7 +13,6 @@ const SettingItem = ({
   description,
   trailing,
   href,
-  onClick,
   disabled = false,
   type = 'link',
   trailingIcon,
@@ -46,12 +45,7 @@ const SettingItem = ({
   // 클릭 액션(버튼) 항목
   if (type === 'action') {
     return (
-      <button
-        type="button"
-        className={styles.item}
-        onClick={onClick}
-        disabled={disabled}
-      >
+      <div className={styles.item} aria-disabled={disabled}>
         <div className={styles.title_container}>
           <span className={styles.item_title}>{title}</span>
           {description && (
@@ -59,7 +53,7 @@ const SettingItem = ({
           )}
         </div>
         {Trailing}
-      </button>
+      </div>
     );
   }
 

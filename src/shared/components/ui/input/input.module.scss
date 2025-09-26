@@ -1,7 +1,6 @@
 @use '@/styles/index' as *;
 
 .container {
-  @include text-md;
   width: 100%;
   height: 100%;
 
@@ -15,6 +14,7 @@
     align-items: center;
 
     input {
+      @include text-md;
       display: flex;
       padding: 16px;
       align-items: center;
@@ -41,6 +41,7 @@
       }
 
       &::placeholder {
+        // @include text-md;
         overflow: hidden;
         color: var(--grayscale-500, #767676);
         text-overflow: ellipsis;

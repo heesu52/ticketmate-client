@@ -5,6 +5,7 @@
   flex-direction: column;
   justify-content: center;
   height: 100%;
+  padding: 0 24px;
 
   .title_container {
     display: flex;
@@ -13,17 +14,53 @@
     gap: 4px;
 
     .title {
-      @include Heading-01;
+      @include title-lg;
+      color: var(--grayscale-700, #222);
+      text-align: center;
     }
 
     .sub_title {
-      @include Paragraph-01;
-      color: var(--gray-4);
+      @include text-md;
+      color: var(--grayscale-500, #767676);
+      text-align: center;
     }
   }
 
   .social_container {
-    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 12px;
+
+    .social_button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      border-radius: 8px;
+      padding: 12px 24px;
+
+      &.naver {
+        background-color: #03c75a;
+      }
+
+      &.kakao {
+        background: #fee500;
+      }
+
+      .social_text {
+        @include Heading-04;
+
+        &.naver {
+          color: var(--white);
+        }
+
+        &.kakao {
+          color: rgba(0, 0, 0, 0.85);
+        }
+      }
+    }
   }
 
   .etc_container {
@@ -31,17 +68,10 @@
     text-align: center;
 
     .look_around {
-      @include Paragraph-02;
-      text-decoration: underline;
+      @include text-md;
+      text-decoration: none;
 
-      color: var(--gray-4);
-
-      text-decoration-line: underline;
-      text-decoration-style: solid;
-      text-decoration-skip-ink: auto;
-      text-decoration-thickness: auto;
-      text-underline-offset: auto;
-      text-underline-position: from-font;
+      color: var(--grayscale-500, #767676);
     }
   }
 }

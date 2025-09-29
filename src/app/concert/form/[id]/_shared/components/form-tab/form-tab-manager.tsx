@@ -178,16 +178,26 @@ export default function FormTabManager({
   const handleSubmit = () => {
     // formData의 모든 탭 데이터를 배열로 변환
     const applicationFormDetailRequestList = Object.values(formData).map(
-      (currentFormData) => ({
-        performanceDate: currentFormData.performanceDate,
-        requestCount: Number(currentFormData.requestCount),
-        hopeAreaList: currentFormData.hopeAreaList.map((item, index) => ({
-          priority: index + 1,
-          location: item.location,
-          price: Number(item.price),
-        })),
-        requestDetails: currentFormData.requirement,
-      }),
+      (currentFormData) => {
+        // location과 price가 둘 다 비어있으면 제외
+        const filteredHopeArea = currentFormData.hopeAreaList?.filter(
+          (item) => item.location.trim() || item.price.trim(),
+        );
+
+        return {
+          performanceDate: currentFormData.performanceDate,
+          requestCount: Number(currentFormData.requestCount),
+          hopeAreaList:
+            filteredHopeArea && filteredHopeArea.length > 0
+              ? filteredHopeArea.map((item, index) => ({
+                  priority: index + 1,
+                  location: item.location,
+                  price: Number(item.price),
+                }))
+              : undefined, // 값이 없으면 undefined로 보내서 제외
+          requestDetails: currentFormData.requirement,
+        };
+      },
     );
 
     if (mode === 'input') {

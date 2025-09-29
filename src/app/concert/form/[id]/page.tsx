@@ -56,6 +56,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   );
 
   const handleOpenModal = () => {
+    console.log('handleOpenModal 호출됨');
     open({
       id: 'form-modal',
       content: (

@@ -26,8 +26,9 @@ import styles from './form-tab-manager.module.scss';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;
-  ticketOpenType?: TicketOpenType | null;
+  ticketOpenType: TicketOpenType;
   concertId: string;
+  agentId: string;
   onError: (message: string) => void;
   concertItem: Concert;
   formItem?: Form;
@@ -37,6 +38,7 @@ interface FormTabManagerProps {
 export default function FormTabManager({
   handleOpenModal,
   ticketOpenType,
+  agentId,
   concertId,
   onError,
   concertItem,
@@ -68,7 +70,7 @@ export default function FormTabManager({
     1: {
       performanceDate: '',
       requestCount: '',
-      hopeAreaList: [{ id: 1, location: '', price: '' }],
+      hopeAreaList: undefined,
       requirement: '',
     },
   });
@@ -202,7 +204,7 @@ export default function FormTabManager({
 
     if (mode === 'input') {
       const requestBody: CreateConcertFormRequest = {
-        agentId: 'ce942d97-8cda-4306-95f2-f93068cbe3c3',
+        agentId,
         concertId,
         ticketOpenType,
         applicationFormDetailRequestList,

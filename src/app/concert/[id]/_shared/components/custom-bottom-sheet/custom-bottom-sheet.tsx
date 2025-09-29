@@ -30,6 +30,7 @@ const CustomBottomSheet = ({
   const navigation = useNavigation<{
     ticketOpenType: TicketOpenType;
     isBankTransfer: boolean;
+    agentId: string;
   }>();
   const { agentId, nickname, introduction, averageRating, reviewCount } =
     agentInfo;
@@ -53,46 +54,27 @@ const CustomBottomSheet = ({
   >({ PRE_OPEN: false, GENERAL_OPEN: false });
 
   //선예매/일반예매를 분리해서 중복확인
-  const { mutate: checkPreOpen } = useCheckDuplicateForm();
-  const { mutate: checkGeneralOpen } = useCheckDuplicateForm();
+  const { mutate: checkDuplicate } = useCheckDuplicateForm();
 
   useEffect(() => {
     if (!isOpen || !agentId || !concertId) return;
 
-    if (preOpen) {
-      checkPreOpen(
-        { agentId, concertId, ticketOpenType: 'PRE_OPEN' },
+    const check = (ticketOpenType: TicketOpenType) => {
+      checkDuplicate(
+        { agentId, concertId, ticketOpenType },
         {
           onSuccess: (res) =>
             setIsDuplicateMap((prev) => ({
               ...prev,
-              PRE_OPEN: res as boolean,
+              [ticketOpenType]: res as boolean,
             })),
         },
       );
-    }
+    };
 
-    if (generalOpen) {
-      checkGeneralOpen(
-        { agentId, concertId, ticketOpenType: 'GENERAL_OPEN' },
-        {
-          onSuccess: (res) =>
-            setIsDuplicateMap((prev) => ({
-              ...prev,
-              GENERAL_OPEN: res as boolean,
-            })),
-        },
-      );
-    }
-  }, [
-    isOpen,
-    agentId,
-    concertId,
-    preOpen,
-    generalOpen,
-    checkGeneralOpen,
-    checkPreOpen,
-  ]);
+    if (preOpen) check('PRE_OPEN');
+    if (generalOpen) check('GENERAL_OPEN');
+  }, [isOpen, agentId, concertId, preOpen, generalOpen]);
 
   // 버튼 클릭 시 navigate로 이동
   const handleNavigate = (
@@ -102,7 +84,7 @@ const CustomBottomSheet = ({
     onClose();
     navigation.navigate({
       pathname: `/concert/form/${concertId}`,
-      state: { ticketOpenType, isBankTransfer },
+      state: { ticketOpenType, isBankTransfer, agentId },
     });
   };
 

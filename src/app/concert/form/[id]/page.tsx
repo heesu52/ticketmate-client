@@ -27,9 +27,12 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { state, searchParams } = useLocation<{
     ticketOpenType: TicketOpenType;
     isBankTransfer: boolean;
+    agentId: string;
   }>();
 
-  const ticketOpenType = state?.ticketOpenType;
+  // undefined일 경우 기본값을 지정했는데 상의 필요
+  const ticketOpenType = state?.ticketOpenType ?? 'GENERAL_OPEN';
+  const agentId = state?.agentId ?? 'unknown';
 
   // status는 여전히 쿼리 파라미터 기반으로 사용
   const status = searchParams.get('status') as ApplicationFormStatus | null;
@@ -116,6 +119,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
               formItem={formItem} //기존 신청폼 보여줄 시 공연데이터
               ticketOpenType={ticketOpenType}
               concertId={id}
+              agentId={agentId}
               onError={handleError}
               status={status ?? undefined} //분기처리를 위해 전달
             />

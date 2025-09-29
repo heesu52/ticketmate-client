@@ -1,15 +1,16 @@
 'use client';
 import { use, useEffect, useMemo, useRef } from 'react';
 
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
+import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-confirm-modal/form-confirm-modal';
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
-import FormModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
-import { useModal } from '@/shared/components/modal/use-modal';
+import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import Toast from '@/shared/components/ui/toast/toast';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
 import { TicketOpenType, ApplicationFormStatus } from '@/shared/types';
@@ -19,7 +20,8 @@ import styles from './page.module.scss';
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const { id } = resolvedParams;
-  const { open, closeTop } = useModal();
+  const router = useRouter();
+  const { open } = useModalStore();
 
   // useLocation으로 navigate에서 넘어온 state 받기
   const { state, searchParams } = useLocation<{
@@ -55,25 +57,16 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     [isApplicationFormPage, formItem, fetchedConcertItem],
   );
 
-  const handleOpenModal = () => {
-    console.log('handleOpenModal 호출됨');
-    open({
-      id: 'form-modal',
-      content: (
-        <FormModal
-          title="티켓팅 의뢰를 신청하시겠어요?"
-          message={`대리인이 수락하게 되면 매칭이 완료됩니다.\n매칭이 완료되면 채팅을 통해 이야기를 나눠보세요.`}
-          onConfirm={async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            closeTop();
-          }}
-          onCancel={() => {
-            closeTop();
-          }}
-          concertId={id}
-        />
-      ),
-    });
+  const handleOpenModal = async () => {
+    try {
+      const result = await open('form-confirm-modal', FormConfirmModal);
+
+      if (result) {
+        router.push('/history');
+      }
+    } catch (error) {
+      router.push(`/concert/${id}`);
+    }
   };
 
   //useRef로 중복 확인 후 토스트 알림 한번만 뜨도록 설정
@@ -108,6 +101,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       bottomNav={false}
     >
       <div className={styles.container}>
+        <button onClick={handleOpenModal}>모달 테스트</button>
         {concertItem && (
           <>
             {/* 공연 정보 */}

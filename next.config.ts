@@ -21,6 +21,9 @@ const nextConfig: NextConfig = {
       'ticketmate-storage.s3.ap-northeast-2.amazonaws.com',
     ],
   },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
 };
 
 export default nextConfig;

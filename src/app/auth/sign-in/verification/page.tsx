@@ -27,26 +27,23 @@ const VerificationPage = () => {
         <Spacer size={16} />
 
         <div className={styles.description}>
-          본 서비스는 안전한 거래를 위해 휴대전화를 통한 본인인증을
-          진행하고있습니다.
+          본 서비스는 안전한 거래를 위해
+          <br />
+          휴대전화를 통한 본인인증을 진행하고있습니다.
           <br />
           <br />
           관련 정보는 본인인증 외 사용되지 않습니다.
         </div>
+
         <div className={styles.input_container}>
-          <div className={styles.phone_number_container}>
-            <Input
-              placeholder="- 없이 입력해주세요."
-              id="phoneNumber"
-              label="휴대전화번호"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              style={{ width: '100%' }}
-            />
-            <Button variant="outline" color="gray">
-              인증번호 발송
-            </Button>
-          </div>
+          <Input
+            placeholder="- 없이 입력해주세요."
+            id="phoneNumber"
+            label="휴대전화번호"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            style={{ width: '100%' }}
+          />
 
           <Input
             placeholder="인증번호 입력해주세요."
@@ -59,7 +56,14 @@ const VerificationPage = () => {
 
         <Spacer size={20} />
 
-        <Button variant="fill">인증하기</Button>
+        <div className={styles.button_container}>
+          <Button variant="outline" color="gray">
+            인증번호 발송
+          </Button>
+          <Button variant="fill" disabled={!phoneNumber || !verificationCode}>
+            인증하기
+          </Button>
+        </div>
       </div>
     </PageFrame>
   );

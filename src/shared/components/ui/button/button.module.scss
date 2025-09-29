@@ -19,7 +19,7 @@
     background: var(--primary-500, #ff6a6a);
 
     @media (hover: hover) {
-      &:hover {
+      &:not(:disabled):hover {
         border: 1px solid var(--primary-600, #e55656);
         background: var(--primary-600, #e55656);
       }
@@ -33,7 +33,7 @@
     background: var(--grayscale-200, #fafafa);
 
     @media (hover: hover) {
-      &:hover {
+      &:not(:disabled):hover {
         border: 1px solid var(--grayscale-300, #ededed);
         background: var(--grayscale-300, #ededed);
       }
@@ -56,7 +56,7 @@
     background: var(--grayscale-100, #fff);
 
     @media (hover: hover) {
-      &:hover {
+      &:not(:disabled):hover {
         color: var(--primary-500, #ff6a6a);
 
         border: 1px solid var(--primary-400, #ff8989);
@@ -72,7 +72,7 @@
     background: var(--grayscale-100, #fff);
 
     @media (hover: hover) {
-      &:hover {
+      &:not(:disabled):hover {
         color: var(--grayscale-700, #222);
 
         border: 1px solid var(--grayscale-400, #ccc);

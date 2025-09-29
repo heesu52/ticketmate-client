@@ -1,0 +1,64 @@
+@use '@/styles/index' as *;
+
+.container {
+  padding: 20px;
+
+  .content_container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .title_container {
+      .title {
+        @include title-sm;
+        color: var(--grayscale-700, #222);
+
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        .accent {
+          @include title-sm;
+          color: var(--primary-500, #ff6a6a);
+        }
+      }
+
+      .description {
+        @include text-sm;
+        color: var(--grayscale-500, #767676);
+      }
+    }
+
+    .uploaded_images_container {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+
+      overflow: hidden;
+      overflow-x: auto;
+    }
+
+    .sns_url_container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+
+      .input_row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+
+        .action_button {
+          height: 100%;
+
+          &:disabled {
+            visibility: hidden;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}

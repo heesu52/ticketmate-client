@@ -1,0 +1,26 @@
+.container {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  height: fit-content;
+
+  .close_button {
+    position: absolute;
+    padding: 8px;
+    top: 0;
+    right: 0;
+    z-index: 1;
+
+    cursor: pointer;
+  }
+
+  .image_container {
+    border-radius: 8px;
+    overflow: hidden;
+
+    .image {
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  }
+}

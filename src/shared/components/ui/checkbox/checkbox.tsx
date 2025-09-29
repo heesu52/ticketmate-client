@@ -7,6 +7,7 @@ interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   checked: boolean;
   disabled?: boolean;
+  align?: 'left' | 'right';
 }
 
 const Checkbox = ({
@@ -14,22 +15,40 @@ const Checkbox = ({
   label,
   checked,
   disabled,
+  align = 'left',
   ...props
 }: CheckboxProps) => {
   return (
-    <div className={styles.container}>
-      <label className={styles.checkbox_label} htmlFor={id}>
-        {label}
-      </label>
-
-      <input
-        className={styles.checkbox_input}
-        type="checkbox"
-        id={id}
-        checked={checked}
-        disabled={disabled}
-        {...props}
-      />
+    <div className={`${styles.container} ${styles[`align_${align}`]}`}>
+      {align === 'left' ? (
+        <>
+          <input
+            className={styles.checkbox_input}
+            type="checkbox"
+            id={id}
+            checked={checked}
+            disabled={disabled}
+            {...props}
+          />
+          <label className={styles.checkbox_label} htmlFor={id}>
+            {label}
+          </label>
+        </>
+      ) : (
+        <>
+          <label className={styles.checkbox_label} htmlFor={id}>
+            {label}
+          </label>
+          <input
+            className={styles.checkbox_input}
+            type="checkbox"
+            id={id}
+            checked={checked}
+            disabled={disabled}
+            {...props}
+          />
+        </>
+      )}
     </div>
   );
 };

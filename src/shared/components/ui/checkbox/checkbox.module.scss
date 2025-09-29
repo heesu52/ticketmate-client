@@ -3,14 +3,24 @@
 .container {
   display: flex;
   padding: 16px 0;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
+
+  &.align_left {
+    gap: 12px;
+  }
+
+  &.align_right {
+    justify-content: space-between;
+    gap: 12px;
+  }
 
   .checkbox_label {
     @include text-md;
     overflow: hidden;
     color: var(--grayscale-700, #222);
     text-overflow: ellipsis;
+    flex: 1;
   }
 
   .checkbox_input {

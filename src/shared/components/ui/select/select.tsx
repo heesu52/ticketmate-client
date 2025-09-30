@@ -95,6 +95,7 @@ const Select = ({
                     active: option.value === value,
                   })}
                   data-variant={variant}
+                  data-tone={option.tone ?? 'neutral'}
                   disabled={option.disabled}
                 >
                   <RadixSelect.ItemText>{option.label}</RadixSelect.ItemText>

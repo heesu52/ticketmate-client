@@ -30,7 +30,6 @@ const CustomBottomSheet = ({
   const navigation = useNavigation<{
     ticketOpenType: TicketOpenType;
     isBankTransfer: boolean;
-    agentId: string;
   }>();
   const { agentId, nickname, introduction, averageRating, reviewCount } =
     agentInfo;
@@ -83,8 +82,8 @@ const CustomBottomSheet = ({
   ) => {
     onClose();
     navigation.navigate({
-      pathname: `/concert/form/${concertId}`,
-      state: { ticketOpenType, isBankTransfer, agentId },
+      pathname: `/concert/form/${concertId}?agentId=${agentId}`,
+      state: { ticketOpenType, isBankTransfer },
     });
   };
 

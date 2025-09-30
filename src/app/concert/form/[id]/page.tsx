@@ -17,29 +17,36 @@ import { TicketOpenType, ApplicationFormStatus } from '@/shared/types';
 
 import styles from './page.module.scss';
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
+export default function Page({
+  params,
+  searchParams: searchParamsProps,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ agentId: string; status?: string }>;
+}) {
   const resolvedParams = use(params);
-  const { id } = resolvedParams;
+  const { id: concertId } = resolvedParams;
+  const resolvedSearchParams = use(searchParamsProps);
+  const { agentId, status: statusProp } = resolvedSearchParams;
+
   const router = useRouter();
   const { open } = useModalStore();
 
   // useLocation으로 navigate에서 넘어온 state 받기
-  const { state, searchParams } = useLocation<{
+  const { state } = useLocation<{
     ticketOpenType: TicketOpenType;
     isBankTransfer: boolean;
-    agentId: string;
   }>();
 
   // undefined일 경우 기본값을 지정했는데 상의 필요
   const ticketOpenType = state?.ticketOpenType ?? 'GENERAL_OPEN';
-  const agentId = state?.agentId ?? 'unknown';
 
   // status는 여전히 쿼리 파라미터 기반으로 사용
-  const status = searchParams.get('status') as ApplicationFormStatus | null;
+  const status = (statusProp as ApplicationFormStatus) ?? null;
 
   // status 유무로 기존 신청폼 여부 판단
   const isApplicationFormPage = !!status;
-  const applicationFormId = isApplicationFormPage ? id : undefined;
+  const applicationFormId = isApplicationFormPage ? concertId : undefined;
 
   // 기존 신청폼일 경우 formItem 요청
   const { data: formItem } = useGetFormDetail(
@@ -48,7 +55,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   // 새 신청폼일 경우 concertId로 concertItem 요청
   const { data: fetchedConcertItem } = useGetConcertDetail(
-    !isApplicationFormPage && id ? { concertId: id } : undefined,
+    !isApplicationFormPage && concertId ? { concertId: concertId } : undefined,
   );
 
   // 기존 신청폼이면 formItem.concertInfoResponse, 아니면 API 결과 사용
@@ -68,7 +75,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         router.push('/history');
       }
     } catch (error) {
-      router.push(`/concert/${id}`);
+      router.push(`/concert/${concertId}`);
     }
   };
 
@@ -104,7 +111,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       bottomNav={false}
     >
       <div className={styles.container}>
-        <button onClick={handleOpenModal}>모달 테스트</button>
         {concertItem && (
           <>
             {/* 공연 정보 */}
@@ -118,7 +124,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
               concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
               formItem={formItem} //기존 신청폼 보여줄 시 공연데이터
               ticketOpenType={ticketOpenType}
-              concertId={id}
+              concertId={concertId}
               agentId={agentId}
               onError={handleError}
               status={status ?? undefined} //분기처리를 위해 전달

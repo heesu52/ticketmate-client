@@ -70,7 +70,7 @@ export default function FormTabManager({
     1: {
       performanceDate: '',
       requestCount: '',
-      hopeAreaList: undefined,
+      hopeAreaList: null,
       requirement: '',
     },
   });

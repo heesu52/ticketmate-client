@@ -33,7 +33,7 @@ interface FormInputProps {
   onChange: (data: FormData) => void;
   concertDateInfoResponseList: ConcertDateInfo[];
   ticketOpenDateInfoResponseList: TicketOpenDateInfo[];
-  ticketOpenType?: TicketOpenType | null;
+  ticketOpenType: TicketOpenType;
   formItem?: Form;
   currentIndex: number;
   seatingChartUrl?: string;

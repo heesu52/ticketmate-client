@@ -28,7 +28,6 @@ const CustomBottomSheet = ({
 }: BottomSheetProps) => {
   const { ticketOpenDateInfoResponseList } = concertItem ?? {};
   const navigation = useNavigation<{
-    ticketOpenType: TicketOpenType;
     isBankTransfer: boolean;
   }>();
   const { agentId, nickname, introduction, averageRating, reviewCount } =
@@ -53,27 +52,46 @@ const CustomBottomSheet = ({
   >({ PRE_OPEN: false, GENERAL_OPEN: false });
 
   //선예매/일반예매를 분리해서 중복확인
-  const { mutate: checkDuplicate } = useCheckDuplicateForm();
+  const { mutate: checkPreOpen } = useCheckDuplicateForm();
+  const { mutate: checkGeneralOpen } = useCheckDuplicateForm();
 
   useEffect(() => {
     if (!isOpen || !agentId || !concertId) return;
 
-    const check = (ticketOpenType: TicketOpenType) => {
-      checkDuplicate(
-        { agentId, concertId, ticketOpenType },
+    if (preOpen) {
+      checkPreOpen(
+        { agentId, concertId, ticketOpenType: 'PRE_OPEN' },
         {
           onSuccess: (res) =>
             setIsDuplicateMap((prev) => ({
               ...prev,
-              [ticketOpenType]: res as boolean,
+              PRE_OPEN: res as boolean,
             })),
         },
       );
-    };
+    }
 
-    if (preOpen) check('PRE_OPEN');
-    if (generalOpen) check('GENERAL_OPEN');
-  }, [isOpen, agentId, concertId, preOpen, generalOpen]);
+    if (generalOpen) {
+      checkGeneralOpen(
+        { agentId, concertId, ticketOpenType: 'GENERAL_OPEN' },
+        {
+          onSuccess: (res) =>
+            setIsDuplicateMap((prev) => ({
+              ...prev,
+              GENERAL_OPEN: res as boolean,
+            })),
+        },
+      );
+    }
+  }, [
+    isOpen,
+    agentId,
+    concertId,
+    preOpen,
+    generalOpen,
+    checkGeneralOpen,
+    checkPreOpen,
+  ]);
 
   // 버튼 클릭 시 navigate로 이동
   const handleNavigate = (
@@ -82,8 +100,9 @@ const CustomBottomSheet = ({
   ) => {
     onClose();
     navigation.navigate({
-      pathname: `/concert/form/${concertId}?agentId=${agentId}`,
-      state: { ticketOpenType, isBankTransfer },
+      pathname: `/concert/form/${concertId}`,
+      search: `?agentId=${agentId}&Type=${ticketOpenType}`,
+      state: { isBankTransfer },
     });
   };
 

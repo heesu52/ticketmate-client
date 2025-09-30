@@ -13,7 +13,7 @@ import styles from './form-info.module.scss';
 
 interface ConcertInfoProps {
   concertItem: Concert;
-  ticketOpenType?: TicketOpenType | null;
+  ticketOpenType: TicketOpenType;
   isBankTransfer?: boolean | null;
 }
 

@@ -22,24 +22,24 @@ export default function Page({
   searchParams: searchParamsProps,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ agentId: string; status?: string }>;
+  searchParams: Promise<{
+    agentId: string;
+    Type: TicketOpenType;
+    status?: string;
+  }>;
 }) {
   const resolvedParams = use(params);
   const { id: concertId } = resolvedParams;
   const resolvedSearchParams = use(searchParamsProps);
-  const { agentId, status: statusProp } = resolvedSearchParams;
+  const { agentId, Type, status: statusProp } = resolvedSearchParams;
 
   const router = useRouter();
   const { open } = useModalStore();
 
   // useLocation으로 navigate에서 넘어온 state 받기
   const { state } = useLocation<{
-    ticketOpenType: TicketOpenType;
     isBankTransfer: boolean;
   }>();
-
-  // undefined일 경우 기본값을 지정했는데 상의 필요
-  const ticketOpenType = state?.ticketOpenType ?? 'GENERAL_OPEN';
 
   // status는 여전히 쿼리 파라미터 기반으로 사용
   const status = (statusProp as ApplicationFormStatus) ?? null;
@@ -115,7 +115,11 @@ export default function Page({
           <>
             {/* 공연 정보 */}
             <div className={styles.forminfo_container}>
-              <FormInfo concertItem={concertItem} {...state} />
+              <FormInfo
+                concertItem={concertItem}
+                ticketOpenType={Type}
+                {...state}
+              />
             </div>
 
             {/* 신청 폼 탭*/}
@@ -123,7 +127,7 @@ export default function Page({
               handleOpenModal={handleOpenModal}
               concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
               formItem={formItem} //기존 신청폼 보여줄 시 공연데이터
-              ticketOpenType={ticketOpenType}
+              ticketOpenType={Type}
               concertId={concertId}
               agentId={agentId}
               onError={handleError}

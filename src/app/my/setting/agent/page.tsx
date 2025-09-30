@@ -6,6 +6,7 @@ import ChangeAgentModal from '@/app/my/setting/agent/_shared/components/change-a
 import { MinusIcon, PlusIcon } from '@/assets/icons';
 import { toast } from '@/lib/toast/toast';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
+import InformationBanner from '@/shared/components/ui/banner/information-banner/information-banner';
 import Button from '@/shared/components/ui/button/button';
 import Checkbox from '@/shared/components/ui/checkbox/checkbox';
 import UploadedImage from '@/shared/components/ui/image/uploaded-image/uploaded-image';
@@ -160,13 +161,11 @@ const AgentPage = () => {
       bottomNav={false}
     >
       <div className={styles.container}>
-        <div className={styles.info_container}>
-          <div className={styles.title}>대리인 전환이 뭔가요?</div>
-          <div className={styles.description}>
-            대리인은 티켓팅 의뢰를 받을 수 있습니다. 아래 항목들을 입력하면
-            운영팀의 검토 후 대리인으로 전환될 수 있어요.
-          </div>
-        </div>
+        <InformationBanner
+          variant="info"
+          title="대리인 전환이 뭔가요?"
+          description="대리인은 티켓팅 의뢰를 받을 수 있습니다. 아래 항목들을 입력하면 운영팀의 검토 후 대리인으로 전환될 수 있어요."
+        />
 
         <Spacer size={40} />
 

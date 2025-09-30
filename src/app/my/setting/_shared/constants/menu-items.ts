@@ -22,6 +22,11 @@ export const SETTING_ITEMS: MenuItem[] = [
   },
   {
     type: 'link',
+    title: '대리인 전환',
+    href: `${SETTING_URL_PREFIX}/agent`,
+  },
+  {
+    type: 'link',
     title: '제재 내역',
     href: `${SETTING_URL_PREFIX}/restriction`,
   },
@@ -30,11 +35,6 @@ export const SETTING_ITEMS: MenuItem[] = [
     title: '언어 설정',
     href: `${SETTING_URL_PREFIX}/language`,
     trailing: '한국어',
-  },
-  {
-    type: 'link',
-    title: '대리인 전환',
-    href: `${SETTING_URL_PREFIX}/agent`,
   },
 ];
 

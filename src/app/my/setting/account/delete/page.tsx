@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 
 import DeleteAccountModal from '@/app/my/setting/account/delete/_shared/components/delete-account-modal/delete-account-modal';
-import { ArrowRightIcon } from '@/assets/icons';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
+import InformationBanner from '@/shared/components/ui/banner/information-banner/information-banner';
 import Button from '@/shared/components/ui/button/button';
 import Checkbox from '@/shared/components/ui/checkbox/checkbox';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
@@ -73,23 +73,18 @@ const AccountDeletePage = () => {
             <React.Fragment key={option.value}>
               <Radio option={option as RadioOption} />
               {option.value === 'reason3' && reason === 'reason3' && (
-                <div className={styles.additional_container}>
-                  <div className={styles.title}>억울하게 이용 제한됐나요?</div>
-                  <div className={styles.description}>
-                    <span>
-                      탈퇴전 고객센터에 문의주시면 빠르게 해결해드리겠습니다.
-                    </span>
-                    <ArrowRightIcon
-                      width={12}
-                      height={12}
-                      fill="var(--secondary-700)"
-                    />
-                  </div>
-                </div>
+                <InformationBanner
+                  type="link"
+                  variant="info"
+                  title="억울하게 이용 제한됐나요?"
+                  description="탈퇴전 고객센터에 문의주시면 빠르게 해결해드리겠습니다."
+                />
               )}
             </React.Fragment>
           ))}
         </RadioGroup>
+
+        <Spacer size={40} />
 
         <Checkbox
           id="checkbox"

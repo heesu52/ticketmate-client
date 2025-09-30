@@ -12,6 +12,7 @@ interface TextareaProps
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  ref?: React.Ref<HTMLTextAreaElement>;
 }
 
 const Textarea = ({
@@ -19,6 +20,7 @@ const Textarea = ({
   placeholder,
   value,
   onChange,
+  ref,
   ...rest
 }: TextareaProps) => {
   return (
@@ -28,6 +30,7 @@ const Textarea = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      ref={ref}
       {...rest}
     />
   );

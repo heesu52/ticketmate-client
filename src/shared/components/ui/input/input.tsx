@@ -17,7 +17,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /** 에러 상태 */
   isError?: boolean;
   /** ref 참조 */
-  ref?: React.RefObject<HTMLInputElement | null>;
+  ref?: React.Ref<HTMLInputElement>;
   iconProps?: IconProps;
 }
 

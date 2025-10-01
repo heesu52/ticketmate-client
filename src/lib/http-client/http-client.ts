@@ -71,7 +71,7 @@ const httpClient = async <TResponse = unknown>({
     const text = await response.clone().text(); // .text(), .json() 메서드는 한 번만 호출 가능
 
     // 응답이 성공하고 응답이 비어있으면 true 반환
-    if (response.ok && text === '') {
+    if (text === '') {
       return true as TResponse;
     }
 

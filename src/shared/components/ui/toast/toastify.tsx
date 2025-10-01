@@ -12,7 +12,7 @@ interface ToastOptions extends Omit<ToastifyToastOptions, 'closeButton'> {
   description: string;
 }
 
-export const toast = ({
+export const toastify = ({
   description,
   variant = 'default',
   ...rest

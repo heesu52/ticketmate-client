@@ -18,7 +18,6 @@ const getConcertList = async (request: GetConcertListRequest) => {
     },
   });
 
-  console.log(data);
   return data;
 };
 

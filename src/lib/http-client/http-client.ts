@@ -1,4 +1,6 @@
-import ky, { type Options } from 'ky';
+import ky, { HTTPError, type Options } from 'ky';
+
+import { APIMethod } from '@/lib/http-client/http-client.type';
 
 const PREFIX_URL = process.env.NEXT_PUBLIC_API_URL;
 const MODE = process.env.NODE_ENV;
@@ -10,7 +12,7 @@ const created = ky.create({
     limit: 3,
     backoffLimit: 1000,
   },
-  throwHttpErrors: false,
+  throwHttpErrors: true,
 });
 
 const extended = created.extend({
@@ -29,24 +31,16 @@ const extended = created.extend({
         }
       },
     ],
-    afterResponse: [
-      async (request, options, response) => {
-        try {
-          return response.json();
-        } catch (error) {
-          console.error('HTTP Client Error:', error);
-          throw error;
-        }
-      },
-    ],
+    afterResponse: [async (request, options, response) => response],
   },
 });
 
-export type APIMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
-
 interface HttpClientProps {
+  /** 메서드 타입 */
   method: APIMethod;
+  /** URL */
   url: string;
+  /** 옵션 */
   options?: Options;
 }
 
@@ -57,10 +51,19 @@ const httpClient = async <TResponse = unknown>({
 }: HttpClientProps): Promise<TResponse> => {
   try {
     const response = await extended[method](url, options);
+    const text = await response.clone().text(); // .text(), .json() 메서드는 한 번만 호출 가능
 
-    return response.json() as TResponse;
+    // 응답이 성공하고 응답이 비어있으면 true 반환
+    if (response.ok && text === '') {
+      return true as TResponse;
+    }
+
+    return (await response.json()) as TResponse;
   } catch (error) {
-    console.error('HTTP Client Error:', error);
+    if (error instanceof HTTPError) {
+      const errorJson = await error.response.json();
+      throw errorJson;
+    }
     throw error;
   }
 };

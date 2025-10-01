@@ -27,13 +27,6 @@ export function middleware(req: NextRequest) {
 
   console.log('인증 상태:', { token: !!token, isPhoneVerified, isProfileSet });
 
-  // 미들웨어가 처리하지 않는 공개 경로
-  const publicPaths = ['/', '/auth/sign-in'];
-  if (publicPaths.includes(pathname)) {
-    console.log('공개 경로 접근:', pathname);
-    return NextResponse.next();
-  }
-
   // auth 관련 경로들
   const authPaths = ['/auth/sign-in/verification', '/auth/sign-in/profile'];
 
@@ -64,6 +57,14 @@ export function middleware(req: NextRequest) {
   if (isPhoneVerified && isProfileSet && authPaths.includes(pathname)) {
     console.log('설정 완료, 메인으로 -> /');
     return redirect(url, '/');
+  }
+
+  // 미들웨어가 처리하지 않는 공개 경로 (토큰이 없거나 모든 설정이 완료된 경우)
+  const publicPaths = ['/', '/auth/sign-in'];
+
+  if (publicPaths.includes(pathname)) {
+    console.log('공개 경로 접근:', pathname);
+    return NextResponse.next();
   }
 
   console.log('통과:', pathname);

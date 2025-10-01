@@ -6,6 +6,7 @@ import { useGetAgentList } from '@/app/concert/[id]/_shared/services/agent-card/
 import AgentCard from '@/shared/components/features/agent/agent-card/agent-card';
 import Select from '@/shared/components/ui/select/select';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
+import { AgentInfo } from '@/shared/types';
 
 import styles from './agent-list.module.scss';
 
@@ -19,7 +20,7 @@ const options = [
 
 type AgentListProps = {
   id: string;
-  onAgentClick: (agentId: string) => void;
+  onAgentClick: (agentInfo: AgentInfo) => void;
 };
 
 const AgentList = ({ id, onAgentClick }: AgentListProps) => {
@@ -73,7 +74,7 @@ const AgentList = ({ id, onAgentClick }: AgentListProps) => {
             key={agentInfo.agentId}
             ref={index === agentList.length - 1 ? lastElementRef : undefined}
             className={styles.card_wrapper}
-            onClick={() => onAgentClick(agentInfo.agentId)}
+            onClick={() => onAgentClick(agentInfo)}
           >
             <AgentCard agent={agentInfo} />
           </div>

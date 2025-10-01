@@ -7,6 +7,6 @@ export type HopeArea = {
 export type FormData = {
   performanceDate: string; // 기존: date
   requestCount: string; // 기존: count
-  hopeAreaList: HopeArea[]; // 기존: inputs
+  hopeAreaList: HopeArea[] | null; // 기존: inputs
   requirement: string; // 기존: note
 };

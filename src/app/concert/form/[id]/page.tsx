@@ -2,7 +2,6 @@
 import { use, useMemo } from 'react';
 
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-confirm-modal/form-confirm-modal';
@@ -11,7 +10,7 @@ import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
-import Toast from '@/shared/components/ui/toast/toast';
+import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
 import { TicketOpenType, ApplicationFormStatus } from '@/shared/types';
 
@@ -81,9 +80,10 @@ export default function Page({
 
   // 에러 발생 시 백엔드 에러 내용 필터링하여 토스트 알림
   const handleError = (message: string) => {
-    toast((props) => (
-      <Toast {...props} variant="error" description={message} />
-    ));
+    toastify({
+      variant: 'error',
+      description: message,
+    });
   };
 
   return (

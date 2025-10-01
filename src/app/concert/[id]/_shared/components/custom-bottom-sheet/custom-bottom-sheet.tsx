@@ -101,7 +101,7 @@ const CustomBottomSheet = ({
     onClose();
     navigation.navigate({
       pathname: `/concert/form/${concertId}`,
-      search: `?agentId=${agentId}&Type=${ticketOpenType}`,
+      search: `?agentId=${agentId}&type=${ticketOpenType}`,
       state: { isBankTransfer },
     });
   };

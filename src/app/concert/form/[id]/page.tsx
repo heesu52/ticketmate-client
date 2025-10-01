@@ -24,14 +24,14 @@ export default function Page({
   params: Promise<{ id: string }>;
   searchParams: Promise<{
     agentId: string;
-    Type: TicketOpenType;
+    type: TicketOpenType;
     status?: string;
   }>;
 }) {
   const resolvedParams = use(params);
   const { id: concertId } = resolvedParams;
   const resolvedSearchParams = use(searchParamsProps);
-  const { agentId, Type, status: statusProp } = resolvedSearchParams;
+  const { agentId, type, status: statusProp } = resolvedSearchParams;
 
   const router = useRouter();
   const { open } = useModalStore();
@@ -117,7 +117,7 @@ export default function Page({
             <div className={styles.forminfo_container}>
               <FormInfo
                 concertItem={concertItem}
-                ticketOpenType={Type}
+                ticketOpenType={type}
                 {...state}
               />
             </div>
@@ -127,7 +127,7 @@ export default function Page({
               handleOpenModal={handleOpenModal}
               concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
               formItem={formItem} //기존 신청폼 보여줄 시 공연데이터
-              ticketOpenType={Type}
+              ticketOpenType={type}
               concertId={concertId}
               agentId={agentId}
               onError={handleError}

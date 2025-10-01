@@ -1,35 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import HistoryList from '@/app/history/_shared/components/history-list/history-list';
-import TabButton from '@/shared/components/button/tab-button/tab-button';
+import PageFrame from '@/shared/components/layout/page-frame/page-frame';
+import TabButton from '@/shared/components/ui/tab/tab';
+import { TabItem } from '@/shared/components/ui/tab/tab.type';
 
 import styles from './page.module.scss';
 
 export default function Page() {
-  const [selectedTab, setSelectedTab] = useState<'current' | 'past'>('current');
+  const [active, setActive] = useState<'CURRENT' | 'PAST'>('CURRENT');
+
+  const tabs: TabItem[] = useMemo(
+    () => [
+      { value: 'CURRENT', label: '현재 신청내역' },
+      { value: 'PAST', label: '과거 신청내역' },
+    ],
+    [],
+  );
 
   return (
-    <>
-      <AppBarSetter title="신청내역" />
-
+    <PageFrame
+      appBar={{
+        title: '신청 내역',
+      }}
+      bottomNav={true}
+    >
+      <TabButton
+        items={tabs}
+        value={active}
+        onValueChange={(v) => setActive(v as 'CURRENT' | 'PAST')}
+      />
       <div className={styles.container}>
-        <div className={styles.button_container}>
-          <TabButton
-            label="현재 신청내역"
-            isActive={selectedTab === 'current'}
-            onClick={() => setSelectedTab('current')}
-          />
-          <TabButton
-            label="과거 신청내역"
-            isActive={selectedTab === 'past'}
-            onClick={() => setSelectedTab('past')}
-          />
-        </div>
-        <HistoryList tab={selectedTab} />
+        <HistoryList tab={setActive} />
       </div>
-    </>
+    </PageFrame>
   );
 }

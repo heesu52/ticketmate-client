@@ -1,5 +1,5 @@
 'use client';
-import { use, useEffect, useMemo, useRef } from 'react';
+import { use, useMemo } from 'react';
 
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -78,22 +78,6 @@ export default function Page({
       router.push(`/concert/${concertId}`);
     }
   };
-
-  //useRef로 중복 확인 후 토스트 알림 한번만 뜨도록 설정
-  const hasShownToast = useRef(false);
-  useEffect(() => {
-    if (status === 'PENDING' && !hasShownToast.current) {
-      hasShownToast.current = true;
-      // formreadonly 첫 렌더링 때 나오는 수정불가능 토스트 알림
-      toast((props) => (
-        <Toast
-          {...props}
-          variant="error"
-          description="수정 불가능한 양식입니다."
-        />
-      ));
-    }
-  }, [status]);
 
   // 에러 발생 시 백엔드 에러 내용 필터링하여 토스트 알림
   const handleError = (message: string) => {

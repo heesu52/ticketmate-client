@@ -2,10 +2,13 @@
 
 import React, { useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import {
   usePostSendVerificationCode,
   usePostVerifyVerificationCode,
 } from '@/app/auth/sign-in/verification/_shared/services/mutation';
+import { HttpClientError } from '@/lib/http-client/http-client.type';
 import { toast } from '@/lib/toast/toast';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
@@ -15,6 +18,8 @@ import Spacer from '@/shared/components/ui/spacer/spacer';
 import styles from './page.module.scss';
 
 const VerificationPage = () => {
+  const router = useRouter();
+
   const sendVerificationCodeMutation = usePostSendVerificationCode();
   const verifyVerificationCodeMutation = usePostVerifyVerificationCode();
 
@@ -32,9 +37,8 @@ const VerificationPage = () => {
     }
   };
 
+  // 인증번호 발송
   const handleCodeSend = () => {
-    setIsCodeSent(true);
-
     sendVerificationCodeMutation
       .mutateAsync({ phoneNumber })
       .then((res) => {
@@ -49,14 +53,19 @@ const VerificationPage = () => {
               variant: 'info',
               description: '인증번호가 발송되었습니다.',
             });
+            setIsCodeSent(true);
           }
         }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((err: HttpClientError) => {
+        toast({
+          variant: 'error',
+          description: err.errorMessage,
+        });
       });
   };
 
+  // 인증번호 검증
   const handleVerifyCode = () => {
     verifyVerificationCodeMutation
       .mutateAsync({
@@ -64,10 +73,13 @@ const VerificationPage = () => {
         code: verificationCode,
       })
       .then((res) => {
-        console.log(res);
+        router.push('/auth/sign-in/profile');
       })
       .catch((err) => {
-        console.log(err);
+        toast({
+          variant: 'error',
+          description: err.errorMessage,
+        });
       });
   };
 

@@ -7,8 +7,9 @@
   height: 100%;
 
   .tab_content_container {
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
-    height: 100%;
   }
 
   .list_container {

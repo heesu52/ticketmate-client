@@ -1,14 +1,9 @@
 @use '@/styles/index' as *;
 
 .container {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-
   width: 100%;
   max-width: 600px;
-  height: 100vh;
+  height: calc(100dvh - 54px); // AppBar 높이를 제외한 전체 높이
 
   display: flex;
   flex-direction: column;
@@ -18,13 +13,14 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    flex-shrink: 0;
 
     padding: 20px;
-    margin-top: 54px;
   }
 
   .tab_container {
-    height: 100%;
-    overflow-y: hidden;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
   }
 }

@@ -7,6 +7,6 @@ export type HopeArea = {
 export type FormData = {
   performanceDate: string;
   requestCount: string;
-  hopeAreaList: HopeArea[];
+  hopeAreaList: HopeArea[] | null;
   requirement: string;
 };

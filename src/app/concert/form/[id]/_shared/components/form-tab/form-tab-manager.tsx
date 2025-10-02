@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import FormInput from '@/app/concert/form/[id]/_shared/components/input/form-input';
-import { FormData } from '@/app/concert/form/[id]/_shared/components/input/form-input.type';
-import FormReadOnly from '@/app/concert/form/[id]/_shared/components/readonly/form-readonly';
+import FormInput from '@/app/concert/form/[id]/_shared/components/form-input/form-input';
+import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
 import {
   useCreateConcertForm,
   usePatchConcertForm,
@@ -11,9 +10,8 @@ import {
   CreateConcertFormRequest,
   PatchConcertFormRequest,
 } from '@/app/concert/form/[id]/_shared/services/type';
-import { PlusIcon, CloseIcon } from '@/assets/icons';
-import Button from '@/shared/components/button/functional-button/functional-button';
-import TabButton from '@/shared/components/button/tab-button/tab-button';
+import Button from '@/shared/components/ui/button/button';
+import Tab from '@/shared/components/ui/tab/tab';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
 import {
   TicketOpenType,
@@ -22,6 +20,7 @@ import {
   Form,
 } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
+import { getErrorMessage } from '@/shared/utils/getErrorMessage';
 
 import styles from './form-tab-manager.module.scss';
 
@@ -29,14 +28,17 @@ interface FormTabManagerProps {
   handleOpenModal: () => void;
   ticketOpenType: TicketOpenType;
   concertId: string;
+  agentId: string;
   onError: (message: string) => void;
   concertItem: Concert;
   formItem?: Form;
   status?: ApplicationFormStatus;
 }
+
 export default function FormTabManager({
   handleOpenModal,
   ticketOpenType,
+  agentId,
   concertId,
   onError,
   concertItem,
@@ -68,7 +70,7 @@ export default function FormTabManager({
     1: {
       performanceDate: '',
       requestCount: '',
-      hopeAreaList: [{ id: 1, location: '', price: '' }],
+      hopeAreaList: null,
       requirement: '',
     },
   });
@@ -170,8 +172,7 @@ export default function FormTabManager({
 
   const handleError = (error: unknown) => {
     const code = error instanceof Error ? error.message : undefined;
-    const message =
-      (code && ERROR_MESSAGES[code]) || '알 수 없는 오류가 발생했습니다.';
+    const message = getErrorMessage(code as keyof typeof ERROR_MESSAGES);
     onError(message);
   };
 
@@ -179,21 +180,31 @@ export default function FormTabManager({
   const handleSubmit = () => {
     // formData의 모든 탭 데이터를 배열로 변환
     const applicationFormDetailRequestList = Object.values(formData).map(
-      (currentFormData) => ({
-        performanceDate: currentFormData.performanceDate,
-        requestCount: Number(currentFormData.requestCount),
-        hopeAreaList: currentFormData.hopeAreaList.map((item, index) => ({
-          priority: index + 1,
-          location: item.location,
-          price: Number(item.price),
-        })),
-        requestDetails: currentFormData.requirement,
-      }),
+      (currentFormData) => {
+        // location과 price가 둘 다 비어있으면 제외
+        const filteredHopeArea = currentFormData.hopeAreaList?.filter(
+          (item) => item.location.trim() || item.price.trim(),
+        );
+
+        return {
+          performanceDate: currentFormData.performanceDate,
+          requestCount: Number(currentFormData.requestCount),
+          hopeAreaList:
+            filteredHopeArea && filteredHopeArea.length > 0
+              ? filteredHopeArea.map((item, index) => ({
+                  priority: index + 1,
+                  location: item.location,
+                  price: Number(item.price),
+                }))
+              : undefined, // 값이 없으면 undefined로 보내서 제외
+          requestDetails: currentFormData.requirement,
+        };
+      },
     );
 
     if (mode === 'input') {
       const requestBody: CreateConcertFormRequest = {
-        agentId: '26b4b337-2ce7-448c-89c7-d3ccec43e064',
+        agentId,
         concertId,
         ticketOpenType,
         applicationFormDetailRequestList,
@@ -204,9 +215,7 @@ export default function FormTabManager({
         onError: handleError,
       });
     } else if (mode === 'readApp') {
-      if (!formItem?.applicationFormId) {
-        return;
-      }
+      if (!formItem?.applicationFormId) return;
 
       const requestBody: PatchConcertFormRequest = {
         applicationFormId: formItem.applicationFormId,
@@ -222,98 +231,55 @@ export default function FormTabManager({
     }
   };
 
+  const tabItems = tabs.map((tabId) => {
+    const currentData =
+      formData[tabId] ??
+      formItem?.applicationFormDetailResponseList?.[tabId - 1];
+
+    return {
+      value: tabId.toString(),
+      label: getTabLabel(tabId),
+      content:
+        activeTab === tabId && currentData ? (
+          <FormInput
+            key={tabId}
+            value={formData[tabId]}
+            onChange={(data) => updateFormData(tabId, data)}
+            concertDateInfoResponseList={
+              concertItem.concertDateInfoResponseList
+            }
+            ticketOpenDateInfoResponseList={
+              concertItem.ticketOpenDateInfoResponseList
+            }
+            ticketOpenType={ticketOpenType}
+            formItem={formItem}
+            currentIndex={tabId - 1}
+            seatingChartUrl={concertItem.seatingChartUrl}
+            disabled={!isEditing} // isEditing이 false면 readonly 모드, true면 input, edit 모드
+          />
+        ) : null,
+    };
+  });
+
   return (
     <div className={styles.container}>
-      <div className={styles.tab_container}>
-        {tabs.map((tabId) => (
-          <TabButton
-            key={tabId}
-            label={getTabLabel(tabId)}
-            isActive={activeTab === tabId}
-            onClick={() => setActiveTab(tabId)}
-            rightIcon={
-              isEditing ? (
-                <div
-                  className={styles.icon}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeTab(tabId);
-                  }}
-                >
-                  <CloseIcon width={16} height={16} />
-                </div>
-              ) : undefined
-            }
-          />
-        ))}
-        {isEditing && (
-          <TabButton
-            label="추가하기"
-            isActive={false}
-            onClick={addNewTab}
-            rightIcon={<PlusIcon width={16} height={16} />}
-          />
-        )}
-      </div>
+      <Tab
+        items={tabItems}
+        value={activeTab.toString()}
+        onValueChange={(val) => setActiveTab(Number(val))}
+        onAddTab={isEditing ? addNewTab : undefined}
+        onDeleteTab={isEditing ? (val) => removeTab(Number(val)) : undefined}
+        addTabButtonText="추가하기"
+      />
       <div className={styles.input_container}>
-        <div>
-          {tabs.map((tabId) =>
-            activeTab === tabId ? (
-              isEditing ? (
-                <FormInput
-                  key={tabId}
-                  value={formData[tabId]}
-                  onChange={(data) => updateFormData(tabId, data)}
-                  concertDateInfoResponseList={
-                    concertItem.concertDateInfoResponseList
-                  }
-                  ticketOpenDateInfoResponseList={
-                    concertItem.ticketOpenDateInfoResponseList
-                  }
-                  ticketOpenType={ticketOpenType}
-                  formItem={formItem}
-                  currentIndex={tabId - 1}
-                  seatingChartUrl={concertItem.seatingChartUrl}
-                />
-              ) : formItem?.applicationFormDetailResponseList?.[tabId - 1] ? (
-                <FormReadOnly
-                  key={tabId}
-                  concertDateInfoResponseList={
-                    concertItem.concertDateInfoResponseList
-                  }
-                  ticketOpenDateInfoResponseList={
-                    concertItem.ticketOpenDateInfoResponseList
-                  }
-                  formItem={formItem}
-                  currentIndex={tabId - 1}
-                />
-              ) : null
-            ) : null,
-          )}
-        </div>
-        {mode === 'input' && (
-          <Button
-            type="button"
-            size="large"
-            variant="fill"
-            onClick={handleSubmit}
-          >
-            신청하기
+        {tabItems.map((item) => item.content)}
+        {(mode === 'input' || (mode === 'readApp' && isEditing)) && (
+          <Button variant="fill" onClick={handleSubmit}>
+            {mode === 'input' ? '신청하기' : '재신청하기'}
           </Button>
         )}
-        {mode === 'readApp' && (
-          <Button
-            type="button"
-            size="large"
-            variant="fill"
-            onClick={() => {
-              if (isEditing) {
-                handleSubmit();
-              } else {
-                setIsEdit(true);
-              }
-            }}
-          >
+        {mode === 'readApp' && !isEditing && (
+          <Button variant="fill" onClick={() => setIsEdit(true)}>
             재신청하기
           </Button>
         )}

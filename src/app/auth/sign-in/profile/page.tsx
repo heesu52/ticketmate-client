@@ -24,39 +24,6 @@ const ProfilePage = () => {
   const [nickname, setNickname] = useState('');
   const profileImageInputRef = useRef<HTMLInputElement>(null);
 
-  // 닉네임 유효성 검사
-  const validateNickname = (value: string) => {
-    if (!value.trim()) {
-      toastify({ variant: 'error', description: '닉네임을 입력해주세요.' });
-      return false;
-    }
-    if (value.length < 2) {
-      toastify({
-        variant: 'error',
-        description: '닉네임은 최소 2자 이상이어야 합니다.',
-      });
-      return false;
-    }
-    if (value.length > 12) {
-      toastify({
-        variant: 'error',
-        description: '닉네임은 최대 12자까지 가능합니다.',
-      });
-      return false;
-    }
-    // 특수문자 검사 (한글, 영문, 숫자만 허용)
-    const specialCharRegex = /[^a-zA-Z0-9ㄱ-ㅣ가-힣]/;
-    if (specialCharRegex.test(value)) {
-      toastify({
-        variant: 'error',
-        description: '닉네임에는 특수문자를 사용할 수 없습니다.',
-      });
-      return false;
-    }
-
-    return true;
-  };
-
   // 프로필 이미지 업로드 처리
   const handleProfileImageUpload = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -84,11 +51,36 @@ const ProfilePage = () => {
     setNickname(value);
   };
 
+  // 시작하기 버튼 클릭 처리
   const handleSubmit = () => {
-    const isValid = validateNickname(nickname);
+    if (!nickname.trim()) {
+      toastify({
+        variant: 'error',
+        description: '닉네임을 입력해주세요.',
+      });
+      return false;
+    } else if (nickname.length < 2) {
+      toastify({
+        variant: 'error',
+        description: '닉네임은 최소 2자 이상이어야 합니다.',
+      });
+      return false;
+    } else if (nickname.length > 12) {
+      toastify({
+        variant: 'error',
+        description: '닉네임은 최대 12자까지 가능합니다.',
+      });
+      return false;
+    }
+    // 특수문자 검사 (한글, 영문, 숫자만 허용)
+    const specialCharRegex = /[^a-zA-Z0-9ㄱ-ㅣ가-힣]/;
 
-    if (!isValid) {
-      return;
+    if (specialCharRegex.test(nickname)) {
+      toastify({
+        variant: 'error',
+        description: '닉네임에는 특수문자를 사용할 수 없습니다.',
+      });
+      return false;
     }
 
     const request = {

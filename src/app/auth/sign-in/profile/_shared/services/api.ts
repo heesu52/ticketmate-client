@@ -1,4 +1,4 @@
-import { PostMemberRequest } from '@/app/auth/sign-in/profile/_shared/services/type';
+import { PatchMemberRequest } from '@/app/auth/sign-in/profile/_shared/services/type';
 import httpClient from '@/lib/http-client/http-client';
 
 const BASE_URL = 'member';
@@ -6,7 +6,7 @@ const BASE_URL = 'member';
 /**
  * @description 회원 정보 수정
  */
-export const postMember = async (request: PostMemberRequest) => {
+export const patchMember = async (request: PatchMemberRequest) => {
   const formData = new FormData();
 
   formData.append('nickname', request.nickname);

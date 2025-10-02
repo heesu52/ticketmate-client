@@ -5,7 +5,7 @@ import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import { usePostMember } from '@/app/auth/sign-in/profile/_shared/services/mutation';
+import { useUpdateProfile } from '@/app/auth/sign-in/profile/_shared/services/mutation';
 import { PlusIcon } from '@/assets/icons';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
@@ -18,7 +18,7 @@ import styles from './page.module.scss';
 const ProfilePage = () => {
   const router = useRouter();
 
-  const postMember = usePostMember();
+  const updateProfile = useUpdateProfile();
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [nickname, setNickname] = useState('');
@@ -85,7 +85,7 @@ const ProfilePage = () => {
       profileImg: profileImage || undefined,
     };
 
-    postMember
+    updateProfile
       .mutateAsync(request)
       .then(() => {
         router.push('/');

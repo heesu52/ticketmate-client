@@ -15,6 +15,10 @@ function redirect(url: URL, pathname: string, reason?: string): NextResponse {
 }
 
 export function middleware(req: NextRequest) {
+  if (process.env.NODE_ENV === 'development') {
+    return NextResponse.next();
+  }
+
   const url = req.nextUrl.clone();
   const { pathname } = url;
 

@@ -40,6 +40,10 @@
         background: var(--grayscale-200, #fafafa);
         padding: 18px;
       }
+
+      img {
+        border-radius: 8px;
+      }
     }
   }
 }

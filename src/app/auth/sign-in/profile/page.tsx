@@ -45,7 +45,7 @@ const ProfilePage = () => {
       return false;
     }
     // 특수문자 검사 (한글, 영문, 숫자만 허용)
-    const specialCharRegex = /[^\wㄱ-ㅣ가-힣]/;
+    const specialCharRegex = /[^a-zA-Z0-9ㄱ-ㅣ가-힣]/;
     if (specialCharRegex.test(value)) {
       toastify({
         variant: 'error',
@@ -62,6 +62,17 @@ const ProfilePage = () => {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
+
+    const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+
+    if (file && !validTypes.includes(file.type)) {
+      toastify({
+        variant: 'error',
+        description: '이미지 파일만 업로드 가능합니다.',
+      });
+      return;
+    }
+
     if (file) {
       setProfileImage(file);
     }

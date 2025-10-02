@@ -33,7 +33,7 @@ export default function Page() {
         onValueChange={(v) => setActive(v as 'CURRENT' | 'PAST')}
       />
       <div className={styles.container}>
-        <HistoryList tab={setActive} />
+        <HistoryList tab={active} />
       </div>
     </PageFrame>
   );

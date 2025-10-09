@@ -20,9 +20,6 @@ const extended = created.extend({
   hooks: {
     beforeRequest: [
       (request) => {
-        // Content-Type 설정
-        request.headers.set('Content-Type', 'application/json');
-
         // 개발 환경 토큰 기반 설정
         if (MODE === 'development') {
           request.headers.set(

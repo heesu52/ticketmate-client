@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+
+  .profile_image_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+
+    .profile_image {
+      border-radius: 8px;
+      border: 1px solid var(--grayscale-300, #ededed);
+      background: var(--grayscale-200, #fafafa);
+    }
+
+    .change_image_button {
+      @include text-md;
+      color: var(--grayscale-700, #222);
+    }
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .label {
+      @include title-sm;
+      color: var(--grayscale-700, #222);
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
+
+  .button_container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+  }
+}

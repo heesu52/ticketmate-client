@@ -1,5 +1,8 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { SettingIcon } from '@/assets/icons';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -9,6 +12,12 @@ import Spacer from '@/shared/components/ui/spacer/spacer';
 import styles from './page.module.scss';
 
 const MyPage = () => {
+  const router = useRouter();
+
+  const handleProfileEdit = () => {
+    router.push('/my/profile');
+  };
+
   return (
     <PageFrame
       appBar={{
@@ -42,7 +51,7 @@ const MyPage = () => {
               </span>
             </div>
           </div>
-          <Button variant="outline" color="gray">
+          <Button variant="outline" color="gray" onClick={handleProfileEdit}>
             프로필 편집
           </Button>
         </div>

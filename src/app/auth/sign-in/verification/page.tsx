@@ -9,11 +9,11 @@ import {
   usePostVerifyVerificationCode,
 } from '@/app/auth/sign-in/verification/_shared/services/mutation';
 import { HttpClientError } from '@/lib/http-client/http-client.type';
-import { toast } from '@/lib/toast/toast';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Input from '@/shared/components/ui/input/input';
 import Spacer from '@/shared/components/ui/spacer/spacer';
+import { toastify } from '@/shared/components/ui/toast/toastify';
 
 import styles from './page.module.scss';
 
@@ -44,12 +44,12 @@ const VerificationPage = () => {
       .then((res) => {
         if (res) {
           if (isCodeSent) {
-            toast({
+            toastify({
               variant: 'info',
               description: '인증번호가 재발송되었습니다.',
             });
           } else {
-            toast({
+            toastify({
               variant: 'info',
               description: '인증번호가 발송되었습니다.',
             });
@@ -58,7 +58,7 @@ const VerificationPage = () => {
         }
       })
       .catch((err: HttpClientError) => {
-        toast({
+        toastify({
           variant: 'error',
           description: err.errorMessage,
         });
@@ -76,7 +76,7 @@ const VerificationPage = () => {
         router.push('/auth/sign-in/profile');
       })
       .catch((err) => {
-        toast({
+        toastify({
           variant: 'error',
           description: err.errorMessage,
         });

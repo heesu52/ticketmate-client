@@ -4,7 +4,6 @@ import React, { useCallback, useRef, useState } from 'react';
 
 import ChangeAgentModal from '@/app/my/setting/agent/_shared/components/change-agent-modal/change-agent-modal';
 import { MinusIcon, PlusIcon } from '@/assets/icons';
-import { toast } from '@/lib/toast/toast';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import InformationBanner from '@/shared/components/ui/banner/information-banner/information-banner';
 import Button from '@/shared/components/ui/button/button';
@@ -14,6 +13,7 @@ import Input from '@/shared/components/ui/input/input';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import Spacer from '@/shared/components/ui/spacer/spacer';
 import Textarea from '@/shared/components/ui/textarea/textarea';
+import { toastify } from '@/shared/components/ui/toast/toastify';
 
 import styles from './page.module.scss';
 
@@ -75,7 +75,7 @@ const AgentPage = () => {
 
     // 여기서 딱 1번만 토스트
     if (overflow) {
-      toast({
+      toastify({
         variant: 'error',
         description: `최대 ${maxCount}장까지만 선택할 수 있습니다.`,
         // id: 'max-photos', // (옵션) 지원된다면 중복 방지 toast id 사용
@@ -112,7 +112,7 @@ const AgentPage = () => {
   // 전환 신청하기
   const handleSubmit = async () => {
     if (successPhotos.length < 3) {
-      toast({
+      toastify({
         variant: 'error',
         description: '예매 성공 내역 사진을 최소 3장 이상 업로드해주세요.',
       });
@@ -121,7 +121,7 @@ const AgentPage = () => {
 
     const introduction = introductionRef.current?.value || '';
     if (introduction.length === 0) {
-      toast({
+      toastify({
         variant: 'error',
         description: '한 줄 소개를 입력해주세요.',
       });
@@ -145,14 +145,14 @@ const AgentPage = () => {
       const result = await open('change-agent-modal', ChangeAgentModal);
 
       if (result) {
-        toast({
+        toastify({
           variant: 'success',
           description: '전환 신청이 완료되었습니다.',
         });
         console.log(payload);
       }
     } catch {
-      toast({
+      toastify({
         variant: 'error',
         description: '전환 신청이 취소되었습니다.',
       });

@@ -5,13 +5,13 @@ import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import { useUpdateProfile } from '@/app/auth/sign-in/profile/_shared/services/mutation';
 import { PlusIcon } from '@/assets/icons';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Input from '@/shared/components/ui/input/input';
 import Spacer from '@/shared/components/ui/spacer/spacer';
 import { toastify } from '@/shared/components/ui/toast/toastify';
+import { useUpdateProfile } from '@/shared/services/member/mutation';
 
 import styles from './page.module.scss';
 

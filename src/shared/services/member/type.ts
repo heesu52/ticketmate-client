@@ -12,3 +12,9 @@ export interface GetMemberResponse {
   followingCount: string;
   followerCount: string;
 }
+
+export interface PatchMemberRequest {
+  nickname: string;
+  profileImg?: File;
+  introduction?: string;
+}

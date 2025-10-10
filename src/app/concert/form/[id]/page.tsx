@@ -71,6 +71,10 @@ export default function Page({
       const result = await open('form-confirm-modal', FormConfirmModal);
 
       if (result) {
+        toastify({
+          variant: 'success',
+          description: '공연 의뢰에 성공했습니다.',
+        });
         router.push('/history');
       }
     } catch (error) {

@@ -4,8 +4,8 @@ import { use, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
-import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-confirm-modal/form-confirm-modal';
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
+import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-confirm-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';

@@ -1,10 +1,15 @@
 'use client';
 import { use, useMemo } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
+import FormCancelModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-cancel-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
+import { useModalStore } from '@/shared/components/ui/modal/modal-store';
+import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
 import { ApplicationFormStatus, TicketOpenType } from '@/shared/types';
 
@@ -25,6 +30,9 @@ export default function Page({
   const resolvedSearchParams = use(searchParamsProps);
   const { agentId, type } = resolvedSearchParams;
 
+  const router = useRouter();
+  const { open } = useModalStore();
+
   // useLocation으로 navigate에서 넘어온 state 받기
   const { state } = useLocation<{
     applicationFormStatus: ApplicationFormStatus;
@@ -44,17 +52,26 @@ export default function Page({
     console.error(message);
   };
 
-  //  {
-  //           "applicationFormId": "1069059c-c4c9-4e30-8507-133cade60ea2",
-  //           "concertName": "Funk 전남 sons8300공연",
-  //           "concertThumbnailUrl": "https://picsum.photos/1600/12005921a8d3-2433-4707-9aa4-5eb5c367036c",
-  //           "agentNickname": "리본달린튤립-09c6",
-  //           "clientNickname": "운율있는도마뱀-eac0",
-  //           "submittedDate": "2025-10-11T01:33:48",
-  //           "applicationFormStatus": "PENDING",
-  //           "ticketOpenType": "PRE_OPEN"
-  //       },
+  const handleOpenModal = async () => {
+    try {
+      const result = await open('form-cancel-modal', FormCancelModal, {
+        applicationFormId,
+      });
 
+      if (result) {
+        toastify({
+          variant: 'success',
+          description: '신청이 정상적으로 취소되었습니다',
+        });
+        router.push('/history');
+      }
+    } catch (error) {
+      toastify({
+        variant: 'error',
+        description: '신청 취소에 실패했습니다.',
+      });
+    }
+  };
   return (
     <PageFrame
       appBar={{
@@ -73,7 +90,7 @@ export default function Page({
 
             {/* 신청 폼 탭*/}
             <FormTabManager
-              handleOpenModal={() => {}}
+              handleOpenModal={handleOpenModal}
               concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
               formItem={formItem} //기존 신청폼 보여줄 시 공연데이터
               ticketOpenType={type}

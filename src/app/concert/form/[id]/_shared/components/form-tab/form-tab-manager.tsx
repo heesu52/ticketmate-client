@@ -48,22 +48,9 @@ export default function FormTabManager({
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
-  //status 별로 mode를 지정해서 렌더링 하는 form을 구분
-  const [mode] = useState<'input' | 'readonly' | 'readApp' | undefined>(() => {
-    if (!status) return 'input';
-    if (status === 'PENDING') return 'readonly';
-    if (
-      status === 'CANCELED' ||
-      status === 'CANCELED_IN_PROCESS' ||
-      status === 'REJECTED'
-    )
-      return 'readApp';
-    // APPROVED 혹은 그 외의 상태는 undefined로 둬서 아무 동작 안 하도록
-    return undefined;
-  });
-  //input과 readapp을 구분해서 제출을 하기 위해 state로 관리
+
   const [isEdit, setIsEdit] = useState(false);
-  const isEditing = mode === 'input' || (mode === 'readApp' && isEdit);
+  const isEditing = !status || isEdit;
 
   // FormData 형태로 초기화
   const [formData, setFormData] = useState<Record<number, FormData>>({
@@ -87,18 +74,19 @@ export default function FormTabManager({
       const newTabs = formItem.applicationFormDetailResponseList.map(
         (_, index) => index + 1,
       );
-
-      const newFormData = formItem.applicationFormDetailResponseList.reduce(
+      const newFormData = formItem.applicationFormDetailResponseList?.reduce(
         (acc, item, index) => {
+          console.log(item.requestCount);
           acc[index + 1] = {
             performanceDate: item.performanceDate,
-            requestCount: item.requestCount.toString(),
-            hopeAreaList: item.hopeAreaResponseList.map((area, i) => ({
-              id: i + 1,
-              location: area.location,
-              price: area.price.toString(),
-            })),
-            requirement: item.requirement || '',
+            requestCount: item.requestCount?.toString() ?? '',
+            hopeAreaList:
+              item.hopeAreaResponseList?.map((area, i) => ({
+                id: i + 1,
+                location: area.location,
+                price: area.price?.toString() ?? '',
+              })) ?? [],
+            requirement: item.requirement ?? '',
           };
           return acc;
         },
@@ -202,7 +190,8 @@ export default function FormTabManager({
       },
     );
 
-    if (mode === 'input') {
+    if (!status) {
+      // 새 신청
       const requestBody: CreateConcertFormRequest = {
         agentId,
         concertId,
@@ -214,7 +203,8 @@ export default function FormTabManager({
         onSuccess: () => handleOpenModal(),
         onError: handleError,
       });
-    } else if (mode === 'readApp') {
+    } else if (isEdit) {
+      // 기존 신청 수정
       if (!formItem?.applicationFormId) return;
 
       const requestBody: PatchConcertFormRequest = {
@@ -255,7 +245,7 @@ export default function FormTabManager({
             formItem={formItem}
             currentIndex={tabId - 1}
             seatingChartUrl={concertItem.seatingChartUrl}
-            disabled={!isEditing} // isEditing이 false면 readonly 모드, true면 input, edit 모드
+            disabled={!isEditing}
           />
         ) : null,
     };
@@ -273,14 +263,35 @@ export default function FormTabManager({
       />
       <div className={styles.input_container}>
         {tabItems.map((item) => item.content)}
-        {(mode === 'input' || (mode === 'readApp' && isEditing)) && (
-          <Button variant="fill" onClick={handleSubmit}>
-            {mode === 'input' ? '신청하기' : '재신청하기'}
+        {status === 'PENDING' && (
+          <Button variant="outline" color="gray">
+            신청 취소하기
           </Button>
         )}
-        {mode === 'readApp' && !isEditing && (
-          <Button variant="fill" onClick={() => setIsEdit(true)}>
-            재신청하기
+        {status === 'APPROVED' && (
+          <Button variant="outline" color="gray">
+            대리인과 채팅하기
+          </Button>
+        )}
+        {status === 'REJECTED' && !isEdit && (
+          <div>
+            <Button variant="outline" color="gray">
+              거절사유
+            </Button>
+            <Button variant="fill" onClick={() => setIsEdit(true)}>
+              재신청하기
+            </Button>
+          </div>
+        )}
+        {(status === 'CANCELED' || status === 'CANCELED_IN_PROCESS') &&
+          !isEdit && (
+            <Button variant="fill" onClick={() => setIsEdit(true)}>
+              재신청하기
+            </Button>
+          )}
+        {(!status || isEdit) && (
+          <Button variant="fill" onClick={handleSubmit}>
+            신청하기
           </Button>
         )}
       </div>

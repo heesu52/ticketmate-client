@@ -1,17 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
-import { usePatchFormCancel } from '@/app/history/_shared/services/mutation';
 // import { useGetRejectedReason } from '@/app/history/_shared/services/query';
 import { ArrowRightIcon } from '@/assets/icons';
 import Badge from '@/shared/components/ui/badge/badge';
-import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import {
   APPLICATION_STATUS_LABEL_MAP,
   // APPLICATION_REJECTED_LABEL_MAP,
 } from '@/shared/constants/type-mapping';
+import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import {
   Form,
   ApplicationFormStatus,
@@ -35,11 +33,10 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
     applicationFormStatus,
     ticketOpenType,
   } = formItem;
-
-  const { mutateAsync: cancelFormAsync } = usePatchFormCancel();
   // const { data: rejectReason } = useGetRejectedReason(applicationFormId);
-  const router = useRouter();
-  const { open } = useModalStore();
+  const navigation = useNavigation<{
+    applicationFormStatus: ApplicationFormStatus;
+  }>();
   // const { applicationFormRejectedType, otherMemo } = rejectReason ?? {};
 
   //type별 status 이름 변환
@@ -57,15 +54,20 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
   };
   const badgeVariant = statusBadgeMap[statusKey] ?? 'type-a';
 
-  // //type별 reject 이유 변환
-  // const reasonKey = applicationFormRejectedType as ApplicationRejectedType;
-  // const rejectLabel =
-  //   reasonKey === 'OTHER'
-  //     ? (otherMemo ?? '')
-  //     : (APPLICATION_REJECTED_LABEL_MAP[reasonKey] ?? '');
+  // 버튼 클릭 시 navigate로 이동
+  const handleNavigate = (applicationFormStatus: ApplicationFormStatus) => {
+    navigation.navigate({
+      pathname: `/concert/form/${applicationFormId}/view`,
+      search: `?type=${ticketOpenType}`,
+      state: { applicationFormStatus },
+    });
+  };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      onClick={() => handleNavigate(applicationFormStatus)}
+    >
       <div className={styles.upper_container}>
         <Badge variant={badgeVariant}>{statusLabel}</Badge>
         <ArrowRightIcon

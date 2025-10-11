@@ -1,0 +1,13 @@
+@use '@/styles/index' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px 0;
+  gap: 40px;
+
+  .forminfo_container {
+    padding: 0 20px;
+  }
+}

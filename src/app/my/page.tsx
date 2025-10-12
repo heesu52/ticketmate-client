@@ -8,11 +8,14 @@ import { SettingIcon } from '@/assets/icons';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Spacer from '@/shared/components/ui/spacer/spacer';
+import { useGetMember } from '@/shared/services/member/query';
 
 import styles from './page.module.scss';
 
 const MyPage = () => {
   const router = useRouter();
+
+  const { data: member } = useGetMember();
 
   const handleProfileEdit = () => {
     router.push('/my/profile');
@@ -34,20 +37,30 @@ const MyPage = () => {
           <div className={styles.info_container}>
             <Image
               className={styles.profile_image}
-              src="https://picsum.photos/81/81"
+              src={member?.profileUrl ?? 'https://picsum.photos/81/81'}
               alt="profile"
               width={81}
               height={81}
             />
 
             <div className={styles.info_content}>
-              <span className={styles.name}>홍길동</span>
+              <span className={styles.name}>{member?.nickname}</span>
               <Spacer size={4} />
-              <span className={styles.introduction}>잘 부탁드립니다!!</span>
+              <Link
+                href="/my/profile"
+                className={styles.introduction}
+                // TODO: member introduction 추가 후 수정
+                // data-has-introduction={member?.introduction ? 'true' : 'false'}
+                data-has-introduction={false}
+              >
+                {/* TODO: member introduction 추가 후 수정 */}
+                {/* {member?.introduction ?? '한 줄 소개를 입력해주세요.'} */}
+                {'한 줄 소개를 입력해주세요.'}
+              </Link>
               <Spacer size={15} />
               <span className={styles.follow_container}>
                 <span className={styles.text}>팔로잉</span>
-                <span className={styles.count}>100</span>
+                <span className={styles.count}>{member?.followingCount}</span>
               </span>
             </div>
           </div>

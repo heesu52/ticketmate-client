@@ -28,7 +28,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   // 기존 신청폼일 경우 formItem 요청
   const { data: formItem } = useGetFormDetail({ applicationFormId });
-
   const concertItem = useMemo(
     () => formItem?.concertInfoResponse ?? null,
     [formItem],
@@ -80,7 +79,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
             <FormTabManager
               handleOpenModal={handleOpenModal}
               concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
-              formItem={formItem} //기존 신청폼 보여줄 시 공연데이터
+              formItem={formItem} //기존 신청폼 보여줄 시 신청서정보
               ticketOpenType={type}
               concertId={concertItem.concertId}
               onError={handleError}

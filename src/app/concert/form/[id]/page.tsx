@@ -1,5 +1,5 @@
 'use client';
-import { use, useMemo } from 'react';
+import { use } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -7,7 +7,6 @@ import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
 import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-confirm-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
-import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
@@ -31,28 +30,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const agentId = searchParamsProps.get('agentId') ?? undefined;
   const type = searchParamsProps.get('type') as TicketOpenType;
 
-  // status 유무로 기존 신청폼 여부 판단
-  const isApplicationFormPage = !!status;
-  const applicationFormId = isApplicationFormPage ? concertId : undefined;
-
-  // 기존 신청폼일 경우 formItem 요청
-  const { data: formItem } = useGetFormDetail(
-    applicationFormId ? { applicationFormId } : undefined,
-  );
-
   // 새 신청폼일 경우 concertId로 concertItem 요청
-  const { data: fetchedConcertItem } = useGetConcertDetail(
-    !isApplicationFormPage && concertId ? { concertId: concertId } : undefined,
-  );
-
-  // 기존 신청폼이면 formItem.concertInfoResponse, 아니면 API 결과 사용
-  const concertItem = useMemo(
-    () =>
-      isApplicationFormPage
-        ? (formItem?.concertInfoResponse ?? null)
-        : (fetchedConcertItem ?? null),
-    [isApplicationFormPage, formItem, fetchedConcertItem],
-  );
+  const { data: concertItem } = useGetConcertDetail({ concertId });
 
   const handleOpenModal = async () => {
     try {
@@ -102,9 +81,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
             <FormTabManager
               handleOpenModal={handleOpenModal}
               concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
-              formItem={formItem} //기존 신청폼 보여줄 시 공연데이터
               ticketOpenType={type}
-              concertId={concertId}
+              concertId={concertItem.concertId}
               agentId={agentId}
               onError={handleError}
             />

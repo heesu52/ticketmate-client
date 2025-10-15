@@ -14,10 +14,10 @@ import Button from '@/shared/components/ui/button/button';
 import Tab from '@/shared/components/ui/tab/tab';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
 import {
-  TicketOpenType,
   Concert,
   ApplicationFormStatus,
   Form,
+  TicketOpenType,
 } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 import { getErrorMessage } from '@/shared/utils/getErrorMessage';
@@ -27,8 +27,7 @@ import styles from './form-tab-manager.module.scss';
 interface FormTabManagerProps {
   handleOpenModal: () => void;
   ticketOpenType: TicketOpenType;
-  concertId: string;
-  agentId?: string; //기존 수정폼은 agentId를 사용하지 않음
+  agentId?: string;
   onError: (message: string) => void;
   concertItem: Concert;
   formItem?: Form;
@@ -39,16 +38,22 @@ export default function FormTabManager({
   handleOpenModal,
   ticketOpenType,
   agentId,
-  concertId,
   onError,
   concertItem,
   formItem,
   status,
 }: FormTabManagerProps) {
+  const {
+    concertId,
+    seatingChartUrl,
+    concertDateInfoResponseList,
+    ticketOpenDateInfoResponseList,
+  } = concertItem;
+  const { applicationFormDetailResponseList = [], applicationFormId = '' } =
+    formItem ?? {};
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
-
   const [isEdit, setIsEdit] = useState(false);
   const isEditing = !status || isEdit;
 
@@ -68,13 +73,13 @@ export default function FormTabManager({
   useEffect(() => {
     if (
       formItem &&
-      Array.isArray(formItem.applicationFormDetailResponseList) &&
-      formItem.applicationFormDetailResponseList.length > 0
+      Array.isArray(applicationFormDetailResponseList) &&
+      applicationFormDetailResponseList.length > 0
     ) {
-      const newTabs = formItem.applicationFormDetailResponseList.map(
+      const newTabs = applicationFormDetailResponseList.map(
         (_, index) => index + 1,
       );
-      const newFormData = formItem.applicationFormDetailResponseList?.reduce(
+      const newFormData = applicationFormDetailResponseList?.reduce(
         (acc, item, index) => {
           console.log(item.requestCount);
           acc[index + 1] = {
@@ -106,12 +111,12 @@ export default function FormTabManager({
   const getTabLabel = (tabId: number) => {
     const currentFormDate = formData[tabId]?.performanceDate;
     const fallbackDate =
-      formItem?.applicationFormDetailResponseList?.[tabId - 1]?.performanceDate;
+      applicationFormDetailResponseList?.[tabId - 1]?.performanceDate;
 
     const date = currentFormDate || fallbackDate;
     if (!date) return '회차를 선택해주세요';
 
-    const selectedDateInfo = concertItem.concertDateInfoResponseList.find(
+    const selectedDateInfo = concertDateInfoResponseList.find(
       (item) => item.performanceDate === date,
     );
 
@@ -208,10 +213,10 @@ export default function FormTabManager({
       });
     } else if (isEdit) {
       // 기존 신청 수정
-      if (!formItem?.applicationFormId) return;
+      if (!applicationFormId) return;
 
       const requestBody: PatchConcertFormRequest = {
-        applicationFormId: formItem.applicationFormId,
+        applicationFormId,
         applicationFormEditRequest: {
           applicationFormDetailRequestList,
         },
@@ -226,8 +231,7 @@ export default function FormTabManager({
 
   const tabItems = tabs.map((tabId) => {
     const currentData =
-      formData[tabId] ??
-      formItem?.applicationFormDetailResponseList?.[tabId - 1];
+      formData[tabId] ?? applicationFormDetailResponseList?.[tabId - 1];
 
     return {
       value: tabId.toString(),
@@ -238,16 +242,12 @@ export default function FormTabManager({
             key={tabId}
             value={formData[tabId]}
             onChange={(data) => updateFormData(tabId, data)}
-            concertDateInfoResponseList={
-              concertItem.concertDateInfoResponseList
-            }
-            ticketOpenDateInfoResponseList={
-              concertItem.ticketOpenDateInfoResponseList
-            }
+            concertDateInfo={concertDateInfoResponseList}
+            ticketOpenDateInfo={ticketOpenDateInfoResponseList}
             ticketOpenType={ticketOpenType}
             formItem={formItem}
             currentIndex={tabId - 1}
-            seatingChartUrl={concertItem.seatingChartUrl}
+            seatingChartUrl={seatingChartUrl}
             disabled={!isEditing}
           />
         ) : null,

@@ -1,5 +1,5 @@
 'use client';
-import { use, useMemo } from 'react';
+import { use } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -24,14 +24,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const { open } = useModalStore();
 
-  const type = searchParamsProps.get('type') as TicketOpenType;
-
-  // 기존 신청폼일 경우 formItem 요청
   const { data: formItem } = useGetFormDetail({ applicationFormId });
-  const concertItem = useMemo(
-    () => formItem?.concertInfoResponse ?? null,
-    [formItem],
-  );
+  if (!formItem) return null;
+  const concertItem = formItem.concertInfoResponse;
+
+  const type = searchParamsProps.get('type') as TicketOpenType;
 
   // 에러 발생 시 토스트 알림
   const handleError = (message: string) => {
@@ -72,7 +69,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           <>
             {/* 공연 정보 */}
             <div className={styles.forminfo_container}>
-              <FormInfo concertItem={concertItem} ticketOpenType={type} />
+              <FormInfo concertItem={concertItem} />
             </div>
 
             {/* 신청 폼 탭*/}
@@ -81,7 +78,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
               concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
               formItem={formItem} //기존 신청폼 보여줄 시 신청서정보
               ticketOpenType={type}
-              concertId={concertItem.concertId}
               onError={handleError}
               status={state?.applicationFormStatus} //분기처리를 위해 전달
             />

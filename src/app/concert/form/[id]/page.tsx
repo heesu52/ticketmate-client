@@ -23,14 +23,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { open } = useModalStore();
 
   // useLocation으로 navigate에서 넘어온 state 받기
-  const { state, searchParams: searchParamsProps } = useLocation<{
-    isBankTransfer: boolean;
-  }>();
-
+  const { searchParams: searchParamsProps } =
+    useLocation<Record<string, unknown>>();
   const agentId = searchParamsProps.get('agentId') ?? undefined;
   const type = searchParamsProps.get('type') as TicketOpenType;
 
-  // 새 신청폼일 경우 concertId로 concertItem 요청
   const { data: concertItem } = useGetConcertDetail({ concertId });
 
   const handleOpenModal = async () => {
@@ -70,19 +67,14 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           <>
             {/* 공연 정보 */}
             <div className={styles.forminfo_container}>
-              <FormInfo
-                concertItem={concertItem}
-                ticketOpenType={type}
-                {...state}
-              />
+              <FormInfo concertItem={concertItem} />
             </div>
 
             {/* 신청 폼 탭*/}
             <FormTabManager
               handleOpenModal={handleOpenModal}
-              concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
+              concertItem={concertItem} //새로운 신청서 작성 시 필요한 공연정보
               ticketOpenType={type}
-              concertId={concertItem.concertId}
               agentId={agentId}
               onError={handleError}
             />

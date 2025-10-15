@@ -33,11 +33,9 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
     applicationFormStatus,
     ticketOpenType,
   } = formItem;
-  // const { data: rejectReason } = useGetRejectedReason(applicationFormId);
   const navigation = useNavigation<{
     applicationFormStatus: ApplicationFormStatus;
   }>();
-  // const { applicationFormRejectedType, otherMemo } = rejectReason ?? {};
 
   //type별 status 이름 변환
   const statusKey = applicationFormStatus as ApplicationFormStatus;

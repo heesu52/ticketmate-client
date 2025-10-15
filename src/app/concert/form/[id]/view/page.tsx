@@ -15,28 +15,16 @@ import { ApplicationFormStatus, TicketOpenType } from '@/shared/types';
 
 import styles from './page.module.scss';
 
-export default function Page({
-  params,
-  searchParams: searchParamsProps,
-}: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{
-    agentId: string;
-    type: TicketOpenType;
-  }>;
-}) {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const { id: applicationFormId } = resolvedParams;
-  const resolvedSearchParams = use(searchParamsProps);
-  const { agentId, type } = resolvedSearchParams;
-
+  const { state, searchParams: searchParamsProps } = useLocation<{
+    applicationFormStatus: ApplicationFormStatus;
+  }>();
   const router = useRouter();
   const { open } = useModalStore();
 
-  // useLocation으로 navigate에서 넘어온 state 받기
-  const { state } = useLocation<{
-    applicationFormStatus: ApplicationFormStatus;
-  }>();
+  const type = searchParamsProps.get('type') as TicketOpenType;
 
   // 기존 신청폼일 경우 formItem 요청
   const { data: formItem } = useGetFormDetail({ applicationFormId });
@@ -95,7 +83,6 @@ export default function Page({
               formItem={formItem} //기존 신청폼 보여줄 시 공연데이터
               ticketOpenType={type}
               concertId={concertItem.concertId}
-              agentId={agentId}
               onError={handleError}
               status={state?.applicationFormStatus} //분기처리를 위해 전달
             />

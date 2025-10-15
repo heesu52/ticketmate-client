@@ -12,36 +12,24 @@ import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
-import { TicketOpenType, ApplicationFormStatus } from '@/shared/types';
+import { TicketOpenType } from '@/shared/types';
 
 import styles from './page.module.scss';
 
-export default function Page({
-  params,
-  searchParams: searchParamsProps,
-}: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{
-    agentId: string;
-    type: TicketOpenType;
-    status?: string;
-  }>;
-}) {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const { id: concertId } = resolvedParams;
-  const resolvedSearchParams = use(searchParamsProps);
-  const { agentId, type, status: statusProp } = resolvedSearchParams;
 
   const router = useRouter();
   const { open } = useModalStore();
 
   // useLocation으로 navigate에서 넘어온 state 받기
-  const { state } = useLocation<{
+  const { state, searchParams: searchParamsProps } = useLocation<{
     isBankTransfer: boolean;
   }>();
 
-  // status는 여전히 쿼리 파라미터 기반으로 사용
-  const status = (statusProp as ApplicationFormStatus) ?? null;
+  const agentId = searchParamsProps.get('agentId') ?? undefined;
+  const type = searchParamsProps.get('type') as TicketOpenType;
 
   // status 유무로 기존 신청폼 여부 판단
   const isApplicationFormPage = !!status;
@@ -119,7 +107,6 @@ export default function Page({
               concertId={concertId}
               agentId={agentId}
               onError={handleError}
-              status={status ?? undefined} //분기처리를 위해 전달
             />
           </>
         )}

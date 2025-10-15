@@ -28,7 +28,7 @@ interface FormTabManagerProps {
   handleOpenModal: () => void;
   ticketOpenType: TicketOpenType;
   concertId: string;
-  agentId: string;
+  agentId?: string; //기존 수정폼은 agentId를 사용하지 않음
   onError: (message: string) => void;
   concertItem: Concert;
   formItem?: Form;
@@ -192,6 +192,9 @@ export default function FormTabManager({
 
     if (!status) {
       // 새 신청
+      if (!agentId) {
+        throw new Error('회원을 찾을 수 없습니다.');
+      }
       const requestBody: CreateConcertFormRequest = {
         agentId,
         concertId,

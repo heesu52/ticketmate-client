@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
 import FormCancelModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-cancel-modal';
+// import FormReasonModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-reason-modal ';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -36,6 +37,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     console.error(message);
   };
 
+  // 공연 신청 취소 모달 (의뢰인용)
   const handleOpenModal = async () => {
     try {
       const result = await open('form-cancel-modal', FormCancelModal, {
@@ -56,6 +58,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       });
     }
   };
+
+  // // 신청서 거절 사유 확인 모달(의뢰인)
+  // const handleOpenModal = () => {
+  //   open('form-reason-modal', FormReasonModal, { applicationFormId });
+  // };
   return (
     <PageFrame
       appBar={{
@@ -69,7 +76,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           <>
             {/* 공연 정보 */}
             <div className={styles.forminfo_container}>
-              <FormInfo concertItem={concertItem} />
+              <FormInfo concertItem={concertItem} ticketOpenType={type} />
             </div>
 
             {/* 신청 폼 탭*/}
@@ -78,6 +85,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
               concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
               formItem={formItem} //기존 신청폼 보여줄 시 신청서정보
               ticketOpenType={type}
+              applicationFormId={applicationFormId}
               onError={handleError}
               status={state?.applicationFormStatus} //분기처리를 위해 전달
             />

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import FormInput from '@/app/concert/form/[id]/_shared/components/form-input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
+import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-confirm-modal';
 import {
   useCreateConcertForm,
   usePatchConcertForm,
@@ -21,13 +22,16 @@ import {
 } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 import { getErrorMessage } from '@/shared/utils/getErrorMessage';
+import { handleModal } from '@/shared/utils/hadlemodal';
 
 import styles from './form-tab-manager.module.scss';
 
 interface FormTabManagerProps {
-  handleOpenModal: () => void;
+  handleOpenModal?: () => void;
   ticketOpenType: TicketOpenType;
+  concertId?: string;
   agentId?: string;
+  applicationFormId?: string;
   onError: (message: string) => void;
   concertItem: Concert;
   formItem?: Form;
@@ -38,19 +42,19 @@ export default function FormTabManager({
   handleOpenModal,
   ticketOpenType,
   agentId,
+  concertId,
+  applicationFormId,
   onError,
   concertItem,
   formItem,
   status,
 }: FormTabManagerProps) {
   const {
-    concertId,
     seatingChartUrl,
     concertDateInfoResponseList,
     ticketOpenDateInfoResponseList,
   } = concertItem;
-  const { applicationFormDetailResponseList = [], applicationFormId = '' } =
-    formItem ?? {};
+  const { applicationFormDetailResponseList = [] } = formItem ?? {};
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
@@ -81,7 +85,6 @@ export default function FormTabManager({
       );
       const newFormData = applicationFormDetailResponseList?.reduce(
         (acc, item, index) => {
-          console.log(item.requestCount);
           acc[index + 1] = {
             performanceDate: item.performanceDate,
             requestCount: item.requestCount?.toString() ?? '',
@@ -197,8 +200,8 @@ export default function FormTabManager({
 
     if (!status) {
       // 새 신청
-      if (!agentId) {
-        throw new Error('회원을 찾을 수 없습니다.');
+      if (!agentId || !concertId) {
+        throw new Error('알수없는 에러가 발생했습니다');
       }
       const requestBody: CreateConcertFormRequest = {
         agentId,
@@ -208,7 +211,14 @@ export default function FormTabManager({
       };
 
       createMutate(requestBody, {
-        onSuccess: () => handleOpenModal(),
+        // 공연 신청 모달 (의뢰인용)
+        onSuccess: () =>
+          handleModal(
+            'form-confirm-modal',
+            FormConfirmModal,
+            undefined,
+            '공연 의뢰에 성공했습니다.',
+          ),
         onError: handleError,
       });
     } else if (isEdit) {
@@ -223,7 +233,14 @@ export default function FormTabManager({
       };
 
       patchMutate(requestBody, {
-        onSuccess: () => handleOpenModal(),
+        onSuccess: () =>
+          // 공연 재신청 모달 (의뢰인용)
+          handleModal(
+            'form-confirm-modal',
+            FormConfirmModal,
+            undefined,
+            '공연 재신청에 성공했습니다.',
+          ),
         onError: handleError,
       });
     }
@@ -267,7 +284,7 @@ export default function FormTabManager({
       <div className={styles.input_container}>
         {tabItems.map((item) => item.content)}
         {status === 'PENDING' && (
-          <Button variant="outline" color="gray">
+          <Button variant="outline" color="gray" onClick={handleOpenModal}>
             신청 취소하기
           </Button>
         )}
@@ -278,7 +295,7 @@ export default function FormTabManager({
         )}
         {status === 'REJECTED' && !isEdit && (
           <div>
-            <Button variant="outline" color="gray">
+            <Button variant="outline" color="gray" onClick={handleOpenModal}>
               거절사유
             </Button>
             <Button variant="fill" onClick={() => setIsEdit(true)}>

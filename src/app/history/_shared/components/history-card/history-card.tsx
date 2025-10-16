@@ -2,19 +2,11 @@
 
 import Image from 'next/image';
 
-// import { useGetRejectedReason } from '@/app/history/_shared/services/query';
 import { ArrowRightIcon } from '@/assets/icons';
 import Badge from '@/shared/components/ui/badge/badge';
-import {
-  APPLICATION_STATUS_LABEL_MAP,
-  // APPLICATION_REJECTED_LABEL_MAP,
-} from '@/shared/constants/type-mapping';
+import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
-import {
-  Form,
-  ApplicationFormStatus,
-  // ApplicationRejectedType,
-} from '@/shared/types';
+import { Form, ApplicationFormStatus } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 
 import styles from './history-card.module.scss';

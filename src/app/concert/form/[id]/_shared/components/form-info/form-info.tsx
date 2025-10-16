@@ -6,16 +6,17 @@ import {
   TICKET_SITE_URL_MAP,
   TICKET_SITE_LABEL_MAP,
 } from '@/shared/constants/type-mapping';
-import { TicketReservationSite, Concert } from '@/shared/types';
+import { TicketReservationSite, Concert, TicketOpenType } from '@/shared/types';
 import { getPerformancePeriod } from '@/shared/utils/dates';
 
 import styles from './form-info.module.scss';
 
 interface ConcertInfoProps {
   concertItem: Concert;
+  ticketOpenType: TicketOpenType;
 }
 
-const Form = ({ concertItem }: ConcertInfoProps) => {
+const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
   const {
     concertName,
     concertHallName,
@@ -57,8 +58,12 @@ const Form = ({ concertItem }: ConcertInfoProps) => {
         siteLabel={siteLabel}
         badges={
           <>
-            {preOpenInfo && <Badge variant="type-a">선예매</Badge>}
-            {generalOpenInfo && <Badge variant="type-c">일반예매</Badge>}
+            {ticketOpenType === 'PRE_OPEN' && (
+              <Badge variant="type-a">선예매</Badge>
+            )}
+            {ticketOpenType === 'GENERAL_OPEN' && (
+              <Badge variant="type-c">일반예매</Badge>
+            )}
             {isBankTransfer != null && (
               <Badge variant="type-b">
                 {isBankTransfer ? '무통장 가능' : '무통장 불가능'}

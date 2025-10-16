@@ -11,10 +11,12 @@ const Provider = ({ children }: { children: ReactNode }) => {
     <>
       <HeadProvider />
       <ReactQueryProviders>
-        <ContextProvider>{children}</ContextProvider>
+        <ContextProvider>
+          {children}
+          <StackModalProvider />
+          <ReactToastProvider />
+        </ContextProvider>
       </ReactQueryProviders>
-      <StackModalProvider />
-      <ReactToastProvider />
     </>
   );
 };

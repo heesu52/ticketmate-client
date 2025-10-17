@@ -5,19 +5,14 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { getRejectionReason } from '@/app/history/_shared/services/api';
+import { GetRejectionReasonResponse } from '@/app/history/_shared/services/type';
 import ModalTemplate from '@/shared/components/ui/modal/modal-template/modal-template';
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { APPLICATION_REJECTED_LABEL_MAP } from '@/shared/constants/type-mapping';
-import { ApplicationRejectedType } from '@/shared/types';
 
 interface FormReasonModalProps extends ModalControl<unknown> {
   applicationFormId: string;
-}
-
-interface GetRejectionReasonResponse {
-  applicationFormRejectedType: ApplicationRejectedType;
-  otherMemo: string;
 }
 
 const FormReasonModal = ({

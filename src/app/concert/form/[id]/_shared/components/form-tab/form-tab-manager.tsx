@@ -202,7 +202,8 @@ export default function FormTabManager({
     if (!status) {
       // 새 신청
       if (!agentId || !concertId) {
-        throw new Error('알수없는 에러가 발생했습니다');
+        onError('알수없는 에러가 발생했습니다');
+        return;
       }
       const requestBody: CreateConcertFormRequest = {
         agentId,

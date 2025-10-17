@@ -64,7 +64,6 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
           width={12}
           height={12}
           fill="var(--grayscale-500)"
-          // onClick={addInput}
           style={{ cursor: 'pointer' }}
         />
       </div>

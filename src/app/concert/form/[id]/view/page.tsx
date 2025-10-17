@@ -92,6 +92,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   };
 
   /*
+  // TODO
   //신청서 거절 모달 (대리인용)
   const handleOpenRejectedModal = async () => {
     try {

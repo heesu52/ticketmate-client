@@ -68,7 +68,10 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   // 신청서 거절 사유 확인 모달 (의뢰인용)
   const handleOpenReasonModal = () => {
-    open('form-reason-modal', FormReasonModal, { applicationFormId });
+    open('form-reason-modal', FormReasonModal, {
+      applicationFormId,
+      agentNickname: formItem.agentNickname,
+    });
   };
 
   // 신청서 재요청 확인 모달 (의뢰인용)

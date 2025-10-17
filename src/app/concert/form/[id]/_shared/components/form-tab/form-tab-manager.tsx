@@ -228,8 +228,6 @@ export default function FormTabManager({
         },
       };
 
-      console.log(requestBody);
-
       patchMutate(requestBody, {
         onSuccess: () => {
           handleOpenModal();

@@ -194,7 +194,7 @@ export default function FormTabManager({
                   price: Number(item.price),
                 }))
               : undefined, // 값이 없으면 undefined로 보내서 제외
-          requestDetails: currentFormData.requirement,
+          requirement: currentFormData.requirement,
         };
       },
     );

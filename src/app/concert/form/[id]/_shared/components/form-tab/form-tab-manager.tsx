@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import FormInput from '@/app/concert/form/[id]/_shared/components/form-input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
-import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-confirm-modal';
 import {
   useCreateConcertForm,
   usePatchConcertForm,
@@ -22,12 +23,11 @@ import {
 } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 import { getErrorMessage } from '@/shared/utils/getErrorMessage';
-import { handleModal } from '@/shared/utils/hadlemodal';
 
 import styles from './form-tab-manager.module.scss';
 
 interface FormTabManagerProps {
-  handleOpenModal?: () => void;
+  handleOpenModal: () => void;
   ticketOpenType: TicketOpenType;
   concertId?: string;
   agentId?: string;
@@ -163,6 +163,7 @@ export default function FormTabManager({
     setFormData((prev) => ({ ...prev, [id]: data }));
   }, []);
 
+  const queryClient = useQueryClient();
   const { mutate: createMutate } = useCreateConcertForm();
   const { mutate: patchMutate } = usePatchConcertForm();
 
@@ -209,16 +210,10 @@ export default function FormTabManager({
         ticketOpenType,
         applicationFormDetailRequestList,
       };
-
       createMutate(requestBody, {
-        // 공연 신청 모달 (의뢰인용)
-        onSuccess: () =>
-          handleModal(
-            'form-confirm-modal',
-            FormConfirmModal,
-            undefined,
-            '공연 의뢰에 성공했습니다.',
-          ),
+        onSuccess: () => {
+          handleOpenModal();
+        },
         onError: handleError,
       });
     } else if (isEdit) {
@@ -232,15 +227,18 @@ export default function FormTabManager({
         },
       };
 
+      console.log(requestBody);
+
       patchMutate(requestBody, {
-        onSuccess: () =>
-          // 공연 재신청 모달 (의뢰인용)
-          handleModal(
-            'form-confirm-modal',
-            FormConfirmModal,
-            undefined,
-            '공연 재신청에 성공했습니다.',
-          ),
+        onSuccess: () => {
+          handleOpenModal();
+          // 캐시 무효화로 수정한 신청서 데이터 다시 조회
+          if (applicationFormId) {
+            queryClient.invalidateQueries({
+              queryKey: ['getFormDetail', applicationFormId],
+            });
+          }
+        },
         onError: handleError,
       });
     }

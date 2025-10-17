@@ -1,9 +1,15 @@
 import ModalTemplate from '@/shared/components/ui/modal/modal-template/modal-template';
 import { ModalTemplateType } from '@/shared/components/ui/modal/modal-template/modal-template.type';
 
-type FormrejectModalProps = Omit<ModalTemplateType, 'children'>;
+type FormrejectModalProps = Omit<ModalTemplateType, 'children'> & {
+  agentNickname: string;
+};
 
-const FormRejectedModal = ({ onResolve, onReject }: FormrejectModalProps) => {
+const FormRejectedModal = ({
+  onResolve,
+  onReject,
+  agentNickname,
+}: FormrejectModalProps) => {
   const handleFirstButtonClick = () => {
     onReject?.();
   };
@@ -14,7 +20,7 @@ const FormRejectedModal = ({ onResolve, onReject }: FormrejectModalProps) => {
 
   return (
     <ModalTemplate
-      title={'대리인 닉네임의 거절사유'}
+      title={`${agentNickname}의 거절사유`}
       description={`작성한 신청양식을 통해 동일한 대리인에게 다시 티켓팅을 의뢰할 수 있습니다.`}
       firstButtonLabel={'확인했어요'}
       secondButtonLabel={'신청하기'}

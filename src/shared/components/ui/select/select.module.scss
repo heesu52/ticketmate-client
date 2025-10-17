@@ -95,12 +95,11 @@
       color: var(--grayscale-700, #222);
 
       &:focus {
-        outline: solid var(--gray-2);
+        outline: none;
       }
 
-      &.active {
-        background: var(--primary-600, #e55656);
-        color: var(--white);
+      &[data-tone='negative'] {
+        color: var(--primary-500, #ff6a6a);
       }
 
       &[data-variant='form'] {

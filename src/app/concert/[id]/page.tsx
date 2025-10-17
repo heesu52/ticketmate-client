@@ -13,11 +13,10 @@ import { AgentInfo } from '@/shared/types';
 import styles from './page.module.scss';
 
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = use(params);
+  const resolvedParams = use(params);
+  const { id: concertId } = resolvedParams;
 
-  const { data: concertItem } = useGetConcertDetail(
-    id ? { concertId: id } : undefined,
-  );
+  const { data: concertItem } = useGetConcertDetail({ concertId });
 
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<AgentInfo | null>(null);
@@ -47,14 +46,14 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
         {concertItem && <ConcertInfo concertItem={concertItem} />}
 
         {/* 대리인 리스트 */}
-        <AgentList id={id} onAgentClick={handleAgentCardClick} />
+        <AgentList id={concertId} onAgentClick={handleAgentCardClick} />
 
         {selectedAgent && (
           <CustomBottomSheet
             onClose={toggleBottomSheet}
             isOpen={isBottomSheetOpen}
             concertItem={concertItem}
-            concertId={id}
+            concertId={concertId}
             agentInfo={selectedAgent}
           />
         )}

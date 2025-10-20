@@ -31,11 +31,13 @@ const ProfilePage = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // 닉네임 변경 처리
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setNickname(value);
   };
 
+  // 한 줄 소개 변경 처리
   const handleIntroductionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
@@ -43,6 +45,7 @@ const ProfilePage = () => {
     setIntroduction(value);
   };
 
+  // 프로필 이미지 변경 처리
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -51,10 +54,12 @@ const ProfilePage = () => {
     }
   };
 
+  // 프로필 이미지 클릭 처리
   const handleImageClick = () => {
     fileInputRef.current?.click();
   };
 
+  // 저장 버튼 클릭 처리
   const handleSubmit = () => {
     if (!nickname.trim()) {
       toastify({
@@ -112,6 +117,7 @@ const ProfilePage = () => {
   useEffect(() => {
     if (member) {
       setNickname(member.nickname);
+      setIntroduction(member.introduction);
 
       if (!profileImageFile) {
         setProfileImageUrl(member.profileUrl || null);

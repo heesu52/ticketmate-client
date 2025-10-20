@@ -49,13 +49,9 @@ const MyPage = () => {
               <Link
                 href="/my/profile"
                 className={styles.introduction}
-                // TODO: member introduction 추가 후 수정
-                // data-has-introduction={member?.introduction ? 'true' : 'false'}
-                data-has-introduction={false}
+                data-has-introduction={member?.introduction ? 'true' : 'false'}
               >
-                {/* TODO: member introduction 추가 후 수정 */}
-                {/* {member?.introduction ?? '한 줄 소개를 입력해주세요.'} */}
-                {'한 줄 소개를 입력해주세요.'}
+                {member?.introduction ?? '한 줄 소개를 입력해주세요.'}
               </Link>
               <Spacer size={15} />
               <span className={styles.follow_container}>

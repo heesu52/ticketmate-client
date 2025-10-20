@@ -9,6 +9,7 @@ export interface GetMemberResponse {
   profileUrl: string;
   gender: string;
   memberType: string;
+  introduction: string;
   followingCount: string;
   followerCount: string;
 }

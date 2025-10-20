@@ -5,16 +5,5 @@
   flex-direction: column;
   justify-content: center;
   width: 100%;
-
-  .count {
-    @include title-sm;
-    color: var(--textColor-main);
-    margin-top: 40px;
-  }
-
-  .asterisk {
-    @include title-sm;
-    color: var(--brandColor-main);
-    margin-left: 4px;
-  }
+  gap: 20px;
 }

@@ -31,8 +31,8 @@ import { FormData, HopeArea } from './form-input.type';
 interface FormInputProps {
   value: FormData;
   onChange: (data: FormData) => void;
-  concertDateInfoResponseList: ConcertDateInfo[];
-  ticketOpenDateInfoResponseList: TicketOpenDateInfo[];
+  concertDateInfo: ConcertDateInfo[];
+  ticketOpenDateInfo: TicketOpenDateInfo[];
   ticketOpenType: TicketOpenType;
   formItem?: Form;
   currentIndex: number;
@@ -43,8 +43,8 @@ interface FormInputProps {
 export default function FormInput({
   value,
   onChange,
-  concertDateInfoResponseList,
-  ticketOpenDateInfoResponseList,
+  concertDateInfo,
+  ticketOpenDateInfo,
   ticketOpenType,
   formItem,
   currentIndex,
@@ -116,7 +116,7 @@ export default function FormInput({
   };
 
   // 공연 날짜 옵션 리스트로 생성
-  const dateList = concertDateInfoResponseList.map((item) => {
+  const dateList = concertDateInfo.map((item) => {
     const formatted = formatDate(item.performanceDate);
     return {
       value: item.performanceDate, // 원본 날짜 값 사용
@@ -126,7 +126,7 @@ export default function FormInput({
 
   //티켓 오픈 타입 매칭
   const matchedOpenInfo = getTicketOpenInfoByType(
-    ticketOpenDateInfoResponseList,
+    ticketOpenDateInfo,
     ticketOpenType,
   );
 

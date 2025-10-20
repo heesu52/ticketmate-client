@@ -293,7 +293,7 @@ export default function FormTabManager({
           </Button>
         )}
         {status === 'REJECTED' && !isEdit && (
-          <div>
+          <div className={styles.rejected_button}>
             <Button variant="outline" color="gray" onClick={handleOpenModal}>
               거절사유
             </Button>

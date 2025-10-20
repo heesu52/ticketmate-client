@@ -12,6 +12,7 @@ import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
+import { useLocation } from '@/shared/hooks/navigation/use-location';
 
 import styles from './page.module.scss';
 
@@ -20,6 +21,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id: applicationFormId } = resolvedParams;
   const router = useRouter();
   const { open } = useModalStore();
+  const { state } = useLocation<{
+    agentNickname: string;
+  }>();
 
   const { data: formItem } = useGetFormDetail({ applicationFormId });
   if (!formItem) return null;
@@ -65,7 +69,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const handleOpenReasonModal = () => {
     open('form-reason-modal', FormReasonModal, {
       applicationFormId,
-      agentNickname: formItem.agentNickname,
+      agentNickname: state?.agentNickname,
     });
   };
 

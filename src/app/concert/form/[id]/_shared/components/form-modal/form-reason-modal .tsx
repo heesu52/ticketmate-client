@@ -17,7 +17,7 @@ import styles from './form-reason-modal.module.scss';
 
 interface FormReasonModalProps extends ModalControl<unknown> {
   applicationFormId: string;
-  agentNickname: string;
+  agentNickname?: string;
 }
 
 const FormReasonModal = ({

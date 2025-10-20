@@ -42,14 +42,18 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
   const badgeVariant = statusBadgeMap[statusKey] ?? 'type-a';
 
   // 버튼 클릭 시 navigate로 이동
-  const handleNavigate = () => {
+  const handleNavigate = (agentNickname: string) => {
     navigation.navigate({
       pathname: `/concert/form/${applicationFormId}/view`,
+      state: { agentNickname },
     });
   };
 
   return (
-    <div className={styles.container} onClick={() => handleNavigate()}>
+    <div
+      className={styles.container}
+      onClick={() => handleNavigate(agentNickname)}
+    >
       <div className={styles.upper_container}>
         <Badge variant={badgeVariant}>{statusLabel}</Badge>
         <ArrowRightIcon

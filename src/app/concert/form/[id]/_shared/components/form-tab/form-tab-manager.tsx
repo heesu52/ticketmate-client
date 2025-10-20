@@ -8,6 +8,7 @@ import {
   useCreateConcertForm,
   usePatchConcertForm,
 } from '@/app/concert/form/[id]/_shared/services/mutation';
+import queryKey from '@/app/concert/form/[id]/_shared/services/query-key';
 import {
   CreateConcertFormRequest,
   PatchConcertFormRequest,
@@ -234,7 +235,8 @@ export default function FormTabManager({
           // 캐시 무효화로 수정한 신청서 데이터 다시 조회
           if (applicationFormId) {
             queryClient.invalidateQueries({
-              queryKey: ['getFormDetail', applicationFormId],
+              queryKey: queryKey.getFormDetail({ applicationFormId }),
+              exact: true,
             });
           }
         },

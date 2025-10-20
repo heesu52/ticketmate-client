@@ -23,11 +23,8 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
     agentNickname,
     submittedDate,
     applicationFormStatus,
-    ticketOpenType,
   } = formItem;
-  const navigation = useNavigation<{
-    applicationFormStatus: ApplicationFormStatus;
-  }>();
+  const navigation = useNavigation();
 
   //type별 status 이름 변환
   const statusKey = applicationFormStatus as ApplicationFormStatus;
@@ -45,19 +42,14 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
   const badgeVariant = statusBadgeMap[statusKey] ?? 'type-a';
 
   // 버튼 클릭 시 navigate로 이동
-  const handleNavigate = (applicationFormStatus: ApplicationFormStatus) => {
+  const handleNavigate = () => {
     navigation.navigate({
       pathname: `/concert/form/${applicationFormId}/view`,
-      search: `?type=${ticketOpenType}`,
-      state: { applicationFormStatus },
     });
   };
 
   return (
-    <div
-      className={styles.container}
-      onClick={() => handleNavigate(applicationFormStatus)}
-    >
+    <div className={styles.container} onClick={() => handleNavigate()}>
       <div className={styles.upper_container}>
         <Badge variant={badgeVariant}>{statusLabel}</Badge>
         <ArrowRightIcon

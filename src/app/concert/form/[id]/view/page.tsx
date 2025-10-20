@@ -12,17 +12,12 @@ import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
-import { useLocation } from '@/shared/hooks/navigation/use-location';
-import { ApplicationFormStatus, TicketOpenType } from '@/shared/types';
 
 import styles from './page.module.scss';
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const { id: applicationFormId } = resolvedParams;
-  const { state, searchParams: searchParamsProps } = useLocation<{
-    applicationFormStatus: ApplicationFormStatus;
-  }>();
   const router = useRouter();
   const { open } = useModalStore();
 
@@ -30,8 +25,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   if (!formItem) return null;
   const concertItem = formItem.concertInfoResponse;
 
-  const type = searchParamsProps.get('type') as TicketOpenType;
-  const status = state?.applicationFormStatus;
+  const type = formItem.ticketOpenType;
+  const status = formItem.applicationFormStatus;
 
   // 에러 발생 시 토스트 알림
   const handleError = (message: string) => {

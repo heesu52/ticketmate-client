@@ -1,7 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { createConcertForm, patchConcertForm } from './api';
-import { CreateConcertFormRequest, PatchConcertFormRequest } from './type';
+import {
+  createConcertForm,
+  patchConcertForm,
+} from '@/app/concert/form/[id]/_shared/services/api';
+import {
+  CreateConcertFormRequest,
+  PatchConcertFormRequest,
+} from '@/app/concert/form/[id]/_shared/services/type';
 
 export const useCreateConcertForm = () => {
   return useMutation({

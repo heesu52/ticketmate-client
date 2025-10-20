@@ -11,7 +11,7 @@ const BASE_URL = 'application-form';
 /**
  * @description 공연 신청폼 목록 조회
  */
-const getFormList = async (request: GetFormListRequest) => {
+const getFormList = async (request?: GetFormListRequest) => {
   const data = await httpClient<GetFormListResponse>({
     method: 'get',
     url: `${BASE_URL}`,
@@ -44,7 +44,7 @@ const patchFormReject = async (request: PatchFormRequest) => {
     method: 'patch',
     url: `${BASE_URL}/${applicationFormId}/reject`,
     options: {
-      json: { ...request },
+      json: request,
     },
   });
 

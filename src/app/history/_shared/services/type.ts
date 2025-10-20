@@ -19,9 +19,9 @@ interface GetFormListRequest {
 type GetFormListResponse = Pagination<Form>;
 
 interface PatchFormRequest {
-  applicationFormId: string;
-  applicationFormRejectedType: ApplicationRejectedType;
-  otherMemo: string;
+  applicationFormId: string; // 거절할 신청서 PK [필수]
+  applicationFormRejectedType: ApplicationRejectedType; // 거절 사유 [필수]
+  otherMemo: string; // 기타 사유인 경우 상세 메모 [기타 사유인 경우 필수, 2자 이상]
 }
 
 interface GetRejectionReasonResponse {

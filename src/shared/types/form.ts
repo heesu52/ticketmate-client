@@ -31,7 +31,7 @@ interface ApplicationFormDetailResponse {
 interface Form {
   //신청서 상세조회에 대한 응답값
   concertInfoResponse: Concert;
-  applicationFormDetailResponseList: ApplicationFormDetailResponse[]; // 신청 공연 회차 목록 [최소 1개 이상 필수
+  applicationFormDetailResponseList: ApplicationFormDetailResponse[]; // 신청 공연 회차 목록 [최소 1개 이상 필수]
 
   //신청내역 정보 조회에 대한 응답값
   applicationFormId: string; //신청서 PK

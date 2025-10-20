@@ -10,7 +10,7 @@ interface ApplicationFormDetail {
   performanceDate: string; // 공연 일자
   requestCount: number; // 요청한 티켓 수
   hopeAreaList?: HopeArea[]; // 희망 구역 리스트 (선택)
-  requestDetails?: string; // 요청 사항 (선택)
+  requirement?: string; // 요청 사항 (선택)
 }
 
 interface ApplicationFormRequest {

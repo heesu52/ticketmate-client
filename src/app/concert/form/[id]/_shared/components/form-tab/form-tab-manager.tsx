@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import FormInput from '@/app/concert/form/[id]/_shared/components/form-input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
 import {
   useCreateConcertForm,
   usePatchConcertForm,
 } from '@/app/concert/form/[id]/_shared/services/mutation';
+import queryKey from '@/app/concert/form/[id]/_shared/services/query-key';
 import {
   CreateConcertFormRequest,
   PatchConcertFormRequest,
@@ -14,10 +17,10 @@ import Button from '@/shared/components/ui/button/button';
 import Tab from '@/shared/components/ui/tab/tab';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
 import {
-  TicketOpenType,
   Concert,
   ApplicationFormStatus,
   Form,
+  TicketOpenType,
 } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
 import { getErrorMessage } from '@/shared/utils/getErrorMessage';
@@ -27,8 +30,9 @@ import styles from './form-tab-manager.module.scss';
 interface FormTabManagerProps {
   handleOpenModal: () => void;
   ticketOpenType: TicketOpenType;
-  concertId: string;
-  agentId: string;
+  concertId?: string;
+  agentId?: string;
+  applicationFormId?: string;
   onError: (message: string) => void;
   concertItem: Concert;
   formItem?: Form;
@@ -40,30 +44,23 @@ export default function FormTabManager({
   ticketOpenType,
   agentId,
   concertId,
+  applicationFormId,
   onError,
   concertItem,
   formItem,
   status,
 }: FormTabManagerProps) {
+  const {
+    seatingChartUrl,
+    concertDateInfoResponseList,
+    ticketOpenDateInfoResponseList,
+  } = concertItem;
+  const { applicationFormDetailResponseList = [] } = formItem ?? {};
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
-  //status 별로 mode를 지정해서 렌더링 하는 form을 구분
-  const [mode] = useState<'input' | 'readonly' | 'readApp' | undefined>(() => {
-    if (!status) return 'input';
-    if (status === 'PENDING') return 'readonly';
-    if (
-      status === 'CANCELED' ||
-      status === 'CANCELED_IN_PROCESS' ||
-      status === 'REJECTED'
-    )
-      return 'readApp';
-    // APPROVED 혹은 그 외의 상태는 undefined로 둬서 아무 동작 안 하도록
-    return undefined;
-  });
-  //input과 readapp을 구분해서 제출을 하기 위해 state로 관리
   const [isEdit, setIsEdit] = useState(false);
-  const isEditing = mode === 'input' || (mode === 'readApp' && isEdit);
+  const isEditing = !status || isEdit;
 
   // FormData 형태로 초기화
   const [formData, setFormData] = useState<Record<number, FormData>>({
@@ -81,24 +78,24 @@ export default function FormTabManager({
   useEffect(() => {
     if (
       formItem &&
-      Array.isArray(formItem.applicationFormDetailResponseList) &&
-      formItem.applicationFormDetailResponseList.length > 0
+      Array.isArray(applicationFormDetailResponseList) &&
+      applicationFormDetailResponseList.length > 0
     ) {
-      const newTabs = formItem.applicationFormDetailResponseList.map(
+      const newTabs = applicationFormDetailResponseList.map(
         (_, index) => index + 1,
       );
-
-      const newFormData = formItem.applicationFormDetailResponseList.reduce(
+      const newFormData = applicationFormDetailResponseList?.reduce(
         (acc, item, index) => {
           acc[index + 1] = {
             performanceDate: item.performanceDate,
-            requestCount: item.requestCount.toString(),
-            hopeAreaList: item.hopeAreaResponseList.map((area, i) => ({
-              id: i + 1,
-              location: area.location,
-              price: area.price.toString(),
-            })),
-            requirement: item.requirement || '',
+            requestCount: item.requestCount?.toString() ?? '',
+            hopeAreaList:
+              item.hopeAreaResponseList?.map((area, i) => ({
+                id: i + 1,
+                location: area.location,
+                price: area.price?.toString() ?? '',
+              })) ?? [],
+            requirement: item.requirement ?? '',
           };
           return acc;
         },
@@ -118,12 +115,12 @@ export default function FormTabManager({
   const getTabLabel = (tabId: number) => {
     const currentFormDate = formData[tabId]?.performanceDate;
     const fallbackDate =
-      formItem?.applicationFormDetailResponseList?.[tabId - 1]?.performanceDate;
+      applicationFormDetailResponseList?.[tabId - 1]?.performanceDate;
 
     const date = currentFormDate || fallbackDate;
     if (!date) return '회차를 선택해주세요';
 
-    const selectedDateInfo = concertItem.concertDateInfoResponseList.find(
+    const selectedDateInfo = concertDateInfoResponseList.find(
       (item) => item.performanceDate === date,
     );
 
@@ -167,6 +164,7 @@ export default function FormTabManager({
     setFormData((prev) => ({ ...prev, [id]: data }));
   }, []);
 
+  const queryClient = useQueryClient();
   const { mutate: createMutate } = useCreateConcertForm();
   const { mutate: patchMutate } = usePatchConcertForm();
 
@@ -197,35 +195,51 @@ export default function FormTabManager({
                   price: Number(item.price),
                 }))
               : undefined, // 값이 없으면 undefined로 보내서 제외
-          requestDetails: currentFormData.requirement,
+          requirement: currentFormData.requirement,
         };
       },
     );
 
-    if (mode === 'input') {
+    if (!status) {
+      // 새 신청
+      if (!agentId || !concertId) {
+        onError('알수없는 에러가 발생했습니다');
+        return;
+      }
       const requestBody: CreateConcertFormRequest = {
         agentId,
         concertId,
         ticketOpenType,
         applicationFormDetailRequestList,
       };
-
       createMutate(requestBody, {
-        onSuccess: () => handleOpenModal(),
+        onSuccess: () => {
+          handleOpenModal();
+        },
         onError: handleError,
       });
-    } else if (mode === 'readApp') {
-      if (!formItem?.applicationFormId) return;
+    } else if (isEdit) {
+      // 기존 신청 수정
+      if (!applicationFormId) return;
 
       const requestBody: PatchConcertFormRequest = {
-        applicationFormId: formItem.applicationFormId,
+        applicationFormId,
         applicationFormEditRequest: {
           applicationFormDetailRequestList,
         },
       };
 
       patchMutate(requestBody, {
-        onSuccess: () => handleOpenModal(),
+        onSuccess: () => {
+          handleOpenModal();
+          // 캐시 무효화로 수정한 신청서 데이터 다시 조회
+          if (applicationFormId) {
+            queryClient.invalidateQueries({
+              queryKey: queryKey.getFormDetail({ applicationFormId }),
+              exact: true,
+            });
+          }
+        },
         onError: handleError,
       });
     }
@@ -233,8 +247,7 @@ export default function FormTabManager({
 
   const tabItems = tabs.map((tabId) => {
     const currentData =
-      formData[tabId] ??
-      formItem?.applicationFormDetailResponseList?.[tabId - 1];
+      formData[tabId] ?? applicationFormDetailResponseList?.[tabId - 1];
 
     return {
       value: tabId.toString(),
@@ -245,17 +258,13 @@ export default function FormTabManager({
             key={tabId}
             value={formData[tabId]}
             onChange={(data) => updateFormData(tabId, data)}
-            concertDateInfoResponseList={
-              concertItem.concertDateInfoResponseList
-            }
-            ticketOpenDateInfoResponseList={
-              concertItem.ticketOpenDateInfoResponseList
-            }
+            concertDateInfo={concertDateInfoResponseList}
+            ticketOpenDateInfo={ticketOpenDateInfoResponseList}
             ticketOpenType={ticketOpenType}
             formItem={formItem}
             currentIndex={tabId - 1}
-            seatingChartUrl={concertItem.seatingChartUrl}
-            disabled={!isEditing} // isEditing이 false면 readonly 모드, true면 input, edit 모드
+            seatingChartUrl={seatingChartUrl}
+            disabled={!isEditing}
           />
         ) : null,
     };
@@ -273,14 +282,35 @@ export default function FormTabManager({
       />
       <div className={styles.input_container}>
         {tabItems.map((item) => item.content)}
-        {(mode === 'input' || (mode === 'readApp' && isEditing)) && (
-          <Button variant="fill" onClick={handleSubmit}>
-            {mode === 'input' ? '신청하기' : '재신청하기'}
+        {status === 'PENDING' && (
+          <Button variant="outline" color="gray" onClick={handleOpenModal}>
+            신청 취소하기
           </Button>
         )}
-        {mode === 'readApp' && !isEditing && (
-          <Button variant="fill" onClick={() => setIsEdit(true)}>
-            재신청하기
+        {status === 'APPROVED' && (
+          <Button variant="outline" color="gray">
+            대리인과 채팅하기
+          </Button>
+        )}
+        {status === 'REJECTED' && !isEdit && (
+          <div>
+            <Button variant="outline" color="gray" onClick={handleOpenModal}>
+              거절사유
+            </Button>
+            <Button variant="fill" onClick={() => setIsEdit(true)}>
+              재신청하기
+            </Button>
+          </div>
+        )}
+        {(status === 'CANCELED' || status === 'CANCELED_IN_PROCESS') &&
+          !isEdit && (
+            <Button variant="fill" onClick={() => setIsEdit(true)}>
+              재신청하기
+            </Button>
+          )}
+        {(!status || isEdit) && (
+          <Button variant="fill" onClick={handleSubmit}>
+            신청하기
           </Button>
         )}
       </div>

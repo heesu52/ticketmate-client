@@ -4,7 +4,7 @@ import { getFormList, getRejectionReason } from './api';
 import queryKey from './query-key';
 import { GetFormListRequest } from './type';
 
-const useGetFormList = (request?: GetFormListRequest) => {
+const useGetFormList = (request: GetFormListRequest) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: queryKey.getFormList(request),
     queryFn: () => getFormList(request),

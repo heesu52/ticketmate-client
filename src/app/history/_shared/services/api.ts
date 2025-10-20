@@ -4,21 +4,20 @@ import {
   PatchFormRequest,
   GetRejectionReasonResponse,
 } from '@/app/history/_shared/services/type';
-import instance from '@/shared/services/instance';
-import { createQueryParams } from '@/shared/utils/services/query-string';
+import httpClient from '@/lib/http-client/http-client';
 
-const BASE_URL = '/application-form';
+const BASE_URL = 'application-form';
 
 /**
  * @description 공연 신청폼 목록 조회
  */
-const getFormList = async (request?: GetFormListRequest) => {
-  const query = request
-    ? `?${createQueryParams(request as unknown as Record<string, unknown>)}`
-    : '';
-
-  const data = await instance<GetFormListResponse>(`${BASE_URL}${query}`, {
-    method: 'GET',
+const getFormList = async (request: GetFormListRequest) => {
+  const data = await httpClient<GetFormListResponse>({
+    method: 'get',
+    url: `${BASE_URL}`,
+    options: {
+      searchParams: { ...request },
+    },
   });
   return data;
 };
@@ -27,9 +26,11 @@ const getFormList = async (request?: GetFormListRequest) => {
  * @description 공연 신청폼 수락
  */
 const patchFormApprove = async (applicationFormId: string) => {
-  const data = await instance(`${BASE_URL}/${applicationFormId}/accept`, {
-    method: 'PATCH',
+  const data = await httpClient({
+    method: 'patch',
+    url: `${BASE_URL}/${applicationFormId}/accept`,
   });
+
   return data;
 };
 
@@ -37,17 +38,14 @@ const patchFormApprove = async (applicationFormId: string) => {
  * @description 공연 신청폼 거절
  */
 const patchFormReject = async (request: PatchFormRequest) => {
-  const { applicationFormId, applicationFormRejectedType, otherMemo } = request;
+  const { applicationFormId } = request;
 
-  const data = await instance(`${BASE_URL}/${applicationFormId}/reject`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
+  const data = await httpClient({
+    method: 'patch',
+    url: `${BASE_URL}/${applicationFormId}/reject`,
+    options: {
+      json: { ...request },
     },
-    body: JSON.stringify({
-      applicationFormRejectedType,
-      otherMemo,
-    }),
   });
 
   return data;
@@ -57,8 +55,9 @@ const patchFormReject = async (request: PatchFormRequest) => {
  * @description 공연 신청폼 신청취소(의뢰인)
  */
 const patchFormCancel = async (applicationFormId: string) => {
-  const data = await instance(`${BASE_URL}/${applicationFormId}/cancel`, {
-    method: 'PATCH',
+  const data = await httpClient({
+    method: 'patch',
+    url: `${BASE_URL}/${applicationFormId}/cancel`,
   });
 
   return data;
@@ -68,12 +67,11 @@ const patchFormCancel = async (applicationFormId: string) => {
  * @description 신청서 거절 사유 조회
  */
 const getRejectionReason = async (applicationFormId: string) => {
-  const data = await instance<GetRejectionReasonResponse>(
-    `${BASE_URL}/${applicationFormId}/rejection-reason`,
-    {
-      method: 'GET',
-    },
-  );
+  const data = await httpClient<GetRejectionReasonResponse>({
+    method: 'get',
+    url: `${BASE_URL}/${applicationFormId}/rejection-reason`,
+  });
+
   return data;
 };
 

@@ -94,15 +94,11 @@ const CustomBottomSheet = ({
   ]);
 
   // 버튼 클릭 시 navigate로 이동
-  const handleNavigate = (
-    ticketOpenType: TicketOpenType,
-    isBankTransfer: boolean,
-  ) => {
+  const handleNavigate = (ticketOpenType: TicketOpenType) => {
     onClose();
     navigation.navigate({
       pathname: `/concert/form/${concertId}`,
       search: `?agentId=${agentId}&type=${ticketOpenType}`,
-      state: { isBankTransfer },
     });
   };
 
@@ -140,12 +136,7 @@ const CustomBottomSheet = ({
                 신청된 예매
               </Button>
             ) : (
-              <Button
-                variant="fill"
-                onClick={() =>
-                  handleNavigate('PRE_OPEN', preOpen.isBankTransfer)
-                }
-              >
+              <Button variant="fill" onClick={() => handleNavigate('PRE_OPEN')}>
                 선예매 신청하기
               </Button>
             ))}
@@ -159,9 +150,7 @@ const CustomBottomSheet = ({
               <Button
                 variant="outline"
                 color="gray"
-                onClick={() =>
-                  handleNavigate('GENERAL_OPEN', generalOpen.isBankTransfer)
-                }
+                onClick={() => handleNavigate('GENERAL_OPEN')}
               >
                 일반예매 신청하기
               </Button>

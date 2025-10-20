@@ -29,8 +29,8 @@ export const APPLICATION_STATUS_LABEL_MAP: Record<
   string
 > = {
   PENDING: '수락 대기 중',
-  REJECTED: '거절됨',
-  CANCELED: '취소됨',
+  REJECTED: '거절',
+  CANCELED: '취소',
   APPROVED: '수락완료',
   CANCELED_IN_PROCESS: '진행취소',
 };

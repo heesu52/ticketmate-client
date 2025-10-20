@@ -6,7 +6,7 @@ import {
   TICKET_SITE_URL_MAP,
   TICKET_SITE_LABEL_MAP,
 } from '@/shared/constants/type-mapping';
-import { TicketReservationSite, TicketOpenType, Concert } from '@/shared/types';
+import { TicketReservationSite, Concert, TicketOpenType } from '@/shared/types';
 import { getPerformancePeriod } from '@/shared/utils/dates';
 
 import styles from './form-info.module.scss';
@@ -14,19 +14,15 @@ import styles from './form-info.module.scss';
 interface ConcertInfoProps {
   concertItem: Concert;
   ticketOpenType: TicketOpenType;
-  isBankTransfer?: boolean | null;
 }
 
-const Form = ({
-  concertItem,
-  ticketOpenType,
-  isBankTransfer,
-}: ConcertInfoProps) => {
+const Form = ({ concertItem, ticketOpenType }: ConcertInfoProps) => {
   const {
     concertName,
     concertHallName,
     ticketReservationSite,
     concertDateInfoResponseList,
+    ticketOpenDateInfoResponseList,
   } = concertItem;
 
   //type별 url과 사이트 이름 변환
@@ -38,6 +34,18 @@ const Form = ({
   const { startDate, endDate } = getPerformancePeriod(
     concertDateInfoResponseList,
   );
+
+  //ticket open 타입
+  const preOpenInfo = ticketOpenDateInfoResponseList.find(
+    (item) => item.ticketOpenType === 'PRE_OPEN',
+  );
+  const generalOpenInfo = ticketOpenDateInfoResponseList.find(
+    (item) => item.ticketOpenType === 'GENERAL_OPEN',
+  );
+
+  //무통장 가능여부
+  const isBankTransfer =
+    preOpenInfo?.isBankTransfer ?? generalOpenInfo?.isBankTransfer;
 
   return (
     <div className={styles.container}>

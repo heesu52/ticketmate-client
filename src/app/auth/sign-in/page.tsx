@@ -11,9 +11,9 @@ const cn = classNames.bind(styles);
 
 export default function Page() {
   const NAVER_AUTH_URL =
-    'https://api.ticketmate.site/oauth2/authorization/naver';
+    'https://api.dev.ticketmate.site/oauth2/authorization/naver';
   const KAKAO_AUTH_URL =
-    'https://api.ticketmate.site/oauth2/authorization/kakao';
+    'https://api.dev.ticketmate.site/oauth2/authorization/kakao';
 
   return (
     <PageFrame

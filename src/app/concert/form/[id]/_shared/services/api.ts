@@ -4,21 +4,21 @@ import {
   GetFormDetailRequest,
   GetFormDetailResponse,
 } from '@/app/concert/form/[id]/_shared/services/type';
-import instance from '@/shared/services/instance';
+import httpClient from '@/lib/http-client/http-client';
 
-const BASE_URL = '/application-form';
+const BASE_URL = 'application-form';
 
 /**
  * @description 신청서 작성
  */
 
 const createConcertForm = async (request: CreateConcertFormRequest) => {
-  const data = await instance(`${BASE_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const data = await httpClient({
+    method: 'post',
+    url: `${BASE_URL}`,
+    options: {
+      json: request,
     },
-    body: JSON.stringify(request),
   });
 
   return data;
@@ -30,15 +30,13 @@ const createConcertForm = async (request: CreateConcertFormRequest) => {
 const patchConcertForm = async (request: PatchConcertFormRequest) => {
   const { applicationFormId, applicationFormEditRequest } = request;
 
-  const data = await instance(`${BASE_URL}/${applicationFormId}/edit`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
+  return await httpClient({
+    method: 'patch',
+    url: `${BASE_URL}/${applicationFormId}/edit`,
+    options: {
+      json: applicationFormEditRequest,
     },
-    body: JSON.stringify(applicationFormEditRequest),
   });
-
-  return data;
 };
 
 /**
@@ -47,12 +45,10 @@ const patchConcertForm = async (request: PatchConcertFormRequest) => {
 const getFormDetail = async (request: GetFormDetailRequest) => {
   const { applicationFormId } = request;
 
-  const data = await instance<GetFormDetailResponse>(
-    `${BASE_URL}/${applicationFormId}`,
-    {
-      method: 'GET',
-    },
-  );
+  const data = await httpClient<GetFormDetailResponse>({
+    method: 'get',
+    url: `${BASE_URL}/${applicationFormId}`,
+  });
   return data;
 };
 

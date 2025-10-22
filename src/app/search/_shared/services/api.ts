@@ -4,14 +4,15 @@ import {
   GetAgentSearchResponse,
   GetRecentSearchResponse,
 } from '@/app/search/_shared/services/type';
-import instance from '@/shared/services/instance';
+import httpClient from '@/lib/http-client/http-client';
 import { createQueryParams } from '@/shared/utils/services/query-string';
 
-const BASE_URL = '/search';
+const BASE_URL = 'search';
 
 /**
  * @description 검색 api
  */
+
 const getSearch = async <
   T extends GetConcertSearchResponse | GetAgentSearchResponse,
 >(
@@ -21,23 +22,34 @@ const getSearch = async <
     ? `?${createQueryParams(request as unknown as Record<string, unknown>)}`
     : '';
 
-  const data = await instance<T>(`${BASE_URL}${query}`, {
-    method: 'GET',
+  const data = await httpClient<T>({
+    method: 'get',
+    url: `${BASE_URL}${query}`,
   });
 
   return data;
 };
+
+/**
+ * @description 최근검색 api
+ */
 
 const getRecentSearch = async () => {
-  const data = await instance<GetRecentSearchResponse>(`${BASE_URL}/recent`, {
-    method: 'GET',
+  const data = await httpClient<GetRecentSearchResponse>({
+    method: 'get',
+    url: `${BASE_URL}/recent`,
   });
   return data;
 };
 
+/**
+ * @description 최근검색어 삭제 api
+ */
+
 const deleteRecentSearch = async () => {
-  const data = await instance(`${BASE_URL}/recent`, {
-    method: 'DELETE',
+  const data = await httpClient({
+    method: 'delete',
+    url: `${BASE_URL}/recent`,
   });
   return data;
 };

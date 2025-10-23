@@ -3,7 +3,7 @@
 import { createContext, ReactNode, useContext, useMemo } from 'react';
 
 import { useGetMember } from '@/shared/services/member/query';
-import type { Member } from '@/shared/types';
+import { Member } from '@/shared/types';
 
 /**
  * @typedef {Object} MemberContextType
@@ -14,19 +14,10 @@ import type { Member } from '@/shared/types';
  */
 interface MemberContextType {
   member: Member | null;
-  refresh: () => Promise<Member | undefined>;
+  refresh: () => Promise<Member | null>;
   isLoading: boolean;
   error: unknown | null;
 }
-
-/**
- * 멤버 정보를 전역적으로 관리하는 React Context
- *
- * @type {React.Context<MemberContextType | null>}
- * @description
- * - `MemberProvider` 하위 트리에서 `useMember()` 훅을 사용해 접근할 수 있습니다.
- * - 로그인 상태, 사용자 프로필, 팔로워/팔로잉 수 등 공통 멤버 데이터를 관리합니다.
- */
 const MemberContext = createContext<MemberContextType | null>(null);
 
 /**
@@ -44,7 +35,7 @@ export function MemberProvider({ children }: { children: ReactNode }) {
    * 서버로부터 멤버 데이터를 다시 가져오는 함수.
    * @returns {Promise<Member | undefined>} 최신 멤버 데이터 반환
    */
-  const refresh = () => refetch().then((res) => res.data as Member | undefined);
+  const refresh = () => refetch().then((res) => res.data as Member | null);
 
   const value = useMemo<MemberContextType>(() => {
     const member = isSuccess && data ? data : null;

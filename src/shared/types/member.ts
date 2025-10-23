@@ -1,6 +1,5 @@
 interface Member {
   memberId: string;
-  memberType: string;
   username: string;
   nickname: string;
   name: string;
@@ -9,6 +8,10 @@ interface Member {
   phone: string;
   profileUrl: string;
   gender: string;
+  memberType: string;
+  introduction: string;
+  followingCount: string;
+  followerCount: string;
 }
 
 export type { Member };

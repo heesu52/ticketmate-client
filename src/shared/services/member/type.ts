@@ -1,18 +1,6 @@
-export interface GetMemberResponse {
-  memberId: string;
-  username: string;
-  nickname: string;
-  name: string;
-  birthDay: string;
-  birthYear: string;
-  phone: string;
-  profileUrl: string;
-  gender: string;
-  memberType: string;
-  introduction: string;
-  followingCount: string;
-  followerCount: string;
-}
+import { Member } from '@/shared/types';
+
+export type GetMemberResponse = Member;
 
 export interface PatchMemberRequest {
   nickname: string;

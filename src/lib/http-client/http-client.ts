@@ -31,7 +31,7 @@ const extended = created.extend({
     ],
     afterResponse: [
       async (request, options, response) => {
-        if (response.status === 401) {
+        if (response.status === 401 && MODE !== 'development') {
           const newAccessToken = await refreshAccessToken();
 
           if (newAccessToken) {

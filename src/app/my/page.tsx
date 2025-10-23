@@ -5,17 +5,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { SettingIcon } from '@/assets/icons';
+import { NoRegisterImage } from '@/assets/images';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Spacer from '@/shared/components/ui/spacer/spacer';
-import { useGetMember } from '@/shared/services/member/query';
+import { useMember } from '@/shared/context/member-context';
 
 import styles from './page.module.scss';
 
 const MyPage = () => {
   const router = useRouter();
 
-  const { data: member } = useGetMember();
+  const { member } = useMember();
 
   const handleProfileEdit = () => {
     router.push('/my/profile');
@@ -37,7 +38,7 @@ const MyPage = () => {
           <div className={styles.info_container}>
             <Image
               className={styles.profile_image}
-              src={member?.profileUrl ?? 'https://picsum.photos/81/81'}
+              src={member?.profileUrl ?? NoRegisterImage}
               alt="profile"
               width={81}
               height={81}
@@ -49,9 +50,9 @@ const MyPage = () => {
               <Link
                 href="/my/profile"
                 className={styles.introduction}
-                data-has-introduction={member?.introduction ? 'true' : 'false'}
+                data-has-introduction={member?.introduction || 'false'}
               >
-                {member?.introduction ?? '한 줄 소개를 입력해주세요.'}
+                {member?.introduction || '한 줄 소개를 입력해주세요.'}
               </Link>
               <Spacer size={15} />
               <span className={styles.follow_container}>

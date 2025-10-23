@@ -1,4 +1,4 @@
-import { GetFormDetailRequest } from './type';
+import { GetFormDetailRequest } from '@/app/concert/form/[id]/_shared/services/type';
 
 const queryKey = {
   getFormDetail: (request?: GetFormDetailRequest) => [

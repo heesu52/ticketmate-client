@@ -1,9 +1,10 @@
-import instance from '@/shared/services/instance';
-import { createQueryParams } from '@/shared/utils/services/query-string';
+import {
+  GetAgentListRequest,
+  GetAgentListResponse,
+} from '@/app/concert/[id]/_shared/services/agent-card/type';
+import httpClient from '@/lib/http-client/http-client';
 
-import { GetAgentListRequest, GetAgentListResponse } from './type';
-
-const BASE_URL = '/concert-agent-availability';
+const BASE_URL = 'concert-agent-availability';
 
 /**
  * @description 공연별 수락 대리인 목록 조회
@@ -11,14 +12,13 @@ const BASE_URL = '/concert-agent-availability';
 const getAgentList = async (request: GetAgentListRequest) => {
   const { concertId, ...queryParams } = request;
 
-  const query = Object.keys(queryParams).length
-    ? `?${createQueryParams(queryParams)}`
-    : '';
-
-  const data = await instance<GetAgentListResponse>(
-    `${BASE_URL}/${concertId}/agents${query}`,
-    { method: 'GET' },
-  );
+  const data = await httpClient<GetAgentListResponse>({
+    method: 'get',
+    url: `${BASE_URL}/${concertId}/agents`,
+    options: {
+      searchParams: { ...queryParams },
+    },
+  });
 
   return data;
 };

@@ -1,19 +1,18 @@
-import instance from '@/shared/services/instance';
+import { CheckDuplicateFormRequest } from '@/app/concert/[id]/_shared/services/bottom-sheet/type';
+import httpClient from '@/lib/http-client/http-client';
 
-import { CheckDuplicateFormRequest } from './type';
-
-const BASE_URL = '/application-form/duplicate';
+const BASE_URL = 'application-form/duplicate';
 
 /**
  * @description 공연 신청폼 중복 확인
  */
 const checkDuplicateForm = async (request: CheckDuplicateFormRequest) => {
-  const data = await instance(`${BASE_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const data = await httpClient({
+    method: 'post',
+    url: `${BASE_URL}`,
+    options: {
+      json: request,
     },
-    body: JSON.stringify(request),
   });
 
   return data;

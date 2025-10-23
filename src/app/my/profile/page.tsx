@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 
 import { NoRegisterImage } from '@/assets/images';
@@ -14,13 +13,10 @@ import Textarea from '@/shared/components/ui/textarea/textarea';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useUpdateProfile } from '@/shared/services/member/mutation';
 import { useGetMember } from '@/shared/services/member/query';
-import queryKey from '@/shared/services/member/query-key';
 
 import styles from './page.module.scss';
 
 const ProfilePage = () => {
-  const queryClient = useQueryClient();
-
   const { data: member } = useGetMember();
   const updateProfile = useUpdateProfile();
 
@@ -100,7 +96,6 @@ const ProfilePage = () => {
     updateProfile
       .mutateAsync(request)
       .then(() => {
-        queryClient.invalidateQueries({ queryKey: queryKey.getMember() });
         toastify({
           variant: 'success',
           description: '회원 정보 수정에 성공했습니다.',

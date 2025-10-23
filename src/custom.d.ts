@@ -22,3 +22,12 @@ declare module '*.module.styl' {
   const classes: { [key: string]: string };
   export default classes;
 }
+
+import { HttpClientError } from '@/lib/http-client/http-client.type';
+import '@tanstack/react-query';
+
+declare module '@tanstack/react-query' {
+  interface Register {
+    defaultError: HttpClientError;
+  }
+}

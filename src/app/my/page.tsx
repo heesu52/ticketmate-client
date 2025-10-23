@@ -50,7 +50,7 @@ const MyPage = () => {
               <Link
                 href="/my/profile"
                 className={styles.introduction}
-                data-has-introduction={member?.introduction || 'false'}
+                data-has-introduction={member?.introduction ? 'true' : 'false'}
               >
                 {member?.introduction || '한 줄 소개를 입력해주세요.'}
               </Link>

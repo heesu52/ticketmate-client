@@ -113,12 +113,9 @@ const ProfilePage = () => {
     if (member) {
       setNickname(member.nickname);
       setIntroduction(member.introduction);
-
-      if (!profileImageFile) {
-        setProfileImageUrl(member.profileUrl || null);
-      }
+      setProfileImageUrl(member.profileUrl || null);
     }
-  }, [member, profileImageFile]);
+  }, [member]);
 
   return (
     <PageFrame

@@ -12,6 +12,9 @@ const FormCancelModal = ({
   applicationFormId,
 }: FormCancelModalProps) => {
   const { mutate } = usePatchFormCancelMutation();
+  const handleFirstButtonClick = () => {
+    onReject?.();
+  };
 
   const handleSecondButtonClick = () => {
     mutate(applicationFormId, {
@@ -26,7 +29,7 @@ const FormCancelModal = ({
       description="신청했던 내역은 과거 신청내역에서 확인 가능합니다."
       firstButtonLabel="다음에"
       secondButtonLabel="취소하기"
-      onFirstButtonClick={() => onReject?.()}
+      onFirstButtonClick={handleFirstButtonClick}
       onSecondButtonClick={handleSecondButtonClick}
     />
   );

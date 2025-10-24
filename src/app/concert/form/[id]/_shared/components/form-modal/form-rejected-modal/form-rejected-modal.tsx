@@ -15,15 +15,15 @@ import { ApplicationRejectedType } from '@/shared/types';
 
 import styles from './form-rejected-modal.module.scss';
 
-interface FormReasonModalProps extends ModalControl<unknown> {
+interface FormRejectedModalProps extends ModalControl<unknown> {
   applicationFormId: string;
 }
 
-const FormReasonModal = ({
+const FormRejectedModal = ({
   onResolve,
   onReject,
   applicationFormId,
-}: FormReasonModalProps) => {
+}: FormRejectedModalProps) => {
   const [selected, setSelected] = useState<string>('');
   const [otherMemo, setOtherMemo] = useState<string>('');
   const [error, setError] = useState('');
@@ -136,4 +136,4 @@ const FormReasonModal = ({
   );
 };
 
-export default FormReasonModal;
+export default FormRejectedModal;

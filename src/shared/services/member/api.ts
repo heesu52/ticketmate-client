@@ -1,7 +1,25 @@
-import { PatchMemberRequest } from '@/app/auth/sign-in/profile/_shared/services/type';
 import httpClient from '@/lib/http-client/http-client';
+import {
+  GetMemberResponse,
+  PatchMemberRequest,
+} from '@/shared/services/member/type';
 
 const BASE_URL = 'member';
+
+/**
+ * @description 회원 정보 조회
+ */
+export const getMember = async () => {
+  const response = await httpClient<GetMemberResponse>({
+    method: 'get',
+    url: `${BASE_URL}`,
+    options: {
+      credentials: 'include',
+    },
+  });
+
+  return response;
+};
 
 /**
  * @description 회원 정보 수정

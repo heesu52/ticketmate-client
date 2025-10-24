@@ -1,5 +1,6 @@
 import { createElement, type ReactNode } from 'react';
 
+import { MemberProvider } from '@/shared/context/member-context';
 import { NavigationProvider } from '@/shared/context/navigation-context';
 
 /**
@@ -33,7 +34,7 @@ import { NavigationProvider } from '@/shared/context/navigation-context';
  * ```
  */
 export default function ContextProvider({ children }: { children: ReactNode }) {
-  const contexts = [NavigationProvider];
+  const contexts = [NavigationProvider, MemberProvider];
 
   return contexts.reduce(
     (prev, context) => createElement(context, null, prev),

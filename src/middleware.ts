@@ -25,7 +25,7 @@ export function middleware(req: NextRequest) {
   console.log('미들웨어 실행:', pathname);
 
   // 쿠키에서 인증 상태 확인
-  const token = req.cookies.get('access_token')?.value;
+  const token = req.cookies.get('accessToken')?.value;
   const isPhoneVerified = asBool(req.cookies.get('phoneNumberVerified')?.value);
   const isProfileSet = asBool(req.cookies.get('initialProfileSetKey')?.value);
 

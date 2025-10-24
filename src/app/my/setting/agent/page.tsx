@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import ChangeAgentModal from '@/app/my/setting/agent/_shared/components/change-agent-modal/change-agent-modal';
 import { MinusIcon, PlusIcon } from '@/assets/icons';
-import { toast } from '@/lib/toast/toast';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import InformationBanner from '@/shared/components/ui/banner/information-banner/information-banner';
 import Button from '@/shared/components/ui/button/button';
@@ -14,6 +13,7 @@ import Input from '@/shared/components/ui/input/input';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import Spacer from '@/shared/components/ui/spacer/spacer';
 import Textarea from '@/shared/components/ui/textarea/textarea';
+import { toastify } from '@/shared/components/ui/toast/toastify';
 
 import styles from './page.module.scss';
 
@@ -25,12 +25,13 @@ const AgentPage = () => {
   const successPhotoInputRef = useRef<HTMLInputElement>(null); // 예매 성공 내역 사진 업로드 버튼
 
   // 한 줄 소개
-  const [introduction, setIntroduction] = useState('');
+  const introductionRef = useRef<HTMLTextAreaElement>(null);
 
   // SNS 계정 인증 사진
   const [snsPhotos, setSnsPhotos] = useState<File[]>([]); // SNS 계정 인증 사진
   const snsPhotoInputRef = useRef<HTMLInputElement>(null); // SNS 계정 인증 사진 업로드 버튼
-  const [snsUrls, setSnsUrls] = useState<string[]>(['']); // SNS 계정 인증 링크
+  const snsUrlRefs = useRef<(HTMLInputElement | null)[]>([]); // SNS 계정 인증 링크
+  const [snsUrlCount, setSnsUrlCount] = useState(1); // SNS URL 개수 관리
 
   // 동의 여부
   const [isAgreed, setIsAgreed] = useState(false);
@@ -74,7 +75,7 @@ const AgentPage = () => {
 
     // 여기서 딱 1번만 토스트
     if (overflow) {
-      toast({
+      toastify({
         variant: 'error',
         description: `최대 ${maxCount}장까지만 선택할 수 있습니다.`,
         // id: 'max-photos', // (옵션) 지원된다면 중복 방지 toast id 사용
@@ -92,40 +93,46 @@ const AgentPage = () => {
 
   // SNS 계정 인증 링크 추가
   const handleAddSnsUrl = () => {
-    setSnsUrls([...snsUrls, '']);
+    if (snsUrlCount < 3) {
+      setSnsUrlCount(snsUrlCount + 1);
+    }
   };
 
   // SNS 계정 인증 링크 제거
   const handleRemoveSnsUrl = (index: number) => {
-    if (snsUrls.length > 1) {
-      setSnsUrls(snsUrls.filter((_, i) => i !== index));
+    if (snsUrlCount > 1) {
+      // 해당 input의 값을 초기화
+      if (snsUrlRefs.current[index]) {
+        snsUrlRefs.current[index]!.value = '';
+      }
+      setSnsUrlCount(snsUrlCount - 1);
     }
-  };
-
-  // SNS 계정 인증 링크 변경
-  const handleSnsUrlChange = (index: number, value: string) => {
-    const newUrls = [...snsUrls];
-    newUrls[index] = value;
-    setSnsUrls(newUrls);
   };
 
   // 전환 신청하기
   const handleSubmit = async () => {
     if (successPhotos.length < 3) {
-      toast({
+      toastify({
         variant: 'error',
         description: '예매 성공 내역 사진을 최소 3장 이상 업로드해주세요.',
       });
       return;
     }
 
+    const introduction = introductionRef.current?.value || '';
     if (introduction.length === 0) {
-      toast({
+      toastify({
         variant: 'error',
         description: '한 줄 소개를 입력해주세요.',
       });
       return;
     }
+
+    // SNS URLs 수집
+    const snsUrls = snsUrlRefs.current
+      .slice(0, snsUrlCount)
+      .map((ref) => ref?.value || '')
+      .filter((url) => url.trim() !== '');
 
     const payload = {
       successPhotos,
@@ -138,19 +145,23 @@ const AgentPage = () => {
       const result = await open('change-agent-modal', ChangeAgentModal);
 
       if (result) {
-        toast({
+        toastify({
           variant: 'success',
           description: '전환 신청이 완료되었습니다.',
         });
         console.log(payload);
       }
-    } catch (error) {
-      toast({
+    } catch {
+      toastify({
         variant: 'error',
         description: '전환 신청이 취소되었습니다.',
       });
     }
   };
+
+  const toObjectURL = useCallback((file: File) => {
+    return URL.createObjectURL(file);
+  }, []);
 
   return (
     <PageFrame
@@ -185,7 +196,7 @@ const AgentPage = () => {
               {successPhotos.map((file, index) => (
                 <UploadedImage
                   key={index}
-                  imageURL={URL.createObjectURL(file)}
+                  imageURL={toObjectURL(file)}
                   alt={`예매 성공 사진 ${index + 1}`}
                   onRemove={() => handleRemovePhoto(index, setSuccessPhotos)}
                 />
@@ -222,10 +233,9 @@ const AgentPage = () => {
           </div>
 
           <Textarea
+            ref={introductionRef}
             id="introduction"
             placeholder="한 줄 소개를 작성해주세요"
-            value={introduction}
-            onChange={(e) => setIntroduction(e.target.value)}
             style={{ height: '200px' }}
           />
         </div>
@@ -248,7 +258,7 @@ const AgentPage = () => {
               {snsPhotos.map((file, index) => (
                 <UploadedImage
                   key={index}
-                  imageURL={URL.createObjectURL(file)}
+                  imageURL={toObjectURL(file)}
                   alt={`SNS 인증 사진 ${index + 1}`}
                   onRemove={() => handleRemovePhoto(index, setSnsPhotos)}
                 />
@@ -274,14 +284,15 @@ const AgentPage = () => {
           </Button>
 
           <div className={styles.sns_url_container}>
-            {snsUrls.map((url, index) => (
+            {Array.from({ length: snsUrlCount }, (_, index) => (
               <div key={index} className={styles.input_row}>
                 <Input
+                  ref={(el) => {
+                    snsUrlRefs.current[index] = el;
+                  }}
                   id={`sns-url-${index}`}
                   label=""
                   placeholder="관련 링크를 첨부해주세요."
-                  value={url}
-                  onChange={(e) => handleSnsUrlChange(index, e.target.value)}
                 />
                 <button
                   type="button"
@@ -291,7 +302,7 @@ const AgentPage = () => {
                       ? handleAddSnsUrl
                       : () => handleRemoveSnsUrl(index)
                   }
-                  disabled={index === 0 && snsUrls.length >= 3}
+                  disabled={index === 0 && snsUrlCount >= 3}
                 >
                   {index === 0 ? (
                     <PlusIcon

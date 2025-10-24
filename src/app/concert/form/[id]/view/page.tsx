@@ -7,11 +7,13 @@ import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-
 import FormCancelModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-cancel-modal';
 import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-confirm-modal';
 import FormReasonModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-reason-modal';
+import FormRejectedModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-rejected-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
+import { useMember } from '@/shared/context/member-context';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
 
 import styles from './page.module.scss';
@@ -21,6 +23,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id: applicationFormId } = resolvedParams;
   const router = useRouter();
   const { open, close } = useModalStore();
+  const { member } = useMember();
   const { state } = useLocation<{
     agentNickname: string;
   }>();
@@ -88,13 +91,12 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     }
   };
 
-  /*
-  // TODO
   //신청서 거절 모달 (대리인용)
   const handleOpenRejectedModal = async () => {
     try {
-      const result = await open('form-rejected-modal', FormRejectedModal);
-
+      const result = await open('form-rejected-modal', FormRejectedModal, {
+        applicationFormId,
+      });
       if (result) {
         toastify({
           variant: 'success',
@@ -109,31 +111,27 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       });
     }
   };
-  */
 
   const status = formItem?.applicationFormStatus;
 
   const handleOpenModal = () => {
     if (!status) return;
 
-    //memberId에 따라서 peding일 때는 모달이 달라져야하는데 일단은 대리인 화면을 기준으로 구현
+    //memberType를 기준으로 분기처리
     if (status === 'PENDING') {
-      handleOpenCancelModal();
-      /*
-      if (memberId === 'client' && status === 'PENDING') {
+      if (member?.memberType === 'CLIENT') {
         handleOpenCancelModal();
-      } else if (memberId === 'agent' && status === 'PENDING') {
+      } else if (member?.memberType === 'AGENT') {
         handleOpenRejectedModal();
-      */
-    } else if (status === 'REJECTED') {
+      }
+      return;
+    }
+    if (status === 'REJECTED') {
       handleOpenReasonModal();
-    } else if (status === 'CANCELED' || status === 'CANCELED_IN_PROCESS') {
+      return;
+    }
+    if (status === 'CANCELED' || status === 'CANCELED_IN_PROCESS') {
       handleOpenConfirmModal();
-    } else {
-      toastify({
-        variant: 'error',
-        description: '해당 상태에서는 모달을 열 수 없습니다.',
-      });
     }
   };
 

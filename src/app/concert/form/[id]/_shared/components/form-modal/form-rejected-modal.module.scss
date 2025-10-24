@@ -1,0 +1,7 @@
+@use '@/styles/index' as *;
+.error {
+  @include title-sm;
+
+  color: var(--primary-500, #ff6a6a);
+  text-align: center;
+}

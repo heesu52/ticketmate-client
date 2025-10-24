@@ -45,7 +45,7 @@ export const APPLICATION_REJECTED_LABEL_MAP: Record<
   string
 > = {
   FEE_NOT_MATCHING_MARKET_PRICE: '수고비가 시세에 맞지 않음',
-  RESERVATION_CLOSED: '예약 마감',
+  RESERVATION_CLOSED: '예약이 마감됨',
   SCHEDULE_UNAVAILABLE: '티켓팅 일정이 안됨',
   OTHER: '기타',
 };

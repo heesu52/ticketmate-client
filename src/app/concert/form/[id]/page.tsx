@@ -1,5 +1,5 @@
 'use client';
-import { use } from 'react';
+import { use, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -19,12 +19,12 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const { id: concertId } = resolvedParams;
   const router = useRouter();
-  const { open } = useModalStore();
+  const { open, close } = useModalStore();
 
   // useLocation으로 navigate에서 넘어온 state 받기
   const { searchParams: searchParamsProps } =
     useLocation<Record<string, unknown>>();
-  const agentId = searchParamsProps.get('agentId') ?? undefined;
+  const agentId = searchParamsProps.get('agentId');
   const type = searchParamsProps.get('type') as TicketOpenType;
 
   const { data: concertItem } = useGetConcertDetail({ concertId });
@@ -57,6 +57,13 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     }
   };
 
+  // 페이지 벗어날 경우 모달 닫기
+  useEffect(() => {
+    return () => {
+      close('form-confirm-modal');
+    };
+  }, [close]);
+
   return (
     <PageFrame
       appBar={{
@@ -78,7 +85,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
               handleOpenModal={handleOpenConfirmModal}
               concertItem={concertItem} //새로운 신청서 작성 시 필요한 공연정보
               ticketOpenType={type}
-              concertId={concertId}
               agentId={agentId}
               onError={handleError}
             />

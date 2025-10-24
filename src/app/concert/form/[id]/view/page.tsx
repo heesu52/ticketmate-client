@@ -1,5 +1,5 @@
 'use client';
-import { use } from 'react';
+import { use, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -20,7 +20,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const { id: applicationFormId } = resolvedParams;
   const router = useRouter();
-  const { open } = useModalStore();
+  const { open, close } = useModalStore();
   const { state } = useLocation<{
     agentNickname: string;
   }>();
@@ -134,6 +134,19 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       });
     }
   };
+
+  // 페이지 벗어날 경우 모달 닫기
+  useEffect(() => {
+    const modalKeys = [
+      'form-cancel-modal',
+      'form-reason-modal',
+      'form-confirm-modal',
+    ];
+
+    return () => {
+      modalKeys.forEach((key) => close(key));
+    };
+  }, [close]);
 
   return (
     <PageFrame

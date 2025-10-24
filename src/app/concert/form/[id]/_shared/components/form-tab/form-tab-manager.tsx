@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -32,31 +32,24 @@ import styles from './form-tab-manager.module.scss';
 interface FormTabManagerProps {
   handleOpenModal: () => void;
   ticketOpenType: TicketOpenType;
-  concertId?: string;
-  agentId?: string;
-  applicationFormId?: string;
+  agentId?: string | null;
+  applicationFormId?: string | null;
   onError: (message: string) => void;
   concertItem: Concert;
   formItem?: Form;
-  status?: ApplicationFormStatus;
+  status?: ApplicationFormStatus | null;
 }
 
 export default function FormTabManager({
   handleOpenModal,
   ticketOpenType,
   agentId,
-  concertId,
   applicationFormId,
   onError,
   concertItem,
   formItem,
   status,
 }: FormTabManagerProps) {
-  const {
-    seatingChartUrl,
-    concertDateInfoResponseList,
-    ticketOpenDateInfoResponseList,
-  } = concertItem;
   const { applicationFormDetailResponseList = [] } = formItem ?? {};
 
   const navigation = useNavigation();
@@ -75,52 +68,101 @@ export default function FormTabManager({
     });
   };
 
-  // FormData 형태로 초기화
-  const [formData, setFormData] = useState<Record<number, FormData>>({
-    1: {
-      performanceDate: '',
-      requestCount: '',
-      hopeAreaList: null,
-      requirement: '',
-    },
-  });
+  // 기존 코드
+  // // FormData 형태로 초기화
+  // const [formData, setFormData] = useState<Record<number, FormData>>({
+  //   1: {
+  //     performanceDate: '',
+  //     requestCount: '',
+  //     hopeAreaList: null,
+  //     requirement: '',
+  //   },
+  // });
 
-  // 기존 formItem이 존재하면 응답 리스트를 기반으로 탭 및 formData 상태를 초기화
-  // 탭 번호는 1부터 시작
-  // 각 탭의 formData는 performanceDate, requestCount, hopeAreaList 등의 정보를 포함
-  useEffect(() => {
-    if (
-      formItem &&
-      Array.isArray(applicationFormDetailResponseList) &&
-      applicationFormDetailResponseList.length > 0
-    ) {
-      const newTabs = applicationFormDetailResponseList.map(
-        (_, index) => index + 1,
-      );
-      const newFormData = applicationFormDetailResponseList?.reduce(
-        (acc, item, index) => {
-          acc[index + 1] = {
-            performanceDate: item.performanceDate,
-            requestCount: item.requestCount?.toString() ?? '',
-            hopeAreaList:
-              item.hopeAreaResponseList?.map((area, i) => ({
-                id: i + 1,
-                location: area.location,
-                price: area.price?.toString() ?? '',
-              })) ?? [],
-            requirement: item.requirement ?? '',
-          };
-          return acc;
+  // // 기존 formItem이 존재하면 응답 리스트를 기반으로 탭 및 formData 상태를 초기화
+  // // 탭 번호는 1부터 시작
+  // // 각 탭의 formData는 performanceDate, requestCount, hopeAreaList 등의 정보를 포함
+  // useEffect(() => {
+  //   if (formItem && applicationFormDetailResponseList.length > 0) {
+  //     const newTabs = applicationFormDetailResponseList.map(
+  //       (_, index) => index + 1,
+  //     );
+  //     const newFormData = applicationFormDetailResponseList?.reduce(
+  //       (acc, item, index) => {
+  //         acc[index + 1] = {
+  //           performanceDate: item.performanceDate,
+  //           requestCount: item.requestCount?.toString() ?? '',
+  //           hopeAreaList:
+  //             item.hopeAreaResponseList?.map((area, i) => ({
+  //               id: i + 1,
+  //               location: area.location,
+  //               price: area.price?.toString() ?? '',
+  //             })) ?? [],
+  //           requirement: item.requirement ?? '',
+  //         };
+  //         return acc;
+  //       },
+  //       {} as Record<number, FormData>,
+  //     );
+
+  //     setTabs(newTabs);
+  //     setFormData(newFormData);
+  //     setActiveTab(newTabs[0]);
+  //     setNextId(newTabs.length + 1);
+  //   }
+  // }, [formItem]);
+
+  //새로 생성한 코드 테스트 후 주석 삭제 예정
+  const initialFormData = useMemo(() => {
+    // 신규 신청 폼 → 기본값
+    if (!formItem || !applicationFormDetailResponseList?.length) {
+      return {
+        1: {
+          performanceDate: '',
+          requestCount: '',
+          hopeAreaList: null,
+          requirement: '',
         },
-        {} as Record<number, FormData>,
-      );
-
-      setTabs(newTabs);
-      setFormData(newFormData);
-      setActiveTab(newTabs[0]);
-      setNextId(newTabs.length + 1);
+      };
     }
-  }, [formItem]);
+
+    // 기존 신청 폼 → formItem 데이터로 세팅
+    return applicationFormDetailResponseList.reduce(
+      (acc, item, index) => {
+        acc[index + 1] = {
+          performanceDate: item.performanceDate ?? '',
+          requestCount: item.requestCount?.toString() ?? '',
+          hopeAreaList:
+            item.hopeAreaResponseList?.map((area, i) => ({
+              id: i + 1,
+              location: area.location,
+              price: area.price?.toString() ?? '',
+            })) ?? [],
+          requirement: item.requirement ?? '',
+        };
+        return acc;
+      },
+      {} as Record<number, FormData>,
+    );
+  }, [formItem, applicationFormDetailResponseList]);
+
+  // 초기 렌더 시 useMemo 값으로 세팅 (렌더 1회)
+  const [formData, setFormData] = useState(initialFormData);
+
+  // formItem이 나중에 로드되거나 변경될 때만 업데이트
+  useEffect(() => {
+    setFormData(initialFormData);
+  }, [initialFormData]);
+
+  // 공연 날짜를 key로 빠르게 조회하도록 Map 생성
+  const concertDateMap = useMemo(() => {
+    return new Map(
+      concertItem.concertDateInfoResponseList.map((item) => [
+        item.performanceDate,
+        item,
+      ]),
+    );
+  }, [concertItem.concertDateInfoResponseList]);
 
   // 탭 라벨 생성 함수
   // 기존 신청폼이 있을 경우 공연 날짜 및 회차로 라벨 지정
@@ -133,10 +175,7 @@ export default function FormTabManager({
     const date = currentFormDate || fallbackDate;
     if (!date) return '회차를 선택해주세요';
 
-    const selectedDateInfo = concertDateInfoResponseList.find(
-      (item) => item.performanceDate === date,
-    );
-
+    const selectedDateInfo = concertDateMap.get(date);
     if (!selectedDateInfo) return '회차를 선택해주세요';
 
     const formatted = formatDate(selectedDateInfo.performanceDate);
@@ -181,47 +220,45 @@ export default function FormTabManager({
   const { mutate: createMutate } = useCreateConcertForm();
   const { mutate: patchMutate } = usePatchConcertForm();
 
+  // 에러 처리 함수
   const handleError = (error: unknown) => {
-    const code = error instanceof Error ? error.message : undefined;
+    const code = error instanceof Error ? error.message : String(error);
     const message = getErrorMessage(code as keyof typeof ERROR_MESSAGES);
     onError(message);
   };
 
+  // formData의 모든 탭 데이터를 배열로 변환
+  const applicationFormDetailRequestList = Object.values(formData).map(
+    (currentFormData) => {
+      // location과 price가 둘 다 비어있으면 제외
+      const filteredHopeArea = currentFormData.hopeAreaList?.filter(
+        (item) => item.location.trim() || item.price.trim(),
+      );
+
+      return {
+        performanceDate: currentFormData.performanceDate,
+        requestCount: Number(currentFormData.requestCount),
+        hopeAreaList:
+          filteredHopeArea && filteredHopeArea.length > 0
+            ? filteredHopeArea.map((item, index) => ({
+                priority: index + 1,
+                location: item.location,
+                price: Number(item.price),
+              }))
+            : undefined, // 값이 없으면 undefined로 보내서 제외
+        requirement: currentFormData.requirement,
+      };
+    },
+  );
+
   // 현재 모든 탭의 formData를 수집하여 신청 요청 API(mutate) 호출
   const handleSubmit = () => {
-    // formData의 모든 탭 데이터를 배열로 변환
-    const applicationFormDetailRequestList = Object.values(formData).map(
-      (currentFormData) => {
-        // location과 price가 둘 다 비어있으면 제외
-        const filteredHopeArea = currentFormData.hopeAreaList?.filter(
-          (item) => item.location.trim() || item.price.trim(),
-        );
-
-        return {
-          performanceDate: currentFormData.performanceDate,
-          requestCount: Number(currentFormData.requestCount),
-          hopeAreaList:
-            filteredHopeArea && filteredHopeArea.length > 0
-              ? filteredHopeArea.map((item, index) => ({
-                  priority: index + 1,
-                  location: item.location,
-                  price: Number(item.price),
-                }))
-              : undefined, // 값이 없으면 undefined로 보내서 제외
-          requirement: currentFormData.requirement,
-        };
-      },
-    );
-
     if (!status) {
       // 새 신청
-      if (!agentId || !concertId) {
-        onError('알수없는 에러가 발생했습니다');
-        return;
-      }
+      if (!agentId) return;
       const requestBody: CreateConcertFormRequest = {
         agentId,
-        concertId,
+        concertId: concertItem.concertId,
         ticketOpenType,
         applicationFormDetailRequestList,
       };
@@ -271,12 +308,12 @@ export default function FormTabManager({
             key={tabId}
             value={formData[tabId]}
             onChange={(data) => updateFormData(tabId, data)}
-            concertDateInfo={concertDateInfoResponseList}
-            ticketOpenDateInfo={ticketOpenDateInfoResponseList}
+            concertDateInfo={concertItem.concertDateInfoResponseList}
+            ticketOpenDateInfo={concertItem.ticketOpenDateInfoResponseList}
             ticketOpenType={ticketOpenType}
             formItem={formItem}
             currentIndex={tabId - 1}
-            seatingChartUrl={seatingChartUrl}
+            seatingChartUrl={concertItem.seatingChartUrl}
             disabled={!isEditing}
           />
         ) : null,
@@ -294,7 +331,7 @@ export default function FormTabManager({
         addTabButtonText="추가하기"
       />
       <div className={styles.input_container}>
-        {tabItems.map((item) => item.content)}
+        {tabItems.find((item) => item.value === activeTab.toString())?.content}
         {status === 'PENDING' && (
           <Button variant="outline" color="gray" onClick={handleOpenModal}>
             신청 취소하기

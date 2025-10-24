@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
 import FormCancelModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-cancel-modal';
 import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-confirm-modal';
-import FormReasonModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-reason-modal ';
+import FormReasonModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-reason-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -26,11 +26,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   }>();
 
   const { data: formItem } = useGetFormDetail({ applicationFormId });
-  if (!formItem) return null;
-  const concertItem = formItem.concertInfoResponse;
-
-  const type = formItem.ticketOpenType;
-  const status = formItem.applicationFormStatus;
 
   // 에러 발생 시 토스트 알림
   const handleError = (message: string) => {
@@ -149,22 +144,25 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       bottomNav={false}
     >
       <div className={styles.container}>
-        {concertItem && (
+        {formItem && (
           <>
             {/* 공연 정보 */}
             <div className={styles.forminfo_container}>
-              <FormInfo concertItem={concertItem} ticketOpenType={type} />
+              <FormInfo
+                concertItem={formItem.concertInfoResponse}
+                ticketOpenType={formItem.ticketOpenType}
+              />
             </div>
 
             {/* 신청 폼 탭*/}
             <FormTabManager
               handleOpenModal={handleOpenModal}
-              concertItem={concertItem} //새로운 신청폼 작성 시 공연정보
+              concertItem={formItem.concertInfoResponse} //새로운 신청폼 작성 시 공연정보
               formItem={formItem} //기존 신청폼 보여줄 시 신청서정보
-              ticketOpenType={type}
+              ticketOpenType={formItem?.ticketOpenType}
               applicationFormId={applicationFormId}
               onError={handleError}
-              status={status} //분기처리를 위해 전달
+              status={formItem?.applicationFormStatus} //분기처리를 위해 전달
             />
           </>
         )}

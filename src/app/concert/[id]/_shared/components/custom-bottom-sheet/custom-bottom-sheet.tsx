@@ -6,6 +6,7 @@ import { useCheckDuplicateForm } from '@/app/concert/[id]/_shared/services/botto
 import { StarIcon } from '@/assets/icons';
 import CommonBottomSheet from '@/shared/components/ui/bottom-sheet/bottom-sheet';
 import Button from '@/shared/components/ui/button/button';
+import { useMember } from '@/shared/context/member-context';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import { AgentInfo, Concert, TicketOpenType } from '@/shared/types';
 
@@ -32,6 +33,8 @@ const CustomBottomSheet = ({
   }>();
   const { agentId, nickname, introduction, averageRating, reviewCount } =
     agentInfo;
+
+  const { member } = useMember();
 
   const safeAvg = Number.isFinite(averageRating)
     ? (averageRating as number)
@@ -127,35 +130,41 @@ const CustomBottomSheet = ({
             {introduction || '한 줄 소개를 작성해주세요'}
           </span>
         </div>
-
         {/* 버튼 컨테이너 */}
-        <div className={styles.button_container}>
-          {preOpen &&
-            (isDuplicateMap.PRE_OPEN ? (
-              <Button variant="fill" color="gray" onClick={onClose}>
-                신청된 예매
-              </Button>
-            ) : (
-              <Button variant="fill" onClick={() => handleNavigate('PRE_OPEN')}>
-                선예매 신청하기
-              </Button>
-            ))}
+        {/* 의뢰인일 경우에 버튼 숨김 처리 */}
+        {member?.memberType === 'CLIENT' && (
+          <div className={styles.button_container}>
+            {preOpen &&
+              (isDuplicateMap.PRE_OPEN ? (
+                <Button variant="fill" color="gray" onClick={onClose}>
+                  신청된 예매
+                </Button>
+              ) : (
+                <Button
+                  variant="fill"
+                  onClick={() => handleNavigate('PRE_OPEN')}
+                >
+                  선예매 신청하기
+                </Button>
+              ))}
 
-          {generalOpen &&
-            (isDuplicateMap.GENERAL_OPEN ? (
-              <Button variant="fill" color="gray" onClick={onClose}>
-                신청된 예매
-              </Button>
-            ) : (
-              <Button
-                variant="outline"
-                color="gray"
-                onClick={() => handleNavigate('GENERAL_OPEN')}
-              >
-                일반예매 신청하기
-              </Button>
-            ))}
-        </div>
+            {generalOpen &&
+              (isDuplicateMap.GENERAL_OPEN ? (
+                <Button variant="fill" color="gray" onClick={onClose}>
+                  신청된 예매
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  color="gray"
+                  onClick={() => handleNavigate('GENERAL_OPEN')}
+                >
+                  일반예매 신청하기
+                </Button>
+              ))}
+          </div>
+        )}
+        : <div></div>
       </div>
     </CommonBottomSheet>
   );

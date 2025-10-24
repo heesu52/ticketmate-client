@@ -16,6 +16,7 @@ import {
 import Button from '@/shared/components/ui/button/button';
 import Tab from '@/shared/components/ui/tab/tab';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
+import { useMember } from '@/shared/context/member-context';
 import {
   Concert,
   ApplicationFormStatus,
@@ -56,6 +57,8 @@ export default function FormTabManager({
     ticketOpenDateInfoResponseList,
   } = concertItem;
   const { applicationFormDetailResponseList = [] } = formItem ?? {};
+  const { member } = useMember();
+
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
@@ -289,7 +292,9 @@ export default function FormTabManager({
         )}
         {status === 'APPROVED' && (
           <Button variant="outline" color="gray">
-            대리인과 채팅하기
+            {member?.memberType === 'CLIENT'
+              ? '대리인과 채팅하기'
+              : '의뢰인과 채팅하기'}
           </Button>
         )}
         {status === 'REJECTED' && !isEdit && (

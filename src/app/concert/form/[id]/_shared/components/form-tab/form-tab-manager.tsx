@@ -17,6 +17,7 @@ import Button from '@/shared/components/ui/button/button';
 import Tab from '@/shared/components/ui/tab/tab';
 import { ERROR_MESSAGES } from '@/shared/constants/error-type';
 import { useMember } from '@/shared/context/member-context';
+import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import {
   Concert,
   ApplicationFormStatus,
@@ -57,6 +58,8 @@ export default function FormTabManager({
     ticketOpenDateInfoResponseList,
   } = concertItem;
   const { applicationFormDetailResponseList = [] } = formItem ?? {};
+
+  const navigation = useNavigation();
   const { member } = useMember();
 
   const [tabs, setTabs] = useState([1]);
@@ -64,6 +67,13 @@ export default function FormTabManager({
   const [nextId, setNextId] = useState(2);
   const [isEdit, setIsEdit] = useState(false);
   const isEditing = !status || isEdit;
+
+  // 버튼 클릭 시 navigate로 이동
+  const handleNavigate = () => {
+    navigation.navigate({
+      pathname: `chat`,
+    });
+  };
 
   // FormData 형태로 초기화
   const [formData, setFormData] = useState<Record<number, FormData>>({
@@ -291,7 +301,7 @@ export default function FormTabManager({
           </Button>
         )}
         {status === 'APPROVED' && (
-          <Button variant="outline" color="gray">
+          <Button variant="outline" color="gray" onClick={handleNavigate}>
             {member?.memberType === 'CLIENT'
               ? '대리인과 채팅하기'
               : '의뢰인과 채팅하기'}

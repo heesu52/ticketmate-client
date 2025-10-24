@@ -111,6 +111,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   };
   */
 
+  const status = formItem?.applicationFormStatus;
+
   const handleOpenModal = () => {
     if (!status) return;
 
@@ -172,10 +174,10 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
               handleOpenModal={handleOpenModal}
               concertItem={formItem.concertInfoResponse} //새로운 신청폼 작성 시 공연정보
               formItem={formItem} //기존 신청폼 보여줄 시 신청서정보
-              ticketOpenType={formItem?.ticketOpenType}
+              ticketOpenType={formItem.ticketOpenType}
               applicationFormId={applicationFormId}
               onError={handleError}
-              status={formItem?.applicationFormStatus} //분기처리를 위해 전달
+              status={formItem.applicationFormStatus} //분기처리를 위해 전달
             />
           </>
         )}

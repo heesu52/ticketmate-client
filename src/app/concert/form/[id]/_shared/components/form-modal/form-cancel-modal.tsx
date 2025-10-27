@@ -13,7 +13,7 @@ const FormCancelModal = ({
 }: FormCancelModalProps) => {
   const { mutate } = usePatchFormCancelMutation();
   const handleFirstButtonClick = () => {
-    onReject?.();
+    onResolve?.(false);
   };
 
   const handleSecondButtonClick = () => {

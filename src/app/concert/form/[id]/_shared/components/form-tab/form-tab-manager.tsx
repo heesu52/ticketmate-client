@@ -333,9 +333,25 @@ export default function FormTabManager({
       <div className={styles.input_container}>
         {tabItems.find((item) => item.value === activeTab.toString())?.content}
         {status === 'PENDING' && (
-          <Button variant="outline" color="gray" onClick={handleOpenModal}>
-            신청 취소하기
-          </Button>
+          <>
+            {member?.memberType === 'CLIENT' && (
+              <Button variant="outline" color="gray" onClick={handleOpenModal}>
+                신청 취소하기
+              </Button>
+            )}
+            {member?.memberType === 'AGENT' && (
+              <div className={styles.button}>
+                <Button
+                  variant="outline"
+                  color="gray"
+                  onClick={handleOpenModal}
+                >
+                  거절하기
+                </Button>
+                <Button variant="fill">수락하기</Button>
+              </div>
+            )}
+          </>
         )}
         {status === 'APPROVED' && (
           <Button variant="outline" color="gray" onClick={handleNavigate}>
@@ -345,25 +361,39 @@ export default function FormTabManager({
           </Button>
         )}
         {status === 'REJECTED' && !isEdit && (
-          <div className={styles.rejected_button}>
+          <div
+            className={
+              member?.memberType === 'CLIENT' ? styles.button : undefined
+            }
+          >
             <Button variant="outline" color="gray" onClick={handleOpenModal}>
               거절사유
             </Button>
-            <Button variant="fill" onClick={() => setIsEdit(true)}>
-              재신청하기
-            </Button>
+
+            {member?.memberType === 'CLIENT' && (
+              <Button variant="fill" onClick={() => setIsEdit(true)}>
+                재신청하기
+              </Button>
+            )}
           </div>
         )}
-        {(status === 'CANCELED' || status === 'CANCELED_IN_PROCESS') &&
-          !isEdit && (
-            <Button variant="fill" onClick={() => setIsEdit(true)}>
-              재신청하기
-            </Button>
-          )}
-        {(!status || isEdit) && (
-          <Button variant="fill" onClick={handleSubmit}>
-            신청하기
-          </Button>
+        {member?.memberType === 'CLIENT' ? (
+          <>
+            {(status === 'CANCELED' || status === 'CANCELED_IN_PROCESS') &&
+              !isEdit && (
+                <Button variant="fill" onClick={() => setIsEdit(true)}>
+                  재신청하기
+                </Button>
+              )}
+
+            {(!status || isEdit) && (
+              <Button variant="fill" onClick={handleSubmit}>
+                신청하기
+              </Button>
+            )}
+          </>
+        ) : (
+          <div />
         )}
       </div>
     </div>

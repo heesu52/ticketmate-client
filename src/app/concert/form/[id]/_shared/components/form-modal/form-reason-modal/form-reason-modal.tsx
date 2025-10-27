@@ -21,7 +21,7 @@ interface FormReasonModalProps extends ModalControl<unknown> {
 }
 
 const FormReasonModal = ({
-  onReject,
+  onResolve,
   applicationFormId,
   agentNickname,
 }: FormReasonModalProps) => {
@@ -50,7 +50,7 @@ const FormReasonModal = ({
   }, [data, isError]);
 
   const handleFirstButtonClick = () => {
-    onReject?.();
+    onResolve?.(false);
   };
 
   return (

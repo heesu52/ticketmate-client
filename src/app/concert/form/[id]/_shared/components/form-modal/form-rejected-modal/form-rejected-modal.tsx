@@ -30,7 +30,7 @@ const FormRejectedModal = ({
   const { mutate } = usePatchFormRejectMutation();
 
   const handleFirstButtonClick = () => {
-    onReject?.();
+    onResolve?.(false);
   };
 
   const handleSecondButtonClick = () => {
@@ -114,23 +114,26 @@ const FormRejectedModal = ({
 
       {error && <div className={styles.error}>{error}</div>}
 
+      <Spacer size={32} />
+
       <Modal.Action className={styles.modal_actions}>
-        <Button
-          type="button"
-          variant="fill"
-          color="gray"
-          onClick={handleFirstButtonClick}
-        >
-          다음에
-        </Button>
-        <Button
-          type="button"
-          variant="fill"
-          color="gray"
-          onClick={handleSecondButtonClick}
-        >
-          거절하기
-        </Button>
+        <div className={styles.button}>
+          <Button
+            type="button"
+            variant="fill"
+            color="gray"
+            onClick={handleFirstButtonClick}
+          >
+            다음에
+          </Button>
+          <Button
+            type="button"
+            variant="fill"
+            onClick={handleSecondButtonClick}
+          >
+            거절하기
+          </Button>
+        </div>
       </Modal.Action>
     </Modal>
   );

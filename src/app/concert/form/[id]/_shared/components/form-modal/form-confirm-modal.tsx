@@ -3,9 +3,9 @@ import { ModalTemplateType } from '@/shared/components/ui/modal/modal-template/m
 
 type FormConfirmModalProps = Omit<ModalTemplateType, 'children'>;
 
-const FormConfirmModal = ({ onResolve, onReject }: FormConfirmModalProps) => {
+const FormConfirmModal = ({ onResolve }: FormConfirmModalProps) => {
   const handleFirstButtonClick = () => {
-    onReject?.();
+    onResolve?.(false);
   };
 
   const handleSecondButtonClick = () => {

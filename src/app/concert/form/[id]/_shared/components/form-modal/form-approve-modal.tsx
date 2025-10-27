@@ -1,4 +1,4 @@
-import { usePatchFormCancelMutation } from '@/app/history/_shared/services/mutation';
+import { usePatchFormApproveMutation } from '@/app/history/_shared/services/mutation';
 import ModalTemplate from '@/shared/components/ui/modal/modal-template/modal-template';
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
 
@@ -11,7 +11,7 @@ const FormApproveModal = ({
   onReject,
   applicationFormId,
 }: FormApproveModalProps) => {
-  const { mutate } = usePatchFormCancelMutation();
+  const { mutate } = usePatchFormApproveMutation();
   const handleFirstButtonClick = () => {
     onResolve?.(false);
   };

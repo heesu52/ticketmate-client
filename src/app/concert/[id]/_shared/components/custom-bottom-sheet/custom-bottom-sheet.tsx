@@ -164,7 +164,6 @@ const CustomBottomSheet = ({
               ))}
           </div>
         )}
-        : <div></div>
       </div>
     </CommonBottomSheet>
   );

@@ -4,16 +4,13 @@ import { use, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
-import FormCancelModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-cancel-modal';
 import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-confirm-modal';
 import FormReasonModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-reason-modal/form-reason-modal';
-import FormRejectedModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-rejected-modal/form-rejected-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
-import { useMember } from '@/shared/context/member-context';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
 
 import styles from './page.module.scss';
@@ -23,7 +20,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id: applicationFormId } = resolvedParams;
   const router = useRouter();
   const { open, close } = useModalStore();
-  const { member } = useMember();
   const { state } = useLocation<{
     agentNickname: string;
   }>();
@@ -32,38 +28,13 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   // 에러 발생 시 토스트 알림
   const handleError = (message: string) => {
-    // 읽기 전용이라 버튼 액션 없음
-    console.error(message);
+    toastify({
+      variant: 'error',
+      description: message,
+    });
   };
 
-  // clientId & pending: 신청취소
-  // agentId & pending : 거절 or 수락
-  // rejected: 거절사유
-  // cancel,canceld-inprocess : 신청
-
-  // 공연 신청 취소 모달 (의뢰인용)
-  const handleOpenCancelModal = async () => {
-    try {
-      const result = await open('form-cancel-modal', FormCancelModal, {
-        applicationFormId,
-      });
-
-      if (result) {
-        toastify({
-          variant: 'success',
-          description: '신청이 정상적으로 취소되었습니다',
-        });
-        router.push('/history');
-      }
-    } catch (error) {
-      toastify({
-        variant: 'error',
-        description: '신청 취소에 실패했습니다.',
-      });
-    }
-  };
-
-  // 신청서 거절 사유 확인 모달 (의뢰인용)
+  // 신청서 거절 사유 확인 모달 (공통)
   const handleOpenReasonModal = () => {
     open('form-reason-modal', FormReasonModal, {
       applicationFormId,
@@ -90,42 +61,12 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       });
     }
   };
-
-  //신청서 거절 모달 (대리인용)
-  const handleOpenRejectedModal = async () => {
-    try {
-      const result = await open('form-rejected-modal', FormRejectedModal, {
-        applicationFormId,
-      });
-      if (result) {
-        toastify({
-          variant: 'success',
-          description: '신청이 정상적으로 거절되었습니다',
-        });
-        router.push('/history');
-      }
-    } catch (error) {
-      toastify({
-        variant: 'error',
-        description: '신청 거절에 실패했습니다.',
-      });
-    }
-  };
-
   const status = formItem?.applicationFormStatus;
 
   const handleOpenModal = () => {
     if (!status) return;
 
     //memberType를 기준으로 분기처리
-    if (status === 'PENDING') {
-      if (member?.memberType === 'CLIENT') {
-        handleOpenCancelModal();
-      } else if (member?.memberType === 'AGENT') {
-        handleOpenRejectedModal();
-      }
-      return;
-    }
     if (status === 'REJECTED') {
       handleOpenReasonModal();
       return;
@@ -141,6 +82,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       'form-cancel-modal',
       'form-reason-modal',
       'form-confirm-modal',
+      'form-rejected-modal',
+      'form-approve-modal',
     ];
 
     return () => {

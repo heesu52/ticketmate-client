@@ -86,6 +86,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
               concertItem={concertItem} //새로운 신청서 작성 시 필요한 공연정보
               ticketOpenType={type}
               agentId={agentId}
+              concertId={concertId}
               onError={handleError}
             />
           </>

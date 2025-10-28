@@ -89,9 +89,9 @@ export default function FormInput({
   //희망사항 추가
   const addInput = () => {
     setHopeAreaList((prev) => {
-      if (prev.length >= 10) {
+      if (prev.length >= 5) {
         customToast({
-          description: '최대 10개까지만 가능합니다.',
+          description: '최대 5개까지만 가능합니다.',
         });
         return prev;
       }

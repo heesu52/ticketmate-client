@@ -15,8 +15,9 @@ import {
 import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
+
 interface FormTabManagerProps {
-  handleOpenModal: () => void;
+  handleOpenModal?: () => void;
   ticketOpenType: TicketOpenType;
   agentId?: string | null;
   concertId?: string | null;
@@ -235,7 +236,7 @@ export default function FormTabManager({
           <>
             {member?.memberType === 'CLIENT' && (
               <FormTabClientButton
-                handleOpenModal={handleOpenModal}
+                handleOpenModal={() => handleOpenModal?.()}
                 requestData={requestData}
                 status={status}
                 applicationFormId={applicationFormId}
@@ -245,7 +246,7 @@ export default function FormTabManager({
             )}
             {member?.memberType === 'AGENT' && (
               <FormTabAgentButton
-                handleOpenModal={handleOpenModal}
+                handleOpenModal={() => handleOpenModal?.()}
                 status={status}
                 applicationFormId={applicationFormId}
               />

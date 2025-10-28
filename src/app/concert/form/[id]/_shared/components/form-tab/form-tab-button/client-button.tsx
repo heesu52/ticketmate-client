@@ -69,7 +69,6 @@ export default function FormTabClientButton({
   };
 
   // 신청서 요청 확인 모달 (의뢰인용)
-
   const handleOpenSubmitModal = async () => {
     if (!('agentId' in requestData)) return;
     try {
@@ -90,7 +89,6 @@ export default function FormTabClientButton({
   };
 
   // 신청서 재요청 확인 모달 (의뢰인용)
-
   const handleOpenReSumitModal = async () => {
     if (!('applicationFormId' in requestData)) return;
     try {

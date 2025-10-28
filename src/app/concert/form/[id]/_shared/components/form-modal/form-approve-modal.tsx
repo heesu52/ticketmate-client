@@ -1,17 +1,17 @@
-import { usePatchFormCancelMutation } from '@/app/history/_shared/services/mutation';
+import { usePatchFormApproveMutation } from '@/app/history/_shared/services/mutation';
 import ModalTemplate from '@/shared/components/ui/modal/modal-template/modal-template';
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
 
-type FormCancelModalProps = {
+type FormApproveModalProps = {
   applicationFormId: string;
 } & ModalControl<unknown>;
 
-const FormCancelModal = ({
+const FormApproveModal = ({
   onResolve,
   onReject,
   applicationFormId,
-}: FormCancelModalProps) => {
-  const { mutate } = usePatchFormCancelMutation();
+}: FormApproveModalProps) => {
+  const { mutate } = usePatchFormApproveMutation();
   const handleFirstButtonClick = () => {
     onResolve?.(false);
   };
@@ -25,14 +25,14 @@ const FormCancelModal = ({
 
   return (
     <ModalTemplate
-      title="신청을 취소하시겠습니까?"
-      description="신청했던 내역은 과거 신청내역에서 확인 가능합니다."
+      title="의뢰를 수락하시겠습니까?"
+      description={`의뢰를 수락할 시 의뢰인과 매칭이.\n 성사되어 채팅이 가능해집니다.`}
       firstButtonLabel="다음에"
-      secondButtonLabel="취소하기"
+      secondButtonLabel="수락하기"
       onFirstButtonClick={handleFirstButtonClick}
       onSecondButtonClick={handleSecondButtonClick}
     />
   );
 };
 
-export default FormCancelModal;
+export default FormApproveModal;

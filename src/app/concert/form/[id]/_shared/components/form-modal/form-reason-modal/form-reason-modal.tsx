@@ -10,8 +10,8 @@ import Button from '@/shared/components/ui/button/button';
 import Modal from '@/shared/components/ui/modal/modal';
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
 import Spacer from '@/shared/components/ui/spacer/spacer';
-import { toastify } from '@/shared/components/ui/toast/toastify';
 import { APPLICATION_REJECTED_LABEL_MAP } from '@/shared/constants/type-mapping';
+import { useHandleError } from '@/shared/hooks/use-error';
 
 import styles from './form-reason-modal.module.scss';
 
@@ -21,12 +21,13 @@ interface FormReasonModalProps extends ModalControl<unknown> {
 }
 
 const FormReasonModal = ({
-  onReject,
+  onResolve,
   applicationFormId,
   agentNickname,
 }: FormReasonModalProps) => {
   const [mappedMessage, setMappedMessage] = useState<string>('');
   const [otherMemo, setOtherMemo] = useState<string>('');
+  const { handleError } = useHandleError();
 
   const { data, isError } = useQuery<GetRejectionReasonResponse>({
     queryKey: ['rejectionReason', applicationFormId],
@@ -42,15 +43,12 @@ const FormReasonModal = ({
       const memo = data.otherMemo;
       setOtherMemo(memo);
     } else if (isError) {
-      toastify({
-        variant: 'error',
-        description: '거절 사유 조회를 실패했습니다.',
-      });
+      handleError(isError);
     }
   }, [data, isError]);
 
   const handleFirstButtonClick = () => {
-    onReject?.();
+    onResolve?.(false);
   };
 
   return (

@@ -1,21 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-
-import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import FormInput from '@/app/concert/form/[id]/_shared/components/form-input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
-import {
-  useCreateConcertForm,
-  usePatchConcertForm,
-} from '@/app/concert/form/[id]/_shared/services/mutation';
-import queryKey from '@/app/concert/form/[id]/_shared/services/query-key';
-import {
-  CreateConcertFormRequest,
-  PatchConcertFormRequest,
-} from '@/app/concert/form/[id]/_shared/services/type';
-import Button from '@/shared/components/ui/button/button';
+import FormTabAgentButton from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-button/agent-button';
+import FormTabClientButton from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-button/client-button';
 import Tab from '@/shared/components/ui/tab/tab';
-import { ERROR_MESSAGES } from '@/shared/constants/error-type';
+import { useMember } from '@/shared/context/member-context';
 import {
   Concert,
   ApplicationFormStatus,
@@ -23,20 +13,18 @@ import {
   TicketOpenType,
 } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
-import { getErrorMessage } from '@/shared/utils/getErrorMessage';
 
 import styles from './form-tab-manager.module.scss';
 
 interface FormTabManagerProps {
-  handleOpenModal: () => void;
+  handleOpenModal?: () => void;
   ticketOpenType: TicketOpenType;
-  concertId?: string;
-  agentId?: string;
-  applicationFormId?: string;
-  onError: (message: string) => void;
+  agentId?: string | null;
+  concertId?: string | null;
+  applicationFormId?: string | null;
   concertItem: Concert;
   formItem?: Form;
-  status?: ApplicationFormStatus;
+  status?: ApplicationFormStatus | null;
 }
 
 export default function FormTabManager({
@@ -45,23 +33,21 @@ export default function FormTabManager({
   agentId,
   concertId,
   applicationFormId,
-  onError,
   concertItem,
   formItem,
   status,
 }: FormTabManagerProps) {
-  const {
-    seatingChartUrl,
-    concertDateInfoResponseList,
-    ticketOpenDateInfoResponseList,
-  } = concertItem;
   const { applicationFormDetailResponseList = [] } = formItem ?? {};
+
+  const { member } = useMember();
+
   const [tabs, setTabs] = useState([1]);
   const [activeTab, setActiveTab] = useState(1);
   const [nextId, setNextId] = useState(2);
   const [isEdit, setIsEdit] = useState(false);
   const isEditing = !status || isEdit;
 
+  // 기존 코드
   // FormData 형태로 초기화
   const [formData, setFormData] = useState<Record<number, FormData>>({
     1: {
@@ -76,11 +62,7 @@ export default function FormTabManager({
   // 탭 번호는 1부터 시작
   // 각 탭의 formData는 performanceDate, requestCount, hopeAreaList 등의 정보를 포함
   useEffect(() => {
-    if (
-      formItem &&
-      Array.isArray(applicationFormDetailResponseList) &&
-      applicationFormDetailResponseList.length > 0
-    ) {
+    if (formItem && applicationFormDetailResponseList.length > 0) {
       const newTabs = applicationFormDetailResponseList.map(
         (_, index) => index + 1,
       );
@@ -109,6 +91,16 @@ export default function FormTabManager({
     }
   }, [formItem]);
 
+  // 공연 날짜를 key로 빠르게 조회하도록 Map 생성
+  const concertDateMap = useMemo(() => {
+    return new Map(
+      concertItem.concertDateInfoResponseList.map((item) => [
+        item.performanceDate,
+        item,
+      ]),
+    );
+  }, [concertItem.concertDateInfoResponseList]);
+
   // 탭 라벨 생성 함수
   // 기존 신청폼이 있을 경우 공연 날짜 및 회차로 라벨 지정
   // 없으면 기본 문구('회차를 선택해주세요') 표시
@@ -120,10 +112,7 @@ export default function FormTabManager({
     const date = currentFormDate || fallbackDate;
     if (!date) return '회차를 선택해주세요';
 
-    const selectedDateInfo = concertDateInfoResponseList.find(
-      (item) => item.performanceDate === date,
-    );
-
+    const selectedDateInfo = concertDateMap.get(date);
     if (!selectedDateInfo) return '회차를 선택해주세요';
 
     const formatted = formatDate(selectedDateInfo.performanceDate);
@@ -164,86 +153,47 @@ export default function FormTabManager({
     setFormData((prev) => ({ ...prev, [id]: data }));
   }, []);
 
-  const queryClient = useQueryClient();
-  const { mutate: createMutate } = useCreateConcertForm();
-  const { mutate: patchMutate } = usePatchConcertForm();
+  // formData의 모든 탭 데이터를 배열로 변환
+  const applicationFormDetailRequestList = Object.values(formData).map(
+    (currentFormData) => {
+      // location과 price가 둘 다 비어있으면 제외
+      const filteredHopeArea = currentFormData.hopeAreaList?.filter(
+        (item) => item.location.trim() || item.price.trim(),
+      );
 
-  const handleError = (error: unknown) => {
-    const code = error instanceof Error ? error.message : undefined;
-    const message = getErrorMessage(code as keyof typeof ERROR_MESSAGES);
-    onError(message);
-  };
-
-  // 현재 모든 탭의 formData를 수집하여 신청 요청 API(mutate) 호출
-  const handleSubmit = () => {
-    // formData의 모든 탭 데이터를 배열로 변환
-    const applicationFormDetailRequestList = Object.values(formData).map(
-      (currentFormData) => {
-        // location과 price가 둘 다 비어있으면 제외
-        const filteredHopeArea = currentFormData.hopeAreaList?.filter(
-          (item) => item.location.trim() || item.price.trim(),
-        );
-
-        return {
-          performanceDate: currentFormData.performanceDate,
-          requestCount: Number(currentFormData.requestCount),
-          hopeAreaList:
-            filteredHopeArea && filteredHopeArea.length > 0
-              ? filteredHopeArea.map((item, index) => ({
-                  priority: index + 1,
-                  location: item.location,
-                  price: Number(item.price),
-                }))
-              : undefined, // 값이 없으면 undefined로 보내서 제외
-          requirement: currentFormData.requirement,
-        };
-      },
-    );
-
-    if (!status) {
-      // 새 신청
-      if (!agentId || !concertId) {
-        onError('알수없는 에러가 발생했습니다');
-        return;
-      }
-      const requestBody: CreateConcertFormRequest = {
-        agentId,
-        concertId,
-        ticketOpenType,
-        applicationFormDetailRequestList,
+      return {
+        performanceDate: currentFormData.performanceDate,
+        requestCount: Number(currentFormData.requestCount),
+        hopeAreaList:
+          filteredHopeArea && filteredHopeArea.length > 0
+            ? filteredHopeArea.map((item, index) => ({
+                priority: index + 1,
+                location: item.location,
+                price: Number(item.price),
+              }))
+            : undefined, // 값이 없으면 undefined로 보내서 제외
+        requirement: currentFormData.requirement,
       };
-      createMutate(requestBody, {
-        onSuccess: () => {
-          handleOpenModal();
-        },
-        onError: handleError,
-      });
-    } else if (isEdit) {
-      // 기존 신청 수정
-      if (!applicationFormId) return;
+    },
+  );
 
-      const requestBody: PatchConcertFormRequest = {
-        applicationFormId,
-        applicationFormEditRequest: {
-          applicationFormDetailRequestList,
-        },
-      };
-
-      patchMutate(requestBody, {
-        onSuccess: () => {
-          handleOpenModal();
-          // 캐시 무효화로 수정한 신청서 데이터 다시 조회
-          if (applicationFormId) {
-            queryClient.invalidateQueries({
-              queryKey: queryKey.getFormDetail({ applicationFormId }),
-              exact: true,
-            });
-          }
-        },
-        onError: handleError,
-      });
-    }
-  };
+  // form-button에 전달할 요청 값
+  let requestData;
+  if (!status) {
+    if (!agentId || !concertId) return;
+    requestData = {
+      agentId,
+      concertId,
+      ticketOpenType,
+      applicationFormDetailRequestList,
+    };
+  } else {
+    if (!applicationFormId) return;
+    requestData = {
+      applicationFormId,
+      applicationFormEditRequest: { applicationFormDetailRequestList },
+    };
+  }
 
   const tabItems = tabs.map((tabId) => {
     const currentData =
@@ -258,12 +208,12 @@ export default function FormTabManager({
             key={tabId}
             value={formData[tabId]}
             onChange={(data) => updateFormData(tabId, data)}
-            concertDateInfo={concertDateInfoResponseList}
-            ticketOpenDateInfo={ticketOpenDateInfoResponseList}
+            concertDateInfo={concertItem.concertDateInfoResponseList}
+            ticketOpenDateInfo={concertItem.ticketOpenDateInfoResponseList}
             ticketOpenType={ticketOpenType}
             formItem={formItem}
             currentIndex={tabId - 1}
-            seatingChartUrl={seatingChartUrl}
+            seatingChartUrl={concertItem.seatingChartUrl}
             disabled={!isEditing}
           />
         ) : null,
@@ -281,37 +231,27 @@ export default function FormTabManager({
         addTabButtonText="추가하기"
       />
       <div className={styles.input_container}>
-        {tabItems.map((item) => item.content)}
-        {status === 'PENDING' && (
-          <Button variant="outline" color="gray" onClick={handleOpenModal}>
-            신청 취소하기
-          </Button>
-        )}
-        {status === 'APPROVED' && (
-          <Button variant="outline" color="gray">
-            대리인과 채팅하기
-          </Button>
-        )}
-        {status === 'REJECTED' && !isEdit && (
-          <div className={styles.rejected_button}>
-            <Button variant="outline" color="gray" onClick={handleOpenModal}>
-              거절사유
-            </Button>
-            <Button variant="fill" onClick={() => setIsEdit(true)}>
-              재신청하기
-            </Button>
-          </div>
-        )}
-        {(status === 'CANCELED' || status === 'CANCELED_IN_PROCESS') &&
-          !isEdit && (
-            <Button variant="fill" onClick={() => setIsEdit(true)}>
-              재신청하기
-            </Button>
-          )}
-        {(!status || isEdit) && (
-          <Button variant="fill" onClick={handleSubmit}>
-            신청하기
-          </Button>
+        {tabItems.find((item) => item.value === activeTab.toString())?.content}
+        {tabs.length > 0 && (
+          <>
+            {member?.memberType === 'CLIENT' && (
+              <FormTabClientButton
+                handleOpenModal={() => handleOpenModal?.()}
+                requestData={requestData}
+                status={status}
+                applicationFormId={applicationFormId}
+                isEdit={isEdit}
+                setIsEdit={setIsEdit}
+              />
+            )}
+            {member?.memberType === 'AGENT' && (
+              <FormTabAgentButton
+                handleOpenModal={() => handleOpenModal?.()}
+                status={status}
+                applicationFormId={applicationFormId}
+              />
+            )}
+          </>
         )}
       </div>
     </div>

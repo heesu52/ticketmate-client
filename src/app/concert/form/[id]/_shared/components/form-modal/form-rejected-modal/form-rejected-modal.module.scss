@@ -1,0 +1,40 @@
+@use '@/styles/index' as *;
+
+.container {
+  min-width: 353px;
+
+  .modal_title {
+    @include title-md;
+    color: var(--grayscale-700, #222);
+    text-align: center;
+  }
+
+  .modal_description {
+    @include text-sm;
+    color: var(--grayscale-500, #767676);
+    text-align: center;
+    white-space: pre-wrap;
+  }
+
+  .modal_actions {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .error {
+    @include title-sm;
+
+    color: var(--primary-500, #ff6a6a);
+    text-align: center;
+  }
+
+  .button {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 2fr;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+}

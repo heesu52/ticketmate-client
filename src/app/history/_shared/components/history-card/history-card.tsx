@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ArrowRightIcon } from '@/assets/icons';
 import Badge from '@/shared/components/ui/badge/badge';
 import { APPLICATION_STATUS_LABEL_MAP } from '@/shared/constants/type-mapping';
+import { useMember } from '@/shared/context/member-context';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import { Form, ApplicationFormStatus } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
@@ -21,10 +22,12 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
     concertName,
     concertThumbnailUrl,
     agentNickname,
+    clientNickname,
     submittedDate,
     applicationFormStatus,
   } = formItem;
   const navigation = useNavigation();
+  const { member } = useMember();
 
   //type별 status 이름 변환
   const statusKey = applicationFormStatus as ApplicationFormStatus;
@@ -75,7 +78,9 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
         <div className={styles.detail_container}>
           <div className={styles.title}>{concertName}</div>
           <div className={styles.footer_container}>
-            <span className={styles.info}>{agentNickname}</span>
+            <span className={styles.info}>
+              {member?.memberType === 'CLIENT' ? agentNickname : clientNickname}
+            </span>
             <span
               className={styles.info}
             >{`${formatDate(submittedDate)}`}</span>

@@ -6,6 +6,7 @@ import Button from '@/shared/components/ui/button/button';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
+import { useHandleError } from '@/shared/hooks/use-error';
 import { ApplicationFormStatus } from '@/shared/types';
 
 import styles from './form-tab-button.module.scss';
@@ -24,6 +25,7 @@ export default function FormTabAgentButton({
   const navigation = useNavigation();
   const router = useRouter();
   const { open } = useModalStore();
+  const { handleError } = useHandleError();
 
   // 버튼 클릭 시 navigate로 이동
   const handleNavigate = () => {
@@ -47,10 +49,7 @@ export default function FormTabAgentButton({
         router.push('/history');
       }
     } catch (error) {
-      toastify({
-        variant: 'error',
-        description: '신청 거절에 실패했습니다.',
-      });
+      handleError(error);
     }
   };
 
@@ -69,10 +68,7 @@ export default function FormTabAgentButton({
         router.push('/history');
       }
     } catch (error) {
-      toastify({
-        variant: 'error',
-        description: '신청 수락에 실패했습니다.',
-      });
+      handleError(error);
     }
   };
 

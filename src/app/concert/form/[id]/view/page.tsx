@@ -4,14 +4,15 @@ import { use, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
-import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-confirm-modal';
 import FormReasonModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-reason-modal/form-reason-modal';
+import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-submit-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
+import { useHandleError } from '@/shared/hooks/use-error';
 
 import styles from './page.module.scss';
 
@@ -20,19 +21,12 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id: applicationFormId } = resolvedParams;
   const router = useRouter();
   const { open, close } = useModalStore();
+  const { handleError } = useHandleError();
   const { state } = useLocation<{
     agentNickname: string;
   }>();
 
   const { data: formItem } = useGetFormDetail({ applicationFormId });
-
-  // 에러 발생 시 토스트 알림
-  const handleError = (message: string) => {
-    toastify({
-      variant: 'error',
-      description: message,
-    });
-  };
 
   // 신청서 거절 사유 확인 모달 (공통)
   const handleOpenReasonModal = () => {
@@ -55,10 +49,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         router.push('/history');
       }
     } catch (error) {
-      toastify({
-        variant: 'error',
-        description: '공연 의뢰에 실패했습니다.',
-      });
+      handleError(error);
     }
   };
   const status = formItem?.applicationFormStatus;
@@ -117,7 +108,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
               formItem={formItem} //기존 신청폼 보여줄 시 신청서정보
               ticketOpenType={formItem.ticketOpenType}
               applicationFormId={applicationFormId}
-              onError={handleError}
               status={formItem.applicationFormStatus} //분기처리를 위해 전달
             />
           </>

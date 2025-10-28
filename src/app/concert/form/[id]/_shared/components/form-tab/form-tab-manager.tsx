@@ -1,22 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query';
-
 import FormInput from '@/app/concert/form/[id]/_shared/components/form-input/form-input';
 import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
 import FormTabAgentButton from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-button/agent-button';
 import FormTabClientButton from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-button/client-button';
-import {
-  useCreateConcertForm,
-  usePatchConcertForm,
-} from '@/app/concert/form/[id]/_shared/services/mutation';
-import queryKey from '@/app/concert/form/[id]/_shared/services/query-key';
-import {
-  CreateConcertFormRequest,
-  PatchConcertFormRequest,
-} from '@/app/concert/form/[id]/_shared/services/type';
 import Tab from '@/shared/components/ui/tab/tab';
-import { ERROR_MESSAGES } from '@/shared/constants/error-type';
 import { useMember } from '@/shared/context/member-context';
 import {
   Concert,
@@ -25,7 +13,6 @@ import {
   TicketOpenType,
 } from '@/shared/types';
 import { formatDate } from '@/shared/utils/dates';
-import { getErrorMessage } from '@/shared/utils/getErrorMessage';
 
 import styles from './form-tab-manager.module.scss';
 interface FormTabManagerProps {
@@ -34,7 +21,6 @@ interface FormTabManagerProps {
   agentId?: string | null;
   concertId?: string | null;
   applicationFormId?: string | null;
-  onError: (message: string) => void;
   concertItem: Concert;
   formItem?: Form;
   status?: ApplicationFormStatus | null;
@@ -46,7 +32,6 @@ export default function FormTabManager({
   agentId,
   concertId,
   applicationFormId,
-  onError,
   concertItem,
   formItem,
   status,
@@ -167,17 +152,6 @@ export default function FormTabManager({
     setFormData((prev) => ({ ...prev, [id]: data }));
   }, []);
 
-  const queryClient = useQueryClient();
-  const { mutate: createMutate } = useCreateConcertForm();
-  const { mutate: patchMutate } = usePatchConcertForm();
-
-  // 에러 처리 함수
-  const handleError = (error: unknown) => {
-    const code = error instanceof Error ? error.message : String(error);
-    const message = getErrorMessage(code as keyof typeof ERROR_MESSAGES);
-    onError(message);
-  };
-
   // formData의 모든 탭 데이터를 배열로 변환
   const applicationFormDetailRequestList = Object.values(formData).map(
     (currentFormData) => {
@@ -202,49 +176,23 @@ export default function FormTabManager({
     },
   );
 
-  // 현재 모든 탭의 formData를 수집하여 신청 요청 API(mutate) 호출
-  const handleSubmit = () => {
-    if (!status) {
-      // 새 신청
-      if (!agentId || !concertId) return;
-      const requestBody: CreateConcertFormRequest = {
-        agentId,
-        concertId,
-        ticketOpenType,
-        applicationFormDetailRequestList,
-      };
-      createMutate(requestBody, {
-        onSuccess: () => {
-          handleOpenModal();
-        },
-        onError: handleError,
-      });
-    } else if (isEdit) {
-      // 기존 신청 수정
-      if (!applicationFormId) return;
-
-      const requestBody: PatchConcertFormRequest = {
-        applicationFormId,
-        applicationFormEditRequest: {
-          applicationFormDetailRequestList,
-        },
-      };
-
-      patchMutate(requestBody, {
-        onSuccess: () => {
-          handleOpenModal();
-          // 캐시 무효화로 수정한 신청서 데이터 다시 조회
-          if (applicationFormId) {
-            queryClient.invalidateQueries({
-              queryKey: queryKey.getFormDetail({ applicationFormId }),
-              exact: true,
-            });
-          }
-        },
-        onError: handleError,
-      });
-    }
-  };
+  // form-button에 전달할 요청 값
+  let requestData;
+  if (!status) {
+    if (!agentId || !concertId) return;
+    requestData = {
+      agentId,
+      concertId,
+      ticketOpenType,
+      applicationFormDetailRequestList,
+    };
+  } else {
+    if (!applicationFormId) return;
+    requestData = {
+      applicationFormId,
+      applicationFormEditRequest: { applicationFormDetailRequestList },
+    };
+  }
 
   const tabItems = tabs.map((tabId) => {
     const currentData =
@@ -288,7 +236,7 @@ export default function FormTabManager({
             {member?.memberType === 'CLIENT' && (
               <FormTabClientButton
                 handleOpenModal={handleOpenModal}
-                handleSubmit={handleSubmit}
+                requestData={requestData}
                 status={status}
                 applicationFormId={applicationFormId}
                 isEdit={isEdit}

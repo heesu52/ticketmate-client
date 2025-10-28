@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
-import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-confirm-modal';
+import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-submit-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';

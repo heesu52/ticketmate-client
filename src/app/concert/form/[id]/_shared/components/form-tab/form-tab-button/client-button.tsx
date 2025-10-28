@@ -1,6 +1,12 @@
 import { useRouter } from 'next/navigation';
 
 import FormCancelModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-cancel-modal';
+import FormReSubmitModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-resubmit-modal';
+import FormSumbitModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-submit-modal';
+import {
+  CreateConcertFormRequest,
+  PatchConcertFormRequest,
+} from '@/app/concert/form/[id]/_shared/services/type';
 import Button from '@/shared/components/ui/button/button';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
@@ -12,7 +18,7 @@ import styles from './form-tab-button.module.scss';
 
 interface FormTabManagerProps {
   handleOpenModal: () => void;
-  handleSubmit: () => void;
+  requestData: CreateConcertFormRequest | PatchConcertFormRequest;
   status?: ApplicationFormStatus | null;
   applicationFormId?: string | null;
   isEdit: boolean;
@@ -21,7 +27,7 @@ interface FormTabManagerProps {
 
 export default function FormTabClientButton({
   handleOpenModal,
-  handleSubmit,
+  requestData,
   applicationFormId,
   status,
   isEdit,
@@ -63,6 +69,55 @@ export default function FormTabClientButton({
     }
   };
 
+  console.log('요청값 확인', requestData);
+  // 신청서 요청 확인 모달 (의뢰인용)
+
+  const handleOpenSumitModal = async () => {
+    if (!('agentId' in requestData)) return;
+    try {
+      const result = await open('form-submit-modal', FormSumbitModal, {
+        ...requestData,
+      });
+
+      if (result) {
+        toastify({
+          variant: 'success',
+          description: '공연 의뢰에 성공했습니다.',
+        });
+        router.push('/history');
+      }
+    } catch (error) {
+      toastify({
+        variant: 'error',
+        description: '공연 의뢰에 실패했습니다.',
+      });
+    }
+  };
+
+  // 신청서 재요청 확인 모달 (의뢰인용)
+
+  const handleOpenReSumitModal = async () => {
+    if (!('applicationFormId' in requestData)) return;
+    try {
+      const result = await open('form-resubmit-modal', FormReSubmitModal, {
+        ...requestData,
+      });
+
+      if (result) {
+        toastify({
+          variant: 'success',
+          description: '공연 의뢰에 성공했습니다.',
+        });
+        router.push('/history');
+      }
+    } catch (error) {
+      toastify({
+        variant: 'error',
+        description: '공연 의뢰에 실패했습니다.',
+      });
+    }
+  };
+
   return (
     <div className={styles.button_container}>
       {status === 'PENDING' && (
@@ -96,7 +151,16 @@ export default function FormTabClientButton({
         )}
 
       {(!status || isEdit) && (
-        <Button variant="fill" onClick={handleSubmit}>
+        <Button
+          variant="fill"
+          onClick={() => {
+            if (status) {
+              handleOpenReSumitModal();
+            } else {
+              handleOpenSumitModal();
+            }
+          }}
+        >
           신청하기
         </Button>
       )}

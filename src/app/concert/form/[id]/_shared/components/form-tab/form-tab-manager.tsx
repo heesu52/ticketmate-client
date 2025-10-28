@@ -283,22 +283,26 @@ export default function FormTabManager({
       />
       <div className={styles.input_container}>
         {tabItems.find((item) => item.value === activeTab.toString())?.content}
-        {member?.memberType === 'CLIENT' && (
-          <FormTabClientButton
-            handleOpenModal={handleOpenModal}
-            handleSubmit={handleSubmit}
-            status={status}
-            applicationFormId={applicationFormId}
-            isEdit={isEdit}
-            setIsEdit={setIsEdit}
-          />
-        )}
-        {member?.memberType === 'AGENT' && (
-          <FormTabAgentButton
-            handleOpenModal={handleOpenModal}
-            status={status}
-            applicationFormId={applicationFormId}
-          />
+        {tabs.length > 0 && (
+          <>
+            {member?.memberType === 'CLIENT' && (
+              <FormTabClientButton
+                handleOpenModal={handleOpenModal}
+                handleSubmit={handleSubmit}
+                status={status}
+                applicationFormId={applicationFormId}
+                isEdit={isEdit}
+                setIsEdit={setIsEdit}
+              />
+            )}
+            {member?.memberType === 'AGENT' && (
+              <FormTabAgentButton
+                handleOpenModal={handleOpenModal}
+                status={status}
+                applicationFormId={applicationFormId}
+              />
+            )}
+          </>
         )}
       </div>
     </div>

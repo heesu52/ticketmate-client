@@ -1,4 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
+
 import { usePatchConcertForm } from '@/app/concert/form/[id]/_shared/services/mutation';
+import queryKey from '@/app/concert/form/[id]/_shared/services/query-key';
 import { ApplicationFormRequest } from '@/app/concert/form/[id]/_shared/services/type';
 import ModalTemplate from '@/shared/components/ui/modal/modal-template/modal-template';
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
@@ -15,6 +18,7 @@ const FormReSubmitModal = ({
   applicationFormEditRequest,
 }: FormReSubmitModalProps) => {
   const { mutate } = usePatchConcertForm();
+  const queryClient = useQueryClient();
   const handleFirstButtonClick = () => {
     onResolve?.(false);
   };
@@ -26,7 +30,16 @@ const FormReSubmitModal = ({
         applicationFormEditRequest,
       },
       {
-        onSuccess: () => onResolve?.(true),
+        onSuccess: () => {
+          // 캐시 무효화로 수정한 신청서 데이터 다시 조회
+          if (applicationFormId) {
+            queryClient.invalidateQueries({
+              queryKey: queryKey.getFormDetail({ applicationFormId }),
+              exact: true,
+            });
+          }
+          onResolve?.(true);
+        },
         onError: () => onReject?.(),
       },
     );

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
-import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-submit-modal';
+import FormSubmitModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-submit-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
@@ -32,9 +32,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { data: concertItem } = useGetConcertDetail({ concertId });
 
   // 신청서 요청 확인 모달 (의뢰인용)
-  const handleOpenConfirmModal = async () => {
+  const handleOpenSubmitModal = async () => {
     try {
-      const result = await open('form-confirm-modal', FormConfirmModal);
+      const result = await open('form-submit-modal', FormSubmitModal);
 
       if (result) {
         toastify({
@@ -66,7 +66,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
             {/* 신청 폼 탭*/}
             <FormTabManager
-              handleOpenModal={handleOpenConfirmModal}
+              handleOpenModal={handleOpenSubmitModal}
               concertItem={concertItem} //새로운 신청서 작성 시 필요한 공연정보
               ticketOpenType={type}
               agentId={agentId}

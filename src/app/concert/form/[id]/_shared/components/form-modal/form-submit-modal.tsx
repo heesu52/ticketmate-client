@@ -4,21 +4,21 @@ import ModalTemplate from '@/shared/components/ui/modal/modal-template/modal-tem
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
 import { TicketOpenType } from '@/shared/types';
 
-type FormSumbitModalProps = {
+type FormSubmitModalProps = {
   agentId: string;
   concertId: string;
   ticketOpenType: TicketOpenType;
   applicationFormDetailRequestList: ApplicationFormDetail[];
 } & ModalControl<unknown>;
 
-const FormSumbitModal = ({
+const FormSubmitModal = ({
   onResolve,
   onReject,
   agentId,
   concertId,
   ticketOpenType,
   applicationFormDetailRequestList,
-}: FormSumbitModalProps) => {
+}: FormSubmitModalProps) => {
   const { mutate } = useCreateConcertForm();
   const handleFirstButtonClick = () => {
     onResolve?.(false);
@@ -46,4 +46,4 @@ const FormSumbitModal = ({
   );
 };
 
-export default FormSumbitModal;
+export default FormSubmitModal;

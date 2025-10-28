@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
 import FormReasonModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-reason-modal/form-reason-modal';
-import FormConfirmModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-submit-modal';
+import FormSubmitModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-submit-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
 import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -37,9 +37,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   };
 
   // 신청서 재요청 확인 모달 (의뢰인용)
-  const handleOpenConfirmModal = async () => {
+  const handleOpenSubmitModal = async () => {
     try {
-      const result = await open('form-confirm-modal', FormConfirmModal);
+      const result = await open('form-submit-modal', FormSubmitModal);
 
       if (result) {
         toastify({
@@ -63,7 +63,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       return;
     }
     if (status === 'CANCELED' || status === 'CANCELED_IN_PROCESS') {
-      handleOpenConfirmModal();
+      handleOpenSubmitModal();
     }
   };
 

@@ -1,5 +1,3 @@
-// src/constants/error-messages.ts
-
 export const ERROR_MESSAGES = {
   // GLOBAL
   INVALID_REQUEST: '잘못된 요청입니다.',

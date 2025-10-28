@@ -1,4 +1,4 @@
-import { ERROR_MESSAGES } from '../constants/error-type';
+import { ERROR_MESSAGES } from '@/shared/constants/error-type';
 
 const AUTH_ERROR_CODES = new Set([
   'UNAUTHORIZED',

@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation';
 
 import FormCancelModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-cancel-modal';
 import FormReSubmitModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-resubmit-modal';
-import FormSumbitModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-submit-modal';
+import FormSubmitModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-submit-modal';
 import {
   CreateConcertFormRequest,
   PatchConcertFormRequest,
@@ -70,10 +70,10 @@ export default function FormTabClientButton({
 
   // 신청서 요청 확인 모달 (의뢰인용)
 
-  const handleOpenSumitModal = async () => {
+  const handleOpenSubmitModal = async () => {
     if (!('agentId' in requestData)) return;
     try {
-      const result = await open('form-submit-modal', FormSumbitModal, {
+      const result = await open('form-submit-modal', FormSubmitModal, {
         ...requestData,
       });
 
@@ -149,7 +149,7 @@ export default function FormTabClientButton({
             if (status) {
               handleOpenReSumitModal();
             } else {
-              handleOpenSumitModal();
+              handleOpenSubmitModal();
             }
           }}
         >

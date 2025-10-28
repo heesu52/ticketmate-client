@@ -3,6 +3,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 
+import { usePathname } from 'next/navigation';
 import { createPortal } from 'react-dom';
 
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
@@ -11,7 +12,8 @@ import type { ModalItem } from '@/shared/components/ui/modal/modal.type';
 const MODAL_ROOT_ID = 'modal-root';
 
 export default function ModalProvider() {
-  const { modals } = useModalStore();
+  const { modals, clear } = useModalStore();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [portalEl, setPortalEl] = useState<HTMLElement | null>(null);
   const createdRef = useRef(false);
@@ -35,6 +37,10 @@ export default function ModalProvider() {
       }
     };
   }, [mounted]);
+
+  useEffect(() => {
+    clear();
+  }, [pathname, clear]);
 
   if (!mounted || !portalEl) return null;
 

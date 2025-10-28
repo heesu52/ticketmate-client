@@ -1,5 +1,5 @@
 'use client';
-import { use, useEffect } from 'react';
+import { use } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -20,7 +20,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const { id: concertId } = resolvedParams;
   const router = useRouter();
-  const { open, close } = useModalStore();
+  const { open } = useModalStore();
   const { handleError } = useHandleError();
 
   // useLocation으로 navigate에서 넘어온 state 받기
@@ -47,13 +47,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       handleError(error);
     }
   };
-
-  // 페이지 벗어날 경우 모달 닫기
-  useEffect(() => {
-    return () => {
-      close('form-confirm-modal');
-    };
-  }, [close]);
 
   return (
     <PageFrame

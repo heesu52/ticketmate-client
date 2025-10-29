@@ -76,7 +76,7 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
           height={48}
         />
         <div className={styles.detail_container}>
-          <div className={styles.title}>{concertName}</div>
+          <span className={styles.title}>{concertName}</span>
           <div className={styles.footer_container}>
             <span className={styles.info}>
               {member?.memberType === 'CLIENT' ? agentNickname : clientNickname}

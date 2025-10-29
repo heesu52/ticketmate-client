@@ -32,7 +32,7 @@ const ConcertInfo = ({
       {badges && <div className={styles.tag_container}>{badges}</div>}
 
       {/* 제목 */}
-      <div className={styles.title}>{concertName}</div>
+      <span className={styles.title}>{concertName}</span>
 
       {/* 공연 상세정보 */}
       <div className={styles.detail_container}>

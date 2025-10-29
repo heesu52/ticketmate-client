@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import RecentSuccessList from '@/app/my/_shared/components/recent-success-list/recent-success-list';
 import { SettingIcon } from '@/assets/icons';
 import { NoRegisterImage } from '@/assets/images';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -17,6 +18,9 @@ const MyPage = () => {
   const router = useRouter();
 
   const { member } = useMember();
+
+  // 지금 client
+  console.log(member);
 
   const handleProfileEdit = () => {
     router.push('/my/profile');
@@ -68,14 +72,16 @@ const MyPage = () => {
 
         <Spacer size={40} />
 
-        {/* <div className={styles.history_container}>
+        <div className={styles.history_container}>
           <div className={styles.title_container}>
             <span className={styles.title}>최근 성공 신청내역</span>
             <Link href="" className={styles.link}>
               전체보기
             </Link>
           </div>
-        </div> */}
+
+          <RecentSuccessList />
+        </div>
       </div>
     </PageFrame>
   );

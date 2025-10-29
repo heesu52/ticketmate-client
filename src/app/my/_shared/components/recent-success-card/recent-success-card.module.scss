@@ -1,0 +1,75 @@
+@use '@/styles/index' as *;
+
+.container {
+  display: flex;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 16px;
+  padding: 16px 0;
+
+  border-bottom: 1px solid var(--grayscale-300, #ededed);
+  background: var(--grayscale-100, #fff);
+
+  .image {
+    width: 80px;
+    height: 106px;
+    border-radius: 12px;
+  }
+
+  .info_container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: stretch;
+
+    .title {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      align-self: stretch;
+
+      @include text-lg;
+      color: var(--grayscale-700);
+    }
+
+    .detail_container {
+      .nickname {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        align-self: stretch;
+
+        @include text-md;
+        color: var(--grayscale-500);
+      }
+
+      .footer_container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        align-self: stretch;
+
+        .date {
+          @include text-md;
+          color: var(--grayscale-500);
+        }
+
+        .review_container {
+          display: flex;
+          align-items: center;
+          gap: 2px;
+
+          .info {
+            @include text-lg;
+            color: var(--grayscale-700);
+          }
+        }
+      }
+    }
+  }
+}
+
+.container:first-child {
+  padding-top: 0;
+}

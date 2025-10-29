@@ -64,6 +64,28 @@
     }
   }
 
+  .application_container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .title_container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      align-self: stretch;
+
+      .title {
+        @include title-sm;
+        color: var(--grayscale-700, #222);
+      }
+      .link {
+        @include text-md;
+        color: var(--grayscale-500, #767676);
+      }
+    }
+  }
+
   .history_container {
     display: flex;
     flex-direction: column;

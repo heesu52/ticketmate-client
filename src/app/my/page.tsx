@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import ApplicationList from '@/app/my/_shared/components/application-list/application-list';
 import RecentSuccessList from '@/app/my/_shared/components/recent-success-list/recent-success-list';
 import { SettingIcon } from '@/assets/icons';
 import { NoRegisterImage } from '@/assets/images';
@@ -69,6 +70,18 @@ const MyPage = () => {
             프로필 편집
           </Button>
         </div>
+
+        <Spacer size={40} />
+
+        <div className={styles.application_container}>
+          <div className={styles.title_container}>
+            <span className={styles.title}>신청공연 관리</span>
+            <Link href="" className={styles.link}>
+              관리하기
+            </Link>
+          </div>
+        </div>
+        <ApplicationList />
 
         <Spacer size={40} />
 

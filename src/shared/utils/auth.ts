@@ -4,7 +4,9 @@ export const refreshAccessToken = async () => {
     credentials: 'include',
   });
 
-  if (!res.ok || res.status !== 200) return false;
-
-  return res.ok;
+  if (res.ok && res.status === 200) {
+    return true;
+  } else {
+    return false;
+  }
 };

@@ -1,7 +1,7 @@
 import ky, { HTTPError, type Options } from 'ky';
 
 import { APIMethod } from '@/lib/http-client/http-client.type';
-import { refreshAccessToken } from '@/shared/utils/auth';
+import { refreshAccessToken } from '@/shared/services/auth/api';
 
 const PREFIX_URL = process.env.NEXT_PUBLIC_API_URL;
 const MODE = process.env.NODE_ENV;
@@ -31,15 +31,20 @@ const extended = created.extend({
     ],
     afterResponse: [
       async (request, options, response) => {
-        if (response.status === 401 && MODE !== 'development') {
-          const newAccessToken = await refreshAccessToken();
+        if (response.status !== 401) {
+          return response;
+        }
 
-          if (newAccessToken) {
+        if (response.status === 401 && MODE !== 'development') {
+          const res = await refreshAccessToken();
+
+          if (res) {
             return await ky(request, options);
           } else {
             window.location.href = '/auth/sign-in';
+
             // 이후 흐름 중단을 위해 빈 Response 반환
-            return new Response(null, { status: 401 });
+            return new Response(null);
           }
         }
 

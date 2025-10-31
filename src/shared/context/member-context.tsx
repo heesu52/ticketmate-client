@@ -1,6 +1,14 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useMemo,
+  useCallback,
+} from 'react';
+
+import { usePathname } from 'next/navigation';
 
 import { useGetMember } from '@/shared/services/member/query';
 import { Member } from '@/shared/types';
@@ -21,26 +29,49 @@ interface MemberContextType {
 const MemberContext = createContext<MemberContextType | null>(null);
 
 /**
+ * Member API를 실행하지 않아야 하는 라우트들
+ */
+const EXCLUDED_ROUTES = [
+  '/',
+  '/auth/sign-in',
+  '/auth/sign-in/verification',
+  '/auth/sign-in/profile',
+];
+
+/**
  * 전역 멤버 컨텍스트를 제공하는 Provider 컴포넌트
  *
  * @remarks
+ * - 특정 라우트(로그인, 회원가입 등)에서는 member API를 호출하지 않습니다.
  * - 내부적으로 `useGetMember()` 쿼리를 호출하여 사용자 정보를 가져옵니다.
  * - `refresh()`를 통해 서버 데이터를 강제로 재요청할 수 있습니다.
  * - 데이터를 가져오는 동안 `isLoading`이 `true`로 설정됩니다.
  */
 export function MemberProvider({ children }: { children: ReactNode }) {
-  const { data, isLoading, refetch, error, isSuccess } = useGetMember();
+  const pathname = usePathname();
+
+  // 현재 라우트가 제외된 라우트인지 확인
+  const shouldSkipMemberAPI = EXCLUDED_ROUTES.some(
+    (route) => pathname === route,
+  );
+
+  // 조건부로 member API 호출
+  const { data, isLoading, refetch, error, isSuccess } =
+    useGetMember(!shouldSkipMemberAPI);
 
   /**
    * 서버로부터 멤버 데이터를 다시 가져오는 함수.
    * @returns {Promise<Member | undefined>} 최신 멤버 데이터 반환
    */
-  const refresh = () => refetch().then((res) => res.data as Member | null);
+  const refresh = useCallback(
+    () => refetch().then((res) => res.data as Member | null),
+    [refetch],
+  );
 
   const value = useMemo<MemberContextType>(() => {
     const member = isSuccess && data ? data : null;
     return { member, refresh, isLoading, error: error ?? null };
-  }, [data, isLoading, error, isSuccess]);
+  }, [data, isLoading, error, isSuccess, refresh]);
 
   return (
     <MemberContext.Provider value={value}>{children}</MemberContext.Provider>

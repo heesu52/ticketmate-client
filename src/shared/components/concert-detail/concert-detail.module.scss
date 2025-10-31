@@ -6,8 +6,9 @@
 }
 
 .title {
-  @include title-md;
   margin-top: 8px;
+
+  @include title-md;
   color: var(--grayscale-700, #222);
 }
 

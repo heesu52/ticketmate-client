@@ -4,19 +4,17 @@ import Image from 'next/image';
 
 import { StarIcon } from '@/assets/icons';
 import { useMember } from '@/shared/context/member-context';
-import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 
 import styles from './recent-success-card.module.scss';
 
 const RecentSuccessCard = () => {
-  const navigation = useNavigation();
   const { member } = useMember();
 
   return (
     <div className={styles.container}>
       <Image
         className={styles.image}
-        src={'/naver'}
+        src={'/placeholder-concert.png'}
         alt={'공연썸네일이미지'}
         width={48}
         height={48}

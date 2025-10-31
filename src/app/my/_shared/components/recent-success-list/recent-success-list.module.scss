@@ -16,4 +16,7 @@
   align-items: center;
   border-radius: 8px;
   background: var(--grayscale-200, #fafafa);
+
+  @include text-md;
+  color: var(--grayscale-500, #fafafa);
 }

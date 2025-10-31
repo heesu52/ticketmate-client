@@ -20,9 +20,6 @@ const MyPage = () => {
 
   const { member } = useMember();
 
-  // 지금 client
-  console.log(member);
-
   const handleProfileEdit = () => {
     router.push('/my/profile');
   };
@@ -71,18 +68,21 @@ const MyPage = () => {
           </Button>
         </div>
 
-        <Spacer size={40} />
+        {member?.memberType === 'AGENT' && (
+          <>
+            <Spacer size={40} />
 
-        <div className={styles.application_container}>
-          <div className={styles.title_container}>
-            <span className={styles.title}>신청공연 관리</span>
-            <Link href="" className={styles.link}>
-              관리하기
-            </Link>
-          </div>
-        </div>
-        <ApplicationList />
-
+            <div className={styles.application_container}>
+              <div className={styles.title_container}>
+                <span className={styles.title}>신청공연 관리</span>
+                <Link href="" className={styles.link}>
+                  관리하기
+                </Link>
+              </div>
+              <ApplicationList />
+            </div>
+          </>
+        )}
         <Spacer size={40} />
 
         <div className={styles.history_container}>

@@ -27,7 +27,7 @@ const RecentSuccessCard = () => {
         </span>
 
         <div className={styles.detail_container}>
-          <span className={styles.nickname}>사용자 닉네임</span>
+          <span className={styles.nickname}>{member?.nickname}</span>
 
           <div className={styles.footer_container}>
             <span className={styles.date}>25.01.24(일)</span>
@@ -46,24 +46,3 @@ const RecentSuccessCard = () => {
 };
 
 export default RecentSuccessCard;
-
-//  <div className={styles.detail_container}>
-//       <div className={styles.title}>{concertName}</div>
-//       <div className={styles.nickname_container}>
-//         <span className={styles.info}>
-//           {member?.memberType === 'CLIENT' ? agentNickname : clientNickname}
-//         </span>
-//       </div>
-//       <div className={styles.footer_container}>
-//         <span
-//           className={styles.info}
-//         >{`${formatDate(submittedDate)}`}</span>
-//         <div className={styles.review_container}>
-//           <span>
-//             <StarIcon width={16} height={16} />
-//           </span>
-//           <span className={styles.review_score}>{4.5}</span>
-//           {/* <span className={styles.review_score}>{safeAvg.toFixed(1)}</span> */}
-//         </div>
-//       </div>
-//     </div>

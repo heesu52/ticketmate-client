@@ -23,15 +23,13 @@ const ApplicationCard = () => {
       />
       <div className={styles.footer_container}>
         <div className={styles.count_container}>
-          <span className={styles.icon}>
-            <MyIcon width={12} height={12} fill="var(--grayscale-100)" />
+          <span>
+            <MyIcon width={12} height={12} stroke="var(--grayscale-100)" />
           </span>
           <span className={styles.count}>4</span>
         </div>
 
-        <div className={styles.toggle}>
-          <Toggle pressed={isEnabled} onPressedChange={setIsEnabled} />
-        </div>
+        <Toggle pressed={isEnabled} onPressedChange={setIsEnabled} />
       </div>
     </div>
   );

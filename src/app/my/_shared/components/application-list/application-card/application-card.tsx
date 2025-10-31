@@ -16,7 +16,7 @@ const ApplicationCard = () => {
     <div className={styles.container}>
       <Image
         className={styles.image}
-        src={'/naver'}
+        src={'/placeholder-concert.png'}
         alt={'공연썸네일이미지'}
         width={48}
         height={48}

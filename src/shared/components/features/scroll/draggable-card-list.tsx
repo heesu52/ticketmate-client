@@ -1,19 +1,25 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, ComponentType } from 'react';
 
-import ApplicationCard from '@/app/my/_shared/components/application-list/application-card/application-card';
+import styles from './draggable-card-list.module.scss';
 
-import styles from './application-list.module.scss';
+interface DraggableCardListProps<T> {
+  items: T[];
+  CardComponent: ComponentType<{ item?: T }>;
+  dragSpeed?: number;
+}
 
-const ApplicationList = () => {
-  // 가로 스크롤 영역 참조
+const DraggableCardList = <T,>({
+  items,
+  CardComponent,
+  dragSpeed = 1.2,
+}: DraggableCardListProps<T>) => {
   const containerRef = useRef<HTMLDivElement>(null);
-
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  // 드래그 시작 시점
+  // 드래그 시작
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!containerRef.current) return;
     setIsDragging(true);
@@ -21,16 +27,16 @@ const ApplicationList = () => {
     setScrollLeft(containerRef.current.scrollLeft);
   };
 
-  // 드래그 종료 시점
+  // 드래그 종료
   const handleMouseLeave = () => setIsDragging(false);
   const handleMouseUp = () => setIsDragging(false);
 
-  // 드래그 중일 때 스크롤 이동
+  // 드래그 중
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !containerRef.current) return;
     e.preventDefault();
     const x = e.pageX - containerRef.current.offsetLeft;
-    const walk = (x - startX) * 1.2; // 드래그 속도 조절
+    const walk = (x - startX) * dragSpeed;
     containerRef.current.scrollLeft = scrollLeft - walk;
   };
 
@@ -43,12 +49,11 @@ const ApplicationList = () => {
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
     >
-      {/* 드래그 확인을 위해 임의로 작성 */}
-      {Array.from({ length: 12 }).map((_, i) => (
-        <ApplicationCard key={i} />
+      {items.map((item, i) => (
+        <CardComponent key={i} item={item} />
       ))}
     </div>
   );
 };
 
-export default ApplicationList;
+export default DraggableCardList;

@@ -4,10 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import ApplicationList from '@/app/my/_shared/components/application-list/application-list';
-import RecentSuccessList from '@/app/my/_shared/components/recent-success-list/recent-success-list';
+import ApplicationList from '@/app/my/_shared/components/application-list';
 import { SettingIcon } from '@/assets/icons';
 import { NoRegisterImage } from '@/assets/images';
+import RecentSuccessList from '@/shared/components/features/recent-success/recent-success-list/recent-success-list';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Spacer from '@/shared/components/ui/spacer/spacer';
@@ -88,12 +88,15 @@ const MyPage = () => {
         <div className={styles.history_container}>
           <div className={styles.title_container}>
             <span className={styles.title}>최근 성공 신청내역</span>
-            <Link href="/applications/success" className={styles.link}>
+            <Link href="/history/success" className={styles.link}>
               전체보기
             </Link>
           </div>
 
           <RecentSuccessList />
+          {/* 성공신청내역이 없을 때 */}
+          {/* 추후 api 연동 후 recentsuccesscard가 없을 때 최근성공내역없음 버튼이 보일 예정 */}
+          <div className={styles.empty_container}>최근 성공내역 없음</div>
         </div>
       </div>
     </PageFrame>

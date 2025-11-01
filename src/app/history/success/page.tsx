@@ -1,0 +1,46 @@
+'use client';
+import React from 'react';
+
+import SuccessList from '@/app/history/success/_shared/components/success-list';
+import RecentSuccessList from '@/shared/components/features/recent-success/recent-success-list/recent-success-list';
+import PageFrame from '@/shared/components/layout/page-frame/page-frame';
+import Spacer from '@/shared/components/ui/spacer/spacer';
+
+import styles from './page.module.scss';
+
+export default function SuccessPage() {
+  return (
+    <PageFrame
+      appBar={{
+        title: '성공 신청내역',
+        showBack: true,
+      }}
+      bottomNav={true}
+    >
+      <div className={styles.container}>
+        <div className={styles.main_container}>
+          <span className={styles.title}>대표 성공내역</span>
+          <span className={styles.subtitle}>
+            대리인으로 인정받은 대표 성공내역입니다.
+          </span>
+          <Spacer size={16} />
+          <SuccessList />
+        </div>
+
+        <Spacer size={40} />
+
+        {/*  신청내역 날짜별로 */}
+        <div className={styles.list_container}>
+          <div className={styles.history_container}>
+            <span className={styles.subtitle}>2024/12/09(일)</span>
+            <RecentSuccessList />
+          </div>
+          <div className={styles.history_container}>
+            <span className={styles.subtitle}>2024/12/09(일)</span>
+            <RecentSuccessList />
+          </div>
+        </div>
+      </div>
+    </PageFrame>
+  );
+}

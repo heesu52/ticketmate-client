@@ -6,35 +6,14 @@
   width: 100%;
   padding: 20px;
 
-  .main_container {
-    display: flex;
-    flex-direction: column;
-
-    .title {
-      @include title-sm;
-      color: var(--grayscale-700, #222);
-    }
-    .subtitle {
-      margin-top: 4px;
-      @include text-md;
-      color: var(--grayscale-500, #767676);
-    }
+  .title {
+    @include title-sm;
+    color: var(--grayscale-700, #222);
   }
 
   .list_container {
     display: flex;
     flex-direction: column;
-    gap: 40px;
-
-    .history_container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-
-      .subtitle {
-        @include text-md;
-        color: var(--grayscale-500, #767676);
-      }
-    }
+    gap: 20px;
   }
 }

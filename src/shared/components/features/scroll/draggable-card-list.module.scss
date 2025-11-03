@@ -1,0 +1,25 @@
+@use '@/styles/index' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  align-self: stretch;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  cursor: grab;
+  user-select: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  > * {
+    flex: 0 0 auto;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import ConcertDetail from '@/shared/components/concert-detail/concert-detail';
+import ConcertDetail from '@/shared/components/features/concert/concert-detail/concert-detail';
 import Badge from '@/shared/components/ui/badge/badge';
 import {
   TICKET_SITE_URL_MAP,

@@ -4,8 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import ApplicationList from '@/app/my/_shared/components/application-list';
 import { SettingIcon } from '@/assets/icons';
 import { NoRegisterImage } from '@/assets/images';
+import RecentSuccessList from '@/shared/components/features/recent-success/recent-success-list/recent-success-list';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Spacer from '@/shared/components/ui/spacer/spacer';
@@ -66,16 +68,36 @@ const MyPage = () => {
           </Button>
         </div>
 
+        {member?.memberType === 'AGENT' && (
+          <>
+            <Spacer size={40} />
+
+            <div className={styles.application_container}>
+              <div className={styles.title_container}>
+                <span className={styles.title}>신청공연 관리</span>
+                <Link href="/application/concert" className={styles.link}>
+                  관리하기
+                </Link>
+              </div>
+              <ApplicationList />
+            </div>
+          </>
+        )}
         <Spacer size={40} />
 
-        {/* <div className={styles.history_container}>
+        <div className={styles.history_container}>
           <div className={styles.title_container}>
             <span className={styles.title}>최근 성공 신청내역</span>
-            <Link href="" className={styles.link}>
+            <Link href="/history/success" className={styles.link}>
               전체보기
             </Link>
           </div>
-        </div> */}
+
+          <RecentSuccessList />
+          {/* 성공신청내역이 없을 때 */}
+          {/* 추후 api 연동 후 recentsuccesscard가 없을 때 최근성공내역없음 버튼이 보일 예정 */}
+          <div className={styles.empty_container}>최근 성공내역 없음</div>
+        </div>
       </div>
     </PageFrame>
   );

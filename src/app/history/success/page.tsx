@@ -18,7 +18,7 @@ export default function SuccessPage() {
         title: '성공 신청내역',
         showBack: true,
       }}
-      bottomNav={true}
+      bottomNav={false}
     >
       <div className={styles.container}>
         {member?.memberType === 'AGENT' && (

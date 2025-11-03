@@ -11,6 +11,7 @@ import {
 } from '@/assets/icons';
 import Input from '@/shared/components/ui/input/input';
 import Select from '@/shared/components/ui/select/select';
+import Textarea from '@/shared/components/ui/textarea/textarea';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import {
   ConcertDateInfo,
@@ -254,11 +255,12 @@ export default function FormInput({
       {/* 요청사항 입력 */}
       <div className={styles.form_container}>
         <span className={styles.title}>요청사항</span>
-        <textarea
-          className={styles.textarea}
-          placeholder="자유롭게 입력해주세요."
+        <Textarea
           value={requirement}
           onChange={(e) => setRequirement(e.target.value)}
+          id="bio"
+          placeholder="의뢰인에게 보여줄 공연 한 줄 소개를 작성하세요."
+          style={{ height: '200px' }}
           disabled={disabled}
         />
       </div>

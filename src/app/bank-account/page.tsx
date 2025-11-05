@@ -1,6 +1,7 @@
 import BankAccountCard from '@/app/bank-account/_shared/bank-account-card/bank-account-card';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
+import Spacer from '@/shared/components/ui/spacer/spacer';
 
 import styles from './page.module.scss';
 
@@ -23,15 +24,20 @@ const BankAccountPage = () => {
       <div className={styles.container}>
         <div className={styles.list_container}>
           {testAccounts.map((account) => (
-            <BankAccountCard
-              key={account.accountNum}
-              accountName={account.accountName}
-              accountNum={account.accountNum}
-              isMain={account.isMain}
-            />
+            <>
+              <Spacer size={20} />
+              <BankAccountCard
+                key={account.accountNum}
+                accountName={account.accountName}
+                accountNum={account.accountNum}
+                isMain={account.isMain}
+              />
+            </>
           ))}
+          <Spacer size={12} />
+          <span>* 계좌는 최대 5개까지 등록 가능합니다.</span>
         </div>
-        <Button variant="fill">계좌 등록하기</Button>
+        <Button variant="fill">계좌 추가하기</Button>
       </div>
     </PageFrame>
   );

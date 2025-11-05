@@ -19,30 +19,45 @@ const BankAccountCard = ({
 }: BankAccountCardProps) => {
   const BankIcon = getBankIconByName(accountName);
 
+  const dropdownItems = [
+    {
+      label: '수정하기',
+      onClick: () => console.log('수정하기'),
+    },
+    {
+      label: '삭제하기',
+      onClick: () => console.log('삭제하기'),
+      isDanger: true,
+    },
+  ];
+
+  // 대표계좌가 아닐 때만 항목 추가
+  if (!isMain) {
+    dropdownItems.unshift({
+      label: '대표계좌로 설정하기',
+      onClick: () => console.log('대표계좌로 설정하기'),
+    });
+  }
+
   return (
     <div className={styles.container}>
-      <BankIcon width={30} height={30} />
-
       <div className={styles.info_container}>
-        <span className={styles.bank_name}>{accountName}</span>
-        {isMain && <span className={styles.main_account}>대표계좌</span>}
-        <span className={styles.account_num}>{accountNum}</span>
+        <BankIcon width={40} height={40} />
+
+        <div className={styles.detail_container}>
+          <div className={styles.title_row}>
+            <span className={styles.bank_name}>{accountName}</span>
+            {isMain && <span className={styles.main_account}>대표계좌</span>}
+          </div>
+          <span className={styles.account_num}>{accountNum}</span>
+        </div>
       </div>
 
       <Dropdown
         trigger={
           <MoreIcon width={20} height={20} fill="var(--grayscale-700)" />
         }
-        items={[
-          {
-            label: '대표 계좌 등록하기',
-            onClick: () => console.log('대표 계좌 등록하기'),
-          },
-          {
-            label: '계좌 삭제하기',
-            onClick: () => console.log('계좌 삭제하기'),
-          },
-        ]}
+        items={dropdownItems}
       />
     </div>
   );

@@ -40,6 +40,10 @@
       background: var(--primary-600, #e55656);
       color: var(--white);
     }
+
+    &.danger {
+      color: var(--primary-500, #e55656);
+    }
   }
 
   .dropdown_separator {

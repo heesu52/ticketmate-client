@@ -45,7 +45,9 @@ const Dropdown = ({ trigger, items }: DropdownProps) => {
           {items.map((item) => (
             <Fragment key={item.label}>
               <DropdownMenu.Item
-                className={cn('dropdown_item')}
+                className={cn('dropdown_item', {
+                  danger: item.isDanger,
+                })}
                 key={item.label}
                 onClick={item.onClick}
                 disabled={item.disabled}

@@ -44,3 +44,4 @@ export { default as NongHyubLogoIcon } from './nonghyub_logo.svg';
 export { default as SinhanLogoIcon } from './sinhan_logo.svg';
 export { default as WooriLogoIcon } from './woori_logo.svg';
 export { default as TossLogoIcon } from './toss_logo.svg';
+export { default as NoRegisterIcon } from './no-register.svg';

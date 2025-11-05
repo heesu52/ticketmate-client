@@ -1,4 +1,4 @@
-const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
+const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/auth`;
 
 export const refreshAccessToken = async () => {
   const res = await fetch(`${BASE_URL}/reissue`, {

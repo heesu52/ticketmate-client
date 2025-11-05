@@ -4,7 +4,7 @@ import { refreshAccessToken } from '@/shared/utils/auth';
 import httpClient from '@/shared/utils/services/http-client';
 
 const instance = httpClient({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
 
   interceptors: {
     async request(

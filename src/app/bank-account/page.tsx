@@ -1,17 +1,28 @@
-import BankAccountCard from '@/app/bank-account/_shared/bank-account-card/bank-account-card';
+'use client';
+
+import BankAccountCard from '@/app/bank-account/_shared/components/bank-account-card/bank-account-card';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Spacer from '@/shared/components/ui/spacer/spacer';
+import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 
 import styles from './page.module.scss';
 
 const BankAccountPage = () => {
   const testAccounts = [
-    { accountName: '카카오뱅크', accountNum: '3333-01-1234567', isMain: true },
-    { accountName: '신한은행', accountNum: '110-222-333344' },
-    { accountName: '하나은행', accountNum: '123-456789-01-001' },
-    { accountName: '우리은행', accountNum: '1002-123-456789' },
+    { accountName: '카카오뱅크', accountNum: '3333011234567', isMain: true },
+    { accountName: '신한', accountNum: '110222333344' },
+    { accountName: '하나', accountNum: '12345678901001' },
+    { accountName: '우리', accountNum: '1002123456789' },
   ];
+
+  const navigation = useNavigation();
+
+  const handleNavigate = (bankAccountId?: string) => {
+    navigation.navigate({
+      pathname: `/bank-account/${bankAccountId}`,
+    });
+  };
 
   return (
     <PageFrame
@@ -37,7 +48,9 @@ const BankAccountPage = () => {
           <Spacer size={12} />
           <span>* 계좌는 최대 5개까지 등록 가능합니다.</span>
         </div>
-        <Button variant="fill">계좌 추가하기</Button>
+        <Button variant="fill" onClick={() => handleNavigate('1234')}>
+          계좌 추가하기
+        </Button>
       </div>
     </PageFrame>
   );

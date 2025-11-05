@@ -27,7 +27,7 @@ export default function BioPage() {
   // 저장 버튼 클릭
   const handleSubmit = () => {
     const requestData = {
-      concertId: 'test',
+      concertId: '1e79edf4-12d7-4377-8f07-c46c353bedd4',
       accepting: true,
       introduction,
     };

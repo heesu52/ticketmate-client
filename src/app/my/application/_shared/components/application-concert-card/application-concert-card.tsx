@@ -10,19 +10,22 @@ import Toggle from '@/shared/components/ui/toggle/toggle';
 import styles from './application-concert-card.module.scss';
 
 interface ApplicationConcertCardProps {
+  concertId: string;
   title: string;
   matchedCount: number;
   isEnabled: boolean;
-  onToggle: (value: boolean) => void;
+  onToggle: (id: string, value: boolean) => void;
 }
 
 const ApplicationConcertCard = ({
+  concertId,
   title,
   matchedCount,
   isEnabled,
   onToggle,
 }: ApplicationConcertCardProps) => {
   const router = useRouter();
+
   return (
     <div className={styles.container}>
       <Image
@@ -55,7 +58,10 @@ const ApplicationConcertCard = ({
             <span className={styles.count}>{matchedCount}</span>
           </span>
 
-          <Toggle pressed={isEnabled} onPressedChange={onToggle} />
+          <Toggle
+            pressed={isEnabled}
+            onPressedChange={(value) => onToggle(concertId, value)}
+          />
         </div>
       </div>
     </div>

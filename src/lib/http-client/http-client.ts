@@ -1,9 +1,10 @@
+import { getCookie } from 'cookies-next';
 import ky, { HTTPError, type Options } from 'ky';
 
 import { APIMethod } from '@/lib/http-client/http-client.type';
 import { refreshAccessToken } from '@/shared/services/auth/api';
 
-const PREFIX_URL = process.env.NEXT_PUBLIC_API_URL;
+const PREFIX_URL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 const MODE = process.env.NODE_ENV;
 
 const created = ky.create({
@@ -26,6 +27,10 @@ const extended = created.extend({
             'Authorization',
             `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
           );
+        } else {
+          const accessToken = getCookie('accessToken');
+
+          request.headers.set('Authorization', `Bearer ${accessToken}`);
         }
       },
     ],

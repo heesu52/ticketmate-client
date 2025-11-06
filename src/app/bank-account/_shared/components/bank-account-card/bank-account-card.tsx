@@ -10,6 +10,7 @@ import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 import { getBankIconByCode } from '@/shared/utils/bank';
 
 import styles from './bank-account-card.module.scss';
+
 interface BankAccountCardProps {
   bankAccountData: BankAccountResponse;
   onEdit: () => void;

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
+import CustomBottomSheet from '@/app/bank-account/[id]/_shared/components/bank-bottom-sheet/bank-bottom-sheet';
 import {
   useCreateBankAccout,
   usePutBankAccout,
@@ -22,7 +23,6 @@ import { useLocation } from '@/shared/hooks/navigation/use-location';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import { bankInfoMap, getBankNameByCode } from '@/shared/utils/bank';
 
-import CustomBottomSheet from './_shared/components/bank-bottom-sheet/bank-bottom-sheet';
 import styles from './page.module.scss';
 
 const BankAccountPage = () => {

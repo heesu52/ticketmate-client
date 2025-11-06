@@ -1,5 +1,9 @@
 'use client';
 
+import {
+  useDelteBankAccout,
+  usePatchBankAccout,
+} from '@/app/bank-account/_shared/services/mutation';
 import { BankAccountResponse } from '@/app/bank-account/_shared/services/type';
 import { MoreIcon } from '@/assets/icons';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
@@ -16,6 +20,9 @@ const BankAccountCard = ({ bankAccountData, onEdit }: BankAccountCardProps) => {
     bankAccountData;
   const Icon = getBankIconByCode(bankName);
 
+  const { mutate: patchBankAccount } = usePatchBankAccout();
+  const { mutate: deleteBankAccount } = useDelteBankAccout();
+
   const dropdownItems = [
     {
       label: '수정하기',
@@ -23,7 +30,7 @@ const BankAccountCard = ({ bankAccountData, onEdit }: BankAccountCardProps) => {
     },
     {
       label: '삭제하기',
-      onClick: () => console.log('삭제하기'),
+      onClick: () => deleteBankAccount(agentBankAccountId),
       isDanger: true,
     },
   ];
@@ -32,7 +39,7 @@ const BankAccountCard = ({ bankAccountData, onEdit }: BankAccountCardProps) => {
   if (!primaryAccount) {
     dropdownItems.unshift({
       label: '대표계좌로 설정하기',
-      onClick: () => console.log('대표계좌로 설정하기'),
+      onClick: () => patchBankAccount(agentBankAccountId),
     });
   }
 

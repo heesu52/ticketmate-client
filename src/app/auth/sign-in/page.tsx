@@ -10,8 +10,8 @@ import styles from './page.module.scss';
 const cn = classNames.bind(styles);
 
 export default function Page() {
-  const NAVER_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/naver`;
-  const KAKAO_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao`;
+  const NAVER_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/oauth2/authorization/naver`;
+  const KAKAO_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/oauth2/authorization/kakao`;
 
   return (
     <PageFrame

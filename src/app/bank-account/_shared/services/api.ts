@@ -35,7 +35,7 @@ const createBankAccount = async (request: CreateBankAccountRequest) => {
 };
 
 /**
- * @description 대표계좌 수정
+ * @description 대표계좌 변경
  */
 const patchBankAccount = async (agentBankAccountId: string) => {
   return await httpClient({
@@ -45,7 +45,7 @@ const patchBankAccount = async (agentBankAccountId: string) => {
 };
 
 /**
- * @description 대표계좌 변경
+ * @description 대표계좌 수정
  */
 const putBankAccount = async (request: PutBankAccountRequest) => {
   const { agentBankAccountId } = request;

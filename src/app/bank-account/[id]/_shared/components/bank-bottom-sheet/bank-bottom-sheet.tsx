@@ -1,12 +1,12 @@
 import CommonBottomSheet from '@/shared/components/ui/bottom-sheet/bottom-sheet';
-import { getBankIconByName } from '@/shared/utils/bank';
+import { getBankIconByCode, getBankNameByCode } from '@/shared/utils/bank';
 
 import styles from './bank-bottom-sheet.module.scss';
 
 interface BottomSheetProps {
   onClose: () => void;
   isOpen: boolean;
-  onSelectBank: (bankName: string) => void;
+  onSelectBank: (bankCode: string) => void;
 }
 
 const CustomBottomSheet = ({
@@ -14,18 +14,19 @@ const CustomBottomSheet = ({
   onClose,
   onSelectBank,
 }: BottomSheetProps) => {
-  const banks = [
-    '카카오뱅크',
-    '신한',
-    '케이뱅크',
-    '국민',
-    '우리',
-    '하나',
-    '농협',
-    '기업',
-    '토스',
-    '한국씨티',
-    'SC제일',
+  // 표시할 은행 코드 목록
+  const bankCodes = [
+    'KAKAO_BANK',
+    'SHINHAN',
+    'K_BANK',
+    'KOOKMIN',
+    'WOORI',
+    'HANA',
+    'NONGHYEOP',
+    'IBK',
+    'TOSS_BANK',
+    'CITI',
+    'SC',
   ];
 
   return (
@@ -34,19 +35,20 @@ const CustomBottomSheet = ({
         <span className={styles.title}>은행 선택</span>
 
         <div className={styles.grid_container}>
-          {banks.map((bank) => {
-            const BankIcon = getBankIconByName(bank);
+          {bankCodes.map((code) => {
+            const BankIcon = getBankIconByCode(code);
+            const name = getBankNameByCode(code);
             return (
               <button
-                key={bank}
+                key={code}
                 className={styles.grid_item}
                 onClick={() => {
-                  onSelectBank(bank);
+                  onSelectBank(code);
                   onClose();
                 }}
               >
                 {BankIcon && <BankIcon width={24} height={24} />}
-                {bank}
+                {name}
               </button>
             );
           })}

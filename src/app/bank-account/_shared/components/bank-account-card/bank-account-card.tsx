@@ -1,21 +1,20 @@
 'use client';
 
+import { BankAccountResponse } from '@/app/bank-account/_shared/services/type';
 import { MoreIcon } from '@/assets/icons';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
-import { getBankIconByCode, getBankNameByCode } from '@/shared/utils/bank';
+import { getBankIconByCode } from '@/shared/utils/bank';
 
 import styles from './bank-account-card.module.scss';
-import { BankAccountResponse } from '../../services/type';
-
 interface BankAccountCardProps {
   bankAccountData: BankAccountResponse;
   onEdit: () => void;
 }
 
 const BankAccountCard = ({ bankAccountData, onEdit }: BankAccountCardProps) => {
-  const { bankCode, accountNumber, primaryAccount } = bankAccountData;
-  const Icon = getBankIconByCode(bankCode);
-  const bankName = getBankNameByCode(bankCode);
+  const { bankName, agentAccountNumber, primaryAccount, agentBankAccountId } =
+    bankAccountData;
+  const Icon = getBankIconByCode(bankName);
 
   const dropdownItems = [
     {
@@ -49,7 +48,7 @@ const BankAccountCard = ({ bankAccountData, onEdit }: BankAccountCardProps) => {
               <span className={styles.main_account}>대표계좌</span>
             )}
           </div>
-          <span className={styles.account_num}>{accountNumber}</span>
+          <span className={styles.account_num}>{agentAccountNumber}</span>
         </div>
       </div>
 

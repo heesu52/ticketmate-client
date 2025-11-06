@@ -11,25 +11,26 @@ import {
   CitiLogoIcon,
   IBKLogoIcon,
   TossLogoIcon,
+  SCLogoIcon,
+  NoRegisterIcon,
 } from '@/assets/icons';
 
 export const bankImageMap: Record<string, React.ElementType> = {
   카카오뱅크: KakaoBankLogoIcon,
-  신한은행: SinhanLogoIcon,
+  신한: SinhanLogoIcon,
   케이뱅크: KBankLogoIcon,
-  국민은행: KbLogoIcon,
-  우리은행: WooriLogoIcon,
-  하나은행: HanaLogoIcon,
-  농협은행: NongHyubLogoIcon,
-  기업은행: IBKLogoIcon,
-  토스뱅크: TossLogoIcon,
+  국민: KbLogoIcon,
+  우리: WooriLogoIcon,
+  하나: HanaLogoIcon,
+  농협: NongHyubLogoIcon,
+  기업: IBKLogoIcon,
+  토스: TossLogoIcon,
   한국씨티: CitiLogoIcon,
+  SC제일: SCLogoIcon,
 };
-
-const DEFAULT_BANK_ICON = '/banks/default-bank.png';
 
 export const getBankIconByName = (
   bankName: string,
 ): React.ElementType | string => {
-  return bankImageMap[bankName] || DEFAULT_BANK_ICON;
+  return bankImageMap[bankName] || NoRegisterIcon;
 };

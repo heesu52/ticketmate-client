@@ -2,27 +2,25 @@
 
 import { MoreIcon } from '@/assets/icons';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
-import { getBankIconByName } from '@/shared/utils/bank';
+import { getBankIconByCode, getBankNameByCode } from '@/shared/utils/bank';
 
 import styles from './bank-account-card.module.scss';
+import { BankAccountResponse } from '../../services/type';
 
 interface BankAccountCardProps {
-  accountName: string;
-  accountNum: string;
-  isMain?: boolean;
+  bankAccountData: BankAccountResponse;
+  onEdit: () => void;
 }
 
-const BankAccountCard = ({
-  accountName,
-  accountNum,
-  isMain,
-}: BankAccountCardProps) => {
-  const BankIcon = getBankIconByName(accountName);
+const BankAccountCard = ({ bankAccountData, onEdit }: BankAccountCardProps) => {
+  const { bankCode, accountNumber, primaryAccount } = bankAccountData;
+  const Icon = getBankIconByCode(bankCode);
+  const bankName = getBankNameByCode(bankCode);
 
   const dropdownItems = [
     {
       label: '수정하기',
-      onClick: () => console.log('수정하기'),
+      onClick: onEdit,
     },
     {
       label: '삭제하기',
@@ -32,7 +30,7 @@ const BankAccountCard = ({
   ];
 
   // 대표계좌가 아닐 때만 항목 추가
-  if (!isMain) {
+  if (!primaryAccount) {
     dropdownItems.unshift({
       label: '대표계좌로 설정하기',
       onClick: () => console.log('대표계좌로 설정하기'),
@@ -42,14 +40,16 @@ const BankAccountCard = ({
   return (
     <div className={styles.container}>
       <div className={styles.info_container}>
-        <BankIcon width={40} height={40} />
+        <Icon width={40} height={40} />
 
         <div className={styles.detail_container}>
           <div className={styles.title_row}>
-            <span className={styles.bank_name}>{accountName}</span>
-            {isMain && <span className={styles.main_account}>대표계좌</span>}
+            <span className={styles.bank_name}>{bankName}</span>
+            {primaryAccount && (
+              <span className={styles.main_account}>대표계좌</span>
+            )}
           </div>
-          <span className={styles.account_num}>{accountNum}</span>
+          <span className={styles.account_num}>{accountNumber}</span>
         </div>
       </div>
 

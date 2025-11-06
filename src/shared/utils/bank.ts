@@ -48,13 +48,11 @@ export const bankInfoMap: Record<
 };
 
 //은행 아이콘 반환
-
-export const getBankIconByCode = (bankCode: string): React.ElementType => {
-  return bankInfoMap[bankCode]?.icon || NoRegisterIcon;
+export const getBankIconByCode = (bankName: string): React.ElementType => {
+  return bankInfoMap[bankName]?.icon || NoRegisterIcon;
 };
 
 //은행 이름 반환
-
 export const getBankNameByCode = (bankCode: string): string => {
   return bankInfoMap[bankCode]?.name || '미등록 은행';
 };

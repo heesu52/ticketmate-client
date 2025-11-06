@@ -1,18 +1,25 @@
-import { BankCode, BankAccount } from '@/shared/types';
+interface CreateBankAccountRequest {
+  bankCode: string; // 은행 코드
+  accountHolder: string; // 예금주 명
+  accountNumber: string; // 계좌번호
+  primaryAccount: boolean; // 대표계좌 여부
+}
 
-type CreateBankAccountRequest = BankAccount;
-
-interface BankAccountResponse extends BankAccount {
-  agentBankAccountId: string; // 계좌 고유 ID
+interface BankAccountResponse {
+  agentBankAccountId: string;
+  agentAccountNumber: string;
+  bankName: string;
+  primaryAccount: true;
+  accountHolder: string;
 }
 
 type GetBankAccountListResponse = BankAccountResponse[];
 
 interface PutBankAccountRequest {
-  agentBankAccountId: string; // params
-  bankCode?: BankCode; // 은행 코드
-  accountHolder?: string; // 예금주 명
-  accountNumber?: string; // 계좌번호
+  agentBankAccountId: string;
+  bankCode?: string;
+  accountHolder?: string;
+  accountNumber?: string;
 }
 
 export type {

@@ -14,6 +14,7 @@ import {
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Input from '@/shared/components/ui/input/input';
+import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
@@ -31,7 +32,7 @@ const EditPage = () => {
   const queryClient = useQueryClient();
   const { state } = useLocation<{ agentBankAccountId?: string }>();
 
-  const updateMutation = usePutBankAccout();
+  const { mutate } = usePutBankAccout();
 
   const { member } = useMember();
 
@@ -107,9 +108,19 @@ const EditPage = () => {
       accountNumber,
     };
 
-    updateMutation.mutate(payload as PutBankAccountRequest, {
+    mutate(payload as PutBankAccountRequest, {
       onSuccess: () => {
         navigation.navigate({ pathname: '/bank-account' });
+        toastify({
+          variant: 'success',
+          description: '계좌 수정이 완료됐습니다.',
+        });
+      },
+      onError: () => {
+        toastify({
+          variant: 'error',
+          description: '계좌 수정을 실패했습니다.',
+        });
       },
     });
   };

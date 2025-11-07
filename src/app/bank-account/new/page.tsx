@@ -8,6 +8,7 @@ import { CreateBankAccountRequest } from '@/app/bank-account/_shared/services/ty
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Input from '@/shared/components/ui/input/input';
+import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import { getBankNameByCode } from '@/shared/utils/bank';
@@ -65,6 +66,16 @@ const NewPage = () => {
     mutate(payload as CreateBankAccountRequest, {
       onSuccess: () => {
         navigation.navigate({ pathname: '/bank-account' });
+        toastify({
+          variant: 'success',
+          description: '계좌 추가가 완료됐습니다.',
+        });
+      },
+      onError: () => {
+        toastify({
+          variant: 'error',
+          description: '계좌 추가를 실패했습니다.',
+        });
       },
     });
   };

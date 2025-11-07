@@ -9,7 +9,7 @@ interface BottomSheetProps {
   onSelectBank: (bankCode: string) => void;
 }
 
-const CustomBottomSheet = ({
+const BankBottomSheet = ({
   isOpen,
   onClose,
   onSelectBank,
@@ -58,4 +58,4 @@ const CustomBottomSheet = ({
   );
 };
 
-export default CustomBottomSheet;
+export default BankBottomSheet;

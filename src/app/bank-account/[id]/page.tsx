@@ -2,7 +2,7 @@
 
 import React, { use, useEffect, useState } from 'react';
 
-import CustomBottomSheet from '@/app/bank-account/_shared/components/bank-bottom-sheet/bank-bottom-sheet';
+import BankBottomSheet from '@/app/bank-account/_shared/components/bank-bottom-sheet/bank-bottom-sheet';
 import { usePutBankAccout } from '@/app/bank-account/_shared/services/mutation';
 import { useGetBankAccountList } from '@/app/bank-account/_shared/services/query';
 import { PutBankAccountRequest } from '@/app/bank-account/_shared/services/type';
@@ -58,7 +58,7 @@ const EditPage = ({ params }: EditPageProps) => {
     }
   }, [state, bankList, agentBankAccountId]);
 
-  // 바텀 시트 토글
+  // 바텀 시트 닫기
   const closeBottomSheet = () => setIsBottomSheetOpen(false);
 
   // 은행 선택 시 (은행코드)
@@ -162,7 +162,7 @@ const EditPage = ({ params }: EditPageProps) => {
           추가하기
         </Button>
 
-        <CustomBottomSheet
+        <BankBottomSheet
           onClose={closeBottomSheet}
           isOpen={isBottomSheetOpen}
           onSelectBank={handleSelectBank}

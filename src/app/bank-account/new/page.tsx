@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-import CustomBottomSheet from '@/app/bank-account/_shared/components/bank-bottom-sheet/bank-bottom-sheet';
+import BankBottomSheet from '@/app/bank-account/_shared/components/bank-bottom-sheet/bank-bottom-sheet';
 import { useCreateBankAccout } from '@/app/bank-account/_shared/services/mutation';
 import { CreateBankAccountRequest } from '@/app/bank-account/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -26,9 +26,7 @@ const NewPage = () => {
   const { mutate } = useCreateBankAccout();
 
   // 바텀 시트 토글
-  const toggleBottomSheet = () => {
-    setIsBottomSheetOpen(!isBottomSheetOpen);
-  };
+  const closeBottomSheet = () => setIsBottomSheetOpen(false);
 
   // 은행 선택 시 (은행코드)
   const handleSelectBank = (bankCode: string) => {
@@ -121,8 +119,8 @@ const NewPage = () => {
           추가하기
         </Button>
 
-        <CustomBottomSheet
-          onClose={toggleBottomSheet}
+        <BankBottomSheet
+          onClose={closeBottomSheet}
           isOpen={isBottomSheetOpen}
           onSelectBank={handleSelectBank}
         />

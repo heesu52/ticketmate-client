@@ -4,36 +4,36 @@ import {
   createBankAccount,
   patchBankAccount,
   putBankAccount,
-  deleteBankAccout,
+  deleteBankAccount,
 } from '@/app/bank-account/_shared/services/api';
 import {
   CreateBankAccountRequest,
   PutBankAccountRequest,
 } from '@/app/bank-account/_shared/services/type';
 
-export const useCreateBankAccout = () => {
+export const useCreateBankAccount = () => {
   return useMutation({
     mutationFn: (request: CreateBankAccountRequest) =>
       createBankAccount(request),
   });
 };
 
-export const usePatchBankAccout = () => {
+export const usePatchBankAccount = () => {
   return useMutation({
     mutationFn: (agentBankAccountId: string) =>
       patchBankAccount(agentBankAccountId),
   });
 };
 
-export const usePutBankAccout = () => {
+export const usePutBankAccount = () => {
   return useMutation({
     mutationFn: (request: PutBankAccountRequest) => putBankAccount(request),
   });
 };
 
-export const useDelteBankAccout = () => {
+export const useDelteBankAccount = () => {
   return useMutation({
     mutationFn: (agentBankAccountId: string) =>
-      deleteBankAccout(agentBankAccountId),
+      deleteBankAccount(agentBankAccountId),
   });
 };

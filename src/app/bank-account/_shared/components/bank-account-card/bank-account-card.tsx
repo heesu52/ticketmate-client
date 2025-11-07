@@ -3,7 +3,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 
 import AccountDeleteModal from '@/app/bank-account/_shared/components/account-delete-modal';
-import { usePatchBankAccout } from '@/app/bank-account/_shared/services/mutation';
+import { usePatchBankAccount } from '@/app/bank-account/_shared/services/mutation';
 import queryKey from '@/app/bank-account/_shared/services/query-key';
 import { BankAccountResponse } from '@/app/bank-account/_shared/services/type';
 import { MoreIcon } from '@/assets/icons';
@@ -30,7 +30,7 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
   }>();
   const { open } = useModalStore();
   const { handleError } = useHandleError();
-  const { mutate } = usePatchBankAccout();
+  const { mutate } = usePatchBankAccount();
   const queryClient = useQueryClient();
 
   const handleNavigate = (agentBankAccountId: string) => {
@@ -86,7 +86,7 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
             });
           },
           onError: (error) => {
-            console.error(error);
+            handleError(error);
           },
         }),
     });

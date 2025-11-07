@@ -41,7 +41,10 @@ const BankAccountPage = () => {
         <span>* 계좌는 최대 5개까지 등록 가능합니다.</span>
 
         <div className={styles.button}>
-          <Button variant="fill" onClick={() => handleNavigate()}>
+          <Button
+            onClick={() => handleNavigate()}
+            disabled={data && data.length >= 5}
+          >
             계좌 추가하기
           </Button>
         </div>

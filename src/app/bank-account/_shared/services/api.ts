@@ -62,7 +62,7 @@ const putBankAccount = async (request: PutBankAccountRequest) => {
 /**
  * @description 대표계좌 삭제
  */
-const deleteBankAccout = async (agentBankAccountId: string) => {
+const deleteBankAccount = async (agentBankAccountId: string) => {
   return await httpClient({
     method: 'delete',
     url: `${BASE_URL}/${agentBankAccountId}`,
@@ -74,5 +74,5 @@ export {
   createBankAccount,
   putBankAccount,
   patchBankAccount,
-  deleteBankAccout,
+  deleteBankAccount,
 };

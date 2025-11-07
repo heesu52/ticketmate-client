@@ -22,7 +22,7 @@ const NewPage = () => {
 
   const { member } = useMember();
   const navigation = useNavigation();
-  const createMutation = useCreateBankAccout();
+  const { mutate } = useCreateBankAccout();
 
   // 바텀 시트 토글
   const toggleBottomSheet = () => {
@@ -62,8 +62,7 @@ const NewPage = () => {
       accountNumber,
       primaryAccount: false, // 일단 지정해놓은 대표계좌가 있을테니 무조건 false로 넣음
     };
-
-    createMutation.mutate(payload as CreateBankAccountRequest, {
+    mutate(payload as CreateBankAccountRequest, {
       onSuccess: () => {
         navigation.navigate({ pathname: '/bank-account' });
       },

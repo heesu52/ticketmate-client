@@ -6,17 +6,17 @@ import BankBottomSheet from '@/app/bank-account/_shared/components/bank-bottom-s
 import { usePutBankAccount } from '@/app/bank-account/_shared/services/mutation';
 import { useGetBankAccountList } from '@/app/bank-account/_shared/services/query';
 import { PutBankAccountRequest } from '@/app/bank-account/_shared/services/type';
+import styles from '@/app/bank-account/new/page.module.scss';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Input from '@/shared/components/ui/input/input';
+import Spacer from '@/shared/components/ui/spacer/spacer';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import { BankCode } from '@/shared/types';
 import { getBankNameByCode } from '@/shared/utils/bank';
-
-import styles from './page.module.scss';
 
 interface EditPageProps {
   params: Promise<{ id: string }>;
@@ -96,8 +96,10 @@ const EditPage = ({ params }: EditPageProps) => {
       !member?.name ||
       !selectedBankCode ||
       !accountNumber
-    )
+    ) {
+      toastify({ variant: 'error', description: '계좌 수정을 실패했습니다.' });
       return;
+    }
 
     const payload: PutBankAccountRequest = {
       agentBankAccountId: agentBankAccountId,
@@ -152,17 +154,20 @@ const EditPage = ({ params }: EditPageProps) => {
             <span className={styles.errormessage}>{accountNumberError}</span>
           )}
         </div>
-        <Button
-          variant="fill"
-          onClick={handleSubmit}
-          disabled={
-            !!accountNumberError ||
-            !selectedBankCode ||
-            accountNumber.length === 0
-          }
-        >
-          수정하기
-        </Button>
+        <div className={styles.button}>
+          <Button
+            variant="fill"
+            onClick={handleSubmit}
+            disabled={
+              !!accountNumberError ||
+              !selectedBankCode ||
+              accountNumber.length === 0
+            }
+          >
+            수정하기
+          </Button>
+        </div>
+        <Spacer size={20} />
 
         <BankBottomSheet
           onClose={closeBottomSheet}

@@ -8,6 +8,7 @@ import { CreateBankAccountRequest } from '@/app/bank-account/_shared/services/ty
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Input from '@/shared/components/ui/input/input';
+import Spacer from '@/shared/components/ui/spacer/spacer';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
@@ -54,7 +55,10 @@ const NewPage = () => {
   };
 
   const handleSubmit = () => {
-    if (!member?.name || !selectedBankCode || !accountNumber) return;
+    if (!member?.name || !selectedBankCode || !accountNumber) {
+      toastify({ variant: 'error', description: '계좌 추가를 실패했습니다.' });
+      return;
+    }
 
     const payload: CreateBankAccountRequest = {
       bankCode: selectedBankCode,
@@ -108,18 +112,20 @@ const NewPage = () => {
             <span className={styles.errormessage}>{accountNumberError}</span>
           )}
         </div>
-        <Button
-          variant="fill"
-          onClick={handleSubmit}
-          disabled={
-            !!accountNumberError ||
-            !selectedBankCode ||
-            accountNumber.length === 0
-          }
-        >
-          추가하기
-        </Button>
-
+        <div className={styles.button}>
+          <Button
+            variant="fill"
+            onClick={handleSubmit}
+            disabled={
+              !!accountNumberError ||
+              !selectedBankCode ||
+              accountNumber.length === 0
+            }
+          >
+            추가하기
+          </Button>
+          <Spacer size={20} />
+        </div>
         <BankBottomSheet
           onClose={closeBottomSheet}
           isOpen={isBottomSheetOpen}

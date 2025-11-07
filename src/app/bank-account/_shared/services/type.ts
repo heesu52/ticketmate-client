@@ -1,3 +1,5 @@
+import { BankCode } from '@/shared/types';
+
 interface CreateBankAccountRequest {
   bankCode: string; // 은행 코드
   accountHolder: string; // 예금주 명
@@ -8,7 +10,7 @@ interface CreateBankAccountRequest {
 interface BankAccountResponse {
   agentBankAccountId: string;
   agentAccountNumber: string;
-  bankName: string;
+  bankCode: BankCode;
   primaryAccount: boolean;
   accountHolder: string;
 }

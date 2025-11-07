@@ -13,7 +13,8 @@ import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
-import { getBankCodeByName, getBankNameByCode } from '@/shared/utils/bank';
+import { BankCode } from '@/shared/types';
+import { getBankNameByCode } from '@/shared/utils/bank';
 
 import styles from './page.module.scss';
 
@@ -23,14 +24,17 @@ interface EditPageProps {
 
 const EditPage = ({ params }: EditPageProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [selectedBankCode, setSelectedBankCode] = useState('');
+  const [selectedBankCode, setSelectedBankCode] = useState<BankCode | ''>('');
   const [accountNumber, setAccountNumber] = useState('');
   const [accountNumberError, setAccountNumberError] = useState('');
 
   const { member } = useMember();
   const navigation = useNavigation();
 
-  const { state } = useLocation<{ accountNumber: string; bankName: string }>();
+  const { state } = useLocation<{
+    accountNumber: string;
+    bankCode: BankCode;
+  }>();
   const { id: agentBankAccountId } = use(params);
 
   const { data: bankList } = useGetBankAccountList();
@@ -40,8 +44,7 @@ const EditPage = ({ params }: EditPageProps) => {
   useEffect(() => {
     if (state) {
       setAccountNumber(state.accountNumber);
-      const foundBankCode = getBankCodeByName(state.bankName);
-      if (foundBankCode !== '미등록 은행') setSelectedBankCode(foundBankCode);
+      setSelectedBankCode(state.bankCode);
       return;
     }
 
@@ -52,8 +55,7 @@ const EditPage = ({ params }: EditPageProps) => {
       );
       if (target) {
         setAccountNumber(target.agentAccountNumber);
-        const foundBankCode = getBankCodeByName(target.bankName);
-        if (foundBankCode !== '미등록 은행') setSelectedBankCode(foundBankCode);
+        setSelectedBankCode(target.bankCode);
       }
     }
   }, [state, bankList, agentBankAccountId]);
@@ -62,7 +64,7 @@ const EditPage = ({ params }: EditPageProps) => {
   const closeBottomSheet = () => setIsBottomSheetOpen(false);
 
   // 은행 선택 시 (은행코드)
-  const handleSelectBank = (bankCode: string) => {
+  const handleSelectBank = (bankCode: BankCode) => {
     setSelectedBankCode(bankCode);
     setIsBottomSheetOpen(false);
   };

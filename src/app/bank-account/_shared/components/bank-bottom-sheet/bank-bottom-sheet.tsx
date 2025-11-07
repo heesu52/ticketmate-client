@@ -1,4 +1,5 @@
 import CommonBottomSheet from '@/shared/components/ui/bottom-sheet/bottom-sheet';
+import { BankCode } from '@/shared/types';
 import { getBankIconByCode, getBankNameByCode } from '@/shared/utils/bank';
 
 import styles from './bank-bottom-sheet.module.scss';
@@ -6,7 +7,7 @@ import styles from './bank-bottom-sheet.module.scss';
 interface BottomSheetProps {
   onClose: () => void;
   isOpen: boolean;
-  onSelectBank: (bankCode: string) => void;
+  onSelectBank: (bankCode: BankCode) => void;
 }
 
 const BankBottomSheet = ({
@@ -15,18 +16,18 @@ const BankBottomSheet = ({
   onSelectBank,
 }: BottomSheetProps) => {
   // 표시할 은행 코드 목록
-  const bankCodes = [
-    'KAKAO_BANK',
-    'SHINHAN',
-    'K_BANK',
-    'KOOKMIN',
-    'WOORI',
-    'HANA',
-    'NONGHYEOP',
-    'IBK',
-    'TOSS_BANK',
-    'CITI',
-    'SC',
+  const bankCodes: BankCode[] = [
+    BankCode.KAKAO_BANK,
+    BankCode.SHINHAN,
+    BankCode.K_BANK,
+    BankCode.KOOKMIN,
+    BankCode.WOORI,
+    BankCode.HANA,
+    BankCode.NONGHYEOP,
+    BankCode.IBK,
+    BankCode.TOSS_BANK,
+    BankCode.CITI,
+    BankCode.SC,
   ];
 
   return (

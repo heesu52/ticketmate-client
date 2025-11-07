@@ -1,13 +1,14 @@
 'use client';
 
-import {
-  useDelteBankAccout,
-  usePatchBankAccout,
-} from '@/app/bank-account/_shared/services/mutation';
+import AccountDeleteModal from '@/app/bank-account/_shared/components/account-delete-modal';
+import { usePatchBankAccout } from '@/app/bank-account/_shared/services/mutation';
 import { BankAccountResponse } from '@/app/bank-account/_shared/services/type';
 import { MoreIcon } from '@/assets/icons';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
+import { useModalStore } from '@/shared/components/ui/modal/modal-store';
+import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
+import { useHandleError } from '@/shared/hooks/use-error';
 import { getBankIconByName } from '@/shared/utils/bank';
 
 import styles from './bank-account-card.module.scss';
@@ -21,14 +22,36 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
     bankAccountData;
   const Icon = getBankIconByName(bankName);
 
+  const { open } = useModalStore();
+  const { handleError } = useHandleError();
   const navigation = useNavigation();
+
   const { mutate: patchBankAccount } = usePatchBankAccout();
-  const { mutate: deleteBankAccount } = useDelteBankAccout();
 
   const handleNavigate = (agentBankAccountId: string) => {
     navigation.navigate({
       pathname: `/bank-account/${agentBankAccountId}`,
     });
+  };
+
+  // 계좌 삭제 모달
+  const handleOpenDeleteModal = async () => {
+    if (!agentBankAccountId) return;
+
+    try {
+      const result = await open('form-cancel-modal', AccountDeleteModal, {
+        agentBankAccountId,
+      });
+
+      if (result) {
+        toastify({
+          variant: 'success',
+          description: '계좌가 삭제되었습니다.',
+        });
+      }
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   const dropdownItems = [
@@ -38,7 +61,7 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
     },
     {
       label: '삭제하기',
-      onClick: () => deleteBankAccount(agentBankAccountId),
+      onClick: () => handleOpenDeleteModal,
       isDanger: true,
     },
   ];

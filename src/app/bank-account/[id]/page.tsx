@@ -3,7 +3,7 @@
 import React, { use, useEffect, useState } from 'react';
 
 import BankBottomSheet from '@/app/bank-account/_shared/components/bank-bottom-sheet/bank-bottom-sheet';
-import { usePutBankAccout } from '@/app/bank-account/_shared/services/mutation';
+import { usePutBankAccount } from '@/app/bank-account/_shared/services/mutation';
 import { useGetBankAccountList } from '@/app/bank-account/_shared/services/query';
 import { PutBankAccountRequest } from '@/app/bank-account/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -34,7 +34,7 @@ const EditPage = ({ params }: EditPageProps) => {
   const { id: agentBankAccountId } = use(params);
 
   const { data: bankList } = useGetBankAccountList();
-  const { mutate } = usePutBankAccout();
+  const { mutate } = usePutBankAccount();
 
   // 기존 계좌 데이터 input에 세팅
   useEffect(() => {
@@ -124,7 +124,7 @@ const EditPage = ({ params }: EditPageProps) => {
   return (
     <PageFrame
       appBar={{
-        title: '계좌 추가',
+        title: '계좌 수정',
         showBack: true,
       }}
       bottomNav={false}
@@ -159,7 +159,7 @@ const EditPage = ({ params }: EditPageProps) => {
             accountNumber.length === 0
           }
         >
-          추가하기
+          수정하기
         </Button>
 
         <BankBottomSheet

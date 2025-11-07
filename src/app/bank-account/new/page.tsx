@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 
 import BankBottomSheet from '@/app/bank-account/_shared/components/bank-bottom-sheet/bank-bottom-sheet';
-import { useCreateBankAccout } from '@/app/bank-account/_shared/services/mutation';
+import { useCreateBankAccount } from '@/app/bank-account/_shared/services/mutation';
 import { CreateBankAccountRequest } from '@/app/bank-account/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
@@ -23,7 +23,7 @@ const NewPage = () => {
 
   const { member } = useMember();
   const navigation = useNavigation();
-  const { mutate } = useCreateBankAccout();
+  const { mutate } = useCreateBankAccount();
 
   // 바텀 시트 토글
   const closeBottomSheet = () => setIsBottomSheetOpen(false);

@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import { useDelteBankAccout } from '@/app/bank-account/_shared/services/mutation';
+import { useDelteBankAccount } from '@/app/bank-account/_shared/services/mutation';
 import queryKey from '@/app/bank-account/_shared/services/query-key';
 import ModalTemplate from '@/shared/components/ui/modal/modal-template/modal-template';
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
@@ -14,7 +14,7 @@ const AccountDeleteModal = ({
   onReject,
   agentBankAccountId,
 }: AccountDeleteModalProps) => {
-  const { mutate } = useDelteBankAccout();
+  const { mutate } = useDelteBankAccount();
   const queryClient = useQueryClient();
 
   const handleFirstButtonClick = () => {

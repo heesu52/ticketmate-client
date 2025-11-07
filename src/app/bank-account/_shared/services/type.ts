@@ -9,7 +9,7 @@ interface BankAccountResponse {
   agentBankAccountId: string;
   agentAccountNumber: string;
   bankName: string;
-  primaryAccount: true;
+  primaryAccount: boolean;
   accountHolder: string;
 }
 

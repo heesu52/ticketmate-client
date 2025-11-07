@@ -62,3 +62,11 @@ export const getBankIconByCode = (bankCode: string): React.ElementType => {
 export const getBankNameByCode = (bankCode: string): string => {
   return bankInfoMap[bankCode]?.name || '미등록 은행';
 };
+
+//은행이름 - 은행코드 변환
+export const getBankCodeByName = (bankName: string): string => {
+  const entry = Object.entries(bankInfoMap).find(
+    ([, value]) => value.name === bankName,
+  );
+  return entry ? entry[0] : '미등록 은행';
+};

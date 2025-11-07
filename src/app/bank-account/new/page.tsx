@@ -11,13 +11,14 @@ import Input from '@/shared/components/ui/input/input';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
+import { BankCode } from '@/shared/types';
 import { getBankNameByCode } from '@/shared/utils/bank';
 
 import styles from './page.module.scss';
 
 const NewPage = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [selectedBankCode, setSelectedBankCode] = useState('');
+  const [selectedBankCode, setSelectedBankCode] = useState<BankCode | ''>('');
   const [accountNumber, setAccountNumber] = useState('');
   const [accountNumberError, setAccountNumberError] = useState('');
 
@@ -29,7 +30,7 @@ const NewPage = () => {
   const closeBottomSheet = () => setIsBottomSheetOpen(false);
 
   // 은행 선택 시 (은행코드)
-  const handleSelectBank = (bankCode: string) => {
+  const handleSelectBank = (bankCode: BankCode) => {
     setSelectedBankCode(bankCode);
     setIsBottomSheetOpen(false);
   };

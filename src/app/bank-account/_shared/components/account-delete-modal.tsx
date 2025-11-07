@@ -1,4 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
+
 import { useDelteBankAccout } from '@/app/bank-account/_shared/services/mutation';
+import queryKey from '@/app/bank-account/_shared/services/query-key';
 import ModalTemplate from '@/shared/components/ui/modal/modal-template/modal-template';
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
 
@@ -12,13 +15,21 @@ const AccountDeleteModal = ({
   agentBankAccountId,
 }: AccountDeleteModalProps) => {
   const { mutate } = useDelteBankAccout();
+  const queryClient = useQueryClient();
+
   const handleFirstButtonClick = () => {
     onResolve?.(false);
   };
 
   const handleSecondButtonClick = () => {
     mutate(agentBankAccountId, {
-      onSuccess: () => onResolve?.(true),
+      onSuccess: () => {
+        // 계좌삭제 후 목록 재조회
+        queryClient.invalidateQueries({
+          queryKey: queryKey.getBankAccountList(),
+        });
+        onResolve?.(true);
+      },
       onError: () => onReject?.(),
     });
   };

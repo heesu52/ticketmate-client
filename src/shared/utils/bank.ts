@@ -49,7 +49,8 @@ export const bankInfoMap: Record<
 
 //은행 아이콘 반환
 export const getBankIconByCode = (bankName: string): React.ElementType => {
-  return bankInfoMap[bankName]?.icon || NoRegisterIcon;
+  const entry = Object.values(bankInfoMap).find((v) => v.name === bankName);
+  return entry?.icon || NoRegisterIcon;
 };
 
 //은행 이름 반환

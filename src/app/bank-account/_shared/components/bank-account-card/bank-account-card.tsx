@@ -12,7 +12,8 @@ import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import { useHandleError } from '@/shared/hooks/use-error';
-import { getBankIconByName } from '@/shared/utils/bank';
+import { BankCode } from '@/shared/types';
+import { getBankIconByCode, getBankNameByCode } from '@/shared/utils/bank';
 
 import styles from './bank-account-card.module.scss';
 
@@ -22,11 +23,11 @@ interface BankAccountCardProps {
 
 const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
   const { agentBankAccountId } = bankAccountData;
-  const Icon = getBankIconByName(bankAccountData.bankName);
+  const Icon = getBankIconByCode(bankAccountData.bankCode);
 
   const { navigate } = useNavigation<{
     accountNumber: string;
-    bankName: string;
+    bankCode: BankCode;
   }>();
   const { open } = useModalStore();
   const { handleError } = useHandleError();
@@ -38,7 +39,7 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
       pathname: `/bank-account/${agentBankAccountId}`,
       state: {
         accountNumber: bankAccountData.agentAccountNumber,
-        bankName: bankAccountData.bankName,
+        bankCode: bankAccountData.bankCode,
       },
     });
   };
@@ -99,7 +100,9 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
 
         <div className={styles.detail_container}>
           <div className={styles.title_row}>
-            <span className={styles.bank_name}>{bankAccountData.bankName}</span>
+            <span className={styles.bank_name}>
+              {getBankNameByCode(bankAccountData.bankCode)}
+            </span>
             {bankAccountData.primaryAccount && (
               <span className={styles.main_account}>대표계좌</span>
             )}

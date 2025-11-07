@@ -1,7 +1,10 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import AccountDeleteModal from '@/app/bank-account/_shared/components/account-delete-modal';
 import { usePatchBankAccout } from '@/app/bank-account/_shared/services/mutation';
+import queryKey from '@/app/bank-account/_shared/services/query-key';
 import { BankAccountResponse } from '@/app/bank-account/_shared/services/type';
 import { MoreIcon } from '@/assets/icons';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
@@ -18,15 +21,14 @@ interface BankAccountCardProps {
 }
 
 const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
-  const { bankName, agentAccountNumber, primaryAccount, agentBankAccountId } =
-    bankAccountData;
-  const Icon = getBankIconByName(bankName);
+  const { agentBankAccountId } = bankAccountData;
+  const Icon = getBankIconByName(bankAccountData.bankName);
 
+  const navigation = useNavigation();
   const { open } = useModalStore();
   const { handleError } = useHandleError();
-  const navigation = useNavigation();
-
-  const { mutate: patchBankAccount } = usePatchBankAccout();
+  const { mutate } = usePatchBankAccout();
+  const queryClient = useQueryClient();
 
   const handleNavigate = (agentBankAccountId: string) => {
     navigation.navigate({
@@ -37,12 +39,10 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
   // 계좌 삭제 모달
   const handleOpenDeleteModal = async () => {
     if (!agentBankAccountId) return;
-
     try {
       const result = await open('form-cancel-modal', AccountDeleteModal, {
         agentBankAccountId,
       });
-
       if (result) {
         toastify({
           variant: 'success',
@@ -61,16 +61,27 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
     },
     {
       label: '삭제하기',
-      onClick: () => handleOpenDeleteModal,
+      onClick: () => handleOpenDeleteModal(),
       isDanger: true,
     },
   ];
 
   // 대표계좌가 아닐 때만 항목 추가
-  if (!primaryAccount) {
+  if (!bankAccountData.primaryAccount) {
     dropdownItems.unshift({
       label: '대표계좌로 설정하기',
-      onClick: () => patchBankAccount(agentBankAccountId),
+      onClick: () =>
+        mutate(agentBankAccountId, {
+          onSuccess: () => {
+            // 대표계좌 설정 후 목록 재조회
+            queryClient.invalidateQueries({
+              queryKey: queryKey.getBankAccountList(),
+            });
+          },
+          onError: (error) => {
+            console.error(error);
+          },
+        }),
     });
   }
 
@@ -81,12 +92,14 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
 
         <div className={styles.detail_container}>
           <div className={styles.title_row}>
-            <span className={styles.bank_name}>{bankName}</span>
-            {primaryAccount && (
+            <span className={styles.bank_name}>{bankAccountData.bankName}</span>
+            {bankAccountData.primaryAccount && (
               <span className={styles.main_account}>대표계좌</span>
             )}
           </div>
-          <span className={styles.account_num}>{agentAccountNumber}</span>
+          <span className={styles.account_num}>
+            {bankAccountData.agentAccountNumber}
+          </span>
         </div>
       </div>
 

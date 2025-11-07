@@ -31,9 +31,7 @@ const EditPage = () => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
   const { state } = useLocation<{ agentBankAccountId?: string }>();
-
   const { mutate } = usePutBankAccout();
-
   const { member } = useMember();
 
   // 캐시된 계좌 리스트 -> 계좌 개별정보 가져오기
@@ -43,6 +41,8 @@ const EditPage = () => {
   const currentAccount = cachedList?.find(
     (acc) => acc.agentBankAccountId === state?.agentBankAccountId,
   );
+
+  console.log('조회되는 계좌정보', currentAccount);
 
   // 기존 데이터 세팅
   useEffect(() => {

@@ -33,21 +33,22 @@ const BankAccountPage = () => {
       <div className={styles.container}>
         <div className={styles.list_container}>
           {data?.map((bankAccount) => (
-            <>
-              <Spacer size={20} />
-              <BankAccountCard
-                key={bankAccount.agentBankAccountId}
-                bankAccountData={bankAccount}
-                onEdit={() => handleNavigate(bankAccount.agentBankAccountId)}
-              />
-            </>
+            <BankAccountCard
+              key={bankAccount.agentBankAccountId}
+              bankAccountData={bankAccount}
+            />
           ))}
-          <Spacer size={12} />
-          <span>* 계좌는 최대 5개까지 등록 가능합니다.</span>
         </div>
-        <Button variant="fill" onClick={() => handleNavigate()}>
-          계좌 추가하기
-        </Button>
+        <Spacer size={12} />
+
+        <span>* 계좌는 최대 5개까지 등록 가능합니다.</span>
+
+        <div className={styles.button}>
+          <Button variant="fill" onClick={() => handleNavigate()}>
+            계좌 추가하기
+          </Button>
+        </div>
+        <Spacer size={20} />
       </div>
     </PageFrame>
   );

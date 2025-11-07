@@ -24,15 +24,22 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
   const { agentBankAccountId } = bankAccountData;
   const Icon = getBankIconByName(bankAccountData.bankName);
 
-  const navigation = useNavigation();
+  const { navigate } = useNavigation<{
+    accountNumber: string;
+    bankName: string;
+  }>();
   const { open } = useModalStore();
   const { handleError } = useHandleError();
   const { mutate } = usePatchBankAccout();
   const queryClient = useQueryClient();
 
   const handleNavigate = (agentBankAccountId: string) => {
-    navigation.navigate({
+    navigate({
       pathname: `/bank-account/${agentBankAccountId}`,
+      state: {
+        accountNumber: bankAccountData.agentAccountNumber,
+        bankName: bankAccountData.bankName,
+      },
     });
   };
 

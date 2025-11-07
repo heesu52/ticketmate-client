@@ -29,6 +29,7 @@ const BankAccountPage = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedBankCode, setSelectedBankCode] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
+  const [accountNumberError, setAccountNumberError] = useState('');
 
   const navigation = useNavigation();
   const queryClient = useQueryClient();
@@ -68,7 +69,7 @@ const BankAccountPage = () => {
 
   // 바텀 시트 토글
   const toggleBottomSheet = () => {
-    setIsBottomSheetOpen((prev) => !prev);
+    setIsBottomSheetOpen(!isBottomSheetOpen);
   };
 
   // 은행 선택 시 (은행코드)
@@ -81,10 +82,21 @@ const BankAccountPage = () => {
   const handleAccountNumberChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    // 숫자만
-    const input = e.target.value.replace(/\D/g, '');
-    if (input.length > 16) return;
-    setAccountNumber(input);
+    const input = e.target.value;
+    // 숫자만 필터링
+    const filtered = input.replace(/\D/g, '');
+
+    // 최대 16자리 제한
+    if (filtered.length > 16) return;
+
+    setAccountNumber(filtered);
+
+    // 11자리 이상인지 검증
+    if (filtered.length < 11) {
+      setAccountNumberError('계좌번호는 최소 11자리 이상이어야 합니다.');
+    } else {
+      setAccountNumberError('');
+    }
   };
 
   const handleSubmit = () => {
@@ -142,13 +154,20 @@ const BankAccountPage = () => {
             value={accountNumber}
             onChange={handleAccountNumberChange}
           />
+          {accountNumberError && (
+            <span className={styles.errormessage}>{accountNumberError}</span>
+          )}
         </div>
         <Button
           variant="fill"
           onClick={handleSubmit}
-          disabled={!selectedBankCode || accountNumber.length === 0}
+          disabled={
+            !!accountNumberError ||
+            !selectedBankCode ||
+            accountNumber.length === 0
+          }
         >
-          계좌 추가하기
+          추가하기
         </Button>
 
         <CustomBottomSheet

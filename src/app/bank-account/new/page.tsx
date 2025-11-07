@@ -1,63 +1,28 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-
-import { useQueryClient } from '@tanstack/react-query';
+import React, { useState } from 'react';
 
 import CustomBottomSheet from '@/app/bank-account/_shared/components/bank-bottom-sheet/bank-bottom-sheet';
-import { usePutBankAccout } from '@/app/bank-account/_shared/services/mutation';
-import queryKey from '@/app/bank-account/_shared/services/query-key';
-import {
-  BankAccountResponse,
-  PutBankAccountRequest,
-} from '@/app/bank-account/_shared/services/type';
+import { useCreateBankAccout } from '@/app/bank-account/_shared/services/mutation';
+import { CreateBankAccountRequest } from '@/app/bank-account/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Input from '@/shared/components/ui/input/input';
 import { useMember } from '@/shared/context/member-context';
-import { useLocation } from '@/shared/hooks/navigation/use-location';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
-import { bankInfoMap, getBankNameByCode } from '@/shared/utils/bank';
+import { getBankNameByCode } from '@/shared/utils/bank';
 
 import styles from './page.module.scss';
 
-const EditPage = () => {
+const NewPage = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedBankCode, setSelectedBankCode] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [accountNumberError, setAccountNumberError] = useState('');
 
-  const navigation = useNavigation();
-  const queryClient = useQueryClient();
-  const { state } = useLocation<{ agentBankAccountId?: string }>();
-
-  const updateMutation = usePutBankAccout();
-
   const { member } = useMember();
-
-  // 캐시된 계좌 리스트 -> 계좌 개별정보 가져오기
-  const cachedList = queryClient.getQueryData<BankAccountResponse[]>(
-    queryKey.getBankAccountList(),
-  );
-  const currentAccount = cachedList?.find(
-    (acc) => acc.agentBankAccountId === state?.agentBankAccountId,
-  );
-
-  // 기존 데이터 세팅
-  useEffect(() => {
-    if (currentAccount) {
-      // 은행이름에서 은행코드로 변환
-      const foundCode = Object.entries(bankInfoMap).find(
-        ([, value]) => value.name === currentAccount.bankName,
-      )?.[0];
-
-      if (foundCode) {
-        setSelectedBankCode(foundCode);
-      }
-
-      setAccountNumber(currentAccount.agentAccountNumber);
-    }
-  }, [currentAccount]);
+  const navigation = useNavigation();
+  const createMutation = useCreateBankAccout();
 
   // 바텀 시트 토글
   const toggleBottomSheet = () => {
@@ -77,12 +42,9 @@ const EditPage = () => {
     const input = e.target.value;
     // 숫자만 필터링
     const filtered = input.replace(/\D/g, '');
-
     // 최대 16자리 제한
     if (filtered.length > 16) return;
-
     setAccountNumber(filtered);
-
     // 11자리 이상인지 검증
     if (filtered.length < 11) {
       setAccountNumberError('계좌번호는 최소 11자리 이상이어야 합니다.');
@@ -92,22 +54,16 @@ const EditPage = () => {
   };
 
   const handleSubmit = () => {
-    if (
-      !state?.agentBankAccountId ||
-      !member?.name ||
-      !selectedBankCode ||
-      !accountNumber
-    )
-      return;
+    if (!member?.name || !selectedBankCode || !accountNumber) return;
 
-    const payload: PutBankAccountRequest = {
-      agentBankAccountId: state?.agentBankAccountId,
+    const payload: CreateBankAccountRequest = {
       bankCode: selectedBankCode,
       accountHolder: member.name,
       accountNumber,
+      primaryAccount: false, // 일단 지정해놓은 대표계좌가 있을테니 무조건 false로 넣음
     };
 
-    updateMutation.mutate(payload as PutBankAccountRequest, {
+    createMutation.mutate(payload as CreateBankAccountRequest, {
       onSuccess: () => {
         navigation.navigate({ pathname: '/bank-account' });
       },
@@ -165,4 +121,4 @@ const EditPage = () => {
   );
 };
 
-export default EditPage;
+export default NewPage;

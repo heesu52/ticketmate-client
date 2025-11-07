@@ -13,12 +13,9 @@ const BankAccountPage = () => {
   const navigation = useNavigation();
   const { data } = useGetBankAccountList();
 
-  const handleNavigate = (agentBankAccountId?: string) => {
+  const handleNavigate = () => {
     navigation.navigate({
-      pathname: '/bank-account',
-      search: agentBankAccountId
-        ? `?accountId=${agentBankAccountId}`
-        : undefined,
+      pathname: '/bank-account/new',
     });
   };
 

@@ -7,27 +7,34 @@ import {
 import { BankAccountResponse } from '@/app/bank-account/_shared/services/type';
 import { MoreIcon } from '@/assets/icons';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
+import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 import { getBankIconByCode } from '@/shared/utils/bank';
 
 import styles from './bank-account-card.module.scss';
 
 interface BankAccountCardProps {
   bankAccountData: BankAccountResponse;
-  onEdit: () => void;
 }
 
-const BankAccountCard = ({ bankAccountData, onEdit }: BankAccountCardProps) => {
+const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
   const { bankName, agentAccountNumber, primaryAccount, agentBankAccountId } =
     bankAccountData;
   const Icon = getBankIconByCode(bankName);
 
+  const navigation = useNavigation();
   const { mutate: patchBankAccount } = usePatchBankAccout();
   const { mutate: deleteBankAccount } = useDelteBankAccout();
+
+  const handleNavigate = (agentBankAccountId: string) => {
+    navigation.navigate({
+      pathname: `/bank-account/${agentBankAccountId}`,
+    });
+  };
 
   const dropdownItems = [
     {
       label: '수정하기',
-      onClick: onEdit,
+      onClick: () => handleNavigate(agentBankAccountId),
     },
     {
       label: '삭제하기',

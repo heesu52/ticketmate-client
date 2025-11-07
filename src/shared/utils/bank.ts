@@ -47,13 +47,18 @@ export const bankInfoMap: Record<
   SUHYEOP: { name: '수협', icon: NoRegisterIcon },
 };
 
-//은행 아이콘 반환
-export const getBankIconByCode = (bankName: string): React.ElementType => {
+//은행이름 - 은행아이콘 변환
+export const getBankIconByName = (bankName: string): React.ElementType => {
   const entry = Object.values(bankInfoMap).find((v) => v.name === bankName);
   return entry?.icon || NoRegisterIcon;
 };
 
-//은행 이름 반환
+//은행코드 - 은행아이콘 변환
+export const getBankIconByCode = (bankCode: string): React.ElementType => {
+  return bankInfoMap[bankCode]?.icon || NoRegisterIcon;
+};
+
+//은행코드 - 은행이름 변환
 export const getBankNameByCode = (bankCode: string): string => {
   return bankInfoMap[bankCode]?.name || '미등록 은행';
 };

@@ -8,7 +8,7 @@ import { BankAccountResponse } from '@/app/bank-account/_shared/services/type';
 import { MoreIcon } from '@/assets/icons';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
-import { getBankIconByCode } from '@/shared/utils/bank';
+import { getBankIconByName } from '@/shared/utils/bank';
 
 import styles from './bank-account-card.module.scss';
 
@@ -19,7 +19,7 @@ interface BankAccountCardProps {
 const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
   const { bankName, agentAccountNumber, primaryAccount, agentBankAccountId } =
     bankAccountData;
-  const Icon = getBankIconByCode(bankName);
+  const Icon = getBankIconByName(bankName);
 
   const navigation = useNavigation();
   const { mutate: patchBankAccount } = usePatchBankAccout();

@@ -8,20 +8,19 @@ import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 import Toggle from '@/shared/components/ui/toggle/toggle';
 
 import styles from './application-concert-card.module.scss';
+import { AcceptingConcert } from '../../services/type';
+
+/**
+ * @description 신청 공연관리 페이지에서 on/off를 설정 할 수 있는 공연 카드
+ */
 
 interface ApplicationConcertCardProps {
-  concertId: string;
-  title: string;
-  matchedCount: number;
-  isEnabled: boolean;
+  Item: AcceptingConcert;
   onToggle: (id: string, value: boolean) => void;
 }
 
 const ApplicationConcertCard = ({
-  concertId,
-  title,
-  matchedCount,
-  isEnabled,
+  Item,
   onToggle,
 }: ApplicationConcertCardProps) => {
   const router = useRouter();
@@ -30,14 +29,14 @@ const ApplicationConcertCard = ({
     <div className={styles.container}>
       <Image
         className={styles.image}
-        src={'/placeholder-concert.png'}
-        alt={'공연썸네일이미지'}
+        src={Item.concertThumbnailUrl}
+        alt={Item.concertName}
         width={48}
         height={48}
       />
       <div className={styles.info_container}>
         <div className={styles.header_container}>
-          <span className={styles.title}>{title}</span>
+          <span className={styles.title}>{Item.concertName}</span>
           {/* 더보기 버튼 */}
           <Dropdown
             trigger={
@@ -55,12 +54,12 @@ const ApplicationConcertCard = ({
         <div className={styles.footer_container}>
           <span className={styles.detail_container}>
             <span className={styles.nickname}>매칭된 의뢰인</span>
-            <span className={styles.count}>{matchedCount}</span>
+            <span className={styles.count}>{Item.matchedClientCount}</span>
           </span>
 
           <Toggle
-            pressed={isEnabled}
-            onPressedChange={(value) => onToggle(concertId, value)}
+            pressed={Item.accepting ?? false}
+            onPressedChange={(value) => onToggle(Item.concertId, value)}
           />
         </div>
       </div>

@@ -1,8 +1,10 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ApplicationConcertCard from '@/app/my/application/_shared/components/application-concert-card/application-concert-card';
 import { useCreateAgentAvailabilityMutation } from '@/app/my/application/_shared/services/mutation';
+import { useGetOnOffConcertList } from '@/app/my/application/_shared/services/query';
+import { GetAcceptingConcertRequest } from '@/app/my/application/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Spacer from '@/shared/components/ui/spacer/spacer';
 import { toastify } from '@/shared/components/ui/toast/toastify';
@@ -10,43 +12,39 @@ import { toastify } from '@/shared/components/ui/toast/toastify';
 import styles from './page.module.scss';
 
 export default function ApplicationPage() {
-  const { mutate } = useCreateAgentAvailabilityMutation();
-  const [concerts, setConcerts] = useState([
-    {
-      id: '1e79edf4-12d7-4377-8f07-c46c353bedd4',
-      title: '터치드 단독 콘서트 HIGHLIGHT Ⅲ',
-      matchedCount: 4,
-      isEnabled: true,
-    },
-    {
-      id: 'a82289e4-f3d2-4c5f-9a44-29a06c1ef9c9',
-      title: '기리보이 콘서트 “보통날”',
-      matchedCount: 2,
-      isEnabled: true,
-    },
-    {
-      id: '7e39dfb4-1111-4377-8f07-c46c353b0000',
-      title: '잔나비 콘서트 “소곡집”',
-      matchedCount: 5,
-      isEnabled: false,
-    },
-    {
-      id: 'abcdedf4-12d7-4377-8f07-c46c353b1234',
-      title: '혁오 단독 콘서트 “LOVE YA!”',
-      matchedCount: 3,
-      isEnabled: false,
-    },
-  ]);
+  const [request] = useState<GetAcceptingConcertRequest>({
+    pageNumber: 1,
+    pageSize: 10,
+  });
 
-  // Toggle 클릭 시 상태 변경
+  // 신청 공연 데이터 불러오기
+  const { data } = useGetOnOffConcertList(request);
+
+  // content만 추출
+  const acceptingConcertItem = React.useMemo(
+    () => data?.content ?? [],
+    [data?.content],
+  );
+  // 토글 변경 시 데이터를 복사해서 저장
+  const [concerts, setConcerts] = useState(acceptingConcertItem);
+
+  // 토글 변경 후 데이터 새로 세팅
+  useEffect(() => {
+    setConcerts(acceptingConcertItem);
+  }, [acceptingConcertItem]);
+
+  const { mutate } = useCreateAgentAvailabilityMutation();
+
+  // 토글 on/off로 공연 상태 변환
   const handleToggle = (concertId: string, value: boolean) => {
     setConcerts((prev) =>
       prev.map((concert) =>
-        concert.id === concertId ? { ...concert, isEnabled: value } : concert,
+        concert.concertId === concertId
+          ? { ...concert, accepting: value }
+          : concert,
       ),
     );
 
-    // API 요청
     mutate(
       {
         concertId,
@@ -62,11 +60,10 @@ export default function ApplicationPage() {
           });
         },
         onError: () => {
-          // 실패 시 rollback
           setConcerts((prev) =>
             prev.map((concert) =>
-              concert.id === concertId
-                ? { ...concert, isEnabled: !value }
+              concert.concertId === concertId
+                ? { ...concert, accepting: !value }
                 : concert,
             ),
           );
@@ -80,8 +77,9 @@ export default function ApplicationPage() {
     );
   };
 
-  const activeConcerts = concerts.filter((c) => c.isEnabled);
-  const closedConcerts = concerts.filter((c) => !c.isEnabled);
+  // on/off 공연 분리해서 리스트로 전달
+  const activeConcerts = concerts.filter((c) => c.accepting);
+  const closedConcerts = concerts.filter((c) => !c.accepting);
 
   return (
     <PageFrame
@@ -97,11 +95,8 @@ export default function ApplicationPage() {
         <div className={styles.list_container}>
           {activeConcerts.map((concert) => (
             <ApplicationConcertCard
-              key={concert.id}
-              concertId={concert.id}
-              title={concert.title}
-              matchedCount={concert.matchedCount}
-              isEnabled={concert.isEnabled}
+              key={concert.concertId}
+              Item={concert}
               onToggle={handleToggle}
             />
           ))}
@@ -114,11 +109,8 @@ export default function ApplicationPage() {
         <div className={styles.list_container}>
           {closedConcerts.map((concert) => (
             <ApplicationConcertCard
-              key={concert.id}
-              concertId={concert.id}
-              title={concert.title}
-              matchedCount={concert.matchedCount}
-              isEnabled={concert.isEnabled}
+              key={concert.concertId}
+              Item={concert}
               onToggle={handleToggle}
             />
           ))}

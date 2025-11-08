@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import type { ChatRoom } from '@/app/chat/_shared/services/type';
-import Badge from '@/shared/components/badge/badge';
+import Badge from '@/shared/components/ui/badge/badge';
 import { TICKET_OPEN_TYPE_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { formatDateToLocale, formatTime, isToday } from '@/shared/utils/dates';
 
@@ -41,20 +41,23 @@ const ChatCard = ({ chat, ref }: ChatCardProps) => {
           className={styles.profile_image}
           src={chat.concertThumbnailUrl}
           alt="profile"
-          width={48}
-          height={48}
+          width={60}
+          height={60}
         />
-        <Badge type="type-a">
+        <Badge
+          variant={chat.ticketOpenType === 'PRE_OPEN' ? 'type-a' : 'type-c'}
+        >
           {TICKET_OPEN_TYPE_LABEL_MAP[chat.ticketOpenType]}
         </Badge>
       </div>
+
       <div className={styles.chat_info}>
-        <div className={styles.left_column}>
+        <div className={styles.top_container}>
           <span className={styles.name}>{chat.chatRoomName}</span>
           <div className={styles.message}>{chat.lastChatMessage}</div>
         </div>
 
-        <div className={styles.right_column}>
+        <div className={styles.bottom_container}>
           <span className={styles.time}>{formattedDateTime}</span>
           {chat.unReadMessageCount > 0 && (
             <div className={styles.unread}>

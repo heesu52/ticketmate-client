@@ -1,6 +1,10 @@
 import httpClient from '@/lib/http-client/http-client';
 
-import { CreateAgentAvailabilityRequest } from './type';
+import {
+  CreateAgentAvailabilityRequest,
+  GetAcceptingConcertRequest,
+  GetAcceptingConcertResponse,
+} from './type';
 
 const BASE_URL = 'concert-agent-availability';
 
@@ -22,4 +26,32 @@ const createAgentAvailability = async (
   return data;
 };
 
-export { createAgentAvailability };
+/**
+ * @description 대리인 on/off 설정을 위한 공연 목록 조회
+ */
+const getOnOffConcert = async (request: GetAcceptingConcertRequest) => {
+  const data = await httpClient<GetAcceptingConcertResponse>({
+    method: 'get',
+    url: `${BASE_URL}/concerts`,
+    options: {
+      searchParams: { ...request },
+    },
+  });
+  return data;
+};
+
+/**
+ * @description 대리인 on설정된 모집 중 공연 목록 조회
+ */
+const getAcceptingConcert = async (request: GetAcceptingConcertRequest) => {
+  const data = await httpClient<GetAcceptingConcertResponse>({
+    method: 'get',
+    url: `${BASE_URL}/accepting-concerts`,
+    options: {
+      searchParams: { ...request },
+    },
+  });
+  return data;
+};
+
+export { createAgentAvailability, getOnOffConcert, getAcceptingConcert };

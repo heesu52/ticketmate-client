@@ -36,10 +36,7 @@ const extended = created.extend({
     ],
     afterResponse: [
       async (request, options, response) => {
-        if (response.status !== 401) {
-          return response;
-        }
-
+        // 401 에러 처리 (토큰 만료)
         if (response.status === 401 && MODE !== 'development') {
           const res = await refreshAccessToken();
 
@@ -50,6 +47,27 @@ const extended = created.extend({
 
             // 이후 흐름 중단을 위해 빈 Response 반환
             return new Response(null);
+          }
+        }
+
+        // 403 에러 처리 (본인인증 또는 프로필 설정 미완료)
+        if (response.status === 403 && MODE !== 'development') {
+          try {
+            const errorJson = await response.clone().json();
+            const errorCode = errorJson.errorCode;
+
+            if (errorCode === 'PHONE_VERIFICATION_REQUIRED') {
+              // 본인인증 미완료 시 본인인증 페이지로 리다이렉트
+              window.location.href = '/auth/sign-in/verification';
+              return new Response(null);
+            } else if (errorCode === 'INITIAL_PROFILE_SETUP_REQUIRED') {
+              // 프로필 설정 미완료 시 프로필 설정 페이지로 리다이렉트
+              window.location.href = '/auth/sign-in/profile';
+              return new Response(null);
+            }
+          } catch {
+            // JSON 파싱 실패 시 원래 응답 반환
+            return response;
           }
         }
 

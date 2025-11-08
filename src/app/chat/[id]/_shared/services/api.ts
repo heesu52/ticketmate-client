@@ -1,8 +1,10 @@
 import httpClient from '@/lib/http-client/http-client';
 
 import {
-  GetChatDetailRequest,
-  GetChatDetailResponse,
+  GetChatMessageListRequest,
+  GetChatMessageListResponse,
+  GetChatRoomInfoRequest,
+  GetChatRoomInfoResponse,
   SendChatImageMessageRequest,
 } from './type';
 
@@ -13,15 +15,33 @@ const BASE_URL = 'chat-room';
  * @param request 채팅 상세 조회 요청 파라미터
  * @returns 채팅 상세 조회 응답
  */
-export const getChatDetail = async (request: GetChatDetailRequest) => {
+export const getChatMessageList = async (
+  request: GetChatMessageListRequest,
+) => {
   const { chatRoomId, parameter } = request;
 
-  const data = await httpClient<GetChatDetailResponse>({
+  const data = await httpClient<GetChatMessageListResponse>({
     url: `${BASE_URL}/${chatRoomId}/message`,
     method: 'get',
     options: {
       searchParams: { ...parameter },
     },
+  });
+
+  return data;
+};
+
+/**
+ * 채팅방 정보 조회
+ * @param request 채팅방 정보 조회 요청 파라미터
+ * @returns 채팅방 정보 조회 응답
+ */
+export const getChatRoomInfo = async (request: GetChatRoomInfoRequest) => {
+  const { chatRoomId } = request;
+
+  const data = await httpClient<GetChatRoomInfoResponse>({
+    url: `${BASE_URL}/${chatRoomId}/context`,
+    method: 'get',
   });
 
   return data;
@@ -37,7 +57,7 @@ export const sendChatMessageImage = async (
   });
   formData.append('type', request.type);
 
-  const data = await httpClient<GetChatDetailResponse>({
+  const data = await httpClient<GetChatMessageListResponse>({
     url: `${BASE_URL}/${request.chatRoomId}/send/pictures`,
     method: 'post',
     options: {

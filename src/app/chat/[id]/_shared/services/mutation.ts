@@ -12,7 +12,7 @@ export const useSendChatMessageImage = () => {
     mutationFn: (request: SendChatImageMessageRequest) =>
       sendChatMessageImage(request),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKey.chatDetail() });
+      queryClient.invalidateQueries({ queryKey: queryKey.chatMessageList() });
     },
   });
 };

@@ -1,6 +1,11 @@
+import {
+  TicketOpenDateInfo,
+  TicketOpenType,
+  TicketReservationSite,
+} from '@/shared/types';
 import { Pagination } from '@/shared/types/api';
 
-export interface GetChatDetailRequest {
+export interface GetChatMessageListRequest {
   /** 채팅방 고유 ID */
   chatRoomId: string;
 
@@ -36,7 +41,31 @@ export interface ChatMessage {
   pictureMessageList?: string[];
 }
 
-export type GetChatDetailResponse = Pagination<ChatMessage>;
+export type GetChatMessageListResponse = Pagination<ChatMessage>;
+
+export interface GetChatRoomInfoRequest {
+  /** 채팅방 고유 ID */
+  chatRoomId: string;
+}
+
+export interface GetChatRoomInfoResponse {
+  /** 채팅방 고유 ID */
+  chatRoomId: string;
+  /** 상대방 ID */
+  otherMemberId: string;
+  /** 콘서트 이름 */
+  concertName: string;
+  /** 콘서트 썸네일 이미지 */
+  concertThumbnailImage: string;
+  /** 예매 타입 */
+  ticketOpenType: TicketOpenType;
+  /** 예매 일자 정보 */
+  ticketOpenDateInfoResponseList: TicketOpenDateInfo[];
+  /** 예매처 정보 */
+  ticketReservationSite: TicketReservationSite;
+  /** 콘서트 타입 */
+  concertType: string;
+}
 
 export interface SendChatMessageRequest {
   /** 채팅방 고유 ID */

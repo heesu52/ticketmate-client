@@ -4,11 +4,11 @@ import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 
-import useGetChatDetail from '@/app/chat/[id]/_shared/services/query';
+import { useGetChatMessageList } from '@/app/chat/[id]/_shared/services/query';
 import type {
   ChatMessage,
   ChatMessage as ChatMessageType,
-  GetChatDetailRequest,
+  GetChatMessageListRequest,
 } from '@/app/chat/[id]/_shared/services/type';
 import { useWebSocket } from '@/shared/context/websocket-context';
 
@@ -49,7 +49,7 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   }, []);
 
   /** 채팅 메시지 조회 요청 Request */
-  const [request] = useState<GetChatDetailRequest>({
+  const [request] = useState<GetChatMessageListRequest>({
     chatRoomId: roomId,
     parameter: {
       pageNumber: 1,
@@ -63,7 +63,7 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useGetChatDetail(request);
+  } = useGetChatMessageList(request);
 
   /** 메시지 목록 */
   const [messages, setMessages] = useState<ChatMessage[]>([]);

@@ -1,10 +1,9 @@
-import httpClient from '@/lib/http-client/http-client';
-
 import {
   CreateAgentAvailabilityRequest,
   GetAcceptingConcertRequest,
   GetAcceptingConcertResponse,
-} from './type';
+} from '@/app/my/application/_shared/services/type';
+import httpClient from '@/lib/http-client/http-client';
 
 const BASE_URL = 'concert-agent-availability';
 

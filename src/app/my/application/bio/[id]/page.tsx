@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -12,7 +12,13 @@ import { toastify } from '@/shared/components/ui/toast/toastify';
 
 import styles from './page.module.scss';
 
-export default function BioPage() {
+interface BioPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function BioPage({ params }: BioPageProps) {
+  const { id: concertId } = use(params);
+
   const [introduction, setIntroduction] = useState('');
   const router = useRouter();
   const { mutate } = useCreateAgentAvailabilityMutation();
@@ -27,8 +33,7 @@ export default function BioPage() {
   // 저장 버튼 클릭
   const handleSubmit = () => {
     const requestData = {
-      concertId: '1e79edf4-12d7-4377-8f07-c46c353bedd4',
-      accepting: true,
+      concertId,
       introduction,
     };
 

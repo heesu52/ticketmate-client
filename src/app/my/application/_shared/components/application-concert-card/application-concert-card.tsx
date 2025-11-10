@@ -1,14 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
+import { AcceptingConcert } from '@/app/my/application/_shared/services/type';
 import { MoreIcon } from '@/assets/icons';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 import Toggle from '@/shared/components/ui/toggle/toggle';
+import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 
 import styles from './application-concert-card.module.scss';
-import { AcceptingConcert } from '../../services/type';
 
 /**
  * @description 신청 공연관리 페이지에서 on/off를 설정 할 수 있는 공연 카드
@@ -23,7 +23,14 @@ const ApplicationConcertCard = ({
   Item,
   onToggle,
 }: ApplicationConcertCardProps) => {
-  const router = useRouter();
+  const navigation = useNavigation();
+
+  // 버튼 클릭 시 navigate로 이동
+  const handleNavigate = () => {
+    navigation.navigate({
+      pathname: `/my/application/bio/${Item.concertId}`,
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -45,7 +52,7 @@ const ApplicationConcertCard = ({
             items={[
               {
                 label: '한 줄 소개 관리',
-                onClick: () => router.push('/my/application/bio'),
+                onClick: () => handleNavigate(),
               },
             ]}
           />

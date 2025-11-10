@@ -5,6 +5,7 @@ import React, { use } from 'react';
 import ChatHeader from '@/app/chat/[id]/_shared/components/chat-header/chat-header';
 import ChatInput from '@/app/chat/[id]/_shared/components/chat-input/chat-input';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
+import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 
 import ChatMessageList from './_shared/components/chat-message-list/chat-message-list';
 import styles from './page.module.scss';
@@ -25,6 +26,18 @@ const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
           <div className={styles.header_container}>
             <ChatHeader roomId={roomId} />
           </div>
+        ),
+        right: (
+          <button type="button">
+            <Dropdown
+              items={[
+                {
+                  label: '채팅방 나가기',
+                  onClick: () => console.log('채팅방 나가기'),
+                },
+              ]}
+            />
+          </button>
         ),
       }}
       bottomNav={false}

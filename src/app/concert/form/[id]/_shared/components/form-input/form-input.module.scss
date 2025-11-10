@@ -100,24 +100,5 @@
         text-align: center;
       }
     }
-
-    .textarea {
-      @include text-sm;
-      color: var(--grayscale-700);
-      display: flex;
-      width: 100%;
-      padding: 16px;
-      height: 200px;
-      align-items: flex-start;
-      gap: 10px;
-      background: var(--grayscale-100, #fff);
-      border: 1px solid var(--grayscale-300);
-      border-radius: 8px;
-      flex-shrink: 0;
-
-      &:focus {
-        border-bottom: 1px solid var(--brand-main);
-      }
-    }
   }
 }

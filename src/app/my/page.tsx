@@ -75,7 +75,7 @@ const MyPage = () => {
             <div className={styles.application_container}>
               <div className={styles.title_container}>
                 <span className={styles.title}>신청공연 관리</span>
-                <Link href="/application/concert" className={styles.link}>
+                <Link href="my/application" className={styles.link}>
                   관리하기
                 </Link>
               </div>
@@ -88,7 +88,7 @@ const MyPage = () => {
         <div className={styles.history_container}>
           <div className={styles.title_container}>
             <span className={styles.title}>최근 성공 신청내역</span>
-            <Link href="/history/success" className={styles.link}>
+            <Link href="my/success" className={styles.link}>
               전체보기
             </Link>
           </div>

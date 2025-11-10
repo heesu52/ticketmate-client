@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 
 import { useSendChatMessageImage } from '@/app/chat/[id]/_shared/services/mutation';
 import {
-  CameraIcon,
   CheckIcon,
   CloseIcon,
+  GalleryIcon,
   ListIcon,
   PlusIcon,
   SendIcon,
@@ -21,20 +21,20 @@ interface ChatInputProps {
 
 const actionItems = [
   {
-    icon: <ListIcon width={24} height={24} stroke={`var(--textColor-main)`} />,
-    label: '신청양식',
+    icon: <ListIcon width={24} height={24} />,
+    label: '신청 양식',
   },
   {
-    icon: <CameraIcon width={24} height={24} fill={`var(--textColor-main)`} />,
-    label: '카메라',
+    icon: <GalleryIcon width={24} height={24} />,
+    label: '갤러리',
   },
   {
-    icon: <CloseIcon width={24} height={24} fill={`var(--textColor-main)`} />,
-    label: '진행 취소',
-  },
-  {
-    icon: <CheckIcon width={24} height={24} fill={`var(--textColor-main)`} />,
+    icon: <CheckIcon width={24} height={24} />,
     label: '의뢰 성공',
+  },
+  {
+    icon: <CloseIcon width={24} height={24} />,
+    label: '진행 취소',
   },
 ];
 
@@ -85,8 +85,8 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
       });
   };
 
-  // 카메라 버튼 클릭 핸들러
-  const handleCameraClick = () => {
+  //'갤러리 버튼 클릭 핸들러
+  const handleGalleryClick = () => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
@@ -126,7 +126,12 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
           disabled={disabled}
         >
           {isOpen ? (
-            <CloseIcon width={20} height={20} fill={`var(--textColor-main)`} />
+            <CloseIcon
+              width={20}
+              height={20}
+              stroke={`var(--textColor-main)`}
+              fill={`var(--textColor-main)`}
+            />
           ) : (
             <PlusIcon width={20} height={20} fill={`var(--textColor-main)`} />
           )}
@@ -135,7 +140,7 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
         <textarea
           className={styles.message_input}
           id="message-input"
-          placeholder="메시지를 입력해주세요."
+          placeholder="내용을 입력해주세요."
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyDown={handleKeyPress}
@@ -149,7 +154,7 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
           onClick={handleSendMessage}
           disabled={!inputMessage.trim() || disabled}
         >
-          <SendIcon width={20} height={20} fill={`var(--textColor-main)`} />
+          <SendIcon width={20} height={20} />
         </button>
       </div>
 
@@ -160,18 +165,18 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
               key={item.label}
               className={styles.item}
               type="button"
-              onClick={item.label === '카메라' ? handleCameraClick : undefined}
-              disabled={item.label === '카메라' ? isImageUploading : false}
+              onClick={item.label === '갤러리' ? handleGalleryClick : undefined}
+              disabled={item.label === '갤러리' ? isImageUploading : false}
             >
               <span className={styles.icon}>
-                {item.label === '카메라' && isImageUploading ? (
+                {item.label === '갤러리' && isImageUploading ? (
                   <div className={styles.loading_spinner} />
                 ) : (
                   item.icon
                 )}
               </span>
               <span className={styles.label}>
-                {item.label === '카메라' && isImageUploading
+                {item.label === '갤러리' && isImageUploading
                   ? '업로드 중...'
                   : item.label}
               </span>

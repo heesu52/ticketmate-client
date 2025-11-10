@@ -21,14 +21,15 @@ const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
       appBar={{
         title: '상대방 닉네임',
         showBack: true,
+        additionalContent: (
+          <div className={styles.header_container}>
+            <ChatHeader roomId={roomId} />
+          </div>
+        ),
       }}
       bottomNav={false}
     >
       <div className={styles.container}>
-        <div className={styles.header_container}>
-          <ChatHeader roomId={roomId} />
-        </div>
-
         <div className={styles.messages_container}>
           <ChatMessageList roomId={roomId} />
         </div>

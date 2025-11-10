@@ -402,8 +402,8 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
                     <Image
                       src={msgItem.profileUrl}
                       alt="profile"
-                      width={36}
-                      height={36}
+                      width={44}
+                      height={44}
                       className={cn(
                         styles.profile_image,
                         isFirstOfGroup ? '' : styles.hidden,

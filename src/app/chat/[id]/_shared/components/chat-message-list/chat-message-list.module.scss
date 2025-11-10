@@ -6,12 +6,11 @@
   height: 100%;
 
   .date_divider {
-    color: var(--textColor-less, #767676);
-    @include text-xs;
-
+    @include text-md;
     display: flex;
     justify-content: center;
-    margin-top: 40px;
+    color: var(--grayscale-700, #222);
+    text-align: center;
   }
 
   .list_container {
@@ -23,11 +22,11 @@
 
     .profile_image_wrapper {
       flex-shrink: 0;
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
 
       .profile_image {
-        border-radius: 50%;
+        border-radius: 8px;
         border: 1px solid var(--lineColor-sub, #ccc);
 
         &.hidden {
@@ -44,7 +43,7 @@
 
       // 메세지가 텍스트 일 때
       .message_bubble {
-        padding: 12px 16px;
+        padding: 12px;
         word-break: break-word;
         border-radius: 12px;
 
@@ -77,9 +76,9 @@
 
       .message_time {
         @include text-xs;
-        color: var(--textColor-less);
         flex-shrink: 0;
-        margin-bottom: 2px;
+
+        color: var(--grayscale-500, #767676);
       }
     }
 
@@ -91,8 +90,10 @@
         flex-direction: row-reverse;
 
         .message_bubble {
-          background: var(--brandColor-main, #ff6a6a);
-          color: var(--white, #fff);
+          border-radius: 8px;
+          border: 1px solid var(--primary-500, #ff6a6a);
+          background: var(--primary-500, #ff6a6a);
+          color: var(--grayscale-100, #fff);
         }
       }
     }
@@ -102,8 +103,10 @@
 
       .message_container {
         .message_bubble {
-          background: var(--bgColor-sub, #f5f5f5);
-          color: var(--textColor-main, #333);
+          border-radius: 8px;
+          border: 1px solid var(--grayscale-300, #ededed);
+          background: var(--grayscale-200, #fafafa);
+          color: var(--grayscale-700, #222);
         }
       }
     }

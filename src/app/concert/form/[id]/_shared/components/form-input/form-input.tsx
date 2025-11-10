@@ -258,8 +258,8 @@ export default function FormInput({
         <Textarea
           value={requirement}
           onChange={(e) => setRequirement(e.target.value)}
-          id="bio"
-          placeholder="의뢰인에게 보여줄 공연 한 줄 소개를 작성하세요."
+          id="requirement"
+          placeholder="자유롭게 입력해주세요."
           style={{ height: '200px' }}
           disabled={disabled}
         />

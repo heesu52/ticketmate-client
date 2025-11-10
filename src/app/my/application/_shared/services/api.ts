@@ -28,7 +28,7 @@ const createAgentAvailability = async (
 /**
  * @description 대리인 on/off 설정을 위한 공연 목록 조회
  */
-const getOnOffConcert = async (request: GetAcceptingConcertRequest) => {
+const getOnOffConcert = async (request?: GetAcceptingConcertRequest) => {
   const data = await httpClient<GetAcceptingConcertResponse>({
     method: 'get',
     url: `${BASE_URL}/concerts`,
@@ -42,7 +42,7 @@ const getOnOffConcert = async (request: GetAcceptingConcertRequest) => {
 /**
  * @description 대리인 on설정된 모집 중 공연 목록 조회
  */
-const getAcceptingConcert = async (request: GetAcceptingConcertRequest) => {
+const getAcceptingConcert = async (request?: GetAcceptingConcertRequest) => {
   const data = await httpClient<GetAcceptingConcertResponse>({
     method: 'get',
     url: `${BASE_URL}/accepting-concerts`,

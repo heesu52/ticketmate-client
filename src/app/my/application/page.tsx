@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import ApplicationConcertCard from '@/app/my/application/_shared/components/application-concert-card/application-concert-card';
 import { useCreateAgentAvailabilityMutation } from '@/app/my/application/_shared/services/mutation';
 import { useGetOnOffConcertList } from '@/app/my/application/_shared/services/query';
-import { GetAcceptingConcertRequest } from '@/app/my/application/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Spacer from '@/shared/components/ui/spacer/spacer';
 import { toastify } from '@/shared/components/ui/toast/toastify';
@@ -12,13 +11,8 @@ import { toastify } from '@/shared/components/ui/toast/toastify';
 import styles from './page.module.scss';
 
 export default function ApplicationPage() {
-  const [request] = useState<GetAcceptingConcertRequest>({
-    pageNumber: 1,
-    pageSize: 10,
-  });
-
   // 신청 공연 데이터 불러오기
-  const { data } = useGetOnOffConcertList(request);
+  const { data } = useGetOnOffConcertList();
 
   // content만 추출
   const acceptingConcertItem = React.useMemo(

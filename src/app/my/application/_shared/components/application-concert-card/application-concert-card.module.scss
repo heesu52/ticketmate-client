@@ -46,15 +46,9 @@
 
       .detail_container {
         display: flex;
-
         gap: 4px;
 
-        .date {
-          @include text-md;
-          color: var(--grayscale-700);
-        }
-
-        .date {
+        span {
           @include text-md;
           color: var(--grayscale-700);
         }

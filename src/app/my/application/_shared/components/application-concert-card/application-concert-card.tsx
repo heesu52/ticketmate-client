@@ -60,12 +60,12 @@ const ApplicationConcertCard = ({
 
         <div className={styles.footer_container}>
           <span className={styles.detail_container}>
-            <span className={styles.nickname}>매칭된 의뢰인</span>
-            <span className={styles.count}>{Item.matchedClientCount}</span>
+            <span>매칭된 의뢰인</span>
+            <span>{Item.matchedClientCount}</span>
           </span>
 
           <Toggle
-            pressed={Item.accepting ?? false}
+            pressed={Item.accepting ?? true}
             onPressedChange={(value) => onToggle(Item.concertId, value)}
           />
         </div>

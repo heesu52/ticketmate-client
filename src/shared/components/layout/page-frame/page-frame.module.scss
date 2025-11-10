@@ -1,7 +1,6 @@
 @use '@/styles/index' as *;
 
 .container {
-  --app-bar-height: 54px;
   --bottom-nav-height: 69px;
 
   display: flex;
@@ -20,6 +19,15 @@
 
     width: 100%;
     max-width: var(--max-width);
+
+    // 스크롤 시 그림자 효과
+    transition: box-shadow 0.1s ease;
+
+    // 스크롤 상태일 때 그림자 추가
+    &[data-scrolled='true'] {
+      /* DropSD_Header Scroll */
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08);
+    }
   }
 
   .content {
@@ -36,16 +44,6 @@
     width: 100%;
     max-width: var(--max-width);
   }
-}
-
-/* AppBar가 보일 때만 상단 여백 부여 */
-.container[data-app-bar-visible] .content {
-  padding-top: var(--app-bar-height);
-}
-
-/* AppBar가 투명일 때는 상단 여백 제거 (우선순위로 덮어씀) */
-.container[data-app-bar-transparent] .content {
-  padding-top: 0;
 }
 
 /* BottomNav가 보일 때만 하단 여백 부여 */

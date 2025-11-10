@@ -8,4 +8,6 @@ export interface AppBarProps {
   backHref?: string;
 
   right?: ReactNode;
+
+  additionalContent?: ReactNode;
 }

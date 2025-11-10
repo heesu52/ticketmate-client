@@ -1,4 +1,6 @@
-import { ReactNode } from 'react';
+'use client';
+
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import classNames from 'classnames/bind';
 
@@ -25,31 +27,87 @@ interface PageFrameProps {
 }
 
 const PageFrame = ({ appBar, bottomNav, children }: PageFrameProps) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [appBarHeight, setAppBarHeight] = useState(0);
+  const appBarRef = useRef<HTMLElement>(null);
+
+  // AppBar 높이 계산
+  useLayoutEffect(() => {
+    if (!appBar || !appBarRef.current) {
+      setAppBarHeight(0);
+      return;
+    }
+
+    const updateAppBarHeight = () => {
+      if (appBarRef.current) {
+        const height = appBarRef.current.offsetHeight;
+        setAppBarHeight(height);
+      }
+    };
+
+    // 초기 높이 계산
+    updateAppBarHeight();
+
+    // ResizeObserver로 높이 변화 감지
+    const resizeObserver = new ResizeObserver(updateAppBarHeight);
+    if (appBarRef.current) {
+      resizeObserver.observe(appBarRef.current);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [appBar]);
+
+  // 스크롤 상태 감지
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // 초기 스크롤 상태 확인
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   return (
     <div
       className={cn('container')}
-      data-app-bar-visible={!!appBar || undefined}
-      data-app-bar-transparent={
-        (appBar && 'variant' in appBar && appBar.variant === 'transparent') ||
-        undefined
-      }
       data-bottom-nav-visible={bottomNav !== false || undefined}
     >
       {/* 상단 앱바 */}
       {appBar && (
-        <header className={cn('app_bar')}>
+        <header
+          ref={appBarRef}
+          className={cn('app_bar')}
+          data-scrolled={isScrolled}
+        >
           <AppBar
             variant={appBar.variant}
             title={appBar.title}
             showBack={appBar.showBack}
             backHref={appBar.backHref}
             right={appBar.right}
+            additionalContent={appBar.additionalContent}
           />
         </header>
       )}
 
       {/* 본문 컨텐츠 */}
-      <main className={cn('content')}>{children}</main>
+      <main
+        className={cn('content')}
+        style={{
+          paddingTop:
+            appBar && appBar.variant !== 'transparent' && appBarHeight > 0
+              ? `${appBarHeight}px`
+              : undefined,
+        }}
+      >
+        {children}
+      </main>
 
       {/* 하단 네비게이션 */}
       {bottomNav !== false && (

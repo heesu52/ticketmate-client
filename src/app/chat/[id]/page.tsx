@@ -26,7 +26,7 @@ const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
     >
       <div className={styles.container}>
         <div className={styles.header_container}>
-          <ChatHeader />
+          <ChatHeader roomId={roomId} />
         </div>
 
         <div className={styles.messages_container}>

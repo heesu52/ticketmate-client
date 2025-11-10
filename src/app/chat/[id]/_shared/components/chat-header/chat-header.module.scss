@@ -1,75 +1,26 @@
 @use '@/styles/index' as *;
 
 .container {
-  background: var(--white);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-  padding: 24px;
-
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
 
-  .chat_header {
+  width: 100%;
+
+  padding: 12px 20px;
+
+  .left_container {
     display: flex;
-    justify-content: space-between;
-
-    cursor: pointer;
-    text-align: left;
-
-    .profile_info {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      flex: 1;
-      min-width: 0;
-
-      .profile_image {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        border: 1px solid var(--lineColor-sub, #ccc);
-        flex-shrink: 0;
-      }
-
-      .concert_name {
-        @include title-sm;
-        color: var(--textColor-main, #333);
-      }
-    }
-
-    .arrow_icon {
-      transition: transform 0.3s ease;
-      transform: rotate(180deg);
-      flex-shrink: 0;
-
-      &.open {
-        transform: rotate(0deg);
-      }
-    }
+    align-items: center;
+    gap: 8px;
   }
 
-  .content_panel {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  .concert_name {
+    @include text-md;
 
-    .content_item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .label {
-        @include text-xs;
-        color: var(--textColor-less, #767676);
-      }
-
-      .value {
-        @include text-md;
-
-        &.colored {
-          color: var(--subColor-main, #2097bd);
-        }
-      }
-    }
+    overflow: hidden;
+    color: var(--grayscale-700, #222);
+    text-overflow: ellipsis;
   }
 }

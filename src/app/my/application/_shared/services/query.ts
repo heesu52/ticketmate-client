@@ -31,12 +31,12 @@ const useGetOnOffConcertList = (request?: GetAcceptingConcertRequest) => {
  */
 
 const useGetAcceptingConcertList = (request: GetAcceptingConcertRequest) => {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: queryKey.getAcceptingConcertList(request),
     queryFn: () => getAcceptingConcert(request),
   });
 
-  return { data, isLoading, isError };
+  return { data, isLoading, isError, refetch };
 };
 
 export { useGetOnOffConcertList, useGetAcceptingConcertList };

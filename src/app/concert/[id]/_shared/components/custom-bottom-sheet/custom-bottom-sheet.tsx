@@ -28,13 +28,11 @@ const CustomBottomSheet = ({
   agentInfo,
 }: BottomSheetProps) => {
   const { ticketOpenDateInfoResponseList } = concertItem ?? {};
-  const navigation = useNavigation<{
-    isBankTransfer: boolean;
-  }>();
   const { agentId, nickname, introduction, averageRating, reviewCount } =
     agentInfo;
 
   const { member } = useMember();
+  const navigation = useNavigation();
 
   const safeAvg = Number.isFinite(averageRating)
     ? (averageRating as number)

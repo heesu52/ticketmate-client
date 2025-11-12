@@ -2,7 +2,7 @@
 import React from 'react';
 
 import SuccessCard from '@/app/my/success/_shared/components/success-card/success-card';
-import DraggableCardList from '@/shared/components/features/scroll/draggable-card-list';
+import DraggableCardList from '@/shared/components/features/draggable-card-list/draggable-card-list';
 
 const SuccessList = () => {
   const mockItems = Array.from({ length: 12 });

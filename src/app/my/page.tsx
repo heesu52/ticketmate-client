@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import ApplicationList from '@/app/my/_shared/components/application-list';
+import RecentSuccessList from '@/app/my/recent-success/recent-success-list/recent-success-list';
 import { SettingIcon } from '@/assets/icons';
 import { NoRegisterImage } from '@/assets/images';
-import RecentSuccessList from '@/shared/components/features/recent-success/recent-success-list/recent-success-list';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Button from '@/shared/components/ui/button/button';
 import Spacer from '@/shared/components/ui/spacer/spacer';

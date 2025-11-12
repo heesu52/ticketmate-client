@@ -20,11 +20,16 @@ interface AcceptingConcert {
   accepting?: boolean; //On/Off 할 때 필요
 }
 
-type GetAcceptingConcertResponse = Pagination<AcceptingConcert>;
+// 대리인 on/off 설정을 위한 공연 목록 조회 응답값
+type GetOnOffConcertResponse = Pagination<AcceptingConcert>;
+
+// 대리인 on설정된 모집 중 공연 목록 조회 응답값
+type GetAcceptingConcertResponse = AcceptingConcert[];
 
 export type {
   CreateAgentAvailabilityRequest,
   GetAcceptingConcertRequest,
   AcceptingConcert,
+  GetOnOffConcertResponse,
   GetAcceptingConcertResponse,
 };

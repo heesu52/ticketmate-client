@@ -1,0 +1,58 @@
+@use '@/styles/index' as *;
+
+.container {
+  display: flex;
+  padding: 16px;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+  border-radius: 8px;
+  border: 1px solid var(--grayscale-300, #ededed);
+  background: var(--grayscale-100, #fff);
+
+  .image {
+    width: 80px;
+    height: 106px;
+    border-radius: 12px;
+  }
+
+  .info_container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: stretch;
+
+    .header_container {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+
+      .title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        align-self: stretch;
+
+        @include title-sm;
+        color: var(--grayscale-700);
+      }
+    }
+
+    .footer_container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .detail_container {
+        display: flex;
+        gap: 4px;
+
+        span {
+          @include text-md;
+          color: var(--grayscale-700);
+        }
+      }
+    }
+  }
+}

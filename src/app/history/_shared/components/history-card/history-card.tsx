@@ -71,7 +71,7 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
         <Image
           className={styles.image}
           src={concertThumbnailUrl}
-          alt={'공연썸네일이미지'}
+          alt={concertName}
           width={48}
           height={48}
         />

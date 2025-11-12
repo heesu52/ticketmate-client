@@ -5,7 +5,7 @@ import ApplicationCard from '@/app/my/_shared/components/application-card/applic
 import { useCreateAgentAvailabilityMutation } from '@/app/my/application/_shared/services/mutation';
 import { useGetAcceptingConcertList } from '@/app/my/application/_shared/services/query';
 import { CreateAgentAvailabilityRequest } from '@/app/my/application/_shared/services/type';
-import DraggableCardList from '@/shared/components/features/scroll/draggable-card-list';
+import DraggableCardList from '@/shared/components/features/draggable-card-list/draggable-card-list';
 
 const ApplicationList = () => {
   const { data, refetch } = useGetAcceptingConcertList();

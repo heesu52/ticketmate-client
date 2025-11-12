@@ -11,8 +11,6 @@ const ApplicationList = () => {
   const { data, refetch } = useGetAcceptingConcertList();
   const { mutate: createAvailability } = useCreateAgentAvailabilityMutation();
 
-  const acceptingConcertItem = data?.content ?? [];
-
   const handleToggle = (concertId: string, accepting: boolean) => {
     const payload: CreateAgentAvailabilityRequest = {
       concertId,
@@ -27,7 +25,7 @@ const ApplicationList = () => {
 
   return (
     <DraggableCardList
-      items={acceptingConcertItem}
+      items={data ?? []}
       CardComponent={(props) => (
         <ApplicationCard {...props} onToggle={handleToggle} />
       )}

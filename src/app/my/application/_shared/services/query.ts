@@ -22,10 +22,10 @@ const useGetOnOffConcertList = (request?: GetAcceptingConcertRequest) => {
 /**
  * @description 대리인 on 설정된 모집 중 공연 목록 조회
  */
-const useGetAcceptingConcertList = (request?: GetAcceptingConcertRequest) => {
+const useGetAcceptingConcertList = () => {
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: queryKey.getAcceptingConcertList(request),
-    queryFn: () => getAcceptingConcert(request),
+    queryKey: queryKey.getAcceptingConcertList,
+    queryFn: () => getAcceptingConcert(),
   });
 
   return { data, isLoading, isError, refetch };

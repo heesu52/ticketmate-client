@@ -4,6 +4,7 @@ import type {
   ApplicationFormStatus,
   TicketOpenType,
   ApplicationRejectedType,
+  WithdrawalReasonType,
 } from '@/shared/types';
 
 export const TICKET_SITE_URL_MAP: Record<TicketReservationSite, string> = {
@@ -49,3 +50,13 @@ export const APPLICATION_REJECTED_LABEL_MAP: Record<
   SCHEDULE_UNAVAILABLE: '티켓팅 일정이 안됨',
   OTHER: '기타',
 };
+
+export const WITHDRAWAL_REASON_LABEL_MAP: Record<WithdrawalReasonType, string> =
+  {
+    NO_CONCERTS: '찾는 공연이 없어요',
+    RUDE_USER: '비매너 사용자를 만났어요',
+    UNFAIR_RESTRICTION: '억울하게 이용이 제한됐어요',
+    WANT_NEW_ACCOUNT: '새 계정을 만들고 싶어요',
+    DELETE_PERSONAL_DATA: '개인정보를 삭제하고 싶어요',
+    OTHER: '기타',
+  };

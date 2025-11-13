@@ -4,7 +4,10 @@ import { use } from 'react';
 import FormInfo from '@/app/concert/form/[id]/_shared/components/form-info/form-info';
 import FormReasonModal from '@/app/concert/form/[id]/_shared/components/form-modal/form-reason-modal/form-reason-modal';
 import FormTabManager from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-manager';
-import { useGetFormDetail } from '@/app/concert/form/[id]/_shared/services/query';
+import {
+  useGetFormDetail,
+  useGetFormDetailByChat,
+} from '@/app/concert/form/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { useLocation } from '@/shared/hooks/navigation/use-location';
@@ -15,11 +18,23 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const { id: applicationFormId } = resolvedParams;
   const { open } = useModalStore();
-  const { state } = useLocation<{
+  const { state, searchParams } = useLocation<{
     agentNickname: string;
   }>();
 
-  const { data: formItem } = useGetFormDetail({ applicationFormId });
+  const from = searchParams.get('from');
+
+  const { data: formItem } = useGetFormDetail(
+    { applicationFormId },
+    from !== 'chat',
+  );
+
+  const { data: formItemByChat } = useGetFormDetailByChat(
+    { applicationFormId },
+    from === 'chat',
+  );
+
+  const formItemData = from === 'chat' ? formItemByChat : formItem;
 
   // 신청서 거절 사유 확인 모달 (공통)
   const handleOpenReasonModal = () => {
@@ -38,24 +53,25 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       bottomNav={false}
     >
       <div className={styles.container}>
-        {formItem && (
+        {formItemData && (
           <>
             {/* 공연 정보 */}
             <div className={styles.forminfo_container}>
               <FormInfo
-                concertItem={formItem.concertInfoResponse}
-                ticketOpenType={formItem.ticketOpenType}
+                concertItem={formItemData.concertInfoResponse}
+                ticketOpenType={formItemData.ticketOpenType}
               />
             </div>
 
             {/* 신청 폼 탭*/}
             <FormTabManager
               handleOpenModal={handleOpenReasonModal}
-              concertItem={formItem.concertInfoResponse} //새로운 신청폼 작성 시 공연정보
-              formItem={formItem} //기존 신청폼 보여줄 시 신청서정보
-              ticketOpenType={formItem.ticketOpenType}
+              concertItem={formItemData.concertInfoResponse} //새로운 신청폼 작성 시 공연정보
+              formItem={formItemData} //기존 신청폼 보여줄 시 신청서정보
+              ticketOpenType={formItemData.ticketOpenType}
               applicationFormId={applicationFormId}
-              status={formItem.applicationFormStatus} //분기처리를 위해 전달
+              status={formItemData.applicationFormStatus} //분기처리를 위해 전달
+              from={from}
             />
           </>
         )}

@@ -12,6 +12,7 @@ import {
   SendIcon,
 } from '@/assets/icons';
 import { useWebSocket } from '@/shared/context/websocket-context';
+import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 
 import styles from './chat-input.module.scss';
 
@@ -19,26 +20,8 @@ interface ChatInputProps {
   roomId: string;
 }
 
-const actionItems = [
-  {
-    icon: <ListIcon width={24} height={24} />,
-    label: '신청 양식',
-  },
-  {
-    icon: <GalleryIcon width={24} height={24} />,
-    label: '갤러리',
-  },
-  {
-    icon: <CheckIcon width={24} height={24} />,
-    label: '의뢰 성공',
-  },
-  {
-    icon: <CloseIcon width={24} height={24} />,
-    label: '진행 취소',
-  },
-];
-
 const ChatInput = ({ roomId }: ChatInputProps) => {
+  const navigation = useNavigation();
   // 추가 버튼 클릭 시 추가 메뉴 표시
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
@@ -85,19 +68,6 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
       });
   };
 
-  //'갤러리 버튼 클릭 핸들러
-  const handleGalleryClick = () => {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.multiple = true; // 여러 이미지 선택 가능
-    fileInput.onchange = (e) => {
-      const files = (e.target as HTMLInputElement).files;
-      handleImageSelect(files);
-    };
-    fileInput.click();
-  };
-
   const handleSendMessage = () => {
     // 메시지가 있는 경우
     if (inputMessage.trim()) {
@@ -115,6 +85,46 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
       handleSendMessage();
     }
   };
+
+  //'갤러리 버튼 클릭 핸들러
+  const handleGalleryClick = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.multiple = true; // 여러 이미지 선택 가능
+    fileInput.onchange = (e) => {
+      const files = (e.target as HTMLInputElement).files;
+      handleImageSelect(files);
+    };
+    fileInput.click();
+  };
+
+  const handleApplicationFormClick = () => {
+    navigation.navigate({
+      pathname: `/concert/form/${roomId}/view?from=chat`,
+    });
+  };
+
+  const actionItems = [
+    {
+      icon: <ListIcon width={24} height={24} />,
+      label: '신청 양식',
+      onClick: handleApplicationFormClick,
+    },
+    {
+      icon: <GalleryIcon width={24} height={24} />,
+      label: '갤러리',
+      onClick: handleGalleryClick,
+    },
+    {
+      icon: <CheckIcon width={24} height={24} />,
+      label: '의뢰 성공',
+    },
+    {
+      icon: <CloseIcon width={24} height={24} />,
+      label: '진행 취소',
+    },
+  ];
 
   return (
     <div className={styles.container}>
@@ -165,7 +175,7 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
               key={item.label}
               className={styles.item}
               type="button"
-              onClick={item.label === '갤러리' ? handleGalleryClick : undefined}
+              onClick={item.onClick}
               disabled={item.label === '갤러리' ? isImageUploading : false}
             >
               <span className={styles.icon}>

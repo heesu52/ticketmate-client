@@ -52,4 +52,18 @@ const getFormDetail = async (request: GetFormDetailRequest) => {
   return data;
 };
 
-export { createConcertForm, patchConcertForm, getFormDetail };
+const getFormDetailByChat = async (request: GetFormDetailRequest) => {
+  const { applicationFormId } = request;
+
+  const data = await httpClient<GetFormDetailResponse>({
+    method: 'get',
+    url: `chat-room/${applicationFormId}/application-form`,
+  });
+  return data;
+};
+export {
+  createConcertForm,
+  patchConcertForm,
+  getFormDetail,
+  getFormDetailByChat,
+};

@@ -25,6 +25,7 @@ interface FormTabManagerProps {
   concertItem: Concert;
   formItem?: Form;
   status?: ApplicationFormStatus | null;
+  from?: string | null;
 }
 
 export default function FormTabManager({
@@ -36,6 +37,7 @@ export default function FormTabManager({
   concertItem,
   formItem,
   status,
+  from,
 }: FormTabManagerProps) {
   const { applicationFormDetailResponseList = [] } = formItem ?? {};
 
@@ -232,7 +234,7 @@ export default function FormTabManager({
       />
       <div className={styles.input_container}>
         {tabItems.find((item) => item.value === activeTab.toString())?.content}
-        {tabs.length > 0 && (
+        {tabs.length > 0 && from !== 'chat' && (
           <>
             {member?.memberType === 'CLIENT' && (
               <FormTabClientButton

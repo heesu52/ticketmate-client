@@ -60,7 +60,10 @@ const AccountDeletePage = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const result = await open('delete-account-modal', DeleteAccountModal);
+      const result = await open('delete-account-modal', DeleteAccountModal, {
+        reason,
+        reasonInput,
+      });
 
       if (result) {
         toastify({
@@ -153,8 +156,6 @@ const AccountDeletePage = () => {
           </>
         )}
 
-        <Spacer size={40} />
-
         <div className={styles.button}>
           <Button
             variant="outline"
@@ -186,6 +187,7 @@ const AccountDeletePage = () => {
             </Button>
           )}
         </div>
+        <Spacer size={20} />
       </div>
     </PageFrame>
   );

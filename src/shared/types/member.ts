@@ -22,9 +22,4 @@ interface Member {
   followerCount: string;
 }
 
-interface WithdrawalRequest {
-  applicationFormRejectedType: WithdrawalReasonType; // 탈퇴 사유 [필수]
-  otherMemo: string;
-}
-
-export type { Member, WithdrawalReasonType, WithdrawalRequest };
+export type { Member, WithdrawalReasonType };

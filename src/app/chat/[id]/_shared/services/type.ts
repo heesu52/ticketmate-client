@@ -53,6 +53,8 @@ export interface GetChatRoomInfoResponse {
   chatRoomId: string;
   /** 상대방 ID */
   otherMemberId: string;
+  /** 상대방 닉네임 */
+  opponentMemberNickName: string;
   /** 콘서트 이름 */
   concertName: string;
   /** 콘서트 썸네일 이미지 */

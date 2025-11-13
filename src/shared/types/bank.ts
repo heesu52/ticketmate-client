@@ -27,3 +27,11 @@ export enum BankCode {
   SC = 'SC',
   SUHYEOP = 'SUHYEOP',
 }
+
+export interface BankAccountInfo {
+  agentBankAccountId: string;
+  agentAccountNumber: string;
+  bankCode: BankCode;
+  primaryAccount: boolean;
+  accountHolder: string;
+}

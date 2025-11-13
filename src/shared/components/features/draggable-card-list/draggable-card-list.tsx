@@ -4,15 +4,15 @@ import React, { useRef, useState, ComponentType } from 'react';
 import styles from './draggable-card-list.module.scss';
 
 interface DraggableCardListProps<T> {
-  items: T[];
-  CardComponent: ComponentType<{ item?: T }>;
+  items?: T[];
+  CardComponent: ComponentType<{ item: T }>;
   dragSpeed?: number;
 }
 
 const DraggableCardList = <T,>({
-  items,
+  items = [],
   CardComponent,
-  dragSpeed = 1.2,
+  dragSpeed = 1.5,
 }: DraggableCardListProps<T>) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -49,8 +49,8 @@ const DraggableCardList = <T,>({
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
     >
-      {items.map((item, i) => (
-        <CardComponent key={i} item={item} />
+      {items.map((item, index) => (
+        <CardComponent key={index} item={item} />
       ))}
     </div>
   );

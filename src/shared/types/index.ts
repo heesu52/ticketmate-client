@@ -4,3 +4,4 @@ export * from './api';
 export * from './ticket';
 export * from './member';
 export * from './agent';
+export * from './bank';

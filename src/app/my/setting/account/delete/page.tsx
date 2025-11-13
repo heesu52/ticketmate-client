@@ -95,7 +95,8 @@ const AccountDeletePage = () => {
         {!isConfirmStep && (
           <>
             <div className={styles.title}>
-              의문의 의뢰인님 저희를 떠나는 이유가 있나요?
+              의문의 의뢰인님 <br />
+              저희를 떠나는 이유가 있나요?
             </div>
             <Spacer size={20} />
             <RadioGroup
@@ -127,25 +128,33 @@ const AccountDeletePage = () => {
         {isConfirmStep && (
           <>
             <div className={styles.title}>
-              탈퇴하기 전 확인해야 할 내용들이 있어요
+              탈퇴하기 전 <br />
+              확인해야 할 내용들이 있어요
             </div>
             <Spacer size={20} />
             <div className={styles.notice}>
-              <span className={styles.notice_title}>회원 탈퇴 시 유의사항</span>
-              <span className={styles.notice_text}>
-                · 회원 탈퇴 시 의뢰내역, 팔로우한 대리인 등 모든 정보가
-                삭제됩니다. 또한, 계정 삭제 후 30일간 다시 가입할 수 없습니다.
-              </span>
+              <div className={styles.notice_section}>
+                <span className={styles.notice_title}>
+                  회원 탈퇴 시 유의사항
+                </span>
+                <span className={styles.notice_text}>
+                  · 회원 탈퇴 시 의뢰내역, 팔로우한 대리인 등 모든 정보가
+                  삭제됩니다. 또한, 계정 삭제 후 30일간 다시 가입할 수 없습니다.
+                </span>
+              </div>
 
-              <span className={styles.notice_title}>정보 보관 동의</span>
-              <span className={styles.notice_text}>
-                · 부정 이용 방지를 위해 탈퇴 후 30일간 암호화된 식별
-                정보(전화번호)를 보관하여 재가입을 통한 혜택 중복 수령을
-                방지하는 것에 동의합니다.
-                <br />· 전자 상거래 등에서의 소비자 보호 법률 규정에 따라 기록
-                보관은 법률 의한 경우 외 다른 목적으로 이용되지 않습니다.
-              </span>
+              <div className={styles.notice_section}>
+                <span className={styles.notice_title}>정보 보관 동의</span>
+                <span className={styles.notice_text}>
+                  · 부정 이용 방지를 위해 탈퇴 후 30일간 암호화된 식별
+                  정보(전화번호)를 보관하여 재가입을 통한 혜택 중복 수령을
+                  방지하는 것에 동의합니다.
+                  <br />· 전자 상거래 등에서의 소비자 보호 법률 규정에 따라 기록
+                  보관은 법률 의한 경우 외 다른 목적으로 이용되지 않습니다.
+                </span>
+              </div>
             </div>
+
             <Checkbox
               id="checkbox"
               label="위 유의사항을 확인하였으며, 내용에 모두 동의합니다."

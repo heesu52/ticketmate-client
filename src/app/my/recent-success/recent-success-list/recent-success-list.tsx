@@ -1,6 +1,6 @@
 'use client';
 
-import RecentSuccessCard from '@/shared/components/features/recent-success/recent-success-card/recent-success-card';
+import RecentSuccessCard from '@/app/my/recent-success/recent-success-list/recent-success-card/recent-success-card';
 import { useMember } from '@/shared/context/member-context';
 
 import styles from './recent-success-list.module.scss';

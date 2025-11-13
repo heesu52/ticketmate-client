@@ -6,10 +6,7 @@ const queryKey = {
     request,
   ],
 
-  getAcceptingConcertList: (request?: GetAcceptingConcertRequest) => [
-    'getAcceptingConcertList',
-    request,
-  ],
+  getAcceptingConcertList: ['getAcceptingConcertList'],
 };
 
 export default queryKey;

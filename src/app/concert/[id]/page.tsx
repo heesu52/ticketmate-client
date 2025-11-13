@@ -12,9 +12,12 @@ import { AgentInfo } from '@/shared/types';
 
 import styles from './page.module.scss';
 
-const Page = ({ params }: { params: Promise<{ id: string }> }) => {
-  const resolvedParams = use(params);
-  const { id: concertId } = resolvedParams;
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+const Page = ({ params }: PageProps) => {
+  const { id: concertId } = use(params);
 
   const { data: concertItem } = useGetConcertDetail({ concertId });
 

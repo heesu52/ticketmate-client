@@ -1,0 +1,56 @@
+@use '@/styles/index' as *;
+
+.account_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 76px;
+  padding: 16px;
+
+  border-radius: 8px;
+  border: 1px solid var(--grayscale-300, #ededed);
+  background: var(--grayscale-100, #fff);
+
+  .left_container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .right_container {
+    display: flex;
+    align-self: flex-start;
+  }
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .account_info_container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .bank_name {
+      @include text-md;
+      color: var(--grayscale-500);
+    }
+
+    .primary_badge {
+      @include text-lg;
+      color: var(--secondary-500);
+    }
+
+    .account_number {
+      @include title-sm;
+      color: var(--grayscale-700);
+    }
+
+    .account_holder {
+      @include text-md;
+      color: var(--grayscale-500);
+    }
+  }
+}

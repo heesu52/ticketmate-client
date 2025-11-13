@@ -10,9 +10,12 @@ import { TicketOpenType } from '@/shared/types';
 
 import styles from './page.module.scss';
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
-  const { id: concertId } = resolvedParams;
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function Page({ params }: PageProps) {
+  const { id: concertId } = use(params);
 
   // useLocation으로 navigate에서 넘어온 state 받기
   const { searchParams: searchParamsProps } =

@@ -105,6 +105,12 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
     });
   };
 
+  const handleRequestSuccessClick = () => {
+    navigation.navigate({
+      pathname: `/chat/${roomId}/request-success`,
+    });
+  };
+
   const actionItems = [
     {
       icon: <ListIcon width={24} height={24} />,
@@ -119,6 +125,7 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
     {
       icon: <CheckIcon width={24} height={24} />,
       label: '의뢰 성공',
+      onClick: handleRequestSuccessClick,
     },
     {
       icon: <CloseIcon width={24} height={24} />,

@@ -4,6 +4,7 @@ import React, { use } from 'react';
 
 import ChatHeader from '@/app/chat/[id]/_shared/components/chat-header/chat-header';
 import ChatInput from '@/app/chat/[id]/_shared/components/chat-input/chat-input';
+import { useGetChatRoomInfo } from '@/app/chat/[id]/_shared/services/query';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 
@@ -17,14 +18,15 @@ interface ChatDetailPageProps {
 const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
   const { id: roomId } = use(params);
 
+  const { data: chatRoomInfo } = useGetChatRoomInfo({ chatRoomId: roomId });
   return (
     <PageFrame
       appBar={{
-        title: '상대방 닉네임',
+        title: chatRoomInfo?.opponentMemberNickName,
         showBack: true,
         additionalContent: (
           <div className={styles.header_container}>
-            <ChatHeader roomId={roomId} />
+            <ChatHeader chatRoomInfo={chatRoomInfo} />
           </div>
         ),
         right: (

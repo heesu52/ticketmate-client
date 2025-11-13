@@ -28,8 +28,10 @@
     align-items: center;
     align-self: stretch;
     width: 100%;
+    min-width: 124px;
     padding: 12px 8px;
 
+    @include text-md;
     color: var(--grayscale-700, #222);
 
     &:focus {
@@ -39,6 +41,10 @@
     &.active {
       background: var(--primary-600, #e55656);
       color: var(--white);
+    }
+
+    &.danger {
+      color: var(--primary-500, #e55656);
     }
   }
 

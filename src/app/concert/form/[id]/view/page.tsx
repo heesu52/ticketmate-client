@@ -14,9 +14,12 @@ import { useLocation } from '@/shared/hooks/navigation/use-location';
 
 import styles from './page.module.scss';
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
-  const { id: applicationFormId } = resolvedParams;
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function Page({ params }: PageProps) {
+  const { id: applicationFormId } = use(params);
   const { open } = useModalStore();
   const { state, searchParams } = useLocation<{
     agentNickname: string;

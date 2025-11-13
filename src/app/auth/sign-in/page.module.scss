@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   height: 100%;
-  padding: 0 24px;
+  padding: 0 20px;
 
   .title_container {
     display: flex;
@@ -42,18 +42,20 @@
       padding: 12px 24px;
 
       &.naver {
-        background-color: #03c75a;
+        background-color: var(--white);
+        border: 1px solid #03c75a;
       }
 
       &.kakao {
-        background: #fee500;
+        background-color: var(--white);
+        border: 1px solid #fee500;
       }
 
       .social_text {
-        @include Heading-04;
+        @include text-lg;
 
         &.naver {
-          color: var(--white);
+          color: #03c75a;
         }
 
         &.kakao {
@@ -64,14 +66,14 @@
   }
 
   .etc_container {
-    margin-top: 20px;
+    margin-top: 28px;
     text-align: center;
 
     .look_around {
       @include text-md;
-      text-decoration: none;
+      text-decoration: underline;
 
-      color: var(--grayscale-500, #767676);
+      color: var(--grayscale-700, #222);
     }
   }
 }

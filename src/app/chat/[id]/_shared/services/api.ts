@@ -5,6 +5,7 @@ import {
   GetChatMessageListResponse,
   GetChatRoomInfoRequest,
   GetChatRoomInfoResponse,
+  PatchCancelProgressRequest,
   SendChatImageMessageRequest,
 } from './type';
 
@@ -63,6 +64,24 @@ export const sendChatMessageImage = async (
     options: {
       body: formData,
     },
+  });
+
+  return data;
+};
+
+/**
+ * 진행 취소
+ * @param request 진행 취소 요청 파라미터
+ * @returns 진행 취소 응답
+ */
+export const patchCancelProgress = async (
+  request: PatchCancelProgressRequest,
+) => {
+  const { chatRoomId } = request;
+
+  const data = await httpClient({
+    url: `${BASE_URL}/${chatRoomId}/cancel`,
+    method: 'patch',
   });
 
   return data;

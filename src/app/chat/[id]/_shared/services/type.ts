@@ -88,3 +88,8 @@ export interface SendChatImageMessageRequest {
   chatMessagePictureList: File[];
   type: 'PICTURE';
 }
+
+export interface PatchCancelProgressRequest {
+  /** 채팅방 고유 ID */
+  chatRoomId: string;
+}

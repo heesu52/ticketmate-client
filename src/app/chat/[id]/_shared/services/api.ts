@@ -59,7 +59,7 @@ export const sendChatMessageImage = async (
   formData.append('type', request.type);
 
   const data = await httpClient<GetChatMessageListResponse>({
-    url: `${BASE_URL}/${request.chatRoomId}/send/pictures`,
+    url: `chat-message/${request.chatRoomId}/send/pictures`,
     method: 'post',
     options: {
       body: formData,

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 
+import CancelProgressModal from '@/app/chat/[id]/_shared/components/cancel-progress-modal/cancel-progress-modal';
 import { useSendChatMessageImage } from '@/app/chat/[id]/_shared/services/mutation';
 import {
   CheckIcon,
@@ -11,6 +12,7 @@ import {
   PlusIcon,
   SendIcon,
 } from '@/assets/icons';
+import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { useWebSocket } from '@/shared/context/websocket-context';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 
@@ -22,6 +24,7 @@ interface ChatInputProps {
 
 const ChatInput = ({ roomId }: ChatInputProps) => {
   const navigation = useNavigation();
+  const { open } = useModalStore();
   // 추가 버튼 클릭 시 추가 메뉴 표시
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
@@ -111,6 +114,10 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
     });
   };
 
+  const handleCancelProgressClick = async () => {
+    open('cancel-progress-modal', CancelProgressModal, { roomId });
+  };
+
   const actionItems = [
     {
       icon: <ListIcon width={24} height={24} />,
@@ -130,6 +137,7 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
     {
       icon: <CloseIcon width={24} height={24} />,
       label: '진행 취소',
+      onClick: handleCancelProgressClick,
     },
   ];
 

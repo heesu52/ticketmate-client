@@ -1,29 +1,49 @@
+import { usePostWithdrawMutation } from '@/app/my/setting/account/delete/_shared/services/mutation';
+import { WithdrawRequest } from '@/app/my/setting/account/delete/_shared/services/type';
 import ModalTemplate from '@/shared/components/ui/modal/modal-template/modal-template';
-import { ModalTemplateType } from '@/shared/components/ui/modal/modal-template/modal-template.type';
+import { ModalControl } from '@/shared/components/ui/modal/modal.type';
+import { WithdrawalReasonType } from '@/shared/types';
 
-type DeleteAccountModalProps = Omit<ModalTemplateType, 'children'>;
+type DeleteAccountModalProps = {
+  reason: string;
+  reasonInput: string;
+} & ModalControl<unknown>;
 
 const DeleteAccountModal = ({
   onResolve,
   onReject,
+  reason,
+  reasonInput,
 }: DeleteAccountModalProps) => {
+  const { mutate } = usePostWithdrawMutation();
+
   const handleFirstButtonClick = () => {
     onReject?.();
   };
 
   const handleSecondButtonClick = () => {
-    onResolve?.(true);
+    const request: WithdrawRequest = {
+      withdrawalReasonType: reason as WithdrawalReasonType,
+      otherReason: reason === 'OTHER' ? reasonInput : undefined,
+    };
+
+    mutate(request, {
+      onSuccess: () => onResolve?.(true),
+      onError: (error) => onReject?.(error),
+    });
   };
 
   return (
     <ModalTemplate
-      title={'정말 탈퇴하시겠습니까?'}
-      description={'한 번 탈퇴한 계정은 복구할 수 없습니다.'}
-      firstButtonLabel={'아니요'}
-      secondButtonLabel={'탈퇴하기'}
+      title="정말 떠나시겠어요?"
+      description={
+        '탈퇴 후 3일 이내 같은 전화번호로\n로그인하면 탈퇴를 철회할 수 있어요'
+      }
+      firstButtonLabel="아니요"
+      secondButtonLabel="떠날래요"
       onFirstButtonClick={handleFirstButtonClick}
       onSecondButtonClick={handleSecondButtonClick}
-    ></ModalTemplate>
+    />
   );
 };
 

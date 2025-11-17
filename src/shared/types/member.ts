@@ -1,3 +1,11 @@
+type WithdrawalReasonType =
+  | 'NO_CONCERTS'
+  | 'RUDE_USER'
+  | 'UNFAIR_RESTRICTION'
+  | 'WANT_NEW_ACCOUNT'
+  | 'DELETE_PERSONAL_DATA'
+  | 'OTHER';
+
 interface Member {
   memberId: string;
   username: string;
@@ -14,4 +22,4 @@ interface Member {
   followerCount: string;
 }
 
-export type { Member };
+export type { Member, WithdrawalReasonType };

@@ -43,18 +43,18 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
 
     const selectedFiles = Array.from(files);
 
-    // 이미지 파일만 필터링 (최대 10장)
+    // 이미지 파일만 필터링 (최대 3장)
     const imageFiles = selectedFiles
       .filter((file) => file.type.startsWith('image/'))
-      .slice(0, 10);
+      .slice(0, 3);
 
     if (imageFiles.length === 0) {
       alert('이미지 파일만 선택할 수 있습니다.');
       return;
     }
 
-    if (imageFiles.length > 10) {
-      alert('최대 10장까지만 선택할 수 있습니다.');
+    if (imageFiles.length > 3) {
+      alert('최대 3장까지만 선택할 수 있습니다.');
       return;
     }
 
@@ -89,7 +89,7 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
     }
   };
 
-  //'갤러리 버튼 클릭 핸들러
+  // 갤러리 버튼 클릭 핸들러
   const handleGalleryClick = () => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -102,18 +102,21 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
     fileInput.click();
   };
 
+  // 신청 양식 버튼 클릭 핸들러
   const handleApplicationFormClick = () => {
     navigation.navigate({
       pathname: `/concert/form/${roomId}/view?from=chat`,
     });
   };
 
+  // 의뢰 성공 버튼 클릭 핸들러
   const handleRequestSuccessClick = () => {
     navigation.navigate({
       pathname: `/chat/${roomId}/request-success`,
     });
   };
 
+  // 진행 취소 버튼 클릭 핸들러
   const handleCancelProgressClick = async () => {
     open('cancel-progress-modal', CancelProgressModal, { roomId });
   };

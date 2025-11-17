@@ -39,7 +39,7 @@ const ChatCard = ({ chat, ref }: ChatCardProps) => {
       <div className={styles.profile_wrapper}>
         <Image
           className={styles.profile_image}
-          src={chat.concertThumbnailUrl}
+          src={chat.profileUrl}
           alt="profile"
           width={60}
           height={60}

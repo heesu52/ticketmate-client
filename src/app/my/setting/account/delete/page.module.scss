@@ -1,9 +1,49 @@
 @use '@/styles/index' as *;
+
 .container {
+  display: flex;
+  flex-direction: column;
   padding: 20px;
+  height: 100%;
 
   .title {
     @include title-md;
     color: var(--grayscale-700, #222);
+    white-space: pre-line;
+  }
+
+  .notice {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--grayscale-300, #ededed);
+    gap: 16px;
+
+    .notice_section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      align-self: stretch;
+
+      .notice_title {
+        @include text-lg;
+        color: var(--grayscale-700, #222);
+      }
+
+      .notice_text {
+        @include text-md;
+        color: var(--grayscale-500);
+        white-space: pre-line;
+      }
+    }
+  }
+
+  .button {
+    display: flex;
+    margin-top: auto;
+    gap: 16px;
   }
 }

@@ -17,28 +17,24 @@ export interface GetChatMessageListRequest {
 export type ChatMessageType = 'TEXT' | 'PICTURE';
 
 export interface ChatMessage {
-  /** 채팅 메시지 타입 */
-  chatMessageType: ChatMessageType;
-  /** 채팅방 고유 ID */
-  chatRoomId: string;
-  /** 채팅의 읽음 여부 */
-  isRead: boolean;
-  /** 메시지 정보 */
-  message: string | null;
   /** 채팅 메시지 ID */
   messageId: string;
-  /** 채팅을 보낸 사용자가 본인인지 여부 */
-  mine: boolean;
-  /** 채팅을 보낸 사용자의 프로필 사진 */
-  profileUrl: string;
-  /** 채팅을 보낸 시간 */
-  sendDate: string;
-  /** 채팅 메시지를 보낸 사용자 ID */
-  senderId: string;
   /** 채팅 메시지를 보낸 사용자 닉네임 */
   senderNickname: string;
-  /** 채팅 메시지 이미지 목록 */
-  pictureMessageList?: string[];
+  /** 메시지 정보 */
+  message: string;
+  /** 채팅을 보낸 시간 */
+  sendDate: string;
+  /** 채팅의 읽음 여부 */
+  isRead: boolean;
+  /** 채팅을 보낸 사용자의 프로필 사진 */
+  profileUrl: string;
+  /** 메시지를 보낸 사람의 유무 (자신의 메시지이면 true/상대방의 메시지이면 false) */
+  mine: boolean;
+  /** 채팅 메시지 타입 */
+  chatMessageType: ChatMessageType;
+  /** 사진 이미지 리스트 */
+  pictureMessageUrlList?: string[];
 }
 
 export type GetChatMessageListResponse = Pagination<ChatMessage>;

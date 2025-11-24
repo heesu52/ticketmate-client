@@ -80,7 +80,7 @@ export const patchCancelProgress = async (
   const { chatRoomId } = request;
 
   const data = await httpClient({
-    url: `${BASE_URL}/${chatRoomId}/cancel`,
+    url: `${BASE_URL}/${chatRoomId}/cancel-progress`,
     method: 'patch',
   });
 

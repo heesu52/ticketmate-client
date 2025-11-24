@@ -71,14 +71,13 @@
           display: flex;
           flex-wrap: wrap;
           gap: 4px;
-          min-width: 285px;
-          max-width: 285px;
+          min-width: 230px;
+          max-width: 230px;
 
           .chat_image {
             object-fit: cover;
-            cursor: pointer;
-            border-radius: 12px;
-            border: 1px solid var(--lineColor-sub);
+            border-radius: 8px;
+            border: 1px solid var(--grayscale-400, #ccc);
           }
         }
       }
@@ -118,60 +117,6 @@
           color: var(--grayscale-700, #222);
         }
       }
-    }
-  }
-}
-
-// 이미지 모달 스타일
-.image_modal_overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  cursor: pointer;
-
-  .image_modal_content {
-    position: relative;
-    max-width: 90vw;
-    max-height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .image_modal_close {
-      position: absolute;
-      top: -40px;
-      right: 0;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 32px;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: background-color 0.2s ease;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.2);
-      }
-    }
-
-    .image_modal_image {
-      max-width: 100%;
-      max-height: 100%;
-      border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
   }
 }

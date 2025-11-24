@@ -10,6 +10,7 @@ import type {
   ChatMessage as ChatMessageType,
   GetChatMessageListRequest,
 } from '@/app/chat/[id]/_shared/services/type';
+import { useMember } from '@/shared/context/member-context';
 import { useWebSocket } from '@/shared/context/websocket-context';
 
 import styles from './chat-message-list.module.scss';
@@ -22,7 +23,7 @@ const cn = classNames.bind(styles);
 
 /** 같은 사람이 보낸 메시지인지 확인 */
 const isSameSender = (a: ChatMessageType, b: ChatMessageType) =>
-  a?.senderId === b?.senderId && a?.mine === b?.mine;
+  a?.senderNickname === b?.senderNickname && a?.mine === b?.mine;
 
 /** 같은 시간에 보낸 메시지인지 확인 */
 const isSameMinute = (a: ChatMessageType, b: ChatMessageType) =>
@@ -36,17 +37,8 @@ const isSameDate = (a: ChatMessageType, b: ChatMessageType) =>
 
 /** 채팅 메시지 목록 컴포넌트 */
 const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
-  // 세션에 저장한 memberId
-  const [memberId, setMemberId] = useState<string>('');
-
-  useEffect(() => {
-    try {
-      const id = sessionStorage.getItem('memberId') ?? '';
-      setMemberId(id);
-    } catch (error) {
-      console.error('Failed to access sessionStorage:', error);
-    }
-  }, []);
+  const { member } = useMember();
+  const memberId = member?.memberId;
 
   /** 채팅 메시지 조회 요청 Request */
   const [request] = useState<GetChatMessageListRequest>({
@@ -285,52 +277,44 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     }
   };
 
-  // 이미지 크기 계산 함수
+  // 이미지 크기 계산 함수 (최대 넓이 230px, gap 4px 기준, 최대 3장)
   const getImageSize = (index: number, total: number) => {
-    if (total === 1) return { width: 285, height: 285 };
-    if (total === 2) return { width: 140.5, height: 140.5 };
-    if (total === 3) return { width: 92.3, height: 92.3 };
+    const maxWidth = 230;
+    const gap = 4;
 
-    // 4개
-    if (total === 4)
-      return index === 4
-        ? { width: 285, height: 285 }
-        : { width: 92.3, height: 92.3 };
+    // 최대 3장까지만 처리
+    const displayCount = Math.min(total, 3);
 
-    // 5~6개: 4~5번째는 크기 다름
-    if (total === 5 && index >= 4) return { width: 140.5, height: 140.5 };
-    if (total === 6) return { width: 92.3, height: 92.3 };
+    // 1장: 전체 크기
+    if (displayCount === 1) return { width: maxWidth, height: maxWidth };
 
-    // 7개
-    if (total === 7) {
-      if (index >= 4 && index <= 6) return { width: 140.5, height: 140.5 };
-      if (index === 7) return { width: 285, height: 285 };
+    // 2장: 가로로 2개 배치
+    if (displayCount === 2) {
+      const size = (maxWidth - gap) / 2;
+      return { width: size, height: size };
     }
 
-    // 8개
-    if (total === 8 && index >= 7) return { width: 140.5, height: 140.5 };
-
-    // 9개는 전부 92.3
-    if (total === 9) return { width: 92.3, height: 92.3 };
-
-    // 10개
-    if (total === 10) {
-      if (index >= 7 && index <= 9) return { width: 140.5, height: 140.5 };
-      if (index === 10) return { width: 285, height: 285 };
+    // 3장: 가로로 3개 배치
+    if (displayCount === 3) {
+      const size = (maxWidth - gap * 2) / 3;
+      return { width: size, height: size };
     }
 
-    return { width: 92.3, height: 92.3 }; // fallback
+    // fallback: 기본값
+    const size = (maxWidth - gap * 2) / 3;
+    return { width: size, height: size };
   };
 
   // 메시지 내용 렌더링 함수
   const renderMessageContent = (msgItem: ChatMessage) => {
     if (msgItem.chatMessageType === 'PICTURE') {
-      // 이미지 메시지인 경우
-      const imageCount = msgItem.pictureMessageList?.length || 0;
+      // 이미지 메시지인 경우 (최대 3장까지만 표시)
+      const pictureList = msgItem.pictureMessageUrlList?.slice(0, 3) || [];
+      const imageCount = pictureList.length;
 
       return (
         <div className={styles.image_message}>
-          {msgItem.pictureMessageList?.map((picture, index) => {
+          {pictureList.map((picture, index) => {
             const size = getImageSize(index + 1, imageCount);
             return (
               <Image
@@ -436,32 +420,6 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
 
         <div ref={bottomRef} aria-hidden="true" />
       </div>
-
-      {/* TODO: 이미지 모달 컴포넌트 분리 및 교체*/}
-      {selectedImage && (
-        <div
-          className={styles.image_modal_overlay}
-          onClick={handleModalOverlayClick}
-        >
-          <div className={styles.image_modal_content}>
-            <button
-              className={styles.image_modal_close}
-              onClick={handleCloseModal}
-              aria-label="이미지 모달 닫기"
-            >
-              ×
-            </button>
-            <Image
-              src={selectedImage}
-              alt="확대된 이미지"
-              width={800}
-              height={600}
-              className={styles.image_modal_image}
-              style={{ objectFit: 'contain' }}
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 };

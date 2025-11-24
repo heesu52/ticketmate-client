@@ -13,6 +13,7 @@ import {
   SendIcon,
 } from '@/assets/icons';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
+import { useMember } from '@/shared/context/member-context';
 import { useWebSocket } from '@/shared/context/websocket-context';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 
@@ -25,6 +26,8 @@ interface ChatInputProps {
 const ChatInput = ({ roomId }: ChatInputProps) => {
   const navigation = useNavigation();
   const { open } = useModalStore();
+  const { member } = useMember();
+
   // 추가 버튼 클릭 시 추가 메뉴 표시
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
@@ -134,7 +137,7 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
     },
     {
       icon: <CheckIcon width={24} height={24} />,
-      label: '의뢰 성공',
+      label: member?.memberType === 'AGENT' ? '성공 확인' : '성공 안내',
       onClick: handleRequestSuccessClick,
     },
     {

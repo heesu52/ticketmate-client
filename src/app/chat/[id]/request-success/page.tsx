@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
 
 import ChangeBankBottomSheet from '@/app/chat/[id]/request-success/_shared/components/change-bank-bottom-sheet/change-bank-bottom-sheet';
 import SendRequestSuccessModal from '@/app/chat/[id]/request-success/_shared/components/send-request-success-modal/send-request-success-modal';
@@ -13,13 +15,15 @@ import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import Spacer from '@/shared/components/ui/spacer/spacer';
 import Textarea from '@/shared/components/ui/textarea/textarea';
 import { toastify } from '@/shared/components/ui/toast/toastify';
-import { BankAccountInfo, BankCode } from '@/shared/types';
+import { useGetBankAccountList } from '@/shared/services/member/query';
+import { BankAccountInfo } from '@/shared/types';
 
 import styles from './page.module.scss';
 
-// TODO: 의뢰 성공 요청 관련 API 추가 예정
 const RequestSuccessPage = () => {
+  const router = useRouter();
   const { open } = useModalStore();
+
   // 예매 성공 내역 사진 상태 관리
   const [successPhotos, setSuccessPhotos] = useState<File[]>([]);
   const successPhotoInputRef = useRef<HTMLInputElement>(null);
@@ -27,18 +31,29 @@ const RequestSuccessPage = () => {
   // 상세 설명 상태 관리
   const [description, setDescription] = useState('');
 
-  // 입금 계좌 정보 (나중에 API로 가져올 예정)
-  const [registeredAccount] = useState<BankAccountInfo | null>({
-    agentBankAccountId: '1234567890',
-    agentAccountNumber: '1234567890',
-    bankCode: BankCode.KOOKMIN,
-    primaryAccount: true,
-    accountHolder: '홍길동',
-  });
+  // 계좌 리스트 조회
+  const { data: bankAccountList = [] } = useGetBankAccountList();
+
+  // 입금 계좌 정보 (대표 계좌로 초기화)
+  const [registeredAccount, setRegisteredAccount] =
+    useState<BankAccountInfo | null>(null);
 
   // 계좌 변경 바텀 시트 상태 관리
   const [isChangeBankBottomSheetOpen, setIsChangeBankBottomSheetOpen] =
     useState(false);
+
+  // 계좌 리스트에서 대표 계좌 찾기
+  useEffect(() => {
+    if (bankAccountList.length > 0) {
+      // primaryAccount가 true인 계좌를 찾거나, 없으면 첫 번째 계좌 사용
+      const primaryAccount =
+        bankAccountList.find((account) => account.primaryAccount) ||
+        bankAccountList[0];
+      setRegisteredAccount(primaryAccount);
+    } else {
+      setRegisteredAccount(null);
+    }
+  }, [bankAccountList]);
 
   // 파일을 ObjectURL로 변환하는 함수
   const toObjectURL = useCallback((file: File) => {
@@ -106,15 +121,20 @@ const RequestSuccessPage = () => {
     setDescription(e.target.value);
   };
 
-  // 계좌 변경하기 핸들러 (나중에 구현)
+  // 계좌 변경하기 핸들러
   const handleChangeAccount = () => {
     setIsChangeBankBottomSheetOpen(true);
   };
 
-  // 계좌 등록하기 핸들러 (나중에 구현)
+  // 계좌 등록하기 핸들러
   const handleRegisterAccount = () => {
-    // TODO: 계좌 등록 페이지로 이동
-    console.log('계좌 등록하기');
+    router.push('/bank-account/new');
+  };
+
+  // 계좌 선택 핸들러
+  const handleSelectBankAccount = (bankAccountInfo: BankAccountInfo) => {
+    setRegisteredAccount(bankAccountInfo);
+    setIsChangeBankBottomSheetOpen(false);
   };
 
   // 의뢰 성공 버튼 클릭 핸들러 (나중에 구현)
@@ -247,15 +267,8 @@ const RequestSuccessPage = () => {
       <ChangeBankBottomSheet
         onClose={() => setIsChangeBankBottomSheetOpen(false)}
         isOpen={isChangeBankBottomSheetOpen}
-        // TODO: 계좌 정보 리스트 조회 API 호출 후 바인딩
-        bankAccountInfoList={
-          registeredAccount
-            ? Array.from({ length: 3 }, () => registeredAccount)
-            : []
-        }
-        onSelectBankAccount={(bankAccountInfo) => {
-          console.log(bankAccountInfo);
-        }}
+        bankAccountInfoList={bankAccountList}
+        onSelectBankAccount={handleSelectBankAccount}
       />
     </PageFrame>
   );

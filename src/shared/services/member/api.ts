@@ -1,5 +1,6 @@
 import httpClient from '@/lib/http-client/http-client';
 import {
+  GetBankAccountListResponse,
   GetMemberResponse,
   PatchMemberRequest,
 } from '@/shared/services/member/type';
@@ -43,6 +44,18 @@ export const patchMember = async (request: PatchMemberRequest) => {
     options: {
       body: formData,
     },
+  });
+
+  return data;
+};
+
+/**
+ * @description 회원 계좌 목록 조회
+ */
+export const getBankAccountList = async () => {
+  const data = await httpClient<GetBankAccountListResponse>({
+    method: 'get',
+    url: `${BASE_URL}/bank-account`,
   });
 
   return data;

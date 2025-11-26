@@ -2,10 +2,11 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 import ChangeBankBottomSheet from '@/app/chat/[id]/request-success/_shared/components/change-bank-bottom-sheet/change-bank-bottom-sheet';
 import SendRequestSuccessModal from '@/app/chat/[id]/request-success/_shared/components/send-request-success-modal/send-request-success-modal';
+import { usePostFulfillmentForm } from '@/app/chat/[id]/request-success/_shared/services/mutation';
 import { ArrowRightIcon } from '@/assets/icons';
 import BankAccountInfoCard from '@/shared/components/features/bank/bank-account-info-card/bank-account-info-card';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -23,6 +24,8 @@ import styles from './page.module.scss';
 const RequestSuccessPage = () => {
   const router = useRouter();
   const { open } = useModalStore();
+
+  const { id: chatRoomId } = useParams();
 
   // 예매 성공 내역 사진 상태 관리
   const [successPhotos, setSuccessPhotos] = useState<File[]>([]);
@@ -137,9 +140,38 @@ const RequestSuccessPage = () => {
     setIsChangeBankBottomSheetOpen(false);
   };
 
-  // 의뢰 성공 버튼 클릭 핸들러 (나중에 구현)
+  const requestSuccess = usePostFulfillmentForm();
+
+  // 의뢰 성공 버튼 클릭 핸들러
   const handleRequestSuccess = () => {
-    open('send-request-success-modal', SendRequestSuccessModal);
+    open('send-request-success-modal', SendRequestSuccessModal)
+      .then(() => {
+        requestSuccess
+          .mutateAsync({
+            chatRoomId: chatRoomId as string,
+            fulfillmentFormRequest: {
+              fulfillmentFormImgList: successPhotos,
+              particularMemo: description,
+              agentBankAccountId: registeredAccount?.agentBankAccountId ?? '',
+            },
+          })
+          .then(() => {
+            toastify({
+              variant: 'success',
+              description: '의뢰 성공 요청이 정상적으로 완료되었습니다.',
+            });
+            router.push(`/chat/${chatRoomId}`);
+          })
+          .catch(() => {
+            toastify({
+              variant: 'error',
+              description: '의뢰 성공 안내에 실패했습니다.',
+            });
+          });
+      })
+      .catch(() => {
+        return false;
+      });
   };
 
   // 의뢰 성공 버튼 활성화 여부 (계좌가 등록되어 있어야 활성화)

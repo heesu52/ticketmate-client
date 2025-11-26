@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 
+import FulfillmentMessageCard from '@/app/chat/[id]/_shared/components/fulfillment-message-card/fulfillment-message-card';
 import { useGetChatMessageList } from '@/app/chat/[id]/_shared/services/query';
 import type {
   ChatMessage,
@@ -12,6 +13,7 @@ import type {
 } from '@/app/chat/[id]/_shared/services/type';
 import { useMember } from '@/shared/context/member-context';
 import { useWebSocket } from '@/shared/context/websocket-context';
+import { FulfillmentFormType } from '@/shared/types/chat';
 
 import styles from './chat-message-list.module.scss';
 
@@ -305,8 +307,28 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     return { width: size, height: size };
   };
 
+  // fulfillment 메시지 타입인지 확인
+  const isFulfillmentMessage = (type: FulfillmentFormType) => {
+    return [
+      'FULFILLMENT_FORM',
+      'ACCEPTED_FULFILLMENT_FORM',
+      'REJECTED_FULFILLMENT_FORM',
+      'UPDATE_FULFILLMENT_FORM',
+    ].includes(type);
+  };
+
   // 메시지 내용 렌더링 함수
   const renderMessageContent = (msgItem: ChatMessage) => {
+    // fulfillment 메시지인 경우
+    if (isFulfillmentMessage(msgItem.chatMessageType as FulfillmentFormType)) {
+      return (
+        <FulfillmentMessageCard
+          type={msgItem.chatMessageType as FulfillmentFormType}
+          referenceId={msgItem.referenceId}
+        />
+      );
+    }
+
     if (msgItem.chatMessageType === 'PICTURE') {
       // 이미지 메시지인 경우 (최대 3장까지만 표시)
       const pictureList = msgItem.pictureMessageUrlList?.slice(0, 3) || [];
@@ -369,6 +391,23 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
           /** 그룹 간격 */
           const groupSpacing = isFirstOfGroup ? { marginTop: '24px' } : {};
 
+          // fulfillment 메시지는 중앙에 독립적으로 표시
+          if (
+            isFulfillmentMessage(msgItem.chatMessageType as FulfillmentFormType)
+          ) {
+            return (
+              <React.Fragment key={`${msgItem.messageId}-${idx}`}>
+                {showDateDivider && (
+                  <div className={styles.date_divider}>{formattedDate}</div>
+                )}
+                <div className={styles.fulfillment_container}>
+                  {renderMessageContent(msgItem)}
+                </div>
+              </React.Fragment>
+            );
+          }
+
+          // 일반 메시지 (텍스트, 이미지)
           return (
             <React.Fragment key={`${msgItem.messageId}-${idx}`}>
               {showDateDivider && (
@@ -398,11 +437,11 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
 
                 <div className={styles.message_container}>
                   <div
-                    className={cn(
+                    className={
                       msgItem.chatMessageType === 'PICTURE'
                         ? styles.image_bubble
-                        : styles.message_bubble,
-                    )}
+                        : styles.message_bubble
+                    }
                   >
                     {renderMessageContent(msgItem)}
                   </div>

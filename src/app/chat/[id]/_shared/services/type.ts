@@ -4,6 +4,7 @@ import {
   TicketReservationSite,
 } from '@/shared/types';
 import { Pagination } from '@/shared/types/api';
+import { FulfillmentFormType } from '@/shared/types/chat';
 
 export interface GetChatMessageListRequest {
   /** 채팅방 고유 ID */
@@ -22,7 +23,7 @@ export interface ChatMessage {
   /** 채팅 메시지를 보낸 사용자 닉네임 */
   senderNickname: string;
   /** 메시지 정보 */
-  message: string;
+  message: string | null;
   /** 채팅을 보낸 시간 */
   sendDate: string;
   /** 채팅의 읽음 여부 */
@@ -32,7 +33,9 @@ export interface ChatMessage {
   /** 메시지를 보낸 사람의 유무 (자신의 메시지이면 true/상대방의 메시지이면 false) */
   mine: boolean;
   /** 채팅 메시지 타입 */
-  chatMessageType: ChatMessageType;
+  chatMessageType: ChatMessageType | FulfillmentFormType;
+  /** 참조 ID */
+  referenceId: string | null;
   /** 사진 이미지 리스트 */
   pictureMessageUrlList?: string[];
 }

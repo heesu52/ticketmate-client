@@ -19,6 +19,15 @@
     }
   }
 
+  // fulfillment 메시지 중앙 컨테이너
+  .fulfillment_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 32px;
+  }
+
   .list_container {
     display: flex;
     margin-top: 12px;
@@ -80,6 +89,14 @@
             border: 1px solid var(--grayscale-400, #ccc);
           }
         }
+      }
+
+      // fulfillment 메시지일 때 (이미지처럼 표시)
+      .fulfillment_bubble {
+        background: none;
+        padding: 0;
+        min-width: 280px;
+        max-width: 280px;
       }
 
       .message_time {

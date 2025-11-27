@@ -9,7 +9,7 @@ import {
 import {
   PostFulfillmentFormRequest,
   PatchFulfillmentFormUpdateRequest,
-  PatchFulfillmentFormRejectResponse,
+  PatchFulfillmentFormRejectRequest,
   PatchFulfillmentFormAcceptRequest,
 } from './type';
 
@@ -41,7 +41,7 @@ export const usePatchFulfillmentFormUpdate = () => {
  */
 export const usePatchFulfillmentFormReject = () => {
   return useMutation({
-    mutationFn: (request: PatchFulfillmentFormRejectResponse) =>
+    mutationFn: (request: PatchFulfillmentFormRejectRequest) =>
       patchFulfillmentFormReject(request),
   });
 };

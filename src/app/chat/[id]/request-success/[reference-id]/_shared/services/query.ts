@@ -13,5 +13,6 @@ export const useGetFulfillmentForm = (request: GetFulfillmentFormRequest) => {
   return useQuery({
     queryKey: queryKey.fulfillmentForm(request),
     queryFn: () => getFulfillmentForm(request),
+    enabled: !!request.fulfillmentFormId,
   });
 };

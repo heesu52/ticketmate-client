@@ -32,10 +32,10 @@ export interface PatchFulfillmentFormUpdateRequest {
 }
 
 /** 성공양식 거절 */
-export interface PatchFulfillmentFormRejectResponse {
+export interface PatchFulfillmentFormRejectRequest {
   fulfillmentFormId: string;
   /** 거절 사유 */
-  rejectedMemo: string;
+  rejectedMemo?: string;
 }
 
 export interface PatchFulfillmentFormAcceptRequest {

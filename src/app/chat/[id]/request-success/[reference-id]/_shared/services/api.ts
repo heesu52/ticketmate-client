@@ -4,7 +4,7 @@ import {
   GetFulfillmentFormRequest,
   GetFulfillmentFormResponse,
   PatchFulfillmentFormAcceptRequest,
-  PatchFulfillmentFormRejectResponse,
+  PatchFulfillmentFormRejectRequest,
   PatchFulfillmentFormUpdateRequest,
   PostFulfillmentFormRequest,
 } from './type';
@@ -72,7 +72,7 @@ export const patchFulfillmentFormUpdate = async (
 
   const data = await httpClient({
     method: 'patch',
-    url: `${BASE_URL}/${fulfillmentFormId}`,
+    url: `${BASE_URL}/${fulfillmentFormId}/update`,
     options: {
       body: formData,
     },
@@ -87,7 +87,7 @@ export const patchFulfillmentFormUpdate = async (
  * @returns 성공양식 거절 응답
  */
 export const patchFulfillmentFormReject = async (
-  request: PatchFulfillmentFormRejectResponse,
+  request: PatchFulfillmentFormRejectRequest,
 ) => {
   const { fulfillmentFormId, rejectedMemo } = request;
 

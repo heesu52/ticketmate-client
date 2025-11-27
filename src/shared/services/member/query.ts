@@ -15,9 +15,10 @@ export const useGetMember = (enabled: boolean = true) => {
  * @description 회원 계좌 목록 조회
  * @returns 회원 계좌 목록 조회 query
  */
-export const useGetBankAccountList = () => {
+export const useGetBankAccountList = (enabled: boolean = true) => {
   return useQuery({
     queryKey: queryKey.getBankAccountList(),
     queryFn: getBankAccountList,
+    enabled,
   });
 };

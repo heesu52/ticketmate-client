@@ -5,9 +5,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
 import ChangeBankBottomSheet from '@/app/chat/[id]/request-success/[reference-id]/_shared/components/change-bank-bottom-sheet/change-bank-bottom-sheet';
-import SendRequestSuccessModal from '@/app/chat/[id]/request-success/[reference-id]/_shared/components/send-request-success-modal/send-request-success-modal';
+import SendRequestSuccessModal from '@/app/chat/[id]/request-success/[reference-id]/_shared/components/modal/agent/send-request-success-modal/send-request-success-modal';
 import { usePostFulfillmentForm } from '@/app/chat/[id]/request-success/[reference-id]/_shared/services/mutation';
-import { GetFulfillmentFormResponse } from '@/app/chat/[id]/request-success/[reference-id]/_shared/services/type';
 import { ArrowRightIcon } from '@/assets/icons';
 import BankAccountInfoCard from '@/shared/components/features/bank/bank-account-info-card/bank-account-info-card';
 import Button from '@/shared/components/ui/button/button';
@@ -19,64 +18,29 @@ import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useGetBankAccountList } from '@/shared/services/member/query';
 import { BankAccountInfo } from '@/shared/types';
 
-import styles from './request-success-form.module.scss';
+import styles from './request-success-create.module.scss';
 
-interface RequestSuccessFormProps {
-  data?: GetFulfillmentFormResponse | null;
-}
-
-type PageMode = 'create' | 'view' | 'update';
-
-const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
+const RequestSuccessCreate = () => {
   const router = useRouter();
   const { open } = useModalStore();
 
-  const { id: chatRoomId, 'reference-id': referenceId } = useParams();
-
-  const [pageMode, setPageMode] = useState<PageMode>('create');
-
-  useEffect(() => {
-    if (referenceId === 'new') setPageMode('create');
-    if (referenceId) setPageMode('view');
-  }, [referenceId]);
-
-  // 예매 성공 내역 사진 상태 관리
-  const [successPhotos, setSuccessPhotos] = useState<File[]>([]);
-  const successPhotoInputRef = useRef<HTMLInputElement>(null);
-
-  // 상세 설명 상태 관리
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
-
-  // 입금 계좌 정보 (대표 계좌로 초기화)
-  const [registeredAccount, setRegisteredAccount] =
-    useState<BankAccountInfo | null>(null);
+  const { id: chatRoomId } = useParams();
 
   // 계좌 변경 바텀 시트 상태 관리
   const [isChangeBankBottomSheetOpen, setIsChangeBankBottomSheetOpen] =
     useState(false);
 
+  // 예매 성공 내역 사진 상태 관리
+  const [successPhotoList, setSuccessPhotoList] = useState<File[]>([]);
+  const successPhotoInputRef = useRef<HTMLInputElement>(null);
+  // 상세 설명 상태 관리
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  // 입금 계좌 정보 (대표 계좌로 초기화)
+  const [registeredAccount, setRegisteredAccount] =
+    useState<BankAccountInfo | null>(null);
+
   // 계좌 리스트 조회
   const { data: bankAccountList = [] } = useGetBankAccountList();
-
-  // 계좌 리스트에서 대표 계좌 찾기
-  useEffect(() => {
-    if (bankAccountList.length > 0) {
-      // primaryAccount가 true인 계좌를 찾거나, 없으면 첫 번째 계좌 사용
-      const primaryAccount =
-        bankAccountList.find((account) => account.primaryAccount) ||
-        bankAccountList[0];
-      setRegisteredAccount(primaryAccount);
-    } else {
-      setRegisteredAccount(null);
-    }
-  }, [bankAccountList]);
-
-  // data에서 상세 설명 초기값 설정
-  useEffect(() => {
-    if (data?.particularMemo && descriptionRef.current) {
-      descriptionRef.current.value = data.particularMemo;
-    }
-  }, [data]);
 
   // 파일을 ObjectURL로 변환하는 함수
   const toObjectURL = useCallback((file: File) => {
@@ -84,38 +48,36 @@ const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
   }, []);
 
   // 사진 업로드 핸들러
-  const handleUploadPhoto = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    setFiles: React.Dispatch<React.SetStateAction<File[]>>,
-    maxCount: number,
-  ) => {
+  const handleUploadPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const fileList = e.currentTarget.files;
 
     if (!fileList || fileList.length === 0) return;
 
-    const incoming = Array.from(fileList);
+    const fileListArray = Array.from(fileList);
 
     // 초과 발생 여부 플래그
     let overflow = false;
+    const MAX_COUNT = 6;
 
-    setFiles((prev) => {
-      // 중복 제거(이름+사이즈+mtime 기준)
+    setSuccessPhotoList((prev) => {
+      // 중복 제거(이름+사이즈+마지막 수정 시간 기준)
       const seen = new Set(
         prev.map((f) => `${f.name}_${f.size}_${f.lastModified}`),
       );
-      const dedupIncoming: File[] = [];
-      for (const f of incoming) {
+      const deduplicatedFileList: File[] = [];
+      for (const f of fileListArray) {
         const key = `${f.name}_${f.size}_${f.lastModified}`;
         if (!seen.has(key)) {
-          dedupIncoming.push(f);
+          deduplicatedFileList.push(f);
           seen.add(key);
         }
       }
 
-      const available = Math.max(0, maxCount - prev.length);
-      const willAdd = dedupIncoming.slice(0, available);
+      const available = Math.max(0, MAX_COUNT - prev.length);
+      const willAdd = deduplicatedFileList.slice(0, available);
       // 초과 판단 (중복 제거 후에도 남은 파일이 available보다 많았는지)
-      overflow = dedupIncoming.length > available;
+      overflow = deduplicatedFileList.length > available;
 
       return [...prev, ...willAdd];
     });
@@ -124,17 +86,14 @@ const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
     if (overflow) {
       toastify({
         variant: 'error',
-        description: `최대 ${maxCount}장까지만 선택할 수 있습니다.`,
+        description: `최대 ${MAX_COUNT}장까지만 선택할 수 있습니다.`,
       });
     }
   };
 
   // 사진 제거 핸들러
-  const handleRemovePhoto = (
-    index: number,
-    setFiles: React.Dispatch<React.SetStateAction<File[]>>,
-  ) => {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
+  const handleRemovePhoto = (index: number) => {
+    setSuccessPhotoList((prev) => prev.filter((_, i) => i !== index));
   };
 
   // 계좌 변경하기 핸들러
@@ -156,83 +115,52 @@ const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
   const requestSuccess = usePostFulfillmentForm();
 
   const handleClickRequest = () => {
-    switch (pageMode) {
-      case 'create':
-        open('send-request-success-modal', SendRequestSuccessModal)
+    open('send-request-success-modal', SendRequestSuccessModal)
+      .then(() => {
+        requestSuccess
+          .mutateAsync({
+            chatRoomId: chatRoomId as string,
+            fulfillmentFormRequest: {
+              fulfillmentFormImgList: successPhotoList,
+              particularMemo: descriptionRef.current?.value ?? '',
+              agentBankAccountId: registeredAccount?.agentBankAccountId ?? '',
+            },
+          })
           .then(() => {
-            requestSuccess
-              .mutateAsync({
-                chatRoomId: chatRoomId as string,
-                fulfillmentFormRequest: {
-                  fulfillmentFormImgList: successPhotos,
-                  particularMemo: descriptionRef.current?.value ?? '',
-                  agentBankAccountId:
-                    registeredAccount?.agentBankAccountId ?? '',
-                },
-              })
-              .then(() => {
-                toastify({
-                  variant: 'success',
-                  description: '의뢰 성공 요청이 정상적으로 완료되었습니다.',
-                });
-                router.push(`/chat/${chatRoomId}`);
-              })
-              .catch(() => {
-                toastify({
-                  variant: 'error',
-                  description: '의뢰 성공 안내에 실패했습니다.',
-                });
-              });
+            toastify({
+              variant: 'success',
+              description: '의뢰 성공 요청이 정상적으로 완료되었습니다.',
+            });
+            router.push(`/chat/${chatRoomId}`);
           })
           .catch(() => {
-            return false;
+            toastify({
+              variant: 'error',
+              description: '의뢰 성공 안내에 실패했습니다.',
+            });
           });
-        break;
-      case 'view':
-        break;
-      case 'update':
-        open('send-request-success-modal', SendRequestSuccessModal)
-          .then(() => {
-            requestSuccess
-              .mutateAsync({
-                chatRoomId: chatRoomId as string,
-                fulfillmentFormRequest: {
-                  fulfillmentFormImgList: successPhotos,
-                  particularMemo: descriptionRef.current?.value ?? '',
-                  agentBankAccountId:
-                    registeredAccount?.agentBankAccountId ?? '',
-                },
-              })
-              .then(() => {
-                toastify({
-                  variant: 'success',
-                  description: '의뢰 성공 요청이 정상적으로 완료되었습니다.',
-                });
-                router.push(`/chat/${chatRoomId}`);
-              })
-              .catch(() => {
-                toastify({
-                  variant: 'error',
-                  description: '의뢰 성공 안내에 실패했습니다.',
-                });
-              });
-          })
-          .catch(() => {
-            return false;
-          });
-        break;
-    }
-  };
-
-  // descriptionRef에 값을 설정하는 함수
-  const setDescriptionValue = (value: string) => {
-    if (descriptionRef.current) {
-      descriptionRef.current.value = value;
-    }
+      })
+      .catch(() => {
+        return false;
+      });
   };
 
   // 의뢰 성공 버튼 활성화 여부 (계좌가 등록되어 있어야 활성화)
   const isSubmitDisabled = !registeredAccount;
+
+  // 계좌 리스트에서 대표 계좌 찾기
+  useEffect(() => {
+    if (bankAccountList.length > 0) {
+      // primaryAccount가 true인 계좌를 찾거나, 없으면 첫 번째 계좌 사용
+      const primaryAccount =
+        bankAccountList.find((account) => account.primaryAccount) ||
+        bankAccountList[0];
+      setRegisteredAccount(primaryAccount);
+    } else {
+      setRegisteredAccount(null);
+    }
+  }, [bankAccountList]);
+
   return (
     <>
       <div className={styles.container}>
@@ -242,14 +170,14 @@ const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
           </div>
 
           {/* 업로드된 이미지 표시 */}
-          {successPhotos.length > 0 && (
+          {successPhotoList.length > 0 && (
             <div className={styles.uploaded_images_container}>
-              {successPhotos.map((file, index) => (
+              {successPhotoList.map((file, index) => (
                 <UploadedImage
                   key={index}
                   imageURL={toObjectURL(file)}
                   alt={`예매 성공 내역 사진 ${index + 1}`}
-                  onRemove={() => handleRemovePhoto(index, setSuccessPhotos)}
+                  onRemove={() => handleRemovePhoto(index)}
                 />
               ))}
             </div>
@@ -261,7 +189,7 @@ const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
             type="file"
             multiple
             accept="image/*"
-            onChange={(e) => handleUploadPhoto(e, setSuccessPhotos, 6)}
+            onChange={(e) => handleUploadPhoto(e)}
             style={{ display: 'none' }}
           />
 
@@ -270,9 +198,9 @@ const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
             variant="fill"
             color="gray"
             onClick={() => successPhotoInputRef.current?.click()}
-            disabled={successPhotos.length >= 6}
+            disabled={successPhotoList.length >= 6}
           >
-            사진 첨부하기({successPhotos.length}/6)
+            사진 첨부하기({successPhotoList.length}/6)
           </Button>
         </div>
 
@@ -286,7 +214,6 @@ const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
           <Textarea
             id="description"
             placeholder="상세 설명을 입력해주세요"
-            // value={descriptionRef.current?.value ?? ''}
             ref={descriptionRef}
             style={{ height: '200px' }}
           />
@@ -309,15 +236,7 @@ const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
 
           {registeredAccount ? (
             // 등록된 계좌가 있는 경우
-            <BankAccountInfoCard
-              bankAccountInfo={registeredAccount}
-              dropdownItems={[
-                {
-                  label: '계좌 변경하기',
-                  onClick: handleChangeAccount,
-                },
-              ]}
-            />
+            <BankAccountInfoCard bankAccountInfo={registeredAccount} />
           ) : (
             // 등록된 계좌가 없는 경우
             <button
@@ -342,7 +261,7 @@ const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
           disabled={isSubmitDisabled}
           style={{ marginTop: 'auto' }}
         >
-          {pageMode === 'create' ? '성공 안내하기' : '수정하기'}
+          성공 안내하기
         </Button>
       </div>
 
@@ -356,4 +275,4 @@ const RequestSuccessForm = ({ data }: RequestSuccessFormProps) => {
   );
 };
 
-export default RequestSuccessForm;
+export default RequestSuccessCreate;

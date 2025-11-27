@@ -115,7 +115,7 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
   // 의뢰 성공 버튼 클릭 핸들러
   const handleRequestSuccessClick = () => {
     navigation.navigate({
-      pathname: `/chat/${roomId}/request-success`,
+      pathname: `/chat/${roomId}/request-success/new`,
     });
   };
 

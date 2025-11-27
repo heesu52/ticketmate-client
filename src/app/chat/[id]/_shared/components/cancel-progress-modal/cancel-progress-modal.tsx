@@ -1,34 +1,18 @@
-import { usePatchCancelProgress } from '@/app/chat/[id]/_shared/services/mutation';
 import ModalTemplate from '@/shared/components/ui/modal/modal-template/modal-template';
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
 
-type CancelProgressModalProps = {
-  roomId: string;
-} & ModalControl<unknown>;
+type CancelProgressModalProps = ModalControl<unknown>;
 
 const CancelProgressModal = ({
   onResolve,
   onReject,
-  roomId,
 }: CancelProgressModalProps) => {
-  const cancelProgress = usePatchCancelProgress();
-
   const handleFirstButtonClick = () => {
     onReject?.();
   };
 
   const handleSecondButtonClick = () => {
-    cancelProgress.mutateAsync(
-      { chatRoomId: roomId },
-      {
-        onSuccess: () => {
-          onResolve?.(true);
-        },
-        onError: () => {
-          onReject?.();
-        },
-      },
-    );
+    onResolve?.(true);
   };
 
   return (

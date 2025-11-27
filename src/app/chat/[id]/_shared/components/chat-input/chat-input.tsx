@@ -3,7 +3,10 @@
 import React, { useState } from 'react';
 
 import CancelProgressModal from '@/app/chat/[id]/_shared/components/cancel-progress-modal/cancel-progress-modal';
-import { useSendChatMessageImage } from '@/app/chat/[id]/_shared/services/mutation';
+import {
+  usePatchCancelProgress,
+  useSendChatMessageImage,
+} from '@/app/chat/[id]/_shared/services/mutation';
 import {
   CheckIcon,
   CloseIcon,
@@ -13,6 +16,7 @@ import {
   SendIcon,
 } from '@/assets/icons';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
+import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
 import { useWebSocket } from '@/shared/context/websocket-context';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
@@ -119,9 +123,29 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
     });
   };
 
+  const cancelProgress = usePatchCancelProgress();
   // 진행 취소 버튼 클릭 핸들러
   const handleCancelProgressClick = async () => {
-    open('cancel-progress-modal', CancelProgressModal, { roomId });
+    open('cancel-progress-modal', CancelProgressModal, { roomId })
+      .then(() => {
+        cancelProgress
+          .mutateAsync({ chatRoomId: roomId })
+          .then(() => {
+            toastify({
+              variant: 'success',
+              description: '진행이 정상적으로 취소되었습니다.',
+            });
+          })
+          .catch(() => {
+            toastify({
+              variant: 'error',
+              description: '진행 취소에 실패했습니다.',
+            });
+          });
+      })
+      .catch(() => {
+        return false;
+      });
   };
 
   const actionItems = [

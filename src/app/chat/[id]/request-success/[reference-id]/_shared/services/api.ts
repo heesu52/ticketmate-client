@@ -1,3 +1,5 @@
+import httpClient from '@/lib/http-client/http-client';
+
 import {
   GetFulfillmentFormRequest,
   GetFulfillmentFormResponse,
@@ -5,8 +7,7 @@ import {
   PatchFulfillmentFormRejectResponse,
   PatchFulfillmentFormUpdateRequest,
   PostFulfillmentFormRequest,
-} from '@/app/chat/[id]/request-success/_shared/services/type';
-import httpClient from '@/lib/http-client/http-client';
+} from './type';
 
 const BASE_URL = 'fulfillment-form';
 

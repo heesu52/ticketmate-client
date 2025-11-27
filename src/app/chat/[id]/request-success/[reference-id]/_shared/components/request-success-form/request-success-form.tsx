@@ -4,10 +4,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useParams, useRouter } from 'next/navigation';
 
-import ChangeBankBottomSheet from '@/app/chat/[id]/request-success/_shared/components/change-bank-bottom-sheet/change-bank-bottom-sheet';
-import SendRequestSuccessModal from '@/app/chat/[id]/request-success/_shared/components/send-request-success-modal/send-request-success-modal';
-import { usePostFulfillmentForm } from '@/app/chat/[id]/request-success/_shared/services/mutation';
-import { GetFulfillmentFormResponse } from '@/app/chat/[id]/request-success/_shared/services/type';
+import ChangeBankBottomSheet from '@/app/chat/[id]/request-success/[reference-id]/_shared/components/change-bank-bottom-sheet/change-bank-bottom-sheet';
+import SendRequestSuccessModal from '@/app/chat/[id]/request-success/[reference-id]/_shared/components/send-request-success-modal/send-request-success-modal';
+import { usePostFulfillmentForm } from '@/app/chat/[id]/request-success/[reference-id]/_shared/services/mutation';
+import { GetFulfillmentFormResponse } from '@/app/chat/[id]/request-success/[reference-id]/_shared/services/type';
 import { ArrowRightIcon } from '@/assets/icons';
 import BankAccountInfoCard from '@/shared/components/features/bank/bank-account-info-card/bank-account-info-card';
 import Button from '@/shared/components/ui/button/button';

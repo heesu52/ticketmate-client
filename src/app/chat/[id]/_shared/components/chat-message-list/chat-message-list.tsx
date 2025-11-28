@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 
-import FulfillmentMessageCard from '@/app/chat/[id]/_shared/components/fulfillment-message-card/fulfillment-message-card';
+import FulfillmentMessageCard from '@/app/chat/[id]/_shared/components/chat-message-list/fulfillment-message-card/fulfillment-message-card';
 import { useGetChatMessageList } from '@/app/chat/[id]/_shared/services/query';
 import type {
   ChatMessage,

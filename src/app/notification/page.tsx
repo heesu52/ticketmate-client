@@ -2,50 +2,91 @@
 
 import { useState } from 'react';
 
-import { ArrowRightIcon } from '@/assets/icons';
+import NotificationContent from '@/app/notification/notification-content/notification-content';
+import httpClient from '@/lib/http-client/http-client';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 
 import styles from './page.module.scss';
 
 export default function Notification() {
-  const [readAlaram, setReadAlaram] = useState<boolean[]>(Array(5).fill(false));
+  const [notifications, setNotifications] = useState<
+    {
+      title: string;
+      message: string;
+      time: string;
+      isRead: boolean;
+    }[]
+  >([]);
 
   const handleClick = (index: number) => {
-    setReadAlaram((prev) => prev.map((item, i) => (i === index ? true : item)));
+    setNotifications((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, isRead: true } : item)),
+    );
+  };
+
+  const sendTestNotification = async () => {
+    try {
+      await httpClient({
+        method: 'post',
+        url: 'mock/notification',
+        options: {
+          json: {
+            title: '테스트 제목입니다.',
+            body: '테스트 본문입니다.',
+          },
+        },
+      });
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+
+      setNotifications((prev) => [
+        {
+          title: '테스트 제목입니다.',
+          message: '테스트 본문입니다.',
+          time: timeStr,
+          isRead: false,
+        },
+        ...prev,
+      ]);
+    } catch (error) {
+      console.error('테스트 알림 발송 실패:', error);
+    }
   };
 
   return (
     <PageFrame appBar={{ title: '알림', showBack: true }} bottomNav={false}>
       <div className={styles.container}>
+        <button
+          type="button"
+          onClick={sendTestNotification}
+          style={{
+            marginBottom: 16,
+            padding: '8px 12px',
+            backgroundColor: '#0070f3',
+            color: 'white',
+            borderRadius: 4,
+            border: 'none',
+            cursor: 'pointer',
+          }}
+        >
+          테스트 알림 발송
+        </button>
+
         <div className={styles.list_container}>
-          {readAlaram.map((isRead, index) => (
-            <div
+          {notifications.map((item, index) => (
+            <NotificationContent
               key={index}
-              className={`${styles.notification_container} ${
-                isRead ? styles.read : ''
-              }`}
-              onClick={() => handleClick(index)}
-            >
-              <div className={styles.content}>
-                <div className={styles.header}>
-                  <span className={styles.title}>의뢰가 수락되었어요</span>
-                  <span className={styles.notification_icon} />
-                </div>
-
-                <span className={styles.message}>
-                  의문의 대리인님이 의뢰를 수락했어요. 지금부터 채팅을
-                  시작해보세요.
-                </span>
-              </div>
-
-              <div className={styles.footer}>
-                <span className={styles.time}>21:32</span>
-                <div className={styles.button}>
-                  <span className={styles.button_label}>채팅하기</span>
-                  <ArrowRightIcon width={16} height={16} />
-                </div>
-              </div>
-            </div>
+              index={index}
+              isRead={item.isRead}
+              title={item.title}
+              message={item.message}
+              time={item.time}
+              onClick={handleClick}
+            />
           ))}
         </div>
       </div>

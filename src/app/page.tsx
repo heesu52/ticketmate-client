@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 
 import ConcertList from '@/app/_components/concert/concert-list/concert-list';
@@ -16,7 +18,7 @@ export default function Home() {
 
   // 로그인 완료하고 메인페이지에서 접속 시 FCM 토큰 전송
   useEffect(() => {
-    if (!member?.memberId) return;
+    // if (!member?.memberId) return;
 
     async function sendToken() {
       // 이미 토큰을 전송했는지 확인
@@ -29,7 +31,12 @@ export default function Home() {
           await httpClient({
             method: 'post',
             url: 'fcm',
-            options: { json: { token } },
+            options: {
+              json: {
+                fcmToken: token,
+                deviceType: 'WEB',
+              },
+            },
           });
           // 토큰 전송 여부를 확인
           localStorage.setItem('fcmTokenSent', 'true');

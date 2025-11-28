@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import ConcertList from '@/app/_components/concert/concert-list/concert-list';
+import NotificationButton from '@/app/_components/notification-button/notification-button';
 import SearchButton from '@/app/_components/search-button/search-button';
 import { MainLogoIcon as TicketMateLogoIcon } from '@/assets/icons';
 import { getFcmToken } from '@/lib/firebase-Messaging';
@@ -53,7 +54,12 @@ export default function Home() {
             aria-label="티켓메이트 로고"
           />
         ),
-        right: <SearchButton />,
+        right: (
+          <div style={{ display: 'flex', gap: 16 }}>
+            <NotificationButton />
+            <SearchButton />
+          </div>
+        ),
       }}
     >
       <div className={styles.container}>

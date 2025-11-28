@@ -1,0 +1,85 @@
+@use '@/styles/index' as *;
+
+.container {
+  width: 100%;
+  padding: 20px;
+
+  .list_container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .notification_container {
+      display: flex;
+      flex-direction: column;
+      padding: 16px 20px;
+      gap: 16px;
+      align-self: stretch;
+      border-radius: 8px;
+      border: 1px solid var(--grayscale-300, #ededed);
+      background: var(--grayscale-100, #fff);
+      transition: opacity 0.3s ease;
+
+      .content {
+        display: flex;
+        flex-direction: column;
+
+        .header {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          .title {
+            @include title-sm;
+            color: var(--grayscale-700, #222);
+          }
+
+          .notification_icon {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--primary-500, #ff6a6a);
+            transition: opacity 0.3s ease;
+          }
+        }
+
+        .message {
+          @include text-md;
+          color: var(--grayscale-500, #767676);
+        }
+      }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .time {
+          @include text-xs;
+          color: var(--grayscale-500, #767676);
+        }
+
+        .button {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          .button_label {
+            @include text-md;
+            color: var(--grayscale-700, #222);
+          }
+        }
+      }
+
+      // 알람을 읽었을 때 css
+      &.read {
+        opacity: 0.5;
+
+        .notification_icon {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+}

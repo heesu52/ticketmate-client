@@ -65,8 +65,8 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   /** 초기 로딩 완료 여부 */
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
 
-  /** 이미지 모달 상태 */
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  /** 이미 읽음 처리한 메시지 ID 추적 (중복 호출 방지) */
+  const readMessageIdsRef = useRef<Set<string>>(new Set());
 
   /** 이전 메시지 로딩 중 스크롤 위치 정보 */
   const scrollPositionRef = useRef<{
@@ -78,7 +78,16 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   /** 초기 메시지 설정 */
   useEffect(() => {
     if (initialMessages?.content) {
-      setMessages([...initialMessages.content].reverse());
+      const reversedMessages = [...initialMessages.content].reverse();
+      setMessages(reversedMessages);
+
+      // 이미 읽음 처리된 메시지 ID를 Set에 추가
+      reversedMessages.forEach((msg) => {
+        if (msg.isRead) {
+          readMessageIdsRef.current.add(msg.messageId);
+        }
+      });
+
       setIsInitialLoadComplete(true);
     }
   }, [initialMessages]);
@@ -86,7 +95,16 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   /** 메시지 수신 처리 핸들러 */
   const handleMessage = useCallback((response: ChatMessage) => {
     if ('message' in response) {
-      setMessages((prev) => [...prev, response]);
+      setMessages((prev) => {
+        const newMessages = [...prev, response];
+
+        // 읽음 처리된 메시지인 경우 Set에 추가
+        if (response.isRead) {
+          readMessageIdsRef.current.add(response.messageId);
+        }
+
+        return newMessages;
+      });
     }
   }, []);
 
@@ -102,6 +120,8 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
 
   /** 웹소켓 연결 및 구독 */
   useEffect(() => {
+    if (!memberId) return;
+
     connect().then(() => {
       subscribe(
         `/exchange/chat.exchange/chat.room.${roomId}.user.${memberId}`,
@@ -115,16 +135,24 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
         `/exchange/chat.exchange/chat.room.${roomId}.user.${memberId}`,
       );
     };
-  }, []);
+  }, [memberId]);
 
   /** 메시지 읽음 처리 */
   const handleReadMessage = useCallback(
     (messageId: string) => {
+      // 이미 읽음 처리한 메시지인지 확인
+      if (readMessageIdsRef.current.has(messageId)) {
+        return;
+      }
+
       console.log('메시지 읽음 처리:', messageId);
+
+      // 읽음 처리한 메시지 ID 추가
+      readMessageIdsRef.current.add(messageId);
 
       sendMessage(`/pub/chat.read.${roomId}`, {
         lastReadMessageId: messageId,
-        readDate: dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss'),
+        readDate: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
       });
     },
     [roomId, sendMessage],
@@ -181,7 +209,12 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
       // 마지막 메시지의 ID 가져오기
       const lastMessage = messages[messages.length - 1];
 
-      if (lastMessage && lastMessage.isRead !== true) {
+      if (
+        lastMessage &&
+        lastMessage.isRead !== true &&
+        lastMessage.mine !== true &&
+        !readMessageIdsRef.current.has(lastMessage.messageId)
+      ) {
         // 마지막 메시지 읽음 처리
         handleReadMessage(lastMessage.messageId);
       }
@@ -262,23 +295,6 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     return () => window.removeEventListener('scroll', handleScrollTop);
   }, [handleScrollTop]);
 
-  // 이미지 클릭 핸들러
-  const handleImageClick = (imageUrl: string) => {
-    setSelectedImage(imageUrl);
-  };
-
-  // 모달 닫기 핸들러
-  const handleCloseModal = () => {
-    setSelectedImage(null);
-  };
-
-  // 모달 외부 클릭 핸들러
-  const handleModalOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      handleCloseModal();
-    }
-  };
-
   // 이미지 크기 계산 함수 (최대 넓이 230px, gap 4px 기준, 최대 3장)
   const getImageSize = (index: number, total: number) => {
     const maxWidth = 230;
@@ -346,7 +362,6 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
                 width={size.width}
                 height={size.height}
                 className={styles.chat_image}
-                onClick={() => handleImageClick(picture)}
               />
             );
           })}

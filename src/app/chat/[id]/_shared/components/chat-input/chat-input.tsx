@@ -60,11 +60,6 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
       return;
     }
 
-    if (imageFiles.length > 3) {
-      alert('최대 3장까지만 선택할 수 있습니다.');
-      return;
-    }
-
     sendChatMessageImage({
       chatRoomId: roomId,
       chatMessagePictureList: imageFiles,

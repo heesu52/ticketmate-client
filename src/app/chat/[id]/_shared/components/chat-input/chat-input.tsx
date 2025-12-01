@@ -2,11 +2,14 @@
 
 import React, { useState } from 'react';
 
+import dayjs from 'dayjs';
+
 import CancelProgressModal from '@/app/chat/[id]/_shared/components/cancel-progress-modal/cancel-progress-modal';
 import {
   usePatchCancelProgress,
   useSendChatMessageImage,
 } from '@/app/chat/[id]/_shared/services/mutation';
+import { GetChatRoomInfoResponse } from '@/app/chat/[id]/_shared/services/type';
 import {
   CheckIcon,
   CloseIcon,
@@ -25,12 +28,15 @@ import styles from './chat-input.module.scss';
 
 interface ChatInputProps {
   roomId: string;
+  chatRoomInfo?: GetChatRoomInfoResponse;
 }
 
-const ChatInput = ({ roomId }: ChatInputProps) => {
+const ChatInput = ({ roomId, chatRoomInfo }: ChatInputProps) => {
   const navigation = useNavigation();
   const { open } = useModalStore();
   const { member } = useMember();
+
+  const hasApplicationForm = chatRoomInfo?.fulfillmentFormId !== null;
 
   // 추가 버튼 클릭 시 추가 메뉴 표시
   const [isOpen, setIsOpen] = useState(false);
@@ -113,9 +119,48 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
 
   // 의뢰 성공 버튼 클릭 핸들러
   const handleRequestSuccessClick = () => {
-    navigation.navigate({
-      pathname: `/chat/${roomId}/request-success/new`,
-    });
+    // 예매 오픈 날짜 중 하나라도 지났는지 확인
+    const isOpen =
+      chatRoomInfo?.ticketOpenDateInfoResponseList?.some((date) => {
+        return dayjs().isAfter(dayjs(date.openDate));
+      }) ?? false;
+
+    // 대리인인 경우
+    if (member?.memberType === 'AGENT') {
+      if (!isOpen) {
+        toastify({
+          variant: 'info',
+          description: '아직 안지났어요.',
+        });
+        return;
+      }
+
+      if (hasApplicationForm) {
+        navigation.navigate({
+          pathname: `/chat/${roomId}/request-success/${chatRoomInfo?.fulfillmentFormId}`,
+        });
+        return;
+      } else {
+        navigation.navigate({
+          pathname: `/chat/${roomId}/request-success/new`,
+        });
+        return;
+      }
+    } else {
+      // 의뢰인인 경우
+      if (hasApplicationForm) {
+        navigation.navigate({
+          pathname: `/chat/${roomId}/request-success/${chatRoomInfo?.fulfillmentFormId}`,
+        });
+        return;
+      } else {
+        toastify({
+          variant: 'info',
+          description: '아직 안보냈어요',
+        });
+        return;
+      }
+    }
   };
 
   const cancelProgress = usePatchCancelProgress();

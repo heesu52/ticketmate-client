@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import ChatCard from '@/app/chat/_shared/components/chat-card/chat-card';
 import { useGetChatList } from '@/app/chat/_shared/services/query';
 import queryKey from '@/app/chat/_shared/services/query-key';
@@ -12,31 +11,12 @@ import type {
   GetChatListResponse,
   ChatRoom,
 } from '@/app/chat/_shared/services/type';
-import TabButton from '@/shared/components/button/tab-button/tab-button';
-import { TICKET_OPEN_TYPE_LABEL_MAP } from '@/shared/constants/type-mapping';
+import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useWebSocket } from '@/shared/context/websocket-context';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
-import type { TicketOpenType } from '@/shared/types';
 import { formatDateToLocale, formatTime, isToday } from '@/shared/utils/dates';
 
 import styles from './page.module.scss';
-
-type Tab = TicketOpenType | '';
-
-const tabs: { label: string; value: Tab }[] = [
-  {
-    label: '전체',
-    value: '',
-  },
-  {
-    label: TICKET_OPEN_TYPE_LABEL_MAP.PRE_OPEN,
-    value: 'PRE_OPEN',
-  },
-  {
-    label: TICKET_OPEN_TYPE_LABEL_MAP.GENERAL_OPEN,
-    value: 'GENERAL_OPEN',
-  },
-];
 
 interface UnreadMessage {
   chatRoomId: string;
@@ -64,7 +44,6 @@ export default function ChatPage() {
     }
   }, []);
 
-  const [selectedTab, setSelectedTab] = useState<Tab>('');
   const queryClient = useQueryClient();
 
   const {
@@ -72,9 +51,7 @@ export default function ChatPage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useGetChatList({
-    ticketOpenType: selectedTab === '' ? undefined : selectedTab,
-  });
+  } = useGetChatList();
 
   const { lastElementRef } = useIntersectionObserver<HTMLButtonElement>({
     onIntersect: () => {
@@ -92,9 +69,7 @@ export default function ChatPage() {
     (response: UnreadMessage) => {
       // API 호출 없이, React Query 캐시 직접 업데이트
       queryClient.setQueryData(
-        queryKey.chatList({
-          ticketOpenType: selectedTab as TicketOpenType,
-        }),
+        queryKey.chatList(),
         (oldData: { pages: GetChatListResponse[] } | undefined) => {
           if (!oldData?.pages) return oldData;
 
@@ -129,7 +104,7 @@ export default function ChatPage() {
         },
       );
     },
-    [queryClient, selectedTab],
+    [queryClient],
   );
 
   useEffect(() => {
@@ -144,21 +119,12 @@ export default function ChatPage() {
   }, []);
 
   return (
-    <>
-      <AppBarSetter title="채팅" />
-
+    <PageFrame
+      appBar={{
+        title: '채팅',
+      }}
+    >
       <div className={styles.container}>
-        <div className={styles.button_container}>
-          {tabs.map((tab) => (
-            <TabButton
-              key={tab.value}
-              label={tab.label}
-              isActive={selectedTab === tab.value}
-              onClick={() => setSelectedTab(tab.value)}
-            />
-          ))}
-        </div>
-
         <div className={styles.chat_list}>
           {chatList?.content.map((chat, index) => (
             <ChatCard
@@ -173,6 +139,6 @@ export default function ChatPage() {
           ))}
         </div>
       </div>
-    </>
+    </PageFrame>
   );
 }

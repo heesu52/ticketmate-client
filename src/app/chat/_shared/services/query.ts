@@ -5,7 +5,7 @@ import { getChatList } from '@/app/chat/_shared/services/api';
 import queryKey from './query-key';
 import { GetChatListRequest } from './type';
 
-export const useGetChatList = (request: GetChatListRequest) => {
+export const useGetChatList = (request?: GetChatListRequest) => {
   return useInfiniteQuery({
     queryKey: queryKey.chatList(request),
     queryFn: ({ pageParam = 1 }) =>

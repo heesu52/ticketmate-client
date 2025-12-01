@@ -1,16 +1,15 @@
 @use '@/styles/index' as *;
 
+.header_container {
+  height: 49px;
+  border-bottom: 1px solid var(--grayscale-300, #ededed);
+}
+
 .container {
   display: flex;
   flex-direction: column;
   background: var(--white, #fff);
   height: 100%;
-
-  .header_container {
-    position: sticky;
-    top: 54px;
-    z-index: 10;
-  }
 
   .messages_container {
     flex: 1;
@@ -27,4 +26,8 @@
     bottom: 0;
     z-index: 100;
   }
+}
+
+.dropdown_label {
+  color: var(--primary-500, #ff6a6a);
 }

@@ -2,10 +2,11 @@
 
 import React, { use } from 'react';
 
-import AppBarSetter from '@/app/_components/layout/header/app-bar/app-bar-setter';
 import ChatHeader from '@/app/chat/[id]/_shared/components/chat-header/chat-header';
 import ChatInput from '@/app/chat/[id]/_shared/components/chat-input/chat-input';
-import { MoreIcon } from '@/assets/icons';
+import { useGetChatRoomInfo } from '@/app/chat/[id]/_shared/services/query';
+import PageFrame from '@/shared/components/layout/page-frame/page-frame';
+import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 
 import ChatMessageList from './_shared/components/chat-message-list/chat-message-list';
 import styles from './page.module.scss';
@@ -17,26 +18,33 @@ interface ChatDetailPageProps {
 const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
   const { id: roomId } = use(params);
 
+  const { data: chatRoomInfo } = useGetChatRoomInfo({ chatRoomId: roomId });
   return (
-    <>
-      <AppBarSetter
-        title="의뢰인"
-        action={
-          <button type="button" aria-label="더보기 버튼">
-            <MoreIcon
-              width={20}
-              height={20}
-              fill={`var(--textColor-main)`}
-              aria-hidden="true"
+    <PageFrame
+      appBar={{
+        title: chatRoomInfo?.opponentMemberNickName,
+        showBack: true,
+        additionalContent: (
+          <div className={styles.header_container}>
+            <ChatHeader chatRoomInfo={chatRoomInfo} />
+          </div>
+        ),
+        right: (
+          <button type="button">
+            <Dropdown
+              items={[
+                {
+                  label: '채팅방 나가기',
+                  onClick: () => console.log('채팅방 나가기'),
+                },
+              ]}
             />
           </button>
-        }
-      />
+        ),
+      }}
+      bottomNav={false}
+    >
       <div className={styles.container}>
-        <div className={styles.header_container}>
-          <ChatHeader />
-        </div>
-
         <div className={styles.messages_container}>
           <ChatMessageList roomId={roomId} />
         </div>
@@ -45,7 +53,7 @@ const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
           <ChatInput roomId={roomId} />
         </div>
       </div>
-    </>
+    </PageFrame>
   );
 };
 

@@ -1,0 +1,72 @@
+@use '@/styles/index' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+
+  height: 100%;
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .section_title {
+      @include title-sm;
+      color: var(--grayscale-700, #222);
+
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+
+      .required {
+        @include title-sm;
+        color: var(--primary-500, #ff6a6a);
+      }
+
+      .button {
+        @include text-md;
+        color: var(--grayscale-500, #767676);
+        text-align: right;
+      }
+    }
+
+    .wrapper {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+
+  .uploaded_images_container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+    overflow-x: auto;
+  }
+
+  .account_empty_container {
+    @include text-md;
+    color: var(--grayscale-500);
+    display: flex;
+    padding: 16px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 8px;
+    background: var(--grayscale-200, #fafafa);
+
+    .text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .register {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+}

@@ -1,14 +1,14 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import { getChatDetail } from './api';
+import { getChatMessageList, getChatRoomInfo } from './api';
 import queryKey from './query-key';
-import { GetChatDetailRequest } from './type';
+import { GetChatMessageListRequest, GetChatRoomInfoRequest } from './type';
 
-const useGetChatDetail = (request: GetChatDetailRequest) => {
+export const useGetChatMessageList = (request: GetChatMessageListRequest) => {
   return useInfiniteQuery({
-    queryKey: queryKey.chatDetail(request),
+    queryKey: queryKey.chatMessageList(request),
     queryFn: ({ pageParam = 1 }) =>
-      getChatDetail({
+      getChatMessageList({
         ...request,
         parameter: { ...request.parameter, pageNumber: pageParam },
       }),
@@ -25,4 +25,9 @@ const useGetChatDetail = (request: GetChatDetailRequest) => {
   });
 };
 
-export default useGetChatDetail;
+export const useGetChatRoomInfo = (request: GetChatRoomInfoRequest) => {
+  return useQuery({
+    queryKey: queryKey.chatRoomInfo(request),
+    queryFn: () => getChatRoomInfo(request),
+  });
+};

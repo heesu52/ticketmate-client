@@ -26,11 +26,11 @@
   }
 
   &[data-variant='success'] {
-    color: var(--semantic-success-700, #2e7d32);
+    color: var(--system-success-700, #2e7d32);
 
     border-radius: 8px;
-    border: 1px solid var(--semantic-success-300, #a5d6a7);
-    background: var(--semantic-success-100, #e8f5e9);
+    border: 1px solid var(--system-success-300, #a5d6a7);
+    background: var(--system-success-100, #e8f5e9);
   }
 
   &[data-variant='error'] {
@@ -42,11 +42,11 @@
   }
 
   &[data-variant='warning'] {
-    color: var(--semantic-warning-700, #f99502);
+    color: var(--system-warning-700, #f99502);
 
     border-radius: 8px;
-    border: 1px solid var(--semantic-warning-300, #ffe082);
-    background: var(--semantic-warning-100, #fff8e1);
+    border: 1px solid var(--system-warning-300, #ffe082);
+    background: var(--system-warning-100, #fff8e1);
   }
 
   &[data-variant='info'] {

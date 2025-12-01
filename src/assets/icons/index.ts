@@ -33,6 +33,7 @@ export { default as UnlockIcon } from './unlock.svg';
 export { default as DateRangeIcon } from './date-range.svg';
 export { default as SettingIcon } from './setting.svg';
 export { default as ArrowRightIcon } from './arrow-right.svg';
+export { default as GalleryIcon } from './gallery.svg';
 export { default as IBKLogoIcon } from './IBK_logo.svg';
 export { default as SCLogoIcon } from './SC_logo.svg';
 export { default as CitiLogoIcon } from './citi_logo.svg';

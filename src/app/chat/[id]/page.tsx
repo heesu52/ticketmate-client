@@ -50,7 +50,7 @@ const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
         </div>
 
         <div className={styles.input_container}>
-          <ChatInput roomId={roomId} />
+          <ChatInput roomId={roomId} chatRoomInfo={chatRoomInfo} />
         </div>
       </div>
     </PageFrame>

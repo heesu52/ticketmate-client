@@ -1,7 +1,14 @@
-import { GetChatDetailRequest } from '@/app/chat/[id]/_shared/services/type';
+import {
+  GetChatMessageListRequest,
+  GetChatRoomInfoRequest,
+} from '@/app/chat/[id]/_shared/services/type';
 
 const queryKey = {
-  chatDetail: (request?: GetChatDetailRequest) => ['chat'],
+  chatMessageList: (request?: GetChatMessageListRequest) => [
+    'chatMessageList',
+    request,
+  ],
+  chatRoomInfo: (request?: GetChatRoomInfoRequest) => ['chatRoomInfo', request],
 };
 
 export default queryKey;

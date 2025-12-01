@@ -1,9 +1,8 @@
-import instance from '@/shared/services/instance';
-import { createQueryParams } from '@/shared/utils/services/query-string';
+import httpClient from '@/lib/http-client/http-client';
 
 import { GetChatListRequest, GetChatListResponse } from './type';
 
-const BASE_URL = '/chat-room';
+const BASE_URL = 'chat-room';
 
 /**
  * 채팅 목록 조회
@@ -11,13 +10,13 @@ const BASE_URL = '/chat-room';
  * @returns 채팅 목록 조회 응답
  */
 export const getChatList = async (request: GetChatListRequest) => {
-  const query = request
-    ? `?${createQueryParams(request as Record<string, unknown>)}`
-    : '';
-
-  const data = await instance<GetChatListResponse>(`${BASE_URL}${query}`, {
-    method: 'GET',
+  const response = await httpClient<GetChatListResponse>({
+    url: `${BASE_URL}`,
+    method: 'get',
+    options: {
+      searchParams: { ...request },
+    },
   });
 
-  return data;
+  return response;
 };

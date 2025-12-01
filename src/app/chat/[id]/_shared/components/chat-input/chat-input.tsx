@@ -2,16 +2,24 @@
 
 import React, { useState } from 'react';
 
-import { useSendChatMessageImage } from '@/app/chat/[id]/_shared/services/mutation';
+import CancelProgressModal from '@/app/chat/[id]/_shared/components/cancel-progress-modal/cancel-progress-modal';
 import {
-  CameraIcon,
+  usePatchCancelProgress,
+  useSendChatMessageImage,
+} from '@/app/chat/[id]/_shared/services/mutation';
+import {
   CheckIcon,
   CloseIcon,
+  GalleryIcon,
   ListIcon,
   PlusIcon,
   SendIcon,
 } from '@/assets/icons';
+import { useModalStore } from '@/shared/components/ui/modal/modal-store';
+import { toastify } from '@/shared/components/ui/toast/toastify';
+import { useMember } from '@/shared/context/member-context';
 import { useWebSocket } from '@/shared/context/websocket-context';
+import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
 
 import styles from './chat-input.module.scss';
 
@@ -19,26 +27,11 @@ interface ChatInputProps {
   roomId: string;
 }
 
-const actionItems = [
-  {
-    icon: <ListIcon width={24} height={24} stroke={`var(--textColor-main)`} />,
-    label: '신청양식',
-  },
-  {
-    icon: <CameraIcon width={24} height={24} fill={`var(--textColor-main)`} />,
-    label: '카메라',
-  },
-  {
-    icon: <CloseIcon width={24} height={24} fill={`var(--textColor-main)`} />,
-    label: '진행 취소',
-  },
-  {
-    icon: <CheckIcon width={24} height={24} fill={`var(--textColor-main)`} />,
-    label: '의뢰 성공',
-  },
-];
-
 const ChatInput = ({ roomId }: ChatInputProps) => {
+  const navigation = useNavigation();
+  const { open } = useModalStore();
+  const { member } = useMember();
+
   // 추가 버튼 클릭 시 추가 메뉴 표시
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
@@ -57,18 +50,18 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
 
     const selectedFiles = Array.from(files);
 
-    // 이미지 파일만 필터링 (최대 10장)
+    // 이미지 파일만 필터링 (최대 3장)
     const imageFiles = selectedFiles
       .filter((file) => file.type.startsWith('image/'))
-      .slice(0, 10);
+      .slice(0, 3);
 
     if (imageFiles.length === 0) {
       alert('이미지 파일만 선택할 수 있습니다.');
       return;
     }
 
-    if (imageFiles.length > 10) {
-      alert('최대 10장까지만 선택할 수 있습니다.');
+    if (imageFiles.length > 3) {
+      alert('최대 3장까지만 선택할 수 있습니다.');
       return;
     }
 
@@ -83,19 +76,6 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
       .catch((error) => {
         console.error('이미지 업로드 실패:', error);
       });
-  };
-
-  // 카메라 버튼 클릭 핸들러
-  const handleCameraClick = () => {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.multiple = true; // 여러 이미지 선택 가능
-    fileInput.onchange = (e) => {
-      const files = (e.target as HTMLInputElement).files;
-      handleImageSelect(files);
-    };
-    fileInput.click();
   };
 
   const handleSendMessage = () => {
@@ -116,6 +96,81 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
     }
   };
 
+  // 갤러리 버튼 클릭 핸들러
+  const handleGalleryClick = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.multiple = true; // 여러 이미지 선택 가능
+    fileInput.onchange = (e) => {
+      const files = (e.target as HTMLInputElement).files;
+      handleImageSelect(files);
+    };
+    fileInput.click();
+  };
+
+  // 신청 양식 버튼 클릭 핸들러
+  const handleApplicationFormClick = () => {
+    navigation.navigate({
+      pathname: `/concert/form/${roomId}/view?from=chat`,
+    });
+  };
+
+  // 의뢰 성공 버튼 클릭 핸들러
+  const handleRequestSuccessClick = () => {
+    navigation.navigate({
+      pathname: `/chat/${roomId}/request-success/new`,
+    });
+  };
+
+  const cancelProgress = usePatchCancelProgress();
+  // 진행 취소 버튼 클릭 핸들러
+  const handleCancelProgressClick = async () => {
+    open('cancel-progress-modal', CancelProgressModal, { roomId })
+      .then(() => {
+        cancelProgress
+          .mutateAsync({ chatRoomId: roomId })
+          .then(() => {
+            toastify({
+              variant: 'success',
+              description: '진행이 정상적으로 취소되었습니다.',
+            });
+          })
+          .catch(() => {
+            toastify({
+              variant: 'error',
+              description: '진행 취소에 실패했습니다.',
+            });
+          });
+      })
+      .catch(() => {
+        return false;
+      });
+  };
+
+  const actionItems = [
+    {
+      icon: <ListIcon width={24} height={24} />,
+      label: '신청 양식',
+      onClick: handleApplicationFormClick,
+    },
+    {
+      icon: <GalleryIcon width={24} height={24} />,
+      label: '갤러리',
+      onClick: handleGalleryClick,
+    },
+    {
+      icon: <CheckIcon width={24} height={24} />,
+      label: member?.memberType === 'AGENT' ? '성공 확인' : '성공 안내',
+      onClick: handleRequestSuccessClick,
+    },
+    {
+      icon: <CloseIcon width={24} height={24} />,
+      label: '진행 취소',
+      onClick: handleCancelProgressClick,
+    },
+  ];
+
   return (
     <div className={styles.container}>
       <div className={styles.input_container}>
@@ -126,7 +181,12 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
           disabled={disabled}
         >
           {isOpen ? (
-            <CloseIcon width={20} height={20} fill={`var(--textColor-main)`} />
+            <CloseIcon
+              width={20}
+              height={20}
+              stroke={`var(--textColor-main)`}
+              fill={`var(--textColor-main)`}
+            />
           ) : (
             <PlusIcon width={20} height={20} fill={`var(--textColor-main)`} />
           )}
@@ -135,7 +195,7 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
         <textarea
           className={styles.message_input}
           id="message-input"
-          placeholder="메시지를 입력해주세요."
+          placeholder="내용을 입력해주세요."
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyDown={handleKeyPress}
@@ -149,7 +209,7 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
           onClick={handleSendMessage}
           disabled={!inputMessage.trim() || disabled}
         >
-          <SendIcon width={20} height={20} fill={`var(--textColor-main)`} />
+          <SendIcon width={20} height={20} />
         </button>
       </div>
 
@@ -160,18 +220,18 @@ const ChatInput = ({ roomId }: ChatInputProps) => {
               key={item.label}
               className={styles.item}
               type="button"
-              onClick={item.label === '카메라' ? handleCameraClick : undefined}
-              disabled={item.label === '카메라' ? isImageUploading : false}
+              onClick={item.onClick}
+              disabled={item.label === '갤러리' ? isImageUploading : false}
             >
               <span className={styles.icon}>
-                {item.label === '카메라' && isImageUploading ? (
+                {item.label === '갤러리' && isImageUploading ? (
                   <div className={styles.loading_spinner} />
                 ) : (
                   item.icon
                 )}
               </span>
               <span className={styles.label}>
-                {item.label === '카메라' && isImageUploading
+                {item.label === '갤러리' && isImageUploading
                   ? '업로드 중...'
                   : item.label}
               </span>

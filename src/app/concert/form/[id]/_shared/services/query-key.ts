@@ -5,6 +5,10 @@ const queryKey = {
     'getFormDetail',
     request?.applicationFormId,
   ],
+  getFormDetailByChat: (request?: GetFormDetailRequest) => [
+    'getFormDetailByChat',
+    request?.applicationFormId,
+  ],
 };
 
 export default queryKey;

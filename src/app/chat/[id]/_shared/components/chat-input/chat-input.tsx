@@ -36,7 +36,7 @@ const ChatInput = ({ roomId, chatRoomInfo }: ChatInputProps) => {
   const { open } = useModalStore();
   const { member } = useMember();
 
-  const hasApplicationForm = chatRoomInfo?.fulfillmentFormId !== null;
+  const hasApplicationForm = Boolean(chatRoomInfo?.fulfillmentFormId);
 
   // 추가 버튼 클릭 시 추가 메뉴 표시
   const [isOpen, setIsOpen] = useState(false);

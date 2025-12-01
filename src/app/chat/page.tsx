@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -12,6 +12,7 @@ import type {
   ChatRoom,
 } from '@/app/chat/_shared/services/type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
+import { useMember } from '@/shared/context/member-context';
 import { useWebSocket } from '@/shared/context/websocket-context';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
 import { formatDateToLocale, formatTime, isToday } from '@/shared/utils/dates';
@@ -32,17 +33,8 @@ const formatDateTime = (time: string) => {
 };
 
 export default function ChatPage() {
-  // 세션에 저장한 memberId
-  const [memberId, setMemberId] = useState<string>('');
-
-  useEffect(() => {
-    try {
-      const id = sessionStorage.getItem('memberId') ?? '';
-      setMemberId(id);
-    } catch (error) {
-      console.error('Failed to access sessionStorage:', error);
-    }
-  }, []);
+  const { member } = useMember();
+  const memberId = member?.memberId;
 
   const queryClient = useQueryClient();
 
@@ -108,6 +100,8 @@ export default function ChatPage() {
   );
 
   useEffect(() => {
+    if (!memberId) return;
+
     connect().then(() => {
       subscribe(`/queue/unread.${memberId}`, handleUnreadMessage);
     });
@@ -116,7 +110,7 @@ export default function ChatPage() {
       unsubscribe(`/queue/unread.${memberId}`);
       disconnect();
     };
-  }, []);
+  }, [memberId]);
 
   return (
     <PageFrame

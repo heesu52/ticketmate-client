@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import dayjs from 'dayjs';
 
-import CancelProgressModal from '@/app/chat/[id]/_shared/components/cancel-progress-modal/cancel-progress-modal';
+import CancelProgressModal from '@/app/chat/[id]/_shared/components/chat-input/cancel-progress-modal/cancel-progress-modal';
 import {
   usePatchCancelProgress,
   useSendChatMessageImage,

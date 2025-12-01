@@ -6,25 +6,25 @@ import styles from './notification-content.module.scss';
 
 interface NotificationContentProps {
   index: number;
-  isRead: boolean;
   title: string;
   message: string;
-  time: string;
+  // time: string;
+  // isRead: boolean;
   onClick: (index: number) => void;
 }
 
 export default function NotificationContent({
   index,
-  isRead,
   title,
   message,
-  time,
+  // time,
+  // isRead,
   onClick,
 }: NotificationContentProps) {
   return (
     <div
       key={index}
-      className={`${styles.notification_container} ${isRead ? styles.read : ''}`}
+      // className={`${styles.notification_container} ${isRead ? styles.read : ''}`}
       onClick={() => onClick(index)}
     >
       <div className={styles.content}>
@@ -37,7 +37,8 @@ export default function NotificationContent({
       </div>
 
       <div className={styles.footer}>
-        <span className={styles.time}>{time}</span>
+        {/* <span className={styles.time}>{time}</span> */}
+        <span className={styles.time}>09:32</span>
         <div className={styles.button}>
           <span className={styles.button_label}>채팅하기</span>
           <ArrowRightIcon width={16} height={16} />

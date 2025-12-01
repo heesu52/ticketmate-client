@@ -13,16 +13,8 @@ export default function Notification() {
     {
       title: string;
       message: string;
-      time: string;
-      isRead: boolean;
     }[]
   >([]);
-
-  const handleClick = (index: number) => {
-    setNotifications((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, isRead: true } : item)),
-    );
-  };
 
   const sendTestNotification = async () => {
     try {
@@ -37,18 +29,10 @@ export default function Notification() {
         },
       });
 
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-
       setNotifications((prev) => [
         {
           title: '테스트 제목입니다.',
           message: '테스트 본문입니다.',
-          time: timeStr,
-          isRead: false,
         },
         ...prev,
       ]);
@@ -81,11 +65,9 @@ export default function Notification() {
             <NotificationContent
               key={index}
               index={index}
-              isRead={item.isRead}
               title={item.title}
               message={item.message}
-              time={item.time}
-              onClick={handleClick}
+              onClick={() => {}}
             />
           ))}
         </div>

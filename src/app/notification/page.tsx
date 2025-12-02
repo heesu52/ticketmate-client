@@ -13,6 +13,8 @@ export default function Notification() {
     {
       title: string;
       message: string;
+      time: string;
+      isRead: boolean;
     }[]
   >([]);
 
@@ -29,10 +31,19 @@ export default function Notification() {
         },
       });
 
+      const now = new Date();
+      const formattedTime = now.toLocaleTimeString('ko-KR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+
       setNotifications((prev) => [
         {
           title: '테스트 제목입니다.',
           message: '테스트 본문입니다.',
+          time: formattedTime,
+          isRead: false,
         },
         ...prev,
       ]);
@@ -67,7 +78,8 @@ export default function Notification() {
               index={index}
               title={item.title}
               message={item.message}
-              onClick={() => {}}
+              time={item.time}
+              isRead={item.isRead}
             />
           ))}
         </div>

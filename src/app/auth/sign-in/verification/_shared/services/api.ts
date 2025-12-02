@@ -2,7 +2,7 @@ import {
   PostVerificationCodeRequest,
   PostVerifyVerificationCodeRequest,
 } from '@/app/auth/sign-in/verification/_shared/services/type';
-import instance from '@/shared/services/instance';
+import httpClient from '@/lib/http-client/http-client';
 
 const BASE_URL = '/auth';
 
@@ -12,10 +12,14 @@ const BASE_URL = '/auth';
 export const postSendVerificationCode = async (
   request: PostVerificationCodeRequest,
 ) => {
-  const data = await instance(`${BASE_URL}/sms/send-code`, {
-    method: 'POST',
-    body: JSON.stringify(request),
+  const data = await httpClient({
+    method: 'post',
+    url: `${BASE_URL}/sms/send-code`,
+    options: {
+      json: request,
+    },
   });
+
   return data;
 };
 
@@ -25,9 +29,13 @@ export const postSendVerificationCode = async (
 export const postVerifyVerificationCode = async (
   request: PostVerifyVerificationCodeRequest,
 ) => {
-  const data = await instance(`${BASE_URL}/sms/verify`, {
-    method: 'POST',
-    body: JSON.stringify(request),
+  const data = await httpClient({
+    method: 'post',
+    url: `${BASE_URL}/sms/verify`,
+    options: {
+      json: request,
+    },
   });
+
   return data;
 };

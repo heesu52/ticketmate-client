@@ -66,6 +66,8 @@ export interface GetChatRoomInfoResponse {
   ticketReservationSite: TicketReservationSite;
   /** 콘서트 타입 */
   concertType: string;
+  /** 신청 양식 ID */
+  fulfillmentFormId: string | null;
 }
 
 export interface SendChatMessageRequest {

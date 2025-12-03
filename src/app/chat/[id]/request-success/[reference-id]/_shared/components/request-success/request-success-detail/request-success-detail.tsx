@@ -106,10 +106,10 @@ const RequestSuccessForm = ({
         }
       }
 
-      const available = Math.max(0, MAX_COUNT - prev.length);
-      const willAdd = deduplicatedFileList.slice(0, available);
+      const available = Math.max(0, MAX_COUNT - prev.length); // 최대 업로드 가능 개수
+      const willAdd = deduplicatedFileList.slice(0, available); // 중복 제거 후 추가할 파일 리스트
       // 초과 판단 (중복 제거 후에도 남은 파일이 available보다 많았는지)
-      overflow = deduplicatedFileList.length > available;
+      overflow = deduplicatedFileList.length > available; // 초과 여부
 
       return [...prev, ...willAdd];
     });
@@ -150,7 +150,7 @@ const RequestSuccessForm = ({
   };
 
   const patchFulfillmentFormUpdate = usePatchFulfillmentFormUpdate();
-
+  // 의뢰 수정 핸들러
   const handleClickRequest = () => {
     switch (pageMode) {
       case 'view':
@@ -211,6 +211,7 @@ const RequestSuccessForm = ({
   const patchFulfillmentFormReject = usePatchFulfillmentFormReject();
   const patchFulfillmentFormAccept = usePatchFulfillmentFormAccept();
 
+  // 의뢰 거절 핸들러
   const handleClickReject = () => {
     open('reject-request-success-modal', RejectRequestSuccessModal)
       .then(() => {
@@ -237,6 +238,7 @@ const RequestSuccessForm = ({
       });
   };
 
+  // 의뢰 수락 핸들러
   const handleClickAccept = () => {
     open('accept-request-success-modal', AcceptRequestSuccessModal)
       .then(() => {
@@ -263,13 +265,6 @@ const RequestSuccessForm = ({
       });
   };
 
-  // descriptionRef에 값을 설정하는 함수
-  const setDescriptionValue = (value: string) => {
-    if (descriptionRef.current) {
-      descriptionRef.current.value = value;
-    }
-  };
-
   // 의뢰 성공 버튼 활성화 여부 (계좌가 등록되어 있어야 활성화)
   const isSubmitDisabled = !registeredAccount;
 
@@ -291,7 +286,11 @@ const RequestSuccessForm = ({
           (img) => img.fulfillmentFormImgUrl,
         ),
       );
-      setDescriptionValue(fulfillmentFormData.particularMemo);
+      // descriptionRef에 값을 설정
+      if (descriptionRef.current) {
+        descriptionRef.current.value = fulfillmentFormData.particularMemo;
+      }
+      // 계좌 정보 설정
       setRegisteredAccount(fulfillmentFormData.agentBankAccount);
     }
   }, [fulfillmentFormData, pageMode]);
@@ -311,6 +310,7 @@ const RequestSuccessForm = ({
                 // File인 경우 ObjectURL로 변환, string(URL)인 경우 그대로 사용
                 const imageURL =
                   photo instanceof File ? toObjectURL(photo) : photo;
+
                 return (
                   <UploadedImage
                     key={index}
@@ -324,27 +324,33 @@ const RequestSuccessForm = ({
             </div>
           )}
 
-          {/* 파일 입력 (숨김) */}
-          <input
-            ref={successPhotoInputRef}
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={(e) => handleUploadPhoto(e)}
-            style={{ display: 'none' }}
-          />
+          {pageMode !== 'view' && (
+            <>
+              {/* 파일 입력 (숨김) */}
+              <input
+                ref={successPhotoInputRef}
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={(e) => handleUploadPhoto(e)}
+                style={{ display: 'none' }}
+              />
 
-          {/* 사진 첨부하기 버튼 */}
-          <Button
-            variant="fill"
-            color="gray"
-            onClick={() => successPhotoInputRef.current?.click()}
-            disabled={successPhotoList.length >= 6 || pageMode === 'view'}
-          >
-            사진 첨부하기({successPhotoList.length}/6)
-          </Button>
+              {/* 사진 첨부하기 버튼 */}
+              <Button
+                variant="fill"
+                color="gray"
+                onClick={() => successPhotoInputRef.current?.click()}
+                disabled={successPhotoList.length >= 6}
+              >
+                사진 첨부하기({successPhotoList.length}/6)
+              </Button>
+            </>
+          )}
         </div>
+
         <Spacer size={40} />
+
         {/* 상세 설명 섹션 */}
         <div className={styles.section}>
           <div className={styles.section_title}>
@@ -358,7 +364,9 @@ const RequestSuccessForm = ({
             disabled={pageMode === 'view'}
           />
         </div>
+
         <Spacer size={40} />
+
         {/* 입금 계좌 섹션 */}
         <div className={styles.section}>
           <div className={styles.section_title}>
@@ -409,7 +417,7 @@ const RequestSuccessForm = ({
               disabled={isSubmitDisabled}
               style={{ marginTop: 'auto' }}
             >
-              수정하기
+              {pageMode === 'view' ? '수정하기' : '저장하기'}
             </Button>
             <ChangeBankBottomSheet
               onClose={() => setIsChangeBankBottomSheetOpen(false)}

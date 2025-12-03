@@ -76,7 +76,7 @@ const FulfillmentMessageCard = ({
         {description && <p className={styles.description}>{description}</p>}
       </div>
 
-      {variant === 'link' && (
+      {variant === 'link' && referenceId && (
         <>
           <Spacer size={16} />
           <Link

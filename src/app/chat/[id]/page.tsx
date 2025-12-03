@@ -30,16 +30,14 @@ const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
           </div>
         ),
         right: (
-          <button type="button">
-            <Dropdown
-              items={[
-                {
-                  label: '채팅방 나가기',
-                  onClick: () => console.log('채팅방 나가기'),
-                },
-              ]}
-            />
-          </button>
+          <Dropdown
+            items={[
+              {
+                label: '채팅방 나가기',
+                onClick: () => console.log('채팅방 나가기'),
+              },
+            ]}
+          />
         ),
       }}
       bottomNav={false}
@@ -50,7 +48,7 @@ const ChatDetailPage = ({ params }: ChatDetailPageProps) => {
         </div>
 
         <div className={styles.input_container}>
-          <ChatInput roomId={roomId} />
+          <ChatInput roomId={roomId} chatRoomInfo={chatRoomInfo} />
         </div>
       </div>
     </PageFrame>

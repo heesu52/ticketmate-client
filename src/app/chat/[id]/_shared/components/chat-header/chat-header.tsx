@@ -21,8 +21,10 @@ const ChatHeader = ({ chatRoomInfo }: ChatHeaderProps) => {
   const navigation = useNavigation();
 
   const handleClickHeader = () => {
+    if (!chatRoomInfo) return;
+
     navigation.navigate({
-      pathname: `/concert/form/${chatRoomInfo?.chatRoomId}/view?from=chat`,
+      pathname: `/concert/form/${chatRoomInfo.chatRoomId}/view?from=chat`,
     });
   };
 

@@ -4,7 +4,7 @@ import {
 } from '@/app/auth/sign-in/verification/_shared/services/type';
 import httpClient from '@/lib/http-client/http-client';
 
-const BASE_URL = '/auth';
+const BASE_URL = 'auth';
 
 /**
  * @description 인증번호 발송&재발송

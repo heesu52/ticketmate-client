@@ -2,7 +2,10 @@
 
 import React, { useCallback, useRef, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import ChangeAgentModal from '@/app/my/setting/agent/_shared/components/change-agent-modal/change-agent-modal';
+import { useUploadPortfolioMutation } from '@/app/my/setting/agent/_shared/services/mutation';
 import { MinusIcon, PlusIcon } from '@/assets/icons';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import InformationBanner from '@/shared/components/ui/banner/information-banner/information-banner';
@@ -18,7 +21,10 @@ import { toastify } from '@/shared/components/ui/toast/toastify';
 import styles from './page.module.scss';
 
 const AgentPage = () => {
+  const router = useRouter();
   const { open } = useModalStore();
+
+  const uploadPortfolioMutation = useUploadPortfolioMutation();
 
   // 예매 성공 내역 사진
   const [successPhotos, setSuccessPhotos] = useState<File[]>([]); // 예매 성공 내역 사진
@@ -135,27 +141,35 @@ const AgentPage = () => {
       .filter((url) => url.trim() !== '');
 
     const payload = {
-      successPhotos,
-      introduction,
-      snsPhotos,
-      snsUrls,
+      portfolioDescription: introduction,
+      portfolioImgList: successPhotos,
+      // snsPhotos,
+      // snsUrls,
     };
 
     try {
       const result = await open('change-agent-modal', ChangeAgentModal);
 
       if (result) {
-        toastify({
-          variant: 'success',
-          description: '전환 신청이 완료되었습니다.',
-        });
-        console.log(payload);
+        uploadPortfolioMutation
+          .mutateAsync(payload)
+          .then(() => {
+            toastify({
+              variant: 'success',
+              description: '대리인 전환 신청에 성공했습니다.',
+            });
+
+            router.push('/my/setting');
+          })
+          .catch(() => {
+            toastify({
+              variant: 'error',
+              description: '대리인 전환 신청에 실패했습니다.',
+            });
+          });
       }
     } catch {
-      toastify({
-        variant: 'error',
-        description: '전환 신청이 취소되었습니다.',
-      });
+      return;
     }
   };
 

@@ -20,6 +20,13 @@ const nextConfig: NextConfig = {
       'ticketmate.site',
       'ticketmate-storage.s3.ap-northeast-2.amazonaws.com',
     ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ticketmate-storage.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**',
+      },
+    ],
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',

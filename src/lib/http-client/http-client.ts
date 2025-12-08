@@ -4,7 +4,9 @@ import ky, { HTTPError, type Options } from 'ky';
 import { APIMethod } from '@/lib/http-client/http-client.type';
 import { refreshAccessToken } from '@/shared/services/auth/api';
 
-const PREFIX_URL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
+// 알림 테스트를 위해 주석처리
+// const PREFIX_URL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
+const PREFIX_URL = `${process.env.NEXT_PUBLIC_API_URL}`;
 const MODE = process.env.NODE_ENV;
 
 const created = ky.create({

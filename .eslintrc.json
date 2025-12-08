@@ -48,17 +48,31 @@
         "pathGroupsExcludedImportTypes": ["react*"],
         "newlines-between": "always",
         "alphabetize": {
-          "order": "asc", // 또는 'desc'
+          "order": "asc",
           "caseInsensitive": true
         }
       }
     ],
 
-    // jest
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
     "jest/prefer-to-have-length": "warn",
     "jest/valid-expect": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["public/firebase-messaging-sw.js"],
+      "env": {
+        "serviceworker": true,
+        "browser": true
+      },
+      "globals": {
+        "firebase": "readonly"
+      },
+      "rules": {
+        "no-undef": "off"
+      }
+    }
+  ]
 }

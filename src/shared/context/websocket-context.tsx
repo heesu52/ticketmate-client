@@ -47,7 +47,8 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 
     const connectPromise = new Promise<void>((resolve, reject) => {
       const client = new Client({
-        webSocketFactory: () => new SockJS(`https://api.ticketmate.site/chat`),
+        webSocketFactory: () =>
+          new SockJS(`${process.env.NEXT_PUBLIC_API_URL}/chat`),
         connectHeaders: {
           Authorization: (() => {
             const port =

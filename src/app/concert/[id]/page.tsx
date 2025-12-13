@@ -6,7 +6,6 @@ import AgentList from '@/app/concert/[id]/_shared/components/agent-list/agent-li
 import ConcertInfo from '@/app/concert/[id]/_shared/components/concert-info/concert-info';
 import CustomBottomSheet from '@/app/concert/[id]/_shared/components/custom-bottom-sheet/custom-bottom-sheet';
 import { useGetConcertDetail } from '@/app/concert/[id]/_shared/services/concert/query';
-import { ShareIcon } from '@/assets/icons';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { AgentInfo } from '@/shared/types';
 
@@ -40,7 +39,6 @@ const Page = ({ params }: PageProps) => {
       appBar={{
         title: '공연 상세페이지',
         showBack: true,
-        right: <ShareIcon />,
       }}
       bottomNav={false}
     >

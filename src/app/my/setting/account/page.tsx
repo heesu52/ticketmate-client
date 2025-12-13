@@ -1,3 +1,6 @@
+'use client';
+
+import { useLogoutMutation } from '@/app/my/setting/account/log-out/_shared/services/mutation';
 import SettingItem from '@/shared/components/features/my/setting-item/setting-item';
 import { SettingItem as SettingItemType } from '@/shared/components/features/my/setting-item/setting-item.type';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -5,11 +8,15 @@ import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import styles from './page.module.scss';
 
 const AccountPage = () => {
+  const { mutate: logout } = useLogoutMutation();
+
   const menuItems: SettingItemType[] = [
     {
       title: '로그아웃',
-      href: '/my/setting/account',
-      type: 'link',
+      type: 'action',
+      onClick: () => {
+        logout();
+      },
     },
     {
       title: '탈퇴하기',

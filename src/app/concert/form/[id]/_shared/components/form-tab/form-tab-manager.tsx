@@ -5,6 +5,7 @@ import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/
 import FormTabAgentButton from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-button/agent-button';
 import FormTabClientButton from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-button/client-button';
 import Tab from '@/shared/components/ui/tab/tab';
+import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
 import {
   Concert,
@@ -121,8 +122,18 @@ export default function FormTabManager({
     return `${formatted} (${selectedDateInfo.session}회차)`;
   };
 
+  // 최대 탭 개수
+  const maxTabCount = concertItem.concertDateInfoResponseList.length;
   // 새로운 탭 추가 및 해당 탭에 대응되는 초기 formData 생성
+
   const addNewTab = () => {
+    if (tabs.length >= maxTabCount) {
+      toastify({
+        variant: 'info',
+        description: '신청 가능한 최대 회차에요',
+      });
+      return;
+    }
     setTabs((prev) => [...prev, nextId]);
     setActiveTab(nextId);
     setFormData((prev) => ({

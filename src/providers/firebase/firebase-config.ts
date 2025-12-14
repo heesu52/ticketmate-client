@@ -1,6 +1,5 @@
 /* eslint-disable import/named */
-import { initializeApp, getApps } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getApps, initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -16,9 +15,4 @@ const firebaseApp = getApps().length
   ? getApps()[0]
   : initializeApp(firebaseConfig);
 
-let messaging: ReturnType<typeof getMessaging> | null = null;
-if (typeof window !== 'undefined' && 'Notification' in window) {
-  messaging = getMessaging(firebaseApp);
-}
-
-export { firebaseApp, messaging, getToken, onMessage };
+export { firebaseApp };

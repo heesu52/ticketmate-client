@@ -1,3 +1,4 @@
+/* eslint-disable import/named */
 import { getMessaging, getToken, isSupported } from 'firebase/messaging';
 
 import { firebaseApp } from '@/firebase/firebaseConfig';

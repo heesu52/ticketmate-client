@@ -1,6 +1,7 @@
 import React, { type ReactNode } from 'react';
 
 import ContextProvider from '@/providers/context-provider';
+import FirebaseProvider from '@/providers/firebase/firebase-provider';
 import HeadProvider from '@/providers/head-provider';
 import ReactQueryProviders from '@/providers/react-query-provider';
 import ReactToastProvider from '@/providers/react-toast-provider';
@@ -15,6 +16,7 @@ const Provider = ({ children }: { children: ReactNode }) => {
           {children}
           <StackModalProvider />
           <ReactToastProvider />
+          <FirebaseProvider />
         </ContextProvider>
       </ReactQueryProviders>
     </>

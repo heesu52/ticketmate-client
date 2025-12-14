@@ -8,4 +8,5 @@ export interface SettingItem {
   disabled?: boolean;
   type?: 'link' | 'text' | 'action';
   trailingIcon?: ReactNode; // 우측 아이콘 교체용
+  onClick?: () => void;
 }

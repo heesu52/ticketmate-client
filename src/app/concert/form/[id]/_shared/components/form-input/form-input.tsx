@@ -1,14 +1,19 @@
 import { useEffect, useState, useRef } from 'react';
 
 import classNames from 'classnames';
-// import Image from 'next/image';
+import Image from 'next/image';
 
+import {
+  FormData,
+  HopeArea,
+} from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
 import {
   MinusIcon,
   PlusIcon,
   ArrowBottomIcon,
   ArrowTopIcon,
 } from '@/assets/icons';
+import { NoRegisterImage } from '@/assets/images';
 import Input from '@/shared/components/ui/input/input';
 import Select from '@/shared/components/ui/select/select';
 import Textarea from '@/shared/components/ui/textarea/textarea';
@@ -23,7 +28,6 @@ import { formatDate } from '@/shared/utils/dates';
 import { getTicketOpenInfoByType } from '@/shared/utils/tickets';
 
 import styles from './form-input.module.scss';
-import { FormData, HopeArea } from './form-input.type';
 /**
  * FormInput 컴포넌트
  * 신청폼 작성 탭에서 회차/매수/희망구역/요청사항을 입력할 수 있는 폼 UI
@@ -239,15 +243,14 @@ export default function FormInput({
             )}
           </div>
           {isOpen && (
-            // 열람 확인을 위해 넣은거라 나중에 이미지 제대로 업로드 되면 삭제 예정
-            <div className={styles.example}>예시</div>
-            // <Image
-            //   src={seatingChartUrl}
-            //   alt="좌석배치도"
-            //   width={345}
-            //   height={0} // 또는 생략
-            //   style={{ width: '100%', height: 'auto', marginTop: '12px' }}
-            // />
+            <div className={styles.seat_image_wrapper}>
+              <Image
+                src={seatingChartUrl ?? NoRegisterImage}
+                alt="좌석배치도"
+                fill
+                className={styles.seat_image}
+              />
+            </div>
           )}
         </div>
       )}

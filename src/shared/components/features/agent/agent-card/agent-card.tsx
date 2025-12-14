@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { StarIcon } from '@/assets/icons';
+import { NoRegisterImage } from '@/assets/images';
 import { AgentInfo } from '@/shared/types';
 
 import styles from './agent-card.module.scss';
@@ -28,7 +29,7 @@ const AgentCard = ({ agent }: AgentCardProps) => {
     <div className={styles.container}>
       <Image
         className={styles.profile_image}
-        src={profileUrl}
+        src={profileUrl ?? NoRegisterImage}
         alt={nickname}
         width={48}
         height={48}

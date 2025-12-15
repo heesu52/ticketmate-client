@@ -1,52 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import ky from 'ky';
 
-import NotificationContent from '@/app/notification/notification-content/notification-content';
-import httpClient from '@/lib/http-client/http-client';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 
 import styles from './page.module.scss';
 
-export default function Notification() {
-  const [notifications, setNotifications] = useState<
-    {
-      title: string;
-      message: string;
-      time: string;
-      isRead: boolean;
-    }[]
-  >([]);
-
+export default function NotificationPage() {
   const sendTestNotification = async () => {
     try {
-      await httpClient({
-        method: 'post',
-        url: 'mock/notification',
-        options: {
-          json: {
-            title: '테스트 제목입니다.',
-            body: '테스트 본문입니다.',
-          },
+      Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+          console.log('알림 권한 허용');
+        } else {
+          console.log('알림 권한 거절');
+        }
+      });
+
+      const created = ky.create({
+        prefixUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
+        credentials: 'include',
+      });
+
+      const extended = created.post('mock/notification', {
+        hooks: {
+          beforeRequest: [
+            (request) => {
+              request.headers.set(
+                'Authorization',
+                `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
+              );
+            },
+          ],
         },
-      });
-
-      const now = new Date();
-      const formattedTime = now.toLocaleTimeString('ko-KR', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      });
-
-      setNotifications((prev) => [
-        {
+        json: {
           title: '테스트 제목입니다.',
-          message: '테스트 본문입니다.',
-          time: formattedTime,
-          isRead: false,
+          body: '테스트 본문입니다.',
         },
-        ...prev,
-      ]);
+      });
+
+      await extended;
     } catch (error) {
       console.error('테스트 알림 발송 실패:', error);
     }
@@ -70,19 +63,6 @@ export default function Notification() {
         >
           테스트 알림 발송
         </button>
-
-        <div className={styles.list_container}>
-          {notifications.map((item, index) => (
-            <NotificationContent
-              key={index}
-              index={index}
-              title={item.title}
-              message={item.message}
-              time={item.time}
-              isRead={item.isRead}
-            />
-          ))}
-        </div>
       </div>
     </PageFrame>
   );

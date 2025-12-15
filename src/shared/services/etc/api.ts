@@ -1,7 +1,7 @@
 import httpClient from '@/lib/http-client/http-client';
-import { PostFcmTokenRequest } from '@/shared/services/etc/type';
+import { PostFCMTokenRequest } from '@/shared/services/etc/type';
 
-const postFcmToken = async (request: PostFcmTokenRequest) => {
+const postFCMToken = async (request: PostFCMTokenRequest) => {
   const response = await httpClient({
     method: 'post',
     url: `fcm`,
@@ -13,4 +13,4 @@ const postFcmToken = async (request: PostFcmTokenRequest) => {
   return response;
 };
 
-export { postFcmToken };
+export { postFCMToken };

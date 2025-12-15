@@ -1,16 +1,11 @@
-export enum DeviceType {
-  WEB = 'WEB',
-  ANDROID = 'ANDROID',
-  IOS = 'IOS',
-  OTHER = 'OTHER',
-}
+import { DeviceType } from '@/shared/types/common';
 
-export interface PostFcmTokenRequest {
+export interface PostFCMTokenRequest {
   fcmToken: string;
   deviceType: DeviceType;
 }
 
-export interface PostFcmTokenResponse {
+export interface PostFCMTokenResponse {
   tokenId: string;
   fcmToken: string;
   memberId: string;

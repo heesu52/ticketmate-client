@@ -64,7 +64,9 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
                     height={16}
                     fill="var(--grayscale-600)"
                   />
-                  <span>{concertHallName}</span>
+                  <span>
+                    {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
+                  </span>
                 </div>
                 <div className={styles.info_item}>
                   <DateRangeIcon
@@ -72,8 +74,8 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
                     height={16}
                     fill="var(--grayscale-600)"
                   />
-                  <span>
-                    {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
+                  <span className={styles.info}>
+                    {concertHallName ?? '공연장 정보가 없습니다'}
                   </span>
                 </div>
               </div>

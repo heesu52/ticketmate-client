@@ -1,12 +1,11 @@
 import { DeviceType } from '@/shared/types/common';
 
 export const getDeviceType = () => {
-  // 브라우저 환경이 아니거나 navigator 객체가 없는 경우 'OTHER' 반환
-  if (typeof window === 'undefined' || !window.navigator) {
+  if (typeof window === 'undefined' || !('navigator' in window)) {
     return DeviceType.OTHER;
   }
 
-  const userAgent = navigator.userAgent || navigator.vendor;
+  const userAgent = window.navigator.userAgent || window.navigator.vendor;
 
   // 1. Android 확인
   // userAgent에 'Android' 문자열이 포함되어 있는지 확인

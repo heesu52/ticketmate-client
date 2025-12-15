@@ -29,6 +29,16 @@ const HistoryList = ({ tab }: HistoryListProps) => {
     return tab === 'CURRENT' ? isPending : !isPending;
   });
 
+  if (filteredList.length === 0 && tab === 'CURRENT') {
+    return (
+      <div className={styles.empty_container}>진행 중인 신청내역이 없음</div>
+    );
+  } else if (filteredList.length === 0 && tab === 'PAST') {
+    return (
+      <div className={styles.empty_container}>아직 완료된 신청내역이 없음</div>
+    );
+  }
+
   return (
     <>
       <div className={styles.container}>

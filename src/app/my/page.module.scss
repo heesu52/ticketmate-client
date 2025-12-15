@@ -106,19 +106,18 @@
         color: var(--grayscale-500, #767676);
       }
     }
+    .empty_container {
+      display: flex;
+      width: 100%;
+      padding: 16px 0;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      background: var(--grayscale-200, #fafafa);
+
+      @include text-md;
+      color: var(--grayscale-500, #767676);
+    }
   }
-}
-
-.empty_container {
-  display: flex;
-  width: 100%;
-  padding: 16px 0;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  background: var(--grayscale-200, #fafafa);
-
-  @include text-md;
-  color: var(--grayscale-500, #767676);
 }

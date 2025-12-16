@@ -109,8 +109,8 @@ const FirebaseProvider = () => {
         onMessage(messagingResolve, (payload) => {
           if (Notification.permission === 'granted') {
             console.log('Foreground Message:', payload);
-            const title = payload.notification?.title;
-            const body = payload.notification?.body;
+            const title = payload.data?.title;
+            const body = payload.data?.body;
 
             const notificationOptions = {
               body: body,

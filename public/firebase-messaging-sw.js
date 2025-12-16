@@ -23,8 +23,8 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log('Background Message:', payload);
 
-  const title = payload.notification.title || '새 알림';
-  const body = payload.notification.body || '내용이 없습니다.';
+  const title = payload.data.title || '새 알림';
+  const body = payload.data.body || '내용이 없습니다.';
 
   const notificationOptions = {
     body: body,
@@ -40,7 +40,7 @@ self.addEventListener('notificationclick', function (event) {
   event.notification.close();
 
   const data = event.notification.data;
-  const redirectUrl = data?.redirectUrl || '/';
+  const redirectUrl = data?.redirectUrl || '/my';
 
   event.waitUntil(
     clients

@@ -1,7 +1,7 @@
 import React, { type ReactNode } from 'react';
 
 import ContextProvider from '@/providers/context-provider';
-import FirebaseProvider from '@/providers/firebase/firebase-provider';
+import FirebaseProvider from '@/providers/firebase-provider';
 import HeadProvider from '@/providers/head-provider';
 import ReactQueryProviders from '@/providers/react-query-provider';
 import ReactToastProvider from '@/providers/react-toast-provider';

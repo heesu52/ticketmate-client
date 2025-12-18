@@ -5,7 +5,6 @@ import {
   GetRecentSearchResponse,
 } from '@/app/search/_shared/services/type';
 import httpClient from '@/lib/http-client/http-client';
-import { createQueryParams } from '@/shared/utils/services/query-string';
 
 const BASE_URL = 'search';
 
@@ -18,13 +17,12 @@ const getSearch = async <
 >(
   request?: GetSearchRequest,
 ): Promise<T> => {
-  const query = request
-    ? `?${createQueryParams(request as unknown as Record<string, unknown>)}`
-    : '';
-
   const data = await httpClient<T>({
     method: 'get',
-    url: `${BASE_URL}${query}`,
+    url: `${BASE_URL}`,
+    options: {
+      searchParams: { ...request },
+    },
   });
 
   return data;

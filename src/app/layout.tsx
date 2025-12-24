@@ -2,8 +2,6 @@ import { ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 
-import NotificationInitializer from '@/app/_components/NotificationInitializer';
-import ServiceWorkerRegister from '@/app/_components/ServiceWorkerRegister';
 import Provider from '@/providers';
 
 import type { Metadata, Viewport } from 'next';
@@ -46,8 +44,6 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={pretendard.variable}>
-        <ServiceWorkerRegister />
-        <NotificationInitializer />
         <Provider>{children}</Provider>
       </body>
     </html>

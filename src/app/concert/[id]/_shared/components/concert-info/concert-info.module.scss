@@ -22,7 +22,9 @@
       width: 100%;
       height: 100%;
       filter: blur(4px);
-      transform: scale(1.08); //테두리가 하얗게 보이는 현상을 없애기 위해 사이즈를 살짝 키움
+      transform: scale(
+        1.08
+      ); //테두리가 하얗게 보이는 현상을 없애기 위해 사이즈를 살짝 키움
     }
   }
 

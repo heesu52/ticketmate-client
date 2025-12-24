@@ -1,9 +1,5 @@
 'use client';
 
-import Link from 'next/link';
-
-import { ArrowRightIcon } from '@/assets/icons';
-
 import styles from './notification-content.module.scss';
 
 interface NotificationContentProps {
@@ -38,10 +34,10 @@ export default function NotificationContent({
       <div className={styles.footer}>
         <span className={styles.time}>{time}</span>
         <div className={styles.button}>
-          <Link href="/chat" className={styles.button_label}>
+          {/* <Link href="/chat" className={styles.button_label}>
             채팅하기
           </Link>
-          <ArrowRightIcon width={16} height={16} />
+          <ArrowRightIcon width={16} height={16} /> */}
         </div>
       </div>
     </div>

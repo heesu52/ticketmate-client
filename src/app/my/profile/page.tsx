@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import { NoRegisterImage } from '@/assets/images';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -17,6 +18,8 @@ import { useGetMember } from '@/shared/services/member/query';
 import styles from './page.module.scss';
 
 const ProfilePage = () => {
+  const router = useRouter();
+
   const { data: member } = useGetMember();
   const updateProfile = useUpdateProfile();
 
@@ -100,6 +103,7 @@ const ProfilePage = () => {
           variant: 'success',
           description: '회원 정보 수정에 성공했습니다.',
         });
+        router.back();
       })
       .catch((error) => {
         toastify({

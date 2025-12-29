@@ -265,6 +265,7 @@ export default function FormInput({
           placeholder="자유롭게 입력해주세요."
           style={{ height: '200px' }}
           disabled={disabled}
+          maxLength={100}
         />
       </div>
     </div>

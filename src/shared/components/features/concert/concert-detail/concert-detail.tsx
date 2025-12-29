@@ -47,7 +47,9 @@ const ConcertInfo = ({
 
         <div className={styles.detail}>
           <span className={styles.category}>공연장</span>
-          <span className={styles.info}>{concertHallName}</span>
+          <span className={styles.info}>
+            {concertHallName ?? '공연장 정보가 없습니다'}
+          </span>
         </div>
 
         <div className={styles.detail}>

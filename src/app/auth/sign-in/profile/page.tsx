@@ -21,8 +21,8 @@ const ProfilePage = () => {
   const updateProfile = useUpdateProfile();
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [nickname, setNickname] = useState('');
   const profileImageInputRef = useRef<HTMLInputElement>(null);
+  const nicknameInputRef = useRef<HTMLInputElement>(null);
 
   // 프로필 이미지 업로드 처리
   const handleProfileImageUpload = (
@@ -45,14 +45,10 @@ const ProfilePage = () => {
     }
   };
 
-  // 닉네임 변경 처리
-  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setNickname(value);
-  };
-
   // 시작하기 버튼 클릭 처리
   const handleSubmit = () => {
+    const nickname = nicknameInputRef.current?.value || '';
+
     if (!nickname.trim()) {
       toastify({
         variant: 'error',
@@ -140,8 +136,7 @@ const ProfilePage = () => {
             </button>
 
             <Input
-              value={nickname}
-              onChange={handleNicknameChange}
+              ref={nicknameInputRef}
               id="nickname"
               label="닉네임"
               placeholder="2-12자, 특수문자 제외"

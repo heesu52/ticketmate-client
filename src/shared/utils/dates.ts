@@ -61,14 +61,16 @@ export const getPerformancePeriod = (
  * @returns HH:mm 형식의 시간 문자열
  */
 export const formatTime = (time: string): string => {
-  if (!time || !time.includes('T')) {
-    throw new Error('시간 형식이 올바르지 않습니다.');
+  if (!time || typeof time !== 'string' || !time.includes('T')) {
+    console.error('시간 형식이 올바르지 않습니다:', time);
+    return '';
   }
 
   const timePart = time.split('T')[1];
 
   if (!timePart || timePart.length < 5) {
-    throw new Error('시간 형식이 올바르지 않습니다.');
+    console.error('시간 형식이 올바르지 않습니다:', time);
+    return '';
   }
 
   return timePart.substring(0, 5); // HH:mm 형식으로 반환
@@ -80,7 +82,18 @@ export const formatTime = (time: string): string => {
  * @returns 오늘인지 여부 (boolean)
  */
 export const isToday = (datetime: string): boolean => {
+  if (!datetime || typeof datetime !== 'string') {
+    return false;
+  }
+
   const targetDate = new Date(datetime);
+
+  // 유효하지 않은 날짜인지 확인
+  if (isNaN(targetDate.getTime())) {
+    console.error('유효하지 않은 날짜 형식:', datetime);
+    return false;
+  }
+
   const today = new Date();
 
   // 날짜만 비교하기 위해 시간을 00:00:00으로 설정
@@ -103,7 +116,19 @@ export const formatDateToLocale = ({
   datetime: string;
   locale?: 'ko' | 'en' | 'ja';
 }): string => {
+  // 날짜 문자열 유효성 검사
+  if (!datetime || typeof datetime !== 'string') {
+    return '';
+  }
+
   const date = new Date(datetime);
+
+  // 유효하지 않은 날짜인지 확인
+  if (isNaN(date.getTime())) {
+    console.error('유효하지 않은 날짜 형식:', datetime);
+    return '';
+  }
+
   const month = date.getMonth() + 1;
   const day = date.getDate();
 

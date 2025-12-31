@@ -51,7 +51,6 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
           src={concertThumbnailUrl}
           alt={concertName}
           fill
-          unoptimized
         />
       </div>
 
@@ -63,7 +62,6 @@ const ConcertInfo = ({ concertItem }: ConcertInfoProps) => {
           alt={concertName}
           width={140}
           height={186}
-          unoptimized
         />
 
         <ConcertDetail

@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 
+import GlobalLoading from '@/app/_components/global-loading/global-loading';
 import Provider from '@/providers';
 
 import type { Metadata, Viewport } from 'next';
@@ -44,7 +45,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={pretendard.variable}>
-        <Provider>{children}</Provider>
+        <Provider>
+          {children}
+          <GlobalLoading />
+        </Provider>
       </body>
     </html>
   );

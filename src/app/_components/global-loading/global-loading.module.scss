@@ -1,3 +1,5 @@
+@use '@/styles/index' as *;
+
 .container {
   position: fixed;
   top: 0;
@@ -18,6 +20,10 @@
     svg {
       animation: spin 1s linear infinite;
     }
+  }
+
+  .sr_only {
+    @include a11y-hidden;
   }
 }
 

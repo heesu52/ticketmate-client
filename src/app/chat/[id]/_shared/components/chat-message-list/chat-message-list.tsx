@@ -94,20 +94,97 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   }, [initialMessages]);
 
   /** 메시지 수신 처리 핸들러 */
-  const handleMessage = useCallback((response: ChatMessage) => {
-    if ('message' in response) {
-      setMessages((prev) => {
-        const newMessages = [...prev, response];
+  const handleMessage = useCallback(
+    (
+      response:
+        | ChatMessage
+        | { type: string; lastReadMessageId?: string; readerId?: string },
+    ) => {
+      // READ_ACK 타입인 경우 (상대방이 읽음 처리한 경우)
+      if ('type' in response && response.type === 'READ_ACK') {
+        // 상대방이 읽은 경우에만 처리 (내가 읽은 것은 제외)
+        if (
+          response.readerId &&
+          response.readerId !== memberId &&
+          response.lastReadMessageId
+        ) {
+          setMessages((prev) => {
+            const lastReadId = response.lastReadMessageId!;
+            let foundLastRead = false;
 
-        // 읽음 처리된 메시지인 경우 Set에 추가
-        if (response.isRead) {
-          readMessageIdsRef.current.add(response.messageId);
+            const updatedMessages = prev.map((msg) => {
+              // 내가 보낸 메시지이고 아직 읽지 않은 경우
+              if (msg.mine && !msg.isRead) {
+                // lastReadMessageId까지의 모든 메시지를 읽음 처리
+                // 메시지 ID가 lastReadMessageId와 같거나 그 이전인 경우
+                if (msg.messageId === lastReadId) {
+                  foundLastRead = true;
+                  readMessageIdsRef.current.add(msg.messageId);
+                  return { ...msg, isRead: true };
+                }
+
+                // lastReadMessageId를 찾기 전까지의 모든 메시지를 읽음 처리
+                if (!foundLastRead) {
+                  readMessageIdsRef.current.add(msg.messageId);
+                  return { ...msg, isRead: true };
+                }
+              }
+              return msg;
+            });
+
+            if (!foundLastRead) {
+              console.warn(
+                '[READ_ACK] lastReadMessageId not found in messages:',
+                lastReadId,
+              );
+            }
+
+            return updatedMessages;
+          });
         }
+        return;
+      }
 
-        return newMessages;
-      });
-    }
-  }, []);
+      // 일반 메시지인 경우
+      if ('message' in response || 'chatMessageType' in response) {
+        setMessages((prev) => {
+          // 이미 존재하는 메시지인지 확인 (중복 방지 및 읽음 상태 업데이트)
+          const existingIndex = prev.findIndex(
+            (msg) => msg.messageId === (response as ChatMessage).messageId,
+          );
+
+          if (existingIndex !== -1) {
+            // 이미 존재하는 메시지면 업데이트 (읽음 상태 등)
+            const updatedMessages = [...prev];
+            updatedMessages[existingIndex] = {
+              ...updatedMessages[existingIndex],
+              ...(response as ChatMessage),
+            };
+
+            // 읽음 처리된 메시지인 경우 Set에 추가
+            if ((response as ChatMessage).isRead) {
+              readMessageIdsRef.current.add(
+                (response as ChatMessage).messageId,
+              );
+            }
+
+            return updatedMessages;
+          }
+
+          // 새 메시지 추가
+          const newMessages = [...prev, response as ChatMessage];
+
+          // 읽음 처리된 메시지인 경우 Set에 추가
+          if ((response as ChatMessage).isRead) {
+            readMessageIdsRef.current.add((response as ChatMessage).messageId);
+          }
+
+          return newMessages;
+        });
+      }
+    },
+    [memberId],
+  );
 
   /** 웹소켓 훅 */
   const {

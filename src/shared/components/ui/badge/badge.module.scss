@@ -12,6 +12,8 @@
   padding: 4px 8px;
   border-radius: 4px;
 
+  white-space: nowrap;
+
   /* variant: type-a */
   &[data-variant='type-a'] {
     color: var(--secondary-700, #0e4f65);

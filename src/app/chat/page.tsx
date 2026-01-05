@@ -15,7 +15,6 @@ import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import { useMember } from '@/shared/context/member-context';
 import { useWebSocket } from '@/shared/context/websocket-context';
 import { useIntersectionObserver } from '@/shared/hooks/use-intersection-observer';
-import { formatDateToLocale, formatTime, isToday } from '@/shared/utils/dates';
 
 import styles from './page.module.scss';
 
@@ -25,12 +24,6 @@ interface UnreadMessage {
   sendDate: string;
   unReadMessageCount: number;
 }
-
-const formatDateTime = (time: string) => {
-  return isToday(time)
-    ? formatTime(time)
-    : formatDateToLocale({ datetime: time });
-};
 
 export default function ChatPage() {
   const { member } = useMember();
@@ -59,6 +52,11 @@ export default function ChatPage() {
   // 안읽은 메시지 수신 처리 핸들러
   const handleUnreadMessage = useCallback(
     (response: UnreadMessage) => {
+      // 읽지 않은 메시지가 없으면 업데이트하지 않음
+      if (response.unReadMessageCount === 0) {
+        return;
+      }
+
       // API 호출 없이, React Query 캐시 직접 업데이트
       queryClient.setQueryData(
         queryKey.chatList(),
@@ -77,7 +75,7 @@ export default function ChatPage() {
                   return {
                     ...chat,
                     lastChatMessage: response.lastMessage,
-                    lastChatSendTime: formatDateTime(response.sendDate),
+                    lastChatSendTime: response.sendDate,
                     unReadMessageCount: response.unReadMessageCount,
                   };
                 }
@@ -110,6 +108,7 @@ export default function ChatPage() {
       unsubscribe(`/queue/unread.${memberId}`);
       disconnect();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberId]);
 
   return (

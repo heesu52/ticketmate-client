@@ -11,6 +11,7 @@ import type {
   ChatMessage as ChatMessageType,
   GetChatMessageListRequest,
 } from '@/app/chat/[id]/_shared/services/type';
+import { NoRegisterImage } from '@/assets/images';
 import { useMember } from '@/shared/context/member-context';
 import { useWebSocket } from '@/shared/context/websocket-context';
 import { FulfillmentFormType } from '@/shared/types/chat';
@@ -145,8 +146,6 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
         return;
       }
 
-      console.log('메시지 읽음 처리:', messageId);
-
       // 읽음 처리한 메시지 ID 추가
       readMessageIdsRef.current.add(messageId);
 
@@ -175,6 +174,25 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
     }
   }, [isInitialLoadComplete]);
 
+  /** 채팅방 진입 시 읽지 않은 메시지 읽음 처리 */
+  useEffect(() => {
+    if (!isInitialLoadComplete || !isConnected || messages.length === 0) return;
+
+    // 읽지 않은 메시지 중 마지막 메시지 찾기
+    const unreadMessages = messages.filter(
+      (msg) =>
+        !msg.mine &&
+        !msg.isRead &&
+        !readMessageIdsRef.current.has(msg.messageId),
+    );
+
+    if (unreadMessages.length > 0) {
+      // 마지막 읽지 않은 메시지를 읽음 처리
+      const lastUnreadMessage = unreadMessages[unreadMessages.length - 1];
+      handleReadMessage(lastUnreadMessage.messageId);
+    }
+  }, [isInitialLoadComplete, isConnected, messages, handleReadMessage]);
+
   /** 새 메시지가 추가될 때 스크롤 하단으로 이동 */
   useEffect(() => {
     if (bottomRef.current && messages.length > 0 && isInitialLoadComplete) {
@@ -182,7 +200,7 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
       const { scrollY, innerHeight } = window;
       const documentHeight = document.documentElement.scrollHeight;
 
-      // 하단에서 150px 이내에 있을 때만 자동 스크롤 (더 관대한 기준)
+      // 하단에서 150px 이내에 있을 때만 자동 스크롤
       const isNearBottom = scrollY + innerHeight >= documentHeight - 150;
 
       // 하단에 가까우면 자동으로 스크롤
@@ -196,36 +214,36 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
   }, [messages.length, isInitialLoadComplete]);
 
   /** 스크롤 이벤트 핸들러 */
-  const handleScroll = useCallback(() => {
-    if (!isConnected || messages.length === 0) return;
+  // const handleScroll = useCallback(() => {
+  //   if (!isConnected || messages.length === 0) return;
 
-    const { scrollY, innerHeight } = window;
-    const documentHeight = document.documentElement.scrollHeight;
+  //   const { scrollY, innerHeight } = window;
+  //   const documentHeight = document.documentElement.scrollHeight;
 
-    // 스크롤이 하단에 도달했는지 확인 (약간의 여유 공간 포함)
-    const isAtBottom = scrollY + innerHeight >= documentHeight - 150;
+  //   // 스크롤이 하단에 도달했는지 확인 (약간의 여유 공간 포함)
+  //   const isAtBottom = scrollY + innerHeight >= documentHeight - 150;
 
-    if (isAtBottom) {
-      // 마지막 메시지의 ID 가져오기
-      const lastMessage = messages[messages.length - 1];
+  //   if (isAtBottom) {
+  //     // 마지막 메시지의 ID 가져오기
+  //     const lastMessage = messages[messages.length - 1];
 
-      if (
-        lastMessage &&
-        lastMessage.isRead !== true &&
-        lastMessage.mine !== true &&
-        !readMessageIdsRef.current.has(lastMessage.messageId)
-      ) {
-        // 마지막 메시지 읽음 처리
-        handleReadMessage(lastMessage.messageId);
-      }
-    }
-  }, [isConnected, messages, handleReadMessage]);
+  //     if (
+  //       lastMessage &&
+  //       lastMessage.isRead !== true &&
+  //       lastMessage.mine !== true &&
+  //       !readMessageIdsRef.current.has(lastMessage.messageId)
+  //     ) {
+  //       // 마지막 메시지 읽음 처리
+  //       handleReadMessage(lastMessage.messageId);
+  //     }
+  //   }
+  // }, [isConnected, messages, handleReadMessage]);
 
-  /** 스크롤 이벤트 리스너 등록 */
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
+  // /** 스크롤 이벤트 리스너 등록 */
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, [handleScroll]);
 
   // 역방향 무한스크롤
   const handleScrollTop = useCallback(async () => {
@@ -403,6 +421,9 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
             'YYYY년 MM월 DD일',
           );
 
+          // 내가 보냈는데 상대방이 읽지 않은 메시지인지 확인
+          const isUnread = msgItem.mine && !msgItem.isRead;
+
           /** 그룹 간격 */
           const groupSpacing = isFirstOfGroup ? { marginTop: '24px' } : {};
 
@@ -438,7 +459,7 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
                 {!isMine && (
                   <div className={styles.profile_image_wrapper}>
                     <Image
-                      src={msgItem.profileUrl}
+                      src={msgItem.profileUrl ?? NoRegisterImage}
                       alt="profile"
                       width={44}
                       height={44}
@@ -461,11 +482,14 @@ const ChatMessageList = ({ roomId }: ChatMessageListProps) => {
                     {renderMessageContent(msgItem)}
                   </div>
 
-                  {isLastOfGroup && (
-                    <div className={styles.message_time}>
-                      {dayjs(msgItem.sendDate).format('A h:mm')}
-                    </div>
-                  )}
+                  <div className={styles.message_time_wrapper}>
+                    {isUnread && <div className={styles.unread_dot}></div>}
+                    {isLastOfGroup && (
+                      <div className={styles.message_time}>
+                        {dayjs(msgItem.sendDate).format('A h:mm')}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </React.Fragment>

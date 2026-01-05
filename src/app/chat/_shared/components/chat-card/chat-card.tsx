@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import type { ChatRoom } from '@/app/chat/_shared/services/type';
+import { NoRegisterImage } from '@/assets/images';
 import Badge from '@/shared/components/ui/badge/badge';
 import { TICKET_OPEN_TYPE_LABEL_MAP } from '@/shared/constants/type-mapping';
 import { formatDateToLocale, formatTime, isToday } from '@/shared/utils/dates';
@@ -39,7 +40,7 @@ const ChatCard = ({ chat, ref }: ChatCardProps) => {
       <div className={styles.profile_wrapper}>
         <Image
           className={styles.profile_image}
-          src={chat.profileUrl}
+          src={chat.profileUrl ?? NoRegisterImage}
           alt="profile"
           width={60}
           height={60}

@@ -99,11 +99,25 @@
         max-width: 280px;
       }
 
-      .message_time {
-        @include text-xs;
+      .message_time_wrapper {
+        display: flex;
+        align-items: center;
+        gap: 4px;
         flex-shrink: 0;
 
-        color: var(--grayscale-500, #767676);
+        .unread_dot {
+          width: 6px;
+          height: 6px;
+          background: var(--primary-500, #ff6a6a);
+          border-radius: 50%;
+        }
+
+        .message_time {
+          @include text-xs;
+          flex-shrink: 0;
+
+          color: var(--grayscale-500, #767676);
+        }
       }
     }
 

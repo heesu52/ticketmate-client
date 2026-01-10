@@ -52,11 +52,6 @@ export default function ChatPage() {
   // 안읽은 메시지 수신 처리 핸들러
   const handleUnreadMessage = useCallback(
     (response: UnreadMessage) => {
-      // 읽지 않은 메시지가 없으면 업데이트하지 않음
-      if (response.unReadMessageCount === 0) {
-        return;
-      }
-
       // API 호출 없이, React Query 캐시 직접 업데이트
       queryClient.setQueryData(
         queryKey.chatList(),

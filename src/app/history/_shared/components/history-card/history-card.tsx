@@ -74,6 +74,7 @@ const HistoryCard = ({ formItem }: FormCardProps) => {
           alt={concertName}
           width={48}
           height={48}
+          quality={100}
         />
         <div className={styles.detail_container}>
           <span className={styles.title}>{concertName}</span>

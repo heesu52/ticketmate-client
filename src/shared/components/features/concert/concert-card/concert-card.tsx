@@ -49,7 +49,7 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
                 alt={concertName}
                 width={100}
                 height={133}
-                priority
+                quality={100}
               />
             </div>
 

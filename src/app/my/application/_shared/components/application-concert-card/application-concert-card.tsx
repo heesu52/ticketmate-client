@@ -40,6 +40,7 @@ const ApplicationConcertCard = ({
         alt={Item.concertName}
         width={48}
         height={48}
+        quality={100}
       />
       <div className={styles.info_container}>
         <div className={styles.header_container}>

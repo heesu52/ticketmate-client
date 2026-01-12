@@ -26,6 +26,7 @@ const ApplicationCard = ({ item, onToggle }: ApplicationCardProps) => {
         alt={item.concertName}
         width={48}
         height={48}
+        quality={100}
       />
       <div className={styles.footer_container}>
         <div className={styles.count_container}>

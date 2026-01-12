@@ -10,10 +10,14 @@
 
   padding: 12px 20px;
 
+  gap: 16px;
+
   .left_container {
     display: flex;
     align-items: center;
     gap: 8px;
+    min-width: 0; // ellipsis 작동을 위해 필요
+    flex: 1; // 남은 공간을 차지하도록 설정
   }
 
   .concert_name {
@@ -22,5 +26,6 @@
     overflow: hidden;
     color: var(--grayscale-700, #222);
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

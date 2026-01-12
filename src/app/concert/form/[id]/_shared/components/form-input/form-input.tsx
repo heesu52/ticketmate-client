@@ -24,6 +24,7 @@ import {
   TicketOpenDateInfo,
   TicketOpenType,
 } from '@/shared/types';
+import { ValidationConstants } from '@/shared/types/ValidationConstants';
 import { formatDate } from '@/shared/utils/dates';
 import { getTicketOpenInfoByType } from '@/shared/utils/tickets';
 
@@ -94,10 +95,12 @@ export default function FormInput({
   //희망사항 추가
   const addInput = () => {
     setHopeAreaList((prev) => {
-      if (prev.length >= 5) {
+      if (
+        prev.length >= ValidationConstants.ApplicationForm.HOPE_AREA_MAX_SIZE
+      ) {
         toastify({
           variant: 'error',
-          description: '최대 5개까지만 가능합니다.',
+          description: `희망 구역은 최대 ${ValidationConstants.ApplicationForm.HOPE_AREA_MAX_SIZE}개까지 가능합니다.`,
         });
         return prev;
       }
@@ -114,6 +117,14 @@ export default function FormInput({
   };
 
   const handleInputChange = (id: number, field: string, value: string) => {
+    if (field === 'price' && isNaN(Number(value))) {
+      toastify({
+        variant: 'error',
+        description: '가격은 숫자만 입력 가능합니다.',
+      });
+      return;
+    }
+
     setHopeAreaList((prev) =>
       prev.map((input) =>
         input.id === id ? { ...input, [field]: value } : input,

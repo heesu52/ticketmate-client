@@ -16,6 +16,7 @@ import {
 import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
+import { validateApplicationForm } from '../../validators/applicationForm.validator';
 
 interface FormTabManagerProps {
   handleOpenModal?: () => void;
@@ -190,6 +191,25 @@ export default function FormTabManager({
     },
   );
 
+  // valid 확인 후 모달로 이동
+  const handleValidateAndOpenModal = () => {
+    const result = validateApplicationForm(formData);
+
+    if (!result.valid) {
+      if (result.tabId) {
+        setActiveTab(result.tabId);
+      }
+
+      toastify({
+        variant: 'error',
+        description: result.message,
+      });
+      return;
+    }
+
+    handleOpenModal?.();
+  };
+
   // form-button에 전달할 요청 값
   let requestData;
   if (!status) {
@@ -249,7 +269,7 @@ export default function FormTabManager({
           <>
             {member?.memberType === 'CLIENT' && (
               <FormTabClientButton
-                handleOpenModal={() => handleOpenModal?.()}
+                handleOpenModal={handleValidateAndOpenModal}
                 requestData={requestData}
                 status={status}
                 applicationFormId={applicationFormId}
@@ -259,7 +279,7 @@ export default function FormTabManager({
             )}
             {member?.memberType === 'AGENT' && (
               <FormTabAgentButton
-                handleOpenModal={() => handleOpenModal?.()}
+                handleOpenModal={handleValidateAndOpenModal}
                 status={status}
                 applicationFormId={applicationFormId}
               />

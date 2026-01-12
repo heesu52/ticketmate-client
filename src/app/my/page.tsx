@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import ApplicationList from '@/app/my/_shared/components/application-list';
-import RecentSuccessList from '@/app/my/recent-success/recent-success-list/recent-success-list';
+import RecentSuccessList from '@/app/my/recent-success/_shared/components/recent-success-list/recent-success-list';
 import { SettingIcon } from '@/assets/icons';
 import { NoRegisterImage } from '@/assets/images';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
@@ -94,9 +94,6 @@ const MyPage = () => {
           </div>
 
           <RecentSuccessList />
-          {/* 성공신청내역이 없을 때 */}
-          {/* 추후 api 연동 후 recentsuccesscard가 없을 때 최근성공내역없음 버튼이 보일 예정 */}
-          <div className={styles.empty_container}>최근 성공내역 없음</div>
         </div>
       </div>
     </PageFrame>

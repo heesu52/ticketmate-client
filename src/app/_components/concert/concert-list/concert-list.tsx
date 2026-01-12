@@ -42,10 +42,23 @@ const ConcertList = () => {
   });
 
   const handleSelect = (value: string) => {
-    setRequest((prev) => ({
-      ...prev,
-      sortField: value,
-    }));
+    setRequest((prev) => {
+      if (value === 'TICKET_OPEN_DATE') {
+        return {
+          ...prev,
+          sortField: 'TICKET_OPEN_DATE',
+          sortDirection: 'ASC',
+          pageNumber: 1,
+        };
+      }
+
+      return {
+        ...prev,
+        sortField: 'CREATED_DATE',
+        sortDirection: 'DESC',
+        pageNumber: 1,
+      };
+    });
   };
 
   const concertList = data?.content;

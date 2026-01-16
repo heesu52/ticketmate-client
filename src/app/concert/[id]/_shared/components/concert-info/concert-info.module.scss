@@ -25,6 +25,8 @@
       transform: scale(
         1.08
       ); //테두리가 하얗게 보이는 현상을 없애기 위해 사이즈를 살짝 키움
+      object-fit: cover;
+      object-position: center;
     }
   }
 

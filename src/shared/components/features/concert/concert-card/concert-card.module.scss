@@ -23,7 +23,7 @@
       height: 133px;
 
       img {
-        border-radius: 12px;
+        border-radius: 8px;
       }
     }
 
@@ -50,7 +50,17 @@
           align-items: center;
           gap: 4px;
 
-          color: var(--grayscale-600, #555);
+          // 기본 색상
+          color: var(--grayscale-500);
+
+          &.hasInfo {
+            color: var(--grayscale-700);
+          }
+
+          &.noInfo {
+            color: var(--grayscale-500);
+          }
+
           @include text-md;
         }
       }

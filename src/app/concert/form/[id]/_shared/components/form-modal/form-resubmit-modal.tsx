@@ -40,7 +40,7 @@ const FormReSubmitModal = ({
           }
           onResolve?.(true);
         },
-        onError: () => onReject?.(),
+        onError: (error) => onReject?.(error),
       },
     );
   };

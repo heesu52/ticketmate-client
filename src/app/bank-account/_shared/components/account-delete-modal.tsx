@@ -30,7 +30,7 @@ const AccountDeleteModal = ({
         });
         onResolve?.(true);
       },
-      onError: () => onReject?.(),
+      onError: (error) => onReject?.(error),
     });
   };
 

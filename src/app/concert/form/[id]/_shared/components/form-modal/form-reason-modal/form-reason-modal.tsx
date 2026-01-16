@@ -29,7 +29,7 @@ const FormReasonModal = ({
   const [otherMemo, setOtherMemo] = useState<string>('');
   const { handleError } = useHandleError();
 
-  const { data, isError } = useQuery<GetRejectionReasonResponse>({
+  const { data, error } = useQuery<GetRejectionReasonResponse>({
     queryKey: ['rejectionReason', applicationFormId],
     queryFn: () => getRejectionReason(applicationFormId),
   });
@@ -42,10 +42,10 @@ const FormReasonModal = ({
       setMappedMessage(message);
       const memo = data.otherMemo;
       setOtherMemo(memo);
-    } else if (isError) {
-      handleError(isError);
+    } else if (error) {
+      handleError(error);
     }
-  }, [data, isError]);
+  }, [data, error]);
 
   const handleFirstButtonClick = () => {
     onResolve?.(false);

@@ -1,3 +1,5 @@
+'use client';
+
 import {
   SERVICE_INFO_ITEMS,
   SETTING_ITEMS,
@@ -5,10 +7,17 @@ import {
 import SettingItem from '@/shared/components/features/my/setting-item/setting-item';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Spacer from '@/shared/components/ui/spacer/spacer';
+import { useMember } from '@/shared/context/member-context';
 
 import styles from './page.module.scss';
 
 const SettingPage = () => {
+  const { member } = useMember();
+
+  const settingItems = SETTING_ITEMS.filter(
+    (item) => !item.role || item.role === member?.memberType,
+  );
+
   return (
     <PageFrame
       appBar={{
@@ -22,7 +31,7 @@ const SettingPage = () => {
         <div className={styles.setting_container}>
           <div className={styles.title}>설정</div>
           <div className={styles.content}>
-            {SETTING_ITEMS.map((item) => {
+            {settingItems.map((item) => {
               return <SettingItem key={item.title} {...item} />;
             })}
           </div>

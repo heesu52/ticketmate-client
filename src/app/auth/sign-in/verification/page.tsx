@@ -73,7 +73,7 @@ const VerificationPage = () => {
         code: verificationCode,
       })
       .then((res) => {
-        router.push('/auth/sign-in/profile');
+        router.replace('/auth/sign-in/profile');
       })
       .catch((err) => {
         toastify({

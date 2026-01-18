@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 
+import { deleteCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 
 import DeleteAccountModal from '@/app/my/setting/account/delete/_shared/components/delete-account-modal/delete-account-modal';
@@ -70,7 +71,9 @@ const AccountDeletePage = () => {
           variant: 'success',
           description: '회원 탈퇴가 되었어요. 다음에 또 만나요',
         });
-        router.push('/auth/sign-in');
+        deleteCookie('accessToken');
+        deleteCookie('refreshToken');
+        router.replace('/auth/sign-in');
       }
     } catch (error) {
       handleError(error);

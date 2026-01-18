@@ -87,7 +87,7 @@ const ProfilePage = () => {
     updateProfile
       .mutateAsync(request)
       .then(() => {
-        router.push('/');
+        router.replace('/');
       })
       .catch((error) => {
         toastify({
@@ -98,7 +98,7 @@ const ProfilePage = () => {
   };
   return (
     <PageFrame
-      appBar={{ title: '프로필 설정', showBack: true }}
+      appBar={{ title: '프로필 설정', showBack: false }}
       bottomNav={false}
     >
       <div className={styles.container}>

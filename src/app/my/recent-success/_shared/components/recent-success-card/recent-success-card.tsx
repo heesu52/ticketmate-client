@@ -21,7 +21,7 @@ const RecentSuccessCard = ({ item }: RecentSuccessCardProps) => {
         height={48}
       />
       <div className={styles.info_container}>
-        <span className={styles.title}></span>
+        <span className={styles.title}>{item.concertName}</span>
 
         <div className={styles.detail_container}>
           <span className={styles.nickname}>{item.clientNickname}</span>

@@ -5,6 +5,7 @@ type MenuItem = {
   title: string;
   href: string;
   trailing?: ReactNode;
+  role?: 'AGENT' | 'USER';
 };
 
 const SETTING_URL_PREFIX = '/my/setting';
@@ -24,11 +25,13 @@ export const SETTING_ITEMS: MenuItem[] = [
     type: 'link',
     title: '계좌 관리',
     href: `/bank-account`,
+    role: 'AGENT',
   },
   {
     type: 'link',
     title: '대리인 전환',
     href: `${SETTING_URL_PREFIX}/agent`,
+    role: 'USER',
   },
   {
     type: 'link',

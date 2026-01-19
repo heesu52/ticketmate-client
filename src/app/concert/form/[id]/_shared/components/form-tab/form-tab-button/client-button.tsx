@@ -12,7 +12,7 @@ import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
-import { useHandleError } from '@/shared/hooks/use-error';
+import { handleError } from '@/shared/hooks/use-error';
 import { ApplicationFormStatus } from '@/shared/types';
 
 import styles from './form-tab-button.module.scss';
@@ -38,7 +38,6 @@ export default function FormTabClientButton({
   const { member } = useMember();
   const router = useRouter();
   const { open } = useModalStore();
-  const { handleError } = useHandleError();
 
   // 버튼 클릭 시 navigate로 이동
   const handleNavigate = () => {

@@ -5,10 +5,9 @@ import { useRouter } from 'next/navigation';
 
 import { postLogout } from '@/app/my/setting/account/log-out/_shared/services/api';
 import { toastify } from '@/shared/components/ui/toast/toastify';
-import { useHandleError } from '@/shared/hooks/use-error';
+import { handleError } from '@/shared/hooks/use-error';
 
 export const useLogoutMutation = () => {
-  const { handleError } = useHandleError();
   const router = useRouter();
 
   return useMutation({

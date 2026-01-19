@@ -39,7 +39,6 @@ export const handleError = (error: unknown) => {
 };
 
 // 사용예시
-// const { handleError } = useHandleError();
 
 // try {
 //   await someAsyncFunction();

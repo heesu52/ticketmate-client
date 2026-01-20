@@ -57,25 +57,34 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
               <span className={styles.title}>{concertName}</span>
 
               <div className={styles.info_container}>
-                <div className={styles.info_item}>
-                  <LocationOnIcon
-                    width={16}
-                    height={16}
-                    fill="var(--grayscale-600)"
-                  />
-                  <span>
-                    {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
-                  </span>
-                </div>
-                <div className={styles.info_item}>
+                <div
+                  className={`${styles.info_item} ${
+                    startDate && endDate ? styles.has_Info : styles.no_Info
+                  }`}
+                >
                   <DateRangeIcon
                     width={16}
                     height={16}
                     fill="var(--grayscale-600)"
                   />
-                  <span className={styles.info}>
-                    {concertHallName ?? '공연장 정보가 없습니다'}
+                  <span>
+                    {startDate && endDate
+                      ? `${formatDate(startDate)} ~ ${formatDate(endDate)}`
+                      : '공연 일정 정보가 없습니다'}
                   </span>
+                </div>
+
+                <div
+                  className={`${styles.info_item} ${
+                    concertHallName ? styles.has_info : styles.no_info
+                  }`}
+                >
+                  <LocationOnIcon
+                    width={16}
+                    height={16}
+                    fill="var(--grayscale-600)"
+                  />
+                  <span>{concertHallName ?? '공연장 정보가 없습니다'}</span>
                 </div>
               </div>
             </div>

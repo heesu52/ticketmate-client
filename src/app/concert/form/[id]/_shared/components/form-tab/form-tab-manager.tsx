@@ -4,6 +4,7 @@ import FormInput from '@/app/concert/form/[id]/_shared/components/form-input/for
 import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
 import FormTabAgentButton from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-button/agent-button';
 import FormTabClientButton from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-button/client-button';
+import { validateApplicationForm } from '@/app/concert/form/[id]/_shared/validators/application-form';
 import Tab from '@/shared/components/ui/tab/tab';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
@@ -190,6 +191,25 @@ export default function FormTabManager({
     },
   );
 
+  // valid 확인 후 모달로 이동
+  const handleValidateAndOpenModal = () => {
+    const result = validateApplicationForm(formData);
+
+    if (!result.valid) {
+      if (result.tabId) {
+        setActiveTab(result.tabId);
+      }
+
+      toastify({
+        variant: 'error',
+        description: result.message,
+      });
+      return;
+    }
+
+    handleOpenModal?.();
+  };
+
   // form-button에 전달할 요청 값
   let requestData;
   if (!status) {
@@ -249,7 +269,7 @@ export default function FormTabManager({
           <>
             {member?.memberType === 'CLIENT' && (
               <FormTabClientButton
-                handleOpenModal={() => handleOpenModal?.()}
+                handleOpenModal={handleValidateAndOpenModal}
                 requestData={requestData}
                 status={status}
                 applicationFormId={applicationFormId}
@@ -259,7 +279,7 @@ export default function FormTabManager({
             )}
             {member?.memberType === 'AGENT' && (
               <FormTabAgentButton
-                handleOpenModal={() => handleOpenModal?.()}
+                handleOpenModal={handleValidateAndOpenModal}
                 status={status}
                 applicationFormId={applicationFormId}
               />

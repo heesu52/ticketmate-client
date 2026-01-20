@@ -19,7 +19,7 @@ const FormCancelModal = ({
   const handleSecondButtonClick = () => {
     mutate(applicationFormId, {
       onSuccess: () => onResolve?.(true),
-      onError: () => onReject?.(),
+      onError: (error) => onReject?.(error),
     });
   };
 

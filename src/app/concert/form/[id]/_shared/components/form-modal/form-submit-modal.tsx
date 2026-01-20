@@ -29,7 +29,7 @@ const FormSubmitModal = ({
       { agentId, concertId, ticketOpenType, applicationFormDetailRequestList },
       {
         onSuccess: () => onResolve?.(true),
-        onError: () => onReject?.(),
+        onError: (error) => onReject?.(error),
       },
     );
   };

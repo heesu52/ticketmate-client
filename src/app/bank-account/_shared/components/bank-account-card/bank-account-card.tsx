@@ -11,9 +11,9 @@ import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
-import { useHandleError } from '@/shared/hooks/use-error';
 import { BankCode } from '@/shared/types';
 import { getBankIconByCode, getBankNameByCode } from '@/shared/utils/bank';
+import { handleError } from '@/shared/utils/error';
 
 import styles from './bank-account-card.module.scss';
 
@@ -30,7 +30,6 @@ const BankAccountCard = ({ bankAccountData }: BankAccountCardProps) => {
     bankCode: BankCode;
   }>();
   const { open } = useModalStore();
-  const { handleError } = useHandleError();
   const { mutate } = usePatchBankAccount();
   const queryClient = useQueryClient();
 

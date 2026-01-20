@@ -2,39 +2,38 @@
 
 import Image from 'next/image';
 
+import { HistoryItem } from '@/app/my/recent-success/_shared/services/type';
 import { StarIcon } from '@/assets/icons';
-import { useMember } from '@/shared/context/member-context';
 
 import styles from './recent-success-card.module.scss';
 
-const RecentSuccessCard = () => {
-  const { member } = useMember();
-
+interface RecentSuccessCardProps {
+  item: HistoryItem;
+}
+const RecentSuccessCard = ({ item }: RecentSuccessCardProps) => {
   return (
     <div className={styles.container}>
       <Image
         className={styles.image}
-        src={'/placeholder-concert.png'}
-        alt={'공연썸네일이미지'}
+        src={item.concertThumbnailUrl}
+        alt={item.concertName}
         width={48}
         height={48}
       />
       <div className={styles.info_container}>
-        <span className={styles.title}>
-          터치드(TOUCHED) 단독 콘서트 ‘HIGHLIGHT Ⅲ’
-        </span>
+        <span className={styles.title}>{item.concertName}</span>
 
         <div className={styles.detail_container}>
-          <span className={styles.nickname}>{member?.nickname}</span>
+          <span className={styles.nickname}>{item.clientNickname}</span>
 
           <div className={styles.footer_container}>
-            <span className={styles.date}>25.01.24(일)</span>
+            <span className={styles.date}>{item.createDate}</span>
 
             <span className={styles.review_container}>
               <span>
                 <StarIcon width={16} height={16} />
               </span>
-              <span className={styles.review_score}>{4.5}</span>
+              <span className={styles.review_score}>{item.reviewRating}</span>
             </span>
           </div>
         </div>

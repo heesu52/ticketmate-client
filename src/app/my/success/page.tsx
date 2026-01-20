@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-import RecentSuccessList from '@/app/my/recent-success/recent-success-list/recent-success-list';
+import RecentSuccessList from '@/app/my/recent-success/_shared/components/recent-success-list/recent-success-list';
 import SuccessList from '@/app/my/success/_shared/components/success-list';
 import PageFrame from '@/shared/components/layout/page-frame/page-frame';
 import Spacer from '@/shared/components/ui/spacer/spacer';

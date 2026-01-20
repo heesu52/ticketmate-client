@@ -11,7 +11,7 @@ import Modal from '@/shared/components/ui/modal/modal';
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
 import Spacer from '@/shared/components/ui/spacer/spacer';
 import { APPLICATION_REJECTED_LABEL_MAP } from '@/shared/constants/type-mapping';
-import { useHandleError } from '@/shared/hooks/use-error';
+import { handleError } from '@/shared/utils/error';
 
 import styles from './form-reason-modal.module.scss';
 
@@ -27,9 +27,8 @@ const FormReasonModal = ({
 }: FormReasonModalProps) => {
   const [mappedMessage, setMappedMessage] = useState<string>('');
   const [otherMemo, setOtherMemo] = useState<string>('');
-  const { handleError } = useHandleError();
 
-  const { data, isError } = useQuery<GetRejectionReasonResponse>({
+  const { data, error } = useQuery<GetRejectionReasonResponse>({
     queryKey: ['rejectionReason', applicationFormId],
     queryFn: () => getRejectionReason(applicationFormId),
   });
@@ -42,10 +41,10 @@ const FormReasonModal = ({
       setMappedMessage(message);
       const memo = data.otherMemo;
       setOtherMemo(memo);
-    } else if (isError) {
-      handleError(isError);
+    } else if (error) {
+      handleError(error);
     }
-  }, [data, isError]);
+  }, [data, error]);
 
   const handleFirstButtonClick = () => {
     onResolve?.(false);

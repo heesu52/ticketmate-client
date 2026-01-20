@@ -60,7 +60,7 @@ const FormRejectedModal = ({
     //거절 요청
     mutate(requestBody, {
       onSuccess: () => onResolve?.(true),
-      onError: () => onReject?.(),
+      onError: (error) => onReject?.(error),
     });
   };
 

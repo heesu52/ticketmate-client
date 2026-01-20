@@ -18,6 +18,7 @@ import Input from '@/shared/components/ui/input/input';
 import Select from '@/shared/components/ui/select/select';
 import Textarea from '@/shared/components/ui/textarea/textarea';
 import { toastify } from '@/shared/components/ui/toast/toastify';
+import { VALIDATION_CONSTANTS } from '@/shared/constants/validation';
 import {
   ConcertDateInfo,
   Form,
@@ -94,10 +95,12 @@ export default function FormInput({
   //희망사항 추가
   const addInput = () => {
     setHopeAreaList((prev) => {
-      if (prev.length >= 5) {
+      if (
+        prev.length >= VALIDATION_CONSTANTS.ApplicationForm.HOPE_AREA_MAX_SIZE
+      ) {
         toastify({
           variant: 'error',
-          description: '최대 5개까지만 가능합니다.',
+          description: `희망 구역은 최대 ${VALIDATION_CONSTANTS.ApplicationForm.HOPE_AREA_MAX_SIZE}개까지 가능합니다.`,
         });
         return prev;
       }
@@ -114,6 +117,14 @@ export default function FormInput({
   };
 
   const handleInputChange = (id: number, field: string, value: string) => {
+    if (field === 'price' && isNaN(Number(value))) {
+      toastify({
+        variant: 'error',
+        description: '가격은 숫자만 입력 가능합니다.',
+      });
+      return;
+    }
+
     setHopeAreaList((prev) =>
       prev.map((input) =>
         input.id === id ? { ...input, [field]: value } : input,

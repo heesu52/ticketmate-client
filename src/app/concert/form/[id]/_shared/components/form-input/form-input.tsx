@@ -18,13 +18,13 @@ import Input from '@/shared/components/ui/input/input';
 import Select from '@/shared/components/ui/select/select';
 import Textarea from '@/shared/components/ui/textarea/textarea';
 import { toastify } from '@/shared/components/ui/toast/toastify';
+import { VALIDATION_CONSTANTS } from '@/shared/constants/validation';
 import {
   ConcertDateInfo,
   Form,
   TicketOpenDateInfo,
   TicketOpenType,
 } from '@/shared/types';
-import { ValidationConstants } from '@/shared/types/ValidationConstants';
 import { formatDate } from '@/shared/utils/dates';
 import { getTicketOpenInfoByType } from '@/shared/utils/tickets';
 
@@ -96,11 +96,11 @@ export default function FormInput({
   const addInput = () => {
     setHopeAreaList((prev) => {
       if (
-        prev.length >= ValidationConstants.ApplicationForm.HOPE_AREA_MAX_SIZE
+        prev.length >= VALIDATION_CONSTANTS.ApplicationForm.HOPE_AREA_MAX_SIZE
       ) {
         toastify({
           variant: 'error',
-          description: `희망 구역은 최대 ${ValidationConstants.ApplicationForm.HOPE_AREA_MAX_SIZE}개까지 가능합니다.`,
+          description: `희망 구역은 최대 ${VALIDATION_CONSTANTS.ApplicationForm.HOPE_AREA_MAX_SIZE}개까지 가능합니다.`,
         });
         return prev;
       }

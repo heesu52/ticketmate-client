@@ -1,4 +1,4 @@
-import { ERROR_MESSAGES } from '@/shared/constants/error-type';
+import { ERROR_CONSTANTS } from '../constants/error';
 
 const AUTH_ERROR_CODES = new Set([
   'UNAUTHORIZED',
@@ -15,14 +15,14 @@ const AUTH_ERROR_CODES = new Set([
 const UNKNOWN_ERROR = '알 수 없는 에러가 발생했습니다.';
 
 export const getErrorMessage = (
-  errorCode?: keyof typeof ERROR_MESSAGES,
+  errorCode?: keyof typeof ERROR_CONSTANTS,
 ): string => {
   if (AUTH_ERROR_CODES.has(errorCode ?? '')) {
-    return ERROR_MESSAGES['AUTH_RETRY_REQUIRED'];
+    return ERROR_CONSTANTS['AUTH_RETRY_REQUIRED'];
   }
 
   if (errorCode) {
-    return ERROR_MESSAGES[errorCode] ?? UNKNOWN_ERROR;
+    return ERROR_CONSTANTS[errorCode] ?? UNKNOWN_ERROR;
   }
 
   return UNKNOWN_ERROR;

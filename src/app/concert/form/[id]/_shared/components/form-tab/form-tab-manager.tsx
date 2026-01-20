@@ -4,6 +4,7 @@ import FormInput from '@/app/concert/form/[id]/_shared/components/form-input/for
 import { FormData } from '@/app/concert/form/[id]/_shared/components/form-input/form-input.type';
 import FormTabAgentButton from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-button/agent-button';
 import FormTabClientButton from '@/app/concert/form/[id]/_shared/components/form-tab/form-tab-button/client-button';
+import { validateApplicationForm } from '@/app/concert/form/[id]/_shared/validators/application-form';
 import Tab from '@/shared/components/ui/tab/tab';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
@@ -16,7 +17,6 @@ import {
 import { formatDate } from '@/shared/utils/dates';
 
 import styles from './form-tab-manager.module.scss';
-import { validateApplicationForm } from '../../validators/applicationForm.validator';
 
 interface FormTabManagerProps {
   handleOpenModal?: () => void;

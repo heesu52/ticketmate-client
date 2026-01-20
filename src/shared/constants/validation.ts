@@ -1,4 +1,4 @@
-export const ValidationConstants = {
+export const VALIDATION_CONSTANTS = {
   Member: {
     // 닉네임 제약조건
     NICKNAME_MIN_LENGTH: 2,

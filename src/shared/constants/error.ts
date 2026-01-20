@@ -1,4 +1,4 @@
-export const ERROR_MESSAGES = {
+export const ERROR_CONSTANTS = {
   // GLOBAL
   INVALID_REQUEST: '잘못된 요청입니다.',
   ACCESS_DENIED: '접근이 거부되었습니다.',
@@ -117,4 +117,4 @@ export const ERROR_MESSAGES = {
   INVALID_BANK_CODE: '올바르지 않은 은행 코드입니다.',
 } as const;
 
-export type ErrorCodeKey = keyof typeof ERROR_MESSAGES;
+export type ErrorCodeKey = keyof typeof ERROR_CONSTANTS;

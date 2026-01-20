@@ -1,5 +1,5 @@
 import { toastify } from '@/shared/components/ui/toast/toastify';
-import { ERROR_MESSAGES } from '@/shared/constants/error-type';
+import { ErrorCodeKey } from '@/shared/constants/error';
 import { getErrorMessage } from '@/shared/utils/getErrorMessage';
 
 export const handleError = (error: unknown) => {
@@ -17,7 +17,7 @@ export const handleError = (error: unknown) => {
     'errorCode' in error
   ) {
     const { errorCode, errorMessage } = error as {
-      errorCode?: keyof typeof ERROR_MESSAGES;
+      errorCode?: ErrorCodeKey;
       errorMessage?: string;
     };
 
@@ -27,7 +27,7 @@ export const handleError = (error: unknown) => {
   // JS Error / AxiosError
   else if (error instanceof Error) {
     message =
-      getErrorMessage(error.message as keyof typeof ERROR_MESSAGES) ??
+      getErrorMessage(error.message as ErrorCodeKey) ??
       error.message ??
       DEFAULT_MESSAGE;
   }

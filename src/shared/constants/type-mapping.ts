@@ -1,4 +1,3 @@
-// src/constants/ticketSite.ts
 import type {
   TicketReservationSite,
   ApplicationFormStatus,

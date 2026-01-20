@@ -53,11 +53,11 @@
           // 기본 색상
           color: var(--grayscale-500);
 
-          &.has_Info {
+          &.has_info {
             color: var(--grayscale-700);
           }
 
-          &.no_Info {
+          &.no_info {
             color: var(--grayscale-500);
           }
 

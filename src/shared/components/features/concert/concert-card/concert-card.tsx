@@ -76,7 +76,7 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
 
                 <div
                   className={`${styles.info_item} ${
-                    concertHallName ? styles.hasInfo : styles.noInfo
+                    concertHallName ? styles.has_info : styles.no_info
                   }`}
                 >
                   <LocationOnIcon

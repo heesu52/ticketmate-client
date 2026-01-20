@@ -59,7 +59,7 @@ const ConcertCard = ({ concertItem }: ConcertCardProps) => {
               <div className={styles.info_container}>
                 <div
                   className={`${styles.info_item} ${
-                    startDate && endDate ? styles.hasInfo : styles.noInfo
+                    startDate && endDate ? styles.has_Info : styles.no_Info
                   }`}
                 >
                   <DateRangeIcon

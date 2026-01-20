@@ -6,8 +6,8 @@ import Button from '@/shared/components/ui/button/button';
 import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
-import { handleError } from '@/shared/hooks/use-error';
 import { ApplicationFormStatus } from '@/shared/types';
+import { handleError } from '@/shared/utils/error';
 
 import styles from './form-tab-button.module.scss';
 

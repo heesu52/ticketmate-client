@@ -12,8 +12,8 @@ import { useModalStore } from '@/shared/components/ui/modal/modal-store';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { useMember } from '@/shared/context/member-context';
 import { useNavigation } from '@/shared/hooks/navigation/use-navigation';
-import { handleError } from '@/shared/hooks/use-error';
 import { ApplicationFormStatus } from '@/shared/types';
+import { handleError } from '@/shared/utils/error';
 
 import styles from './form-tab-button.module.scss';
 

@@ -11,7 +11,7 @@ import Modal from '@/shared/components/ui/modal/modal';
 import { ModalControl } from '@/shared/components/ui/modal/modal.type';
 import Spacer from '@/shared/components/ui/spacer/spacer';
 import { APPLICATION_REJECTED_LABEL_MAP } from '@/shared/constants/type-mapping';
-import { handleError } from '@/shared/hooks/use-error';
+import { handleError } from '@/shared/utils/error';
 
 import styles from './form-reason-modal.module.scss';
 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { postLogout } from '@/app/my/setting/account/log-out/_shared/services/api';
 import { toastify } from '@/shared/components/ui/toast/toastify';
-import { handleError } from '@/shared/hooks/use-error';
+import { handleError } from '@/shared/utils/error';
 
 export const useLogoutMutation = () => {
   const router = useRouter();

@@ -15,7 +15,7 @@ import { RadioOption } from '@/shared/components/ui/radio/radio.type';
 import Spacer from '@/shared/components/ui/spacer/spacer';
 import { toastify } from '@/shared/components/ui/toast/toastify';
 import { WITHDRAWAL_REASON_LABEL_MAP } from '@/shared/constants/type-mapping';
-import { handleError } from '@/shared/hooks/use-error';
+import { handleError } from '@/shared/utils/error';
 
 import styles from './page.module.scss';
 
